@@ -1,19 +1,31 @@
+import classNames from 'classnames'
 import Link from 'next/link'
 import React from 'react'
 
 type NavLinkProps = {
   href: string,
-  children: React.ReactNode
+  children: React.ReactNode,
+  icon: React.ReactNode
+  active?: boolean
 }
 
 const NavLink = ({ 
   href,
-  children
+  children,
+  icon,
+  active = false
 }: NavLinkProps) => {
   return (
     <Link href={href}>
-      <div className='flex justify-between gap-3 items-center px-8 py-4 rounded-xl bg-blue-500'>
-        <span className='font-bold text-white'>{children}</span>
+      <div className={
+        classNames(
+          'flex gap-4 items-center px-6 py-4 rounded-2xl',
+          {'bg-blue-500 text-white': active},
+          {'hover:bg-blue-500 hover:text-white text-gray-900': !active}
+        )
+      }>
+        {icon}
+        <span className='font-bold'>{children}</span>
       </div>
     </Link>
   )

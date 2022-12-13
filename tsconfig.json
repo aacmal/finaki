@@ -14,6 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "paths": {
+      "@/icons/*": ["./components/icons/*"],
+      "@/types/*": ["./types/*"],
+    },
     "plugins": [
       {
         "name": "next"
