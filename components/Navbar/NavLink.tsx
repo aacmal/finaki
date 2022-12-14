@@ -19,9 +19,9 @@ const NavLink = ({
     <Link href={href}>
       <div className={
         classNames(
-          'flex gap-4 items-center px-6 py-4 rounded-2xl',
-          {'bg-blue-500 text-white': active},
-          {'hover:bg-blue-500 hover:text-white text-gray-900': !active}
+          'flex gap-4 items-center px-6 py-4 rounded-2xl transition-all duration-100',
+          {'bg-blue-500 text-white shadow-xl shadow-blue-200': active},
+          {'hover:bg-blue-400 hover:text-white text-gray-900': !active}
         )
       }>
         {icon}
