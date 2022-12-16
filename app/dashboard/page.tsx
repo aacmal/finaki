@@ -2,6 +2,7 @@
 
 import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
+import BarChart from '../../components/Charts/BarChart';
 import LineChart from '../../components/Charts/LineChart';
 
 type Props = {}
@@ -21,6 +22,9 @@ const Page = (props: Props) => {
   return (
     <div className='mt-8'>
       <AreaChart data={data}/>
+      <div className='w-1/2'>
+        <BarChart data={data}/>
+      </div>
     </div>
   )
 }
