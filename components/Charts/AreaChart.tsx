@@ -26,6 +26,17 @@ const ChartHeader = () => (
   </div>
 )
 
+const renderCustomizedTooltip = ({ active, payload, label }: any) => {
+  
+  if (active) {
+    return (
+      <div className='bg-white p-4 rounded-xl shadow-lg'>
+        <p className='text-gray-500 font-medium'>{`Rp. ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+};
+
 const AreaChart = ({data}: Props) => {
   return (
     <ChartWrapper
@@ -40,7 +51,7 @@ const AreaChart = ({data}: Props) => {
         </defs>
         {/* Create line in x axis */} 
         <CartesianGrid vertical={false} horizontal={false}/>
-        <Tooltip/>
+        <Tooltip content={renderCustomizedTooltip}/>
         <Area isAnimationActive strokeWidth={5} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
       </ArChart>
     </ChartWrapper>
