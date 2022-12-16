@@ -9,17 +9,25 @@ type Props = {
   chartHeader?: ReactElement,
   width?: string,
   height?: number,
-  className?: string
+  className?: string,
+  isBorder?: boolean
 }
 
 const ChartWrapper = ({
   children,
   height = 300,
   chartHeader,
+  isBorder = true,
   className
 }: Props) => {
   return (
-    <div className={classNames('p-5 rounded-3xl border-2 border-gray-200', className)}>
+    <div className={
+      classNames(
+        'p-5 rounded-3xl',
+        {'border-2 border-gray-200': isBorder},
+        className
+      )
+    }>
       {chartHeader}
       <ResponsiveContainer width='100%' height={height}>
         {children}
