@@ -2,7 +2,7 @@ import { usePathname } from 'next/navigation'
 import Container from '../components/Container/Container'
 import Header from '../components/Header/Header'
 import Navbar from '../components/Navbar/Navbar'
-import './globals.css'
+import './globals.scss'
 
 export default function RootLayout({
   children,

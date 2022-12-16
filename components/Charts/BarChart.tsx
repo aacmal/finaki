@@ -22,6 +22,7 @@ const BarChart = ({ data }: Props) => {
   return (
     <ChartWrapper
       chartHeader={<BarChartHeader />}
+      className='w-[30rem]'
     >
       <BaChart
         width={500}
@@ -29,9 +30,9 @@ const BarChart = ({ data }: Props) => {
         data={data}
       >
         <CartesianGrid vertical={false} />
-        <Tooltip />
-        <Bar radius={[10, 10, 0, 0]} barSize={8} dataKey="pv" fill="#8884d8" />
-        <Bar radius={[10, 10, 0, 0]} barSize={8} dataKey="uv" fill="#82ca9d" />
+        <Tooltip/>
+        <Bar isAnimationActive radius={[10, 10, 0, 0]} barSize={8} dataKey="pv" fill="#8884d8" />
+        <Bar isAnimationActive radius={[10, 10, 0, 0]} barSize={8} dataKey="uv" fill="#82ca9d" />
       </BaChart>
     </ChartWrapper>
   )

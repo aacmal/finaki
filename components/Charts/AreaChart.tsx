@@ -8,8 +8,8 @@ import {
   XAxis, 
   YAxis, 
   CartesianGrid, 
-  Tooltip,
-  CartesianAxis 
+  CartesianAxis,
+  Tooltip
 } from 'recharts'
 import ChartWrapper from './ChartWrapper'
 
@@ -38,10 +38,10 @@ const AreaChart = ({data}: Props) => {
             <stop offset="95%" stopColor="#3c84fa" stopOpacity={0}/>
           </linearGradient>
         </defs>
-        {/* Create line in x axis */}
+        {/* Create line in x axis */} 
         <CartesianGrid vertical={false} horizontal={false}/>
-        <Tooltip />
-        <Area strokeWidth={5} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
+        <Tooltip/>
+        <Area isAnimationActive strokeWidth={5} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
       </ArChart>
     </ChartWrapper>
   )
