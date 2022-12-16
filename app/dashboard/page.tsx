@@ -8,13 +8,13 @@ import PieChart from '../../components/Charts/PieChart';
 
 type Props = {}
 const data = [
-  {name: 'Senin', uv: 100, pv: 2400, amt: 2400},
-  {name: 'Selasa', uv: 200, pv: 2400, amt: 2400},
-  {name: 'Rabu', uv: 100, pv: 2400, amt: 2400},
-  {name: 'Kamis', uv: 400, pv: 2400, amt: 2400},
-  {name: 'Jumat', uv: 250, pv: 2400, amt: 2400},
-  {name: 'Sabtu', uv: 300, pv: 2400, amt: 2400},
-  {name: 'Minggu', uv: 300, pv: 2400, amt: 2400},
+  {name: 'Senin', uv: 100, pv: 350, amt: 2400},
+  {name: 'Selasa', uv: 200, pv: 500, amt: 2400},
+  {name: 'Rabu', uv: 100, pv: 100, amt: 2400},
+  {name: 'Kamis', uv: 400, pv: 350, amt: 2400},
+  {name: 'Jumat', uv: 250, pv: 250, amt: 2400},
+  {name: 'Sabtu', uv: 300, pv: 350, amt: 2400},
+  {name: 'Minggu', uv: 300, pv: 400, amt: 2400},
 ];
 
 const dataCategories = [
