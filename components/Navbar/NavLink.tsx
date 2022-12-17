@@ -19,13 +19,13 @@ const NavLink = ({
     <Link href={href}>
       <div className={
         classNames(
-          'flex gap-4 items-center px-6 py-4 rounded-2xl transition-all duration-100 border border-transparent',
+          'flex gap-4 items-center px-4 py-4 lg:px-6 lg:py-4 rounded-2xl transition-all duration-100 border border-transparent',
           {'bg-blue-500 text-white shadow-xl shadow-blue-200': active},
           {'hover:border-blue-500 hover:text-blue-500 text-gray-900': !active}
         )
       }>
         {icon}
-        <span className='font-bold'>{children}</span>
+        <span className='font-bold hidden lg:block'>{children}</span>
       </div>
     </Link>
   )
