@@ -39,10 +39,11 @@ const BarChart = ({ data }: Props) => {
         <BaChart
           data={data}
         >
-          <CartesianGrid vertical={false} />
+          <CartesianGrid opacity={0.5} vertical={false} />
           <Tooltip cursor={{fill: '#0088FE', opacity: 0.1}}/>
-          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="uv" fill="#0088FE" />
-          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="pv" fill="#FF8042" />
+          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="in" fill="#0088FE" />
+          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="out" fill="#FF8042" />
+          <XAxis style={{ fontSize: 13 }} tickMargin={10} height={30} axisLine={false} tickLine={false} dataKey='name'/>
         </BaChart>
       </ChartWrapper>
     </ChartContainer>

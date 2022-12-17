@@ -6,7 +6,8 @@ import {
   AreaChart as ArChart, 
   Area, 
   CartesianGrid, 
-  Tooltip
+  Tooltip,
+  XAxis,
 } from 'recharts'
 import ChartContainer from './ChartContainer'
 import ChartWrapper from './ChartWrapper'
@@ -16,8 +17,8 @@ type Props = {
 }
 
 const ChartHeader = () => (
-  <div className='flex justify-between px-4 items-center mb-5'>
-    <h3 className='font-bold text-xl'>Pengeluaran</h3>
+  <div className='flex justify-between items-center px-2 lg:px-0 mb-5'>
+    <h3 className='font-bold text-xl'>Aktivitas</h3>
     <div className='flex items-center'>
       <div>7 Hari</div>
     </div>
@@ -37,7 +38,7 @@ const renderCustomizedTooltip = ({ active, payload, label }: any) => {
 
 const AreaChart = ({ data }: Props) => {
   return (
-    <ChartContainer>
+    <ChartContainer className='lg:px-10'>
       <ChartHeader />
       <ChartWrapper className='w-full h-52'>
         <ArChart data={data}>
@@ -47,10 +48,10 @@ const AreaChart = ({ data }: Props) => {
               <stop offset="95%" stopColor="#3c84fa" stopOpacity={0}/>
             </linearGradient>
           </defs>
-          {/* Create line in x axis */} 
-          <CartesianGrid vertical={false} horizontal={false}/>
+          <XAxis style={{ fontSize: 13 }} height={20} axisLine={false} tickLine={false} interval='preserveStartEnd' dataKey="name"/>
+          <CartesianGrid opacity={0.5} vertical={false} horizontal={true}/>
           <Tooltip content={renderCustomizedTooltip}/>
-          <Area isAnimationActive strokeWidth={3} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
+          <Area isAnimationActive strokeWidth={3} type="monotone" dataKey="total" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
         </ArChart>
       </ChartWrapper>
     </ChartContainer>

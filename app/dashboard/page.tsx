@@ -5,14 +5,15 @@ import PieChart from '../../components/Charts/PieChart';
 
 type Props = {}
 export const data = [
-  {name: 'Senin', uv: 100, pv: 350, amt: 2400},
-  {name: 'Selasa', uv: 200, pv: 500, amt: 2400},
-  {name: 'Rabu', uv: 100, pv: 100, amt: 2400},
-  {name: 'Kamis', uv: 400, pv: 350, amt: 2400},
-  {name: 'Jumat', uv: 250, pv: 250, amt: 2400},
-  {name: 'Sabtu', uv: 300, pv: 350, amt: 2400},
-  {name: 'Minggu', uv: 300, pv: 400, amt: 2400},
+  {name: '1 Des', in: 100, out: 350, total: 2400},
+  {name: '2 Des', in: 200, out: 500, total: 2420},
+  {name: '3 Des', in: 100, out: 100, total: 2200},
+  {name: '4 Des', in: 400, out: 350, total: 2350},
+  {name: '5 Des', in: 250, out: 250, total: 2150},
+  {name: '6 Des', in: 300, out: 350, total: 2200},
+  {name: '7 Des', in: 300, out: 400, total: 2600},
 ];
+
 
 const dataCategories = [
   {name: 'Food', value: 400},
