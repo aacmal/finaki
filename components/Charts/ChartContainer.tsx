@@ -10,14 +10,14 @@ type Props = {
 }
 
 const ChartContainer = ({
-  isBorder = true,
+  isBorder = false,
   className,
   children,
 }: Props) => {
   return (
     <div className={
       classNames(
-        'p-2 lg:p-5 rounded-3xl',
+        'p-2 lg:p-5 rounded-3xl bg-slate-50',
         {'border-2 border-gray-200': isBorder},
         className
       )

@@ -17,7 +17,7 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>
+      <body className='bg-gray-100'>
         <Container>
           <Navbar/>
           <div className='flex flex-col w-full'>
