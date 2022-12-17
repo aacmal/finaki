@@ -1,39 +1,31 @@
-import classNames from 'classnames';
 import React, { ReactElement } from 'react'
-
-import { ResponsiveContainer } from 'recharts';
-
+import { ResponsiveContainer } from 'recharts'
 
 type Props = {
   children: ReactElement,
-  chartHeader?: ReactElement,
-  width?: string,
-  height?: number,
-  className?: string,
-  isBorder?: boolean
+  className?: string
 }
 
-const ChartWrapper = ({
+/**
+ * 
+ * @param children use this to set type of chart
+ * @param className use this to set the width and height of the chart with tailwind class
+ * @returns
+ * 
+ */
+
+const ChartWrapper = ({ 
   children,
-  height = 300,
-  chartHeader,
-  isBorder = true,
   className
 }: Props) => {
   return (
-    <div className={
-      classNames(
-        'p-5 rounded-3xl',
-        {'border-2 border-gray-200': isBorder},
-        className
-      )
-    }>
-      {chartHeader}
-      <ResponsiveContainer width='100%' height={height}>
+    <div className={className}>
+      <ResponsiveContainer width="100%" height="100%">
         {children}
       </ResponsiveContainer>
     </div>
   )
 }
 
-export default ChartWrapper;
+export default ChartWrapper
+

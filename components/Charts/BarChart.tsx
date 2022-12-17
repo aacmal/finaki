@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { BarChart as BaChart, CartesianGrid, Tooltip, Legend, Bar, XAxis } from 'recharts'
+import ChartContainer from './ChartContainer'
 import ChartWrapper from './ChartWrapper'
 
 type Props = {
@@ -19,11 +20,11 @@ const BarChartHeader = () => (
     <div className='flex items-center gap-4'>
       <div className='flex items-center'>
         <div style={{backgroundColor: COLOR['INCOME']}} className='h-2 w-2 rounded-full mr-2'></div>
-        <span>Pemasukan</span>
+        <span className='text-sm'>Masuk</span>
       </div>
       <div className='flex items-center'>
         <div style={{backgroundColor: COLOR['OUTCOME']}} className='h-2 w-2 rounded-full mr-2'></div>
-        <span>Pengeluaran</span>
+        <span className='text-sm'>Keluar</span>
       </div>
     </div>
   </div>
@@ -32,20 +33,19 @@ const BarChartHeader = () => (
 
 const BarChart = ({ data }: Props) => {
   return (
-    <ChartWrapper
-      chartHeader={<BarChartHeader />}
-      className='w-[30rem]'
-      height={250}
-    >
-      <BaChart
-        data={data}
-      >
-        <CartesianGrid vertical={false} />
-        <Tooltip cursor={{fill: '#0088FE', opacity: 0.1}}/>
-        <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="uv" fill="#0088FE" />
-        <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="pv" fill="#FF8042" />
-      </BaChart>
-    </ChartWrapper>
+    <ChartContainer className='flex-1'>
+      <BarChartHeader/>
+      <ChartWrapper className=' h-52 lg:h-72 w-full'>
+        <BaChart
+          data={data}
+        >
+          <CartesianGrid vertical={false} />
+          <Tooltip cursor={{fill: '#0088FE', opacity: 0.1}}/>
+          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="uv" fill="#0088FE" />
+          <Bar isAnimationActive radius={[10, 10, 10, 10]} barSize={8} dataKey="pv" fill="#FF8042" />
+        </BaChart>
+      </ChartWrapper>
+    </ChartContainer>
   )
 }
 

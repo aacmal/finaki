@@ -5,12 +5,10 @@ import React from 'react'
 import {
   AreaChart as ArChart, 
   Area, 
-  XAxis, 
-  YAxis, 
   CartesianGrid, 
-  CartesianAxis,
   Tooltip
 } from 'recharts'
+import ChartContainer from './ChartContainer'
 import ChartWrapper from './ChartWrapper'
 
 type Props = {
@@ -37,24 +35,25 @@ const renderCustomizedTooltip = ({ active, payload, label }: any) => {
   }
 };
 
-const AreaChart = ({data}: Props) => {
+const AreaChart = ({ data }: Props) => {
   return (
-    <ChartWrapper
-      chartHeader={<ChartHeader />}
-    >
-      <ArChart data={data}>
-        <defs>
-          <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#3c84fa" stopOpacity={0.8}/>
-            <stop offset="95%" stopColor="#3c84fa" stopOpacity={0}/>
-          </linearGradient>
-        </defs>
-        {/* Create line in x axis */} 
-        <CartesianGrid vertical={false} horizontal={false}/>
-        <Tooltip content={renderCustomizedTooltip}/>
-        <Area isAnimationActive strokeWidth={5} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
-      </ArChart>
-    </ChartWrapper>
+    <ChartContainer>
+      <ChartHeader />
+      <ChartWrapper className='w-full h-52'>
+        <ArChart data={data}>
+          <defs>
+            <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#3c84fa" stopOpacity={0.8}/>
+              <stop offset="95%" stopColor="#3c84fa" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          {/* Create line in x axis */} 
+          <CartesianGrid vertical={false} horizontal={false}/>
+          <Tooltip content={renderCustomizedTooltip}/>
+          <Area isAnimationActive strokeWidth={3} type="monotone" dataKey="uv" stroke="#3c84fa" fillOpacity={1} fill="url(#colorBl)" />
+        </ArChart>
+      </ChartWrapper>
+    </ChartContainer>
   )
 }
 

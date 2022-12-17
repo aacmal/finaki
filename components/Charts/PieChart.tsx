@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Pie, Tooltip, PieChart as PiChart, Cell, Legend } from 'recharts'
-import { Payload } from 'recharts/types/component/DefaultLegendContent'
+import ChartContainer from './ChartContainer'
 import ChartWrapper from './ChartWrapper'
 
 type Props = {
@@ -39,16 +39,17 @@ const PieChart = ({
   height = 50
 }: Props) => {
   return (
-    <ChartWrapper className='flex-1'>
-      <PiChart width={width} height={height}>
+    <ChartContainer className='w-full lg:w-[27rem] lg:p-0 overflow-hidden'>
+      <ChartWrapper className='h-52 lg:h-full w-full lg:-ml-6'>
+        <PiChart>
           <Pie
             dataKey="value"
             data={data}
             isAnimationActive={true}
             cx="50%"
             cy="50%"
-            outerRadius={100}
-            innerRadius={60}
+            outerRadius={80}
+            innerRadius={50}
             blendStroke={true}
           >
             {
@@ -60,7 +61,8 @@ const PieChart = ({
           <Legend content={renderCustomizedLabel} layout="vertical" verticalAlign="middle" align="right" />
           <Tooltip />
         </PiChart>
-    </ChartWrapper>
+      </ChartWrapper>
+    </ChartContainer>
   )
 }
 

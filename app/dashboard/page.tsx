@@ -1,13 +1,10 @@
-'use client'
-
 import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
 import BarChart from '../../components/Charts/BarChart';
-import LineChart from '../../components/Charts/LineChart';
 import PieChart from '../../components/Charts/PieChart';
 
 type Props = {}
-const data = [
+export const data = [
   {name: 'Senin', uv: 100, pv: 350, amt: 2400},
   {name: 'Selasa', uv: 200, pv: 500, amt: 2400},
   {name: 'Rabu', uv: 100, pv: 100, amt: 2400},
@@ -29,9 +26,9 @@ const Page = (props: Props) => {
 
 
   return (
-    <div className='mt-8 flex flex-col gap-4'>
+    <div className='flex flex-col gap-4'>
       <AreaChart data={data}/>
-      <div className='flex gap-4 justify-between'>
+      <div className='flex flex-col lg:flex-row gap-4 justify-between'>
         <BarChart data={data}/>
         <PieChart data={dataCategories}/>
       </div>
