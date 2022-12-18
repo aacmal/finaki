@@ -1,4 +1,5 @@
 import ArrowCircleIcon from '@/icons/ArrowCircleIcon';
+import ArrowIcon from '@/icons/ArrowIcon';
 import classNames from 'classnames';
 import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
@@ -42,8 +43,8 @@ const Page = (props: Props) => {
         <PieChart data={dataCategories}/>
       </div>
       {/* TODO: Create recent transactions component and then refator it */}
-      <div className='flex gap-4 h-fit'>
-        <div className='flex-1 p-7 bg-slate-50 rounded-xl'>
+      <div className='flex gap-4 h-fit flex-col lg:flex-row'>
+        <div className='flex-1 p-4 lg:p-7 bg-slate-50 rounded-xl'>
           <h1 className='font-bold text-xl mb-6'>Transkasi terbaru</h1>
           {/* <div className="flex w-full py-3 border-b">
             <span className='font-bold flex-1'>Nama</span>
@@ -52,9 +53,12 @@ const Page = (props: Props) => {
           </div> */}
           {
             transactions.map((transaction, index) => (
-              <div key={index} className="flex w-full py-3 border-b items-center">
+              <div key={index} className={classNames(
+                  "flex w-full py-3 items-center",
+                  {"border-b": index !== transactions.length - 1}
+                )}>
                 <span>
-                  <div className='mr-10'>
+                  <div className='mr-5 lg:mr-10'>
                     <ArrowCircleIcon
                       direction={
                         transaction.type === 'in' ? 'up' : 'down'
@@ -66,9 +70,9 @@ const Page = (props: Props) => {
                     />
                   </div>
                 </span>
-                <span className='w-[40%] font-medium'>{transaction.name}</span>
+                <span className='w-[30%] lg:w-[40%] font-medium'>{transaction.name}</span>
                 <span></span>
-                <span className='flex flex-col w-[30%]'>
+                <span className='flex flex-col'>
                   <span className='font-medium'>{transaction.date}</span>
                   <span>{transaction.hour}</span>
                 </span>
@@ -81,10 +85,21 @@ const Page = (props: Props) => {
             ))
           }
         </div>
-        <div className='w-[27rem] h-full bg-slate-50'>
-          <div>
-            asd
+        <div className='lg:w-[27rem] h-full bg-slate-50 p-7 rounded-xl flex flex-col gap-5'>
+          <h1 className='font-bold text-xl mb-6'>Kesimpulan</h1>
+          <div className='w-full p-5 rounded-lg flex items-center bg-green-500 text-white shadow-lg shadow-green-200'>
+            <ArrowIcon strokeWidth={3} className="mr-7" stroke='currentColor' direction='up'/>
+            <span>
+              <h1 className='font-bold text-xl'>Rp. 2.000.000</h1>
+            </span>
           </div>
+          <div className='w-full p-5 rounded-lg flex items-center bg-red-500 text-white shadow-lg shadow-red-200'>
+            <ArrowIcon strokeWidth={3} className="mr-7" stroke='currentColor' direction='down'/>
+            <span>
+              <h1 className='font-bold text-xl'>-Rp. 2.000.000</h1>
+            </span>
+          </div>
+          <h1 className='font-bold text-xl mt-6'>Total Profit: Rp. 0</h1>
         </div>
       </div>
     </div>
