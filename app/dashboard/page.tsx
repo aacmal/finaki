@@ -4,7 +4,7 @@ import ArrowIcon from '@/icons/ArrowIcon';
 import classNames from 'classnames';
 import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
-import BarChart from '../../components/Charts/BarChart';
+import BarChart from '../../components/Charts/BarChart/BarChart';
 import PieChart from '../../components/Charts/PieChart';
 import Transactions from '../../components/Transactions/Transactions';
 
@@ -40,29 +40,10 @@ const Page = (props: Props) => {
   return (
     <div className='flex flex-col gap-4'>
       <AreaChart data={data}/>
-      <div className='flex flex-col lg:flex-row gap-4 justify-between'>
-        <BarChart data={data}/>
-        <PieChart data={dataCategories}/>
-      </div>
-      {/* TODO: Create recent transactions component and then refator it */}
+      <BarChart data={data}/>
       <div className='flex gap-4 h-fit flex-col lg:flex-row'>
+        <PieChart data={dataCategories}/>
         <Transactions data={transactions}/>
-        <div className='lg:w-[27rem] h-full bg-slate-50 p-7 rounded-xl flex flex-col gap-5'>
-          <h1 className='font-bold text-xl mb-6'>Kesimpulan</h1>
-          <TextWithIcon 
-            iconPosition='left' 
-            icon={<ArrowIcon direction='up' strokeWidth={3} stroke='currentColor'/>}
-            className="bg-green-500 shadow-green-200"
-          >Rp. 2.000.000
-          </TextWithIcon>
-          <TextWithIcon 
-            iconPosition='left' 
-            icon={<ArrowIcon direction='down' strokeWidth={3} stroke='currentColor'/>}
-            className="bg-red-500 shadow-red-200"
-          >-Rp. 2.000.000
-          </TextWithIcon>
-          <h1 className='font-bold text-xl mt-6'>Total Profit: Rp. 0</h1>
-        </div>
       </div>
     </div>
   )
