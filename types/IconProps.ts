@@ -1,15 +1,15 @@
 export interface IconProps {
   className?: string | undefined; 
   fill?: string;
-  height?: number;
-  width?: number;
   stroke?: string;
   strokeWidth?: number;
 }
 
+export interface ArrowIconProps extends IconProps {
+  direction: 'up' | 'down' | 'left' | 'right';
+}
+
 export const defaultIconProps: IconProps = {
-  className: undefined,
+  className: 'w-6',
   fill: 'currentColor',
-  height: 24,
-  width: 24,
 }
