@@ -5,6 +5,7 @@ import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
 import BarChart from '../../components/Charts/BarChart';
 import PieChart from '../../components/Charts/PieChart';
+import Transactions from '../../components/Transactions/Transactions';
 
 type Props = {}
 export const data = [
@@ -44,47 +45,7 @@ const Page = (props: Props) => {
       </div>
       {/* TODO: Create recent transactions component and then refator it */}
       <div className='flex gap-4 h-fit flex-col lg:flex-row'>
-        <div className='flex-1 p-4 lg:p-7 bg-slate-50 rounded-xl'>
-          <h1 className='font-bold text-xl mb-6'>Transkasi terbaru</h1>
-          {/* <div className="flex w-full py-3 border-b">
-            <span className='font-bold flex-1'>Nama</span>
-            <span className='font-bold w-4/12'>Kategori</span>
-            <span className='font-bold'>Nominal</span>
-          </div> */}
-          {
-            transactions.map((transaction, index) => (
-              <div key={index} className={classNames(
-                  "flex w-full py-3 items-center",
-                  {"border-b": index !== transactions.length - 1}
-                )}>
-                <span>
-                  <div className='mr-5 lg:mr-10'>
-                    <ArrowCircleIcon
-                      direction={
-                        transaction.type === 'in' ? 'up' : 'down'
-                      }
-                      className={classNames(
-                        {'text-green-500': transaction.type === 'in'},
-                        {'text-red-500': transaction.type === 'out'},
-                      )}
-                    />
-                  </div>
-                </span>
-                <span className='w-[30%] lg:w-[40%] font-medium'>{transaction.name}</span>
-                <span></span>
-                <span className='flex flex-col'>
-                  <span className='font-medium'>{transaction.date}</span>
-                  <span>{transaction.hour}</span>
-                </span>
-                <span className={classNames(
-                  'font-medium  ml-auto', 
-                  {'text-green-500': transaction.type === 'in'}, 
-                  {'text-red-500': transaction.type === 'out'}
-                )}>{transaction.type === 'out' && '-'}Rp. {transaction.value}</span>
-              </div>
-            ))
-          }
-        </div>
+        <Transactions data={transactions}/>
         <div className='lg:w-[27rem] h-full bg-slate-50 p-7 rounded-xl flex flex-col gap-5'>
           <h1 className='font-bold text-xl mb-6'>Kesimpulan</h1>
           <div className='w-full p-5 rounded-lg flex items-center bg-green-500 text-white shadow-lg shadow-green-200'>

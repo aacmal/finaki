@@ -14,7 +14,7 @@ const ArrowCircleIcon = ({
       viewBox="0 0 24 24" 
       fill={fill}
       className={classNames(
-        'transform w-8',
+        'transform',
         {'rotate-180': direction === 'up'},
         {'rotate-90': direction === 'left'},
         {'-rotate-90': direction === 'right'},
