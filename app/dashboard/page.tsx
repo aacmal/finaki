@@ -1,3 +1,4 @@
+import TextWithIcon from '@/dls/TextWithIcon';
 import ArrowCircleIcon from '@/icons/ArrowCircleIcon';
 import ArrowIcon from '@/icons/ArrowIcon';
 import classNames from 'classnames';
@@ -48,18 +49,18 @@ const Page = (props: Props) => {
         <Transactions data={transactions}/>
         <div className='lg:w-[27rem] h-full bg-slate-50 p-7 rounded-xl flex flex-col gap-5'>
           <h1 className='font-bold text-xl mb-6'>Kesimpulan</h1>
-          <div className='w-full p-5 rounded-lg flex items-center bg-green-500 text-white shadow-lg shadow-green-200'>
-            <ArrowIcon strokeWidth={3} className="mr-7" stroke='currentColor' direction='up'/>
-            <span>
-              <h1 className='font-bold text-xl'>Rp. 2.000.000</h1>
-            </span>
-          </div>
-          <div className='w-full p-5 rounded-lg flex items-center bg-red-500 text-white shadow-lg shadow-red-200'>
-            <ArrowIcon strokeWidth={3} className="mr-7" stroke='currentColor' direction='down'/>
-            <span>
-              <h1 className='font-bold text-xl'>-Rp. 2.000.000</h1>
-            </span>
-          </div>
+          <TextWithIcon 
+            iconPosition='left' 
+            icon={<ArrowIcon direction='up' strokeWidth={3} stroke='currentColor'/>}
+            className="bg-green-500 shadow-green-200"
+          >Rp. 2.000.000
+          </TextWithIcon>
+          <TextWithIcon 
+            iconPosition='left' 
+            icon={<ArrowIcon direction='down' strokeWidth={3} stroke='currentColor'/>}
+            className="bg-red-500 shadow-red-200"
+          >-Rp. 2.000.000
+          </TextWithIcon>
           <h1 className='font-bold text-xl mt-6'>Total Profit: Rp. 0</h1>
         </div>
       </div>
