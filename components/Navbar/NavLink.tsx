@@ -1,3 +1,4 @@
+import IconWrapper from '@/dls/IconWrapper'
 import classNames from 'classnames'
 import Link from 'next/link'
 import React from 'react'
@@ -24,7 +25,7 @@ const NavLink = ({
           {'hover:border-blue-500 hover:text-blue-500 text-gray-900': !active}
         )
       }>
-        {icon}
+        <IconWrapper>{icon}</IconWrapper>
         <span className='font-bold hidden lg:block'>{children}</span>
       </div>
     </Link>

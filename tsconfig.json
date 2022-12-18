@@ -17,6 +17,7 @@
     "paths": {
       "@/icons/*": ["./components/icons/*"],
       "@/types/*": ["./types/*"],
+      "@/dls/*": ["./components/dls/*"],
     },
     "plugins": [
       {

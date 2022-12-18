@@ -1,5 +1,6 @@
 'use client'
 
+import Heading from '@/dls/Heading'
 import React from 'react'
 import { BarChart as BaChart, CartesianGrid, Tooltip, Legend, Bar, XAxis } from 'recharts'
 import ChartContainer from './ChartContainer'
@@ -16,7 +17,7 @@ const COLOR = {
 
 const BarChartHeader = () => (
   <div className='flex justify-between px-4 items-center mb-5'>
-    <h3 className='font-bold text-xl'>Perbandingan</h3>
+    <Heading className='font-bold text-xl'>Perbandingan</Heading>
     <div className='flex items-center gap-4'>
       <div className='flex items-center'>
         <div style={{backgroundColor: COLOR['INCOME']}} className='h-2 w-2 rounded-full mr-2'></div>

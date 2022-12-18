@@ -3,6 +3,8 @@ export interface IconProps {
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
+  width?: number;
+  height?: number;
 }
 
 export interface ArrowIconProps extends IconProps {
@@ -10,6 +12,5 @@ export interface ArrowIconProps extends IconProps {
 }
 
 export const defaultIconProps: IconProps = {
-  className: 'w-6',
   fill: 'currentColor',
 }

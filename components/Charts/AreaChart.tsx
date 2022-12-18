@@ -1,5 +1,6 @@
 'use client'
 
+import Heading from '@/dls/Heading'
 import React from 'react'
 
 import {
@@ -18,7 +19,7 @@ type Props = {
 
 const ChartHeader = () => (
   <div className='flex justify-between items-center px-2 lg:px-0 mb-5'>
-    <h3 className='font-bold text-xl'>Aktivitas</h3>
+    <Heading className='font-bold text-xl'>Aktivitas</Heading>
     <div className='flex items-center'>
       <div>7 Hari</div>
     </div>

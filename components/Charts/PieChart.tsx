@@ -1,5 +1,6 @@
 'use client'
 
+import Heading from '@/dls/Heading'
 import React from 'react'
 import { Pie, Tooltip, PieChart as PiChart, Cell, Legend } from 'recharts'
 import ChartContainer from './ChartContainer'
@@ -13,6 +14,12 @@ type Props = {
 
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF0000'];
+
+const PieChartHeader = () => (
+  <div className='flex justify-between px-4 items-center mb-5'>
+    <Heading className='font-bold text-xl'>Kategori</Heading>
+  </div>
+)
 
 const renderCustomizedLabel = (props: any) => {
   const { payload } = props;
@@ -35,33 +42,32 @@ const renderCustomizedLabel = (props: any) => {
 
 const PieChart = ({
   data,
-  width = 50,
-  height = 50
 }: Props) => {
   return (
-    <ChartContainer className='w-full lg:w-[27rem] lg:p-0 overflow-hidden'>
-      <ChartWrapper className='h-52 lg:h-full w-full lg:-ml-6'>
-        <PiChart>
-          <Pie
-            dataKey="value"
-            data={data}
-            isAnimationActive={true}
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            innerRadius={50}
-            blendStroke={true}
-          >
-            {
-              data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
-              ))
-            }
-          </Pie>
-          <Legend content={renderCustomizedLabel} layout="vertical" verticalAlign="middle" align="right" />
-          <Tooltip />
-        </PiChart>
-      </ChartWrapper>
+    <ChartContainer className='w-full lg:w-[27rem] overflow-hidden'>
+      <PieChartHeader/>
+        <ChartWrapper className='h-52 lg:h-72 w-full lg:-ml-6'>
+          <PiChart>
+            <Pie
+              dataKey="value"
+              data={data}
+              isAnimationActive={true}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              innerRadius={50}
+              blendStroke={true}
+            >
+              {
+                data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                ))
+              }
+            </Pie>
+            <Legend content={renderCustomizedLabel} layout="vertical" verticalAlign="middle" align="right" />
+            <Tooltip />
+          </PiChart>
+        </ChartWrapper>
     </ChartContainer>
   )
 }
