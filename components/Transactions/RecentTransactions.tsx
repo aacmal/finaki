@@ -5,13 +5,13 @@ import classNames from 'classnames'
 import React from 'react'
 import List from './List'
 
-type TransactionsProps = {
+type RecentTransactionsProps = {
   data: any[]
 }
 
-const Transactions = ({
+const RecentTransactions = ({
   data
-}: TransactionsProps) => {
+}: RecentTransactionsProps) => {
   return (
     <div className='flex-1 p-4 lg:p-7 bg-slate-50 rounded-xl'>
           <Heading className='mb-4'>Transkasi terbaru</Heading>
@@ -40,4 +40,4 @@ const Transactions = ({
   )
 }
 
-export default Transactions
+export default RecentTransactions

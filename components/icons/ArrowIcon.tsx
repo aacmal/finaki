@@ -14,7 +14,7 @@ const ArrowIcon = ({
       {...defaultIconProps}
       {...props}
       className={classNames(
-        'transform w-8',
+        'transform',
         {'rotate-180': direction === 'up'},
         {'rotate-90': direction === 'left'},
         {'-rotate-90': direction === 'right'},

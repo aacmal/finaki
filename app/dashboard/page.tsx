@@ -6,7 +6,7 @@ import React from 'react'
 import AreaChart from '../../components/Charts/AreaChart';
 import BarChart from '../../components/Charts/BarChart/BarChart';
 import PieChart from '../../components/Charts/PieChart';
-import Transactions from '../../components/Transactions/Transactions';
+import RecentTransactions from '../../components/Transactions/RecentTransactions';
 
 type Props = {}
 export const data = [
@@ -43,7 +43,7 @@ const Page = (props: Props) => {
       <BarChart data={data}/>
       <div className='flex gap-4 h-fit flex-col lg:flex-row'>
         <PieChart data={dataCategories}/>
-        <Transactions data={transactions}/>
+        <RecentTransactions data={transactions}/>
       </div>
     </div>
   )
