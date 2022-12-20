@@ -20,7 +20,8 @@ const AllTransactions = ({
 }: Props) => {
   return (
     <>
-      <TableContainer className='gap-10' tabelDescription='All Transactions'>
+      
+      {/* <TableContainer className='gap-10' tabelDescription='All Transactions'>
         <TransactionHeader/>
         {
           transactionsData.map((transaction: Transaction, index) => (
@@ -39,7 +40,7 @@ const AllTransactions = ({
             </TableRow>
           ))
         }
-      </TableContainer>
+      </TableContainer> */}
       {/* <ul>
         <TransactionHeader/>
         {
