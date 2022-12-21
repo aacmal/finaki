@@ -4,6 +4,7 @@ import TableContainer from '@/dls/Table/TableContainer'
 import TableRow from '@/dls/Table/TableRow'
 import ArrowCircleIcon from '@/icons/ArrowCircleIcon'
 import ArrowIcon from '@/icons/ArrowIcon'
+import ElipsisVerticalIcon from '@/icons/ElipsisVerticalIcon'
 import PencilIcon from '@/icons/PencilIcon'
 import TrashIcon from '@/icons/TrashIcon'
 import { Transaction } from '@/types/Transaction'
@@ -15,12 +16,65 @@ type Props = {
   transactionsData: any[]
 }
 
+// TODO: Refactor this component
+
 const AllTransactions = ({
   transactionsData
 }: Props) => {
   return (
     <>
-      
+      <div className='flex flex-col w-full'>
+        <div className='flex gap-2 w-full px-4 py-3 border-b border-gray-400 font-medium text-sm'>
+          <div className='w-[14%] hidden lg:block'>Waktu</div>
+          <div className='w-[40%] lg:w-[30%]'>Deskripsi</div>
+          <div className='w-[10%] text-center'>Kategori</div>
+          <div className='w-[35%] lg:w-[15%] text-right'>Jumlah (Rp.)</div>
+        </div>
+        {
+          transactionsData.map((transaction: Transaction, index) => (
+            <div key={index} className='flex gap-2 items-center w-full py-3 hover:bg-blue-100 rounded-xl px-4 group'>
+              <div className='w-[14%] hidden lg:block text-gray-500 group-hover:text-gray-900'>{transaction.hour}</div>
+              <div className='w-[40%] lg:w-[30%] flex flex-col'>
+                <span className='font-bold lg:font-medium'>{transaction.description}</span>
+                <span className='lg:hidden text-gray-600'>{transaction.hour}</span>
+              </div>
+              <div className='w-[10%] text-center'>
+                <span className='px-3 text-green-700 bg-green-200 text-sm rounded-3xl'>
+                  {transaction.category}
+                </span>
+              </div>
+              <div className={classNames(
+                'w-[35%] lg:w-[15%] text-right font-medium',
+                {'text-green-500': transaction.type === 'in'},
+                {'text-red-500': transaction.type === 'out'}
+              )}>
+                {
+                  transaction.type === 'out' && '-'
+                }{transaction.amount}
+              </div>
+              <div className='flex-1 text-center lg:invisible lg:group-hover:visible'>
+                <div className='hidden lg:flex gap-3 justify-center'>
+                  <button className='text-blue-500 hover:bg-blue-500 hover:text-white rounded p-1'>
+                    <IconWrapper className='w-5'>
+                      <PencilIcon/>
+                    </IconWrapper>
+                  </button>
+                  <button className='text-red-500 hover:bg-red-500 hover:text-white rounded p-1'>
+                    <IconWrapper className='w-5'>
+                      <TrashIcon/>
+                    </IconWrapper>
+                  </button>
+                </div>
+                <button className='lg:hidden rounded p-1 -mr-5'>
+                    <IconWrapper className=' overflow-hidden h-6'>
+                      <ElipsisVerticalIcon strokeWidth={2} stroke='currentColor'/>
+                    </IconWrapper>
+                </button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
       {/* <TableContainer className='gap-10' tabelDescription='All Transactions'>
         <TransactionHeader/>
         {
