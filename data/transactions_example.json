@@ -1,0 +1,91 @@
+{
+  "data": [
+    {
+      "date": "2018-01-01",
+      "transactions": [
+        {
+          "id": 1,
+          "amount": 100,
+          "type": "out",
+          "category": "food",
+          "description": "McDonalds",
+          "time": "18:30"
+        },
+        {
+          "id": 2,
+          "amount": 200,
+          "type": "out",
+          "category": "food",
+          "description": "KFC",
+          "time": "19:30"
+        },
+        {
+          "id": 3,
+          "amount": 300,
+          "type": "in",
+          "category": "food",
+          "description": "Burger King",
+          "time": "20:30"
+        }
+      ]
+    },
+    {
+      "date": "2018-01-02",
+      "transactions": [
+        {
+          "id": 4,
+          "amount": 100,
+          "type": "out",
+          "category": "food",
+          "description": "McDonalds",
+          "time": "18:30"
+        },
+        {
+          "id": 5,
+          "amount": 200,
+          "type": "out",
+          "category": "food",
+          "description": "KFC",
+          "time": "19:30"
+        },
+        {
+          "id": 6,
+          "amount": 300,
+          "type": "in",
+          "category": "food",
+          "description": "Burger King",
+          "time": "20:30"
+        }
+      ]
+    },
+    {
+      "date": "2018-01-03",
+      "transactions": [
+        {
+          "id": 7,
+          "amount": 100,
+          "type": "out",
+          "category": "food",
+          "description": "McDonalds",
+          "time": "18:30"
+        },
+        {
+          "id": 8,
+          "amount": 200,
+          "type": "in",
+          "category": "food",
+          "description": "KFC",
+          "time": "19:30"
+        },
+        {
+          "id": 9,
+          "amount": 300,
+          "type": "out",
+          "category": "food",
+          "description": "Burger King",
+          "time": "20:30"
+        }
+      ]
+    }
+  ]
+}

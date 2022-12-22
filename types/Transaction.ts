@@ -5,5 +5,10 @@ export interface Transaction{
   description: string;
   category: string;
   type: string;
-  hour: string;
+  time: string;
+}
+
+export interface TransactionData {
+  transactions: Transaction[];
+  date: string;
 }

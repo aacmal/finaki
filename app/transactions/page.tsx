@@ -1,23 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AreaChart from '../../components/Charts/AreaChart'
 import AllTransactions from '../../components/Transactions/AllTransactions'
+import { getTransactionsData } from '../../utils/transaction'
 import { data } from '../dashboard/page'
 
 type Props = {}
 
-const transactions = [
-  {description: 'Beli Baju', category: 'lainnya', type: 'out', amount: 3000, date: '12 Desember', hour: '18:64'},
-  {description: 'Beli Baju', category: 'lainnya', type: 'in', amount: 3000, date: '12 Desember', hour: '18:64'},
-  {description: 'Beli Baju', category: 'lainnya', type: 'in', amount: 3000, date: '12 Desember', hour: '18:64'},
-  {description: 'Beli Baju', category: 'lainnya', type: 'out', amount: 3000000, date: '12 Desember', hour: '18:64'},
-  {description: 'Beli Baju', category: 'lainnya', type: 'out', amount: 3000, date: '12 Desember', hour: '18:64'},
-  {description: 'Beli Baju buat kaka ', category: 'lainnya', type: 'out', amount: 3000, date: '12 Desember', hour: '18:64'},
-]
+const getData = async () => {
+  const data = await getTransactionsData()
+  // console.log(json['2 Desember']);
+  console.log(data);
+  
+  return data
+}
 
-const Page = (props: Props) => {
+const Page = async (props: Props) => {
+  const data = await getData()
   return (
     <>
-      <AllTransactions transactionsData={transactions}/>
+      <AllTransactions data={data}/>
     </>
   )
 }
