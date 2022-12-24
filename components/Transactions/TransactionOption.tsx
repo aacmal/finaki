@@ -11,24 +11,25 @@ type Props = {
 };
 
 const TransactionOption = ({ onEdit, onDelete, onSave }: Props) => {
+  
   return (
     <div className="flex-1 text-center lg:invisible lg:group-hover:visible">
       <div className="hidden lg:flex gap-3 justify-center">
         <IconButton
           onClick={onEdit}
-          className="text-blue-500 hover:bg-blue-500 hover:text-white"
+          className="text-blue-500 hover:bg-blue-200"
         >
           <PencilIcon />
         </IconButton>
         <IconButton
           onClick={onDelete}
-          className="text-red-500 hover:bg-red-500 hover:text-white"
+          className="text-red-500 hover:bg-red-200"
         >
           <TrashIcon />
         </IconButton>
       </div>
       <IconButton className="lg:hidden">
-        <ElipsisVerticalIcon strokeWidth={2} stroke="currentColor" />
+        <ElipsisVerticalIcon className="w-5 h-5" strokeWidth={2} stroke="currentColor" />
       </IconButton>
     </div>
   );

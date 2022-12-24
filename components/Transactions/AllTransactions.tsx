@@ -1,6 +1,6 @@
 import { TransactionData } from '@/types/Transaction'
 import React from 'react'
-import TransactionItem from './TransactionItem'
+import TransactionList from './TransactionList'
 
 type Props = {
   data: TransactionData[]
@@ -20,7 +20,7 @@ const AllTransactions = ({
           <div className='w-[10%] text-center'>Kategori</div>
           <div className='w-[35%] lg:w-[15%] text-right'>Jumlah (Rp.)</div>
         </div>
-        <TransactionItem data={data}/>
+        <TransactionList data={data}/>
       </div>
     </>
   )

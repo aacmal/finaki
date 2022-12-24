@@ -18,7 +18,7 @@ const IconButton = ({
       onClick={onClick}
       className={classNames("rounded p-1" ,className)}
     >
-      <IconWrapper className="w-5 h-5">
+      <IconWrapper className="w-5">
         {children}
       </IconWrapper>
     </button>
