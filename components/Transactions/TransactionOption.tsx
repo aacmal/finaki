@@ -1,8 +1,11 @@
+"use client";
+
 import IconButton from "@/dls/IconButton";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PencilIcon from "@/icons/PencilIcon";
 import TrashIcon from "@/icons/TrashIcon";
-import React from "react";
+import classNames from "classnames";
+import React, { useState } from "react";
 
 type Props = {
   onEdit?: () => void;
@@ -11,9 +14,10 @@ type Props = {
 };
 
 const TransactionOption = ({ onEdit, onDelete, onSave }: Props) => {
-  
+  const [isHover, setIsHover] = useState(false);
+
   return (
-    <div className="flex-1 text-center lg:invisible lg:group-hover:visible">
+    <div className="flex-1 text-center lg:invisible lg:group-hover:visible lg:static relative">
       <div className="hidden lg:flex gap-3 justify-center">
         <IconButton
           onClick={onEdit}
@@ -28,9 +32,37 @@ const TransactionOption = ({ onEdit, onDelete, onSave }: Props) => {
           <TrashIcon />
         </IconButton>
       </div>
-      <IconButton className="lg:hidden">
-        <ElipsisVerticalIcon className="w-5 h-5" strokeWidth={2} stroke="currentColor" />
+      <IconButton
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        className="lg:hidden"
+      >
+        <ElipsisVerticalIcon
+          className="w-5 h-5"
+          strokeWidth={2}
+          stroke="currentColor"
+        />
       </IconButton>
+      <div
+        className={classNames(
+          "lg:hidden absolute p-1 flex gap-3 right-8 rounded top-6 shadow-lg bg-white transform transition-all",
+          { "visible opacity-100  translate-y-0": isHover },
+          { "invisible opacity-0 -translate-y-4": !isHover }
+        )}
+      >
+        <IconButton
+          onClick={onEdit}
+          className="text-blue-500 hover:bg-blue-200"
+        >
+          <PencilIcon />
+        </IconButton>
+        <IconButton
+          onClick={onDelete}
+          className="text-red-500 hover:bg-red-200"
+        >
+          <TrashIcon />
+        </IconButton>
+      </div>
     </div>
   );
 };

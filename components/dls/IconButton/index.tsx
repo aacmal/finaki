@@ -6,17 +6,21 @@ type Props = {
   children: React.ReactNode,
   className?: string,
   onClick?: () => void,
+  onMouseEnter?: () => void,
+  onMouseLeave?: () => void,
 }
 
 const IconButton = ({
   children,
   className,
-  onClick
+  onClick, 
+  ...props
 }: Props) => {
   return (
     <button
       onClick={onClick}
-      className={classNames("rounded p-1" ,className)}
+      className={classNames("rounded p-1" , className)}
+      {...props}
     >
       <IconWrapper className="w-5">
         {children}
