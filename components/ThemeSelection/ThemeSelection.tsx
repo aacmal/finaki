@@ -1,37 +1,36 @@
-import classNames from "classnames";
-import Image from "next/image";
-import React from "react";
+"use client";
 
-type ThemeSelectionProps = {
-  active: boolean;
-  src: string;
-  alt: string;
-  className?: string;
-};
+import Heading from "@/dls/Heading";
+import { Theme, ThemeState } from "@/types/Theme";
+import React, { useState } from "react";
+import ThemeOption from "./ThemeOption";
 
-const ThemeSelection = ({
-  active,
-  src,
-  alt,
-  className,
-}: ThemeSelectionProps) => {
+const ThemeSelection = (props: any) => {
+  const [theme, setTheme] = useState<ThemeState>(Theme.Light);
+  const themeList = [
+    {
+      src: "/images/lightmode_preview.jpg",
+      alt: "lightmode preview",
+    },
+    {
+      src: "/images/darkmode_preview.jpg",
+      alt: "darkmode preview",
+    },
+  ];
   return (
-    <div
-      className={classNames(
-        "p-1 md:p-2 w-fit border-2 hover:ring-4 ring-blue-400 transition-all rounded-2xl",
-        { "border-blue-400": active },
-        { "border-transparent": !active }
-      )}
-    >
-      <div className="w-[10rem] md:w-[18rem] lg:w-[24rem] aspect-[4/3] rounded-2xl overflow-hidden">
-        <div className="h-full w-full relative">
-          <Image
-            fill
-            style={{ objectFit: "cover" }}
-            src={src}
-            alt={alt}
-          />
-        </div>
+    <div>
+      <Heading className="mb-3">Tema</Heading>
+      <div className="flex gap-3 p-3 lg:p-5 rounded-2xl bg-slate-50">
+        <ThemeOption
+          {...themeList[0]}
+          onClick={() => setTheme(Theme.Light)}
+          active={theme === Theme.Light}
+        />
+        <ThemeOption
+          {...themeList[1]}
+          onClick={() => setTheme(Theme.Dark)}
+          active={theme === Theme.Dark}
+        />
       </div>
     </div>
   );
