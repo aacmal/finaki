@@ -14,3 +14,9 @@ export interface ArrowIconProps extends IconProps {
 export const defaultIconProps: IconProps = {
   fill: 'currentColor',
 }
+
+export const defaultOutlineIconProps: IconProps = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.5,
+}
