@@ -12,14 +12,22 @@ type Props = {
 
 const TransactionItem = ({ transaction }: Props) => {
   const [isOnEdit, setIsOnEdit] = useState(false);
+
+  const onSaveHandle = () => {
+    setIsOnEdit(false);
+    alert("Save");
+  };
+
   return (
     <>
-      {isOnEdit && <div className="w-screen h-screen bg-transparent absolute top-0 right-0 z-40"></div>}
+      {isOnEdit && (
+        <div className="w-screen h-screen bg-transparent absolute top-0 right-0 z-40"></div>
+      )}
       <div
         className={classNames(
           "flex gap-2 items-center w-full py-3 hover:bg-blue-100 rounded-xl px-4 group",
           { "bg-blue-100": isOnEdit },
-          {"z-50": isOnEdit}
+          { "z-50": isOnEdit }
         )}
       >
         <div className="w-[14%] hidden lg:block text-gray-500 group-hover:text-gray-900">
@@ -27,18 +35,19 @@ const TransactionItem = ({ transaction }: Props) => {
         </div>
         <div className="w-[40%] lg:w-[30%] flex flex-col">
           <span className="font-bold lg:font-medium">
-            {isOnEdit ? (
-              <Input
-                type="text"
-                placeholder="Deskripsi"
-                transparent
-                value={transaction.description}
-                className="border border-blue-200"
-              />
-            ) : (
-              transaction.description
-            )}
-          </span>
+          {isOnEdit ? (
+            <Input
+              type="text"
+              placeholder="Deskripsi"
+              transparent
+              value={transaction.description}
+              className="border border-blue-200 -ml-3"
+            />
+          ) : (
+            <span className="font-bold lg:font-medium">
+              {transaction.description}
+            </span>
+          )}
           <span className="lg:hidden text-gray-600">{transaction.time}</span>
         </div>
         <div className="w-[10%] text-center">
@@ -56,7 +65,12 @@ const TransactionItem = ({ transaction }: Props) => {
           {transaction.type === "out" && "-"}
           {transaction.amount}
         </div>
-        <TransactionOption onEdit={() => setIsOnEdit(!isOnEdit)} />
+        <TransactionOption
+          onCancel={() => setIsOnEdit(false)}
+          onSave={onSaveHandle}
+          isOnEdit={isOnEdit}
+          onEdit={() => setIsOnEdit(!isOnEdit)}
+        />
       </div>
     </>
   );
