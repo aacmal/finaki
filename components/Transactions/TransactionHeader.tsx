@@ -1,28 +1,16 @@
-import IconWrapper from '@/dls/IconWrapper'
-import TableCol from '@/dls/Table/TableCol'
-import TableRow from '@/dls/Table/TableRow'
-import ArrowCircleIcon from '@/icons/ArrowCircleIcon'
-import React from 'react'
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const TransactionHeader = (props: Props) => {
   return (
-    <TableRow className='font-bold gap-2 border-b px-2 sm:px-4 border-gray-500 pb-2'>
-      <TableCol className='w-14 sm:w-[10%]'>Waktu</TableCol>
-      <TableCol className='w-24 sm:w-[40%]'>Deskripsi</TableCol>
-      <TableCol className='w-16 sm:w-[10%]'>Kategori</TableCol>
-      <TableCol className='w-32 text-center sm:w-[15%]'>Jumlah</TableCol>
-    </TableRow>
-    // <li className='flex font-bold w-full border-b border-gray-500 gap-2 pb-2 mb-5'>
-    //   <span className=''>Waktu</span>
-    //   <span className=''>Deskripsi</span>
-    //   <span className=''>Kategori</span>
-    //   <span className=''>Jenis</span>
-    //   <span className=''>Jumlah</span>
-    //   <span>Pilihan</span>
-    // </li>
-  )
-}
+    <div className="flex gap-2 w-full mb-5 px-4 py-3 border-b border-gray-400 font-medium text-sm">
+      <div className="w-[14%] hidden lg:block">Waktu</div>
+      <div className="w-[40%] lg:w-[30%]">Deskripsi</div>
+      <div className="w-[10%] text-center">Kategori</div>
+      <div className="w-[35%] lg:w-[15%] text-right">Jumlah (Rp.)</div>
+    </div>
+  );
+};
 
-export default TransactionHeader
+export default TransactionHeader;
