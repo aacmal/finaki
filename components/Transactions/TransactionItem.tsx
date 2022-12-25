@@ -1,6 +1,8 @@
 "use client";
 
 import Input from "@/dls/Form/Input";
+import IconButton from "@/dls/IconButton";
+import ArrowIcon from "@/icons/ArrowIcon";
 import { Transaction } from "@/types/Transaction";
 import classNames from "classnames";
 import React, { useState } from "react";
@@ -34,7 +36,6 @@ const TransactionItem = ({ transaction }: Props) => {
           {transaction.time}
         </div>
         <div className="w-[40%] lg:w-[30%] flex flex-col">
-          <span className="font-bold lg:font-medium">
           {isOnEdit ? (
             <Input
               type="text"
@@ -58,12 +59,32 @@ const TransactionItem = ({ transaction }: Props) => {
         <div
           className={classNames(
             "w-[35%] lg:w-[15%] text-right font-medium",
-            { "text-green-500": transaction.type === "in" },
-            { "text-red-500": transaction.type === "out" }
+            { "text-green-500": transaction.type === "in" && !isOnEdit },
+            { "text-red-500": transaction.type === "out" && !isOnEdit },
+            { "text-gray-700": isOnEdit},
+            {"w-[50%]": isOnEdit}
           )}
         >
-          {transaction.type === "out" && "-"}
-          {transaction.amount}
+          {isOnEdit ? (
+            <div className="flex gap-1 ml-4">
+              <select className="bg-transparent">
+                <option className="text-green-500" value="in">in</option>
+                <option className="text-red-500" value="out">out</option>
+              </select>
+              <Input
+                type="number"
+                placeholder="amount"
+                value={transaction.amount}
+                transparent
+                className="border border-blue-200 text-right"
+              />
+            </div>
+          ) : (
+            <span>
+              {transaction.type === "out" && "-"}
+              {transaction.amount}
+            </span>
+          )}
         </div>
         <TransactionOption
           onCancel={() => setIsOnEdit(false)}

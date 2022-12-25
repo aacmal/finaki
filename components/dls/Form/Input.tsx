@@ -4,7 +4,7 @@ import React from "react";
 type Props = {
   type: "text" | "number" | "password";
   placeholder: string;
-  value?: string;
+  value?: string | number;
   ref?: React.RefObject<HTMLInputElement>;
   className?: string;
   transparent?: boolean;
