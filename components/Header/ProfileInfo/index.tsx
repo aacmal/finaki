@@ -8,7 +8,6 @@ type Props = {};
 const ProfileInfo = (props: Props) => {
   return (
     <div className="flex gap-2 items-center relative group">
-      <div className="h-9 w-9 rounded-full bg-gray-300"></div>
       <span className="font-medium">Aca M</span>
       <IconWrapper className="text-gray-800 w-5">
         <ChevronIcon
