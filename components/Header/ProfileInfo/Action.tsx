@@ -1,3 +1,4 @@
+import OnHoverWrapper from "@/dls/ActionWrapper/OnHoverWrapper";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowRectangleIcon from "@/icons/ArrowRectangleIcon";
 import UserIcon from "@/icons/UserIcon";
@@ -8,7 +9,7 @@ type Props = {};
 
 const Action = (props: Props) => {
   return (
-    <div className="absolute py-1 shadow-xl rounded-lg top-0 right-0 bg-white z-30 w-fit invisible opacity-0 transition-all delay-200 group-hover:top-8 group-hover:opacity-100 group-hover:visible">
+    <OnHoverWrapper>
       <Link
         href="/profile"
         className="py-2 px-4 hover:bg-gray-200 flex items-center gap-5"
@@ -27,7 +28,7 @@ const Action = (props: Props) => {
         </IconWrapper>
         <span className=" whitespace-nowrap">Log out</span>
       </Link>
-    </div>
+    </OnHoverWrapper>
   );
 };
 
