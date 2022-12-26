@@ -1,4 +1,6 @@
 import Heading from '@/dls/Heading'
+import IconWrapper from '@/dls/IconWrapper'
+import ClipboardIcon from '@/icons/ClipboardIcon'
 import React from 'react'
 
 type Props = {}
@@ -19,7 +21,12 @@ const ProfilePage = (props: Props) => {
           <span className='lg:ml-0 ml-3'>**********</span>
         </div>
         <span className='flex lg:flex-row flex-col lg:items-center'>
-          <span className='w-[18%] font-semibold whitespace-nowrap'>Token Telegram</span>
+          <span className='w-[18%] font-semibold whitespace-nowrap flex items-center gap-2'>
+            <span>Token Telegram</span>
+            <IconWrapper className='w-5'>
+              <ClipboardIcon />
+            </IconWrapper>
+          </span>
           <span className='lg:ml-0 ml-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. At, ullam!</span>
         </span>
       </div>
