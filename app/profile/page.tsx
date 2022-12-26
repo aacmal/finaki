@@ -1,10 +1,29 @@
+import Heading from '@/dls/Heading'
 import React from 'react'
 
 type Props = {}
 
+// TODO: Refactor this component
+
 const ProfilePage = (props: Props) => {
   return (
-    <div>ProfilePage</div>
+    <div className='mt-5'>
+      <Heading>Informasi tentang akun</Heading>
+      <div className='p-5 bg-white rounded-2xl flex flex-col gap-3 mt-4'>
+        <div className='flex  lg:flex-row flex-col lg:items-center'>
+          <span className='w-[18%] font-semibold'>Email</span>
+          <span className='lg:ml-0 ml-3'>personalemail@gmail.com</span>
+        </div>
+        <div className='flex lg:flex-row flex-col lg:items-center'>
+          <span className='w-[18%] font-semibold'>Password</span>
+          <span className='lg:ml-0 ml-3'>**********</span>
+        </div>
+        <span className='flex lg:flex-row flex-col lg:items-center'>
+          <span className='w-[18%] font-semibold whitespace-nowrap'>Token Telegram</span>
+          <span className='lg:ml-0 ml-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. At, ullam!</span>
+        </span>
+      </div>
+    </div>
   )
 }
 
