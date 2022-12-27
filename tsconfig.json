@@ -18,6 +18,8 @@
       "@/icons/*": ["./components/icons/*"],
       "@/types/*": ["./types/*"],
       "@/dls/*": ["./components/dls/*"],
+      "@/components/*": ["./components/*"],
+      "@/utils/*": ["./utils/*"],
     },
     "plugins": [
       {

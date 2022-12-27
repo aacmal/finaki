@@ -3,10 +3,10 @@ import ArrowCircleIcon from '@/icons/ArrowCircleIcon';
 import ArrowIcon from '@/icons/ArrowIcon';
 import classNames from 'classnames';
 import React from 'react'
-import AreaChart from '../../components/Charts/AreaChart';
-import BarChart from '../../components/Charts/BarChart/BarChart';
-import PieChart from '../../components/Charts/PieChart';
-import RecentTransactions from '../../components/Transactions/RecentTransactions';
+import AreaChart from '@/components/Charts/AreaChart';
+import BarChart from '@/components/Charts/BarChart/BarChart';
+import PieChart from '@/components/Charts/PieChart';
+import RecentTransactions from '@/components/Transactions/RecentTransactions';
 
 type Props = {}
 export const data = [

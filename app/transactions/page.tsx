@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
-import AreaChart from '../../components/Charts/AreaChart'
-import AllTransactions from '../../components/Transactions/AllTransactions'
-import { getTransactionsData } from '../../utils/transaction'
-import { data } from '../dashboard/page'
+import AreaChart from '@/components/Charts/AreaChart'
+import AllTransactions from '@/components/Transactions/AllTransactions'
+import { getTransactionsData } from '@/utils/transaction'
 
 type Props = {}
 
