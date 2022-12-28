@@ -27,15 +27,7 @@ export default function RootLayout({
       */}
       <head />
       <body className={classNames('bg-gray-100', font.className)}>
-        <Container>
-          <Navbar/>
-          <div className='flex flex-col w-full'>
-            <Header/>
-            <main>
-              {children}
-            </main>
-          </div>
-        </Container>
+        {children}
       </body>
     </html>
   )

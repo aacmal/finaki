@@ -22,17 +22,17 @@ const Navbar = (props: Props) => {
       {/* <h1 className='mb-10 font-bold text-3xl ml-3 mt-3 hidden lg:block'>Finaki.</h1> */}
       <NavLink 
         icon={<GridIcon {...defaultIconProps}/>} 
-        href='/dashboard'
+        href='/app/dashboard'
         active={pathname === '/dashboard'}
       >Dashboard</NavLink>
       <NavLink 
         icon={<ArrowsIcon {...defaultIconProps}/>} 
-        href='/transactions'
+        href='/app/transactions'
         active={pathname === '/transactions'}
       >Transactions</NavLink>
       <NavLink 
         icon={<GearIcon {...defaultIconProps}/>} 
-        href='/settings'
+        href='/app/settings'
         active={pathname === '/settings'}
       >Settings</NavLink>
     </nav>
