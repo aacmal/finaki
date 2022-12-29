@@ -2,6 +2,7 @@ import OnHoverWrapper from "@/dls/ActionWrapper/OnHoverWrapper";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowRectangleIcon from "@/icons/ArrowRectangleIcon";
 import UserIcon from "@/icons/UserIcon";
+import { Routes } from "@/types/Routes";
 import Link from "next/link";
 import React from "react";
 
@@ -11,7 +12,7 @@ const Action = (props: Props) => {
   return (
     <OnHoverWrapper>
       <Link
-        href="/profile"
+        href={Routes.Profile}
         className="py-2 px-4 hover:bg-gray-200 flex items-center gap-5"
       >
         <IconWrapper>

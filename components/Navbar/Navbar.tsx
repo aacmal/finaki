@@ -9,6 +9,7 @@ import GridIcon from '@/icons/GridIcon'
 import ArrowsIcon from '@/icons/ArrowsIcon'
 import GearIcon from '@/icons/GearIcon'
 import { defaultIconProps } from '@/types/IconProps'
+import { Routes } from '@/types/Routes'
 
 
 type Props = {}
@@ -22,18 +23,18 @@ const Navbar = (props: Props) => {
       {/* <h1 className='mb-10 font-bold text-3xl ml-3 mt-3 hidden lg:block'>Finaki.</h1> */}
       <NavLink 
         icon={<GridIcon {...defaultIconProps}/>} 
-        href='/app/dashboard'
-        active={pathname === '/dashboard'}
+        href={Routes.Dashboard}
+        active={pathname === Routes.Dashboard}
       >Dashboard</NavLink>
       <NavLink 
         icon={<ArrowsIcon {...defaultIconProps}/>} 
-        href='/app/transactions'
-        active={pathname === '/transactions'}
+        href={Routes.Transactions}
+        active={pathname === Routes.Transactions}
       >Transactions</NavLink>
       <NavLink 
         icon={<GearIcon {...defaultIconProps}/>} 
-        href='/app/settings'
-        active={pathname === '/settings'}
+        href={Routes.Settings}
+        active={pathname === Routes.Settings}
       >Settings</NavLink>
     </nav>
   )
