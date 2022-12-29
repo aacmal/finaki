@@ -1,5 +1,5 @@
+import Image from "@/dls/Image";
 import classNames from "classnames";
-import Image from "next/image";
 import React from "react";
 
 type ThemeOptionProps = {
@@ -26,11 +26,11 @@ const ThemeOption = ({
       )}
       onClick={onClick}
     >
-      <div className="w-[10rem] md:w-[18rem] lg:w-[24rem] aspect-[4/3] rounded-2xl overflow-hidden">
-        <div className="h-full w-full relative">
-          <Image fill style={{ objectFit: "cover" }} src={src} alt={alt} />
-        </div>
-      </div>
+      <Image
+        src={src}
+        alt={alt}
+        className="w-[10rem] md:w-[18rem] lg:w-[24rem] aspect-[4/3] rounded-2xl overflow-hidden"
+      />
     </div>
   );
 };
