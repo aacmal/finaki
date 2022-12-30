@@ -1,0 +1,47 @@
+.inputWrapper{
+  position: relative;
+
+  label {
+    @apply text-gray-500;
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input{
+    @apply bg-gray-100;
+    transition: all 0.2s ease-in-out;
+    &:focus + label {
+      top: 0 !important;
+      left: 20px;
+      background-color: white;
+    }
+
+    &:not(:placeholder-shown) + label {
+      top: 0 !important;
+      left: 20px;
+      background-color: white;
+    }
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:focus::placeholder {
+      @apply text-gray-400;
+      transition-delay: 100ms;
+    }
+
+    &:not(:placeholder-shown){
+      @apply ring-1 ring-gray-300;
+      background-color: white;
+    }
+
+    &:focus{
+      @apply ring-2 ring-blue-400 bg-white ;
+    }
+  }
+}
