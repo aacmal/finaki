@@ -16,6 +16,7 @@ type Props = {
   id: string;
   defaultValue?: string;
   required?: boolean;
+  minLength?: number;
   className?: string;
 };
 
@@ -28,6 +29,8 @@ const InputWithLabel = ({
   label,
   className,
   defaultValue,
+  required,
+  minLength,
 }: Props) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
@@ -51,6 +54,8 @@ const InputWithLabel = ({
         ref={ref}
         value={value}
         defaultValue={defaultValue}
+        required={required}
+        minLength={minLength}
       />
       <label htmlFor={id}>{label}</label>
       {type === "password" && (

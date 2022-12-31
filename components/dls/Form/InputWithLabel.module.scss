@@ -36,7 +36,7 @@
     }
 
     &:not(:placeholder-shown){
-      @apply ring-1 ring-gray-300;
+      @apply ring-1 ring-gray-300 invalid:ring-pink-400;
       background-color: white;
     }
 
@@ -45,7 +45,11 @@
     }
 
     &:focus{
-      @apply ring-2 ring-blue-400 bg-white ;
+      @apply bg-white ring-2 ring-blue-400;
+    }
+
+    &:focus:not(:placeholder-shown){
+      @apply ring-2 ring-blue-400 ;
     }
   }
 

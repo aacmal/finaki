@@ -24,12 +24,16 @@ const LoginPage = (props: Props) => {
               id="email"
               type="email"
               placeholder="contoh@mail.com"
+              minLength={5}
+              required
             />
             <InputWithLabel
               label="Password"
               id="password"
               type="password"
               placeholder="masukan password anda"
+              minLength={5}
+              required
             />
             <button
               className="px-4 py-4 w-full bg-blue-500 rounded-xl text-white transition-all hover:shadow-2xl hover:shadow-blue-200"
