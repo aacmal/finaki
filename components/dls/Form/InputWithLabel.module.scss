@@ -40,8 +40,22 @@
       background-color: white;
     }
 
+    &:not(:placeholder-shown) ~ .toggleHide {
+      display: block;
+    }
+
     &:focus{
       @apply ring-2 ring-blue-400 bg-white ;
     }
+  }
+
+  .toggleHide{
+    @apply text-gray-500;
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 }
