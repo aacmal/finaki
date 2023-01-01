@@ -1,33 +1,52 @@
-import classNames from "classnames"
+import classNames from "classnames";
 
 type HeadingTextProps = {
-  children: React.ReactNode,
-  className?: string,
-  isBold?: boolean,
-  isItalic?: boolean,
-  isUnderline?: boolean,
-  defaultColor?: 'bright' | 'dark',
-}
+  children: React.ReactNode;
+  className?: string;
+  fontWeight?: "normal" | "medium" | "bold" | "extrabold";
+  isItalic?: boolean;
+  isUnderline?: boolean;
+  defaultColor?: "bright" | "dark";
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+};
 
-const Heading = ({ 
-  children, 
-  className, 
-  defaultColor = 'dark',
-  ...props 
+const Heading = ({
+  children,
+  className,
+  defaultColor = "dark",
+  level,
+  fontWeight = "bold",
+  isItalic = false,
+  isUnderline = false,
 }: HeadingTextProps) => {
   return (
-    <h1
-      {...props}
+    <div
+      role="heading"
+      aria-level={level}
       className={classNames(
-        'text-lg font-bold lg:text-xl text-gray-700',
-        {"text-gray-700": defaultColor === 'dark'},
-        {"text-gray-100": defaultColor === 'bright'},
-        className,
+        { "text-gray-700": defaultColor === "dark" },
+        { "text-gray-100": defaultColor === "bright" },
+
+        { "lg:text-2xl text-xl": level === 1 },
+        { "lg:text-xl text-lg": level === 2 },
+        { "text-lg": level === 3 },
+        { "text-base": level === 4 },
+        { "text-sm": level === 5 },
+        { "text-xs": level === 6 },
+
+        { "font-extrabold": fontWeight === "extrabold" },
+        { "font-bold": fontWeight === "bold" },
+        { "font-semibold": fontWeight === "medium" },
+        { "font-normal": fontWeight === "normal" },
+        { italic: isItalic },
+        { underline: isUnderline },
+
+        className
       )}
     >
       {children}
-    </h1>
-  )
-}
+    </div>
+  );
+};
 
-export default Heading
+export default Heading;

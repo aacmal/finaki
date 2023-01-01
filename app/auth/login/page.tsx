@@ -16,7 +16,9 @@ const LoginPage = (props: Props) => {
         className="w-[40%] lg:w-[60%] aspect-square"
       />
       <div className="flex flex-col justify-evenly pb-10 lg:pt-16 px-6 md:px-10 w-full lg:gap-0 gap-9 lg:w-[40%] h-fit lg:h-full">
-        <Heading className="text-center mt-2 lg:mt-16">Selamat Datang!</Heading>
+        <Heading level={1} className="text-center mt-2 lg:mt-16">
+          Selamat Datang!
+        </Heading>
         <form action="">
           <div className=" space-y-10">
             <InputWithLabel
