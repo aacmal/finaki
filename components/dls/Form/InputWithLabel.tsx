@@ -48,6 +48,12 @@ const InputWithLabel = ({
               : "text"
             : type
         }
+        // If type is email, set the pattern to validate email
+        pattern={
+          type === "email"
+            ? "[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}$"
+            : undefined
+        }
         name={id}
         id={id}
         placeholder={placeholder}
