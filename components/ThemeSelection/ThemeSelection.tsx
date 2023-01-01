@@ -19,7 +19,9 @@ const ThemeSelection = (props: any) => {
   ];
   return (
     <div>
-      <Heading className="mb-3">Tema</Heading>
+      <Heading level={2} fontWeight="medium" className="mb-3">
+        Tema
+      </Heading>
       <div className="flex gap-3 p-3 lg:p-5 rounded-2xl bg-slate-50">
         <ThemeOption
           {...themeList[0]}
