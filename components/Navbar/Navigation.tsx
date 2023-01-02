@@ -21,9 +21,10 @@ const Navigation = (props: Props) => {
   return (
     <header
       className={classNames(
-        " transition-all duration-300 ease-in-out fixed",
+        " transition-all duration-300 ease-out fixed",
         {
-          "left-1/2 top-10 lg:top-20 -translate-x-1/2 max-w-xl": isInAuthPage,
+          "left-1/2 top-10 lg:top-20 w-72 -translate-x-1/2 max-w-xl":
+            isInAuthPage,
         },
         {
           "left-0 top-0 max-w-full w-full": isInHomePage,
