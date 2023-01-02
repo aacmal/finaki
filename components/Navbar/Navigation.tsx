@@ -5,6 +5,7 @@ import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import ThemeToggleIcon from "../ThemeSelection/ThemeToogleIcon";
 import NavigationLink from "./NavigationLink";
 
 type Props = {};
@@ -75,6 +76,7 @@ const Navigation = (props: Props) => {
             </>
           )}
         </div>
+        {isInHomePage && <ThemeToggleIcon />}
       </nav>
     </header>
   );
