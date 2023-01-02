@@ -1,10 +1,7 @@
-import { usePathname } from "next/navigation";
-import Container from "@/components/Container/Container";
-import Header from "@/components/Header/Header";
-import Navbar from "@/components/Navbar/Navbar";
 import { Inter } from "@next/font/google";
 import classNames from "classnames";
 import "./globals.scss";
+import Navigation from "@/components/Navbar/Navigation";
 
 // font set up
 const font = Inter({
@@ -24,7 +21,8 @@ export default function RootLayout({
       */}
       <head />
       <body className={classNames("bg-gray-100", font.className)}>
-        {children}
+        <Navigation />
+        <main>{children}</main>
       </body>
     </html>
   );

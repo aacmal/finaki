@@ -7,4 +7,5 @@ export enum Routes {
   Auth = "/auth",
   Login = "/auth/login",
   Register = "/auth/register",
+  Home = "/",
 }
