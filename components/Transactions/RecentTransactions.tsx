@@ -11,7 +11,7 @@ type RecentTransactionsProps = {
 
 const RecentTransactions = ({ data }: RecentTransactionsProps) => {
   return (
-    <div className="flex-1 p-4 lg:p-7 bg-slate-50 rounded-xl">
+    <div className="flex-1 p-4 lg:p-7 bg-white/70 shadow-xl shadow-zinc-200/60 rounded-xl">
       <Heading fontWeight="medium" level={2} className="mb-4">
         Transkasi terbaru
       </Heading>

@@ -19,12 +19,10 @@ type Props = {
 
 const ChartHeader = () => (
   <div className="flex justify-between items-center px-2 lg:px-0 mb-5">
-    <Heading fontWeight="medium" level={2}>
+    <Heading fontWeight="medium" level={3}>
       Aktivitas
     </Heading>
-    <div className="flex items-center">
-      <div>7 Hari</div>
-    </div>
+    <span className="text-sm">7 Hari</span>
   </div>
 );
 
@@ -46,8 +44,8 @@ const AreaChart = ({ data }: Props) => {
         <ArChart data={data}>
           <defs>
             <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3c84fa" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#3c84fa" stopOpacity={0} />
+              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis
@@ -65,7 +63,7 @@ const AreaChart = ({ data }: Props) => {
             strokeWidth={3}
             type="monotone"
             dataKey="total"
-            stroke="#3c84fa"
+            stroke="#3b82f6"
             fillOpacity={1}
             fill="url(#colorBl)"
           />

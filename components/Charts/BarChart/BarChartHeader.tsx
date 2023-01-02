@@ -7,7 +7,7 @@ type BarChartHeaderProps = {
 
 const BarChartHeader = ({ COLOR }: BarChartHeaderProps) => (
   <div className="flex justify-between px-4 items-center mb-5">
-    <Heading level={2} fontWeight="medium" className="font-bold text-xl">
+    <Heading level={3} fontWeight="medium">
       Perbandingan
     </Heading>
     <div className="flex items-center gap-4">

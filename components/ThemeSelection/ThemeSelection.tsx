@@ -22,7 +22,7 @@ const ThemeSelection = (props: any) => {
       <Heading level={2} fontWeight="medium" className="mb-3">
         Tema
       </Heading>
-      <div className="flex gap-3 p-3 lg:p-5 rounded-2xl bg-slate-50">
+      <div className="flex gap-3 p-3 lg:p-5 rounded-2xl bg-white/70 shadow-xl shadow-zinc-200/60">
         <ThemeOption
           {...themeList[0]}
           onClick={() => setTheme(Theme.Light)}

@@ -16,7 +16,6 @@ import {
 import ChartContainer from "../ChartContainer";
 import ChartWrapper from "../ChartWrapper";
 
-import styles from "./BarChart.module.scss";
 import BarChartHeader from "./BarChartHeader";
 
 type Props = {
@@ -24,8 +23,8 @@ type Props = {
 };
 
 const COLOR = {
-  INCOME: "#0088FE",
-  OUTCOME: "#FF8042",
+  INCOME: "#3b82f6",
+  OUTCOME: "#f97316",
 };
 
 const BarChart = ({ data }: Props) => {
@@ -42,14 +41,14 @@ const BarChart = ({ data }: Props) => {
               radius={[10, 10, 10, 10]}
               barSize={8}
               dataKey="in"
-              fill="#0088FE"
+              fill={COLOR["INCOME"]}
             />
             <Bar
               isAnimationActive
               radius={[10, 10, 10, 10]}
               barSize={8}
               dataKey="out"
-              fill="#FF8042"
+              fill={COLOR["OUTCOME"]}
             />
             <XAxis
               style={{ fontSize: 13 }}
@@ -62,13 +61,15 @@ const BarChart = ({ data }: Props) => {
           </BaChart>
         </ChartWrapper>
       </div>
-      <div className="lg:w-[17rem] w-full h-full bg-slate-50 py-7 px-3 rounded-xl flex flex-col gap-5">
+      <div className="lg:w-[17rem] w-full h-full bg-transparent py-7 px-3 rounded-xl flex flex-col gap-5">
         <TextWithIcon
           iconPosition="left"
           icon={
             <ArrowIcon direction="up" strokeWidth={3} stroke="currentColor" />
           }
-          className={classNames(styles.incomeBadge)}
+          className={classNames(
+            "bg-blue-500 text-white shadow-xl shadow-blue-200"
+          )}
         >
           Rp. 2.000.000
         </TextWithIcon>
@@ -77,7 +78,9 @@ const BarChart = ({ data }: Props) => {
           icon={
             <ArrowIcon direction="down" strokeWidth={3} stroke="currentColor" />
           }
-          className={classNames(styles.outcomeBadge)}
+          className={classNames(
+            "bg-orange-500 text-white shadow-xl shadow-orange-200"
+          )}
         >
           -Rp. 2.000.000
         </TextWithIcon>

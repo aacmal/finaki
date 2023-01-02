@@ -33,7 +33,7 @@ const Navigation = (props: Props) => {
     >
       <nav
         className={classNames(
-          "items-center flex gap-3 bg-white shadow-lg rounded-lg",
+          "items-center flex gap-3 bg-white shadow-lg shadow-neutral-200/60 rounded-lg",
           { "px-2 py-2 ": isInAuthPage },
           { "px-5 py-5 md:px-10 ": isInHomePage }
         )}

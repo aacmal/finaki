@@ -18,7 +18,7 @@ const TextWithIcon = ({
   return (
     <div
       className={classNames(
-        "gap-10 w-full p-5 rounded-lg flex items-center text-white shadow-lg",
+        "gap-10 w-full p-5 rounded-xl flex items-center text-white shadow-lg",
         className
       )}
     >

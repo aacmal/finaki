@@ -1,25 +1,25 @@
-import React, { useEffect } from 'react'
-import AreaChart from '@/components/Charts/AreaChart'
-import AllTransactions from '@/components/Transactions/AllTransactions'
-import { getTransactionsData } from '@/utils/transaction'
+import React from "react";
+import AreaChart from "@/components/Charts/AreaChart";
+import AllTransactions from "@/components/Transactions/AllTransactions";
+import { getTransactionsData } from "@/utils/transaction";
 
-type Props = {}
+type Props = {};
 
 const getData = async () => {
-  const data = await getTransactionsData()
+  const data = await getTransactionsData();
   // console.log(json['2 Desember']);
   console.log(data);
-  
-  return data
-}
+
+  return data;
+};
 
 const Page = async (props: Props) => {
-  const data = await getData()
+  const data = await getData();
   return (
     <>
-      <AllTransactions data={data}/>
+      <AllTransactions data={data} />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

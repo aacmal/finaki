@@ -20,7 +20,7 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className={classNames("bg-gray-100", font.className)}>
+      <body className={classNames("bg-stone-100", font.className)}>
         <Navigation />
         <main>{children}</main>
       </body>

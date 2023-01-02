@@ -7,16 +7,16 @@ import ChartContainer from "./ChartContainer";
 import ChartWrapper from "./ChartWrapper";
 
 type Props = {
-  data: any[];
+  data: any;
   width?: number;
   height?: number;
 };
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#FF0000"];
+const COLORS = ["#FA7070", "#8CC0DE", "#B1BCE6", "#DEB6AB", "#525E75"];
 
 const PieChartHeader = () => (
   <div className="flex justify-between px-4 items-center mb-5">
-    <Heading fontWeight="medium" level={2}>
+    <Heading fontWeight="medium" level={3}>
       Kategori
     </Heading>
   </div>
@@ -57,7 +57,7 @@ const PieChart = ({ data }: Props) => {
             innerRadius={50}
             blendStroke={true}
           >
-            {data.map((entry, index) => (
+            {data.map((entry: any, index: number) => (
               <Cell key={`cell-${index}`} fill={COLORS[index]} />
             ))}
           </Pie>

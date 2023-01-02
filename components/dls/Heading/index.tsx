@@ -24,12 +24,12 @@ const Heading = ({
       role="heading"
       aria-level={level}
       className={classNames(
-        { "text-gray-700": defaultColor === "dark" },
+        { "text-stone-700": defaultColor === "dark" },
         { "text-gray-100": defaultColor === "bright" },
 
         { "lg:text-2xl text-xl": level === 1 },
         { "lg:text-xl text-lg": level === 2 },
-        { "text-lg": level === 3 },
+        { "lg:text-lg text-base": level === 3 },
         { "text-base": level === 4 },
         { "text-sm": level === 5 },
         { "text-xs": level === 6 },
