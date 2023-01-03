@@ -85,7 +85,7 @@ const TransactionItem = ({ transaction }: Props) => {
             </div>
           ) : (
             <span>
-              {transaction.type === "out" && "-"}
+              {transaction.type === "out" ? "-" : "+"}
               {transaction.amount}
             </span>
           )}
