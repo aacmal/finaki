@@ -5,7 +5,7 @@ import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import ThemeToggleIcon from "../ThemeSelection/ThemeToogleIcon";
+import ThemeToggleIcon from "../ThemeSelection/ThemeToggleIcon";
 import NavigationLink from "./NavigationLink";
 
 type Props = {};
