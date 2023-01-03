@@ -4,5 +4,5 @@ export enum Theme {
 }
 
 
-
-export type ThemeState = 'light' | 'dark';
+// set theme same as user preference use undefined
+export type ThemeState = Theme;
