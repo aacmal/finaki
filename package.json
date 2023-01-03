@@ -21,7 +21,8 @@
     "react-dom": "18.2.0",
     "recharts": "^2.2.0",
     "sass": "^1.56.2",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "zustand": "^4.2.0"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",
