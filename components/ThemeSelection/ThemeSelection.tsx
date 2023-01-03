@@ -3,11 +3,14 @@
 import Heading from "@/dls/Heading";
 import { Theme, ThemeState } from "@/types/Theme";
 import React, { useState } from "react";
+import useHydration from "../../hooks/useHydration";
 import useTheme from "../../hooks/useTheme";
 import ThemeOption from "./ThemeOption";
 
 const ThemeSelection = (props: any) => {
   const { colorTheme, setColorTheme } = useTheme();
+  const hydrated = useHydration();
+
   const themeList = [
     {
       src: "/images/lightmode_preview.jpg",
@@ -19,6 +22,7 @@ const ThemeSelection = (props: any) => {
     },
   ];
 
+  if (!hydrated) return null;
   return (
     <div>
       <Heading level={2} fontWeight="medium" className="mb-3">
