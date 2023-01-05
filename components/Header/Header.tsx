@@ -3,9 +3,13 @@
 import Button from "@/dls/Button/Button";
 import Divider from "@/dls/Divider";
 import Heading from "@/dls/Heading";
+import Modal from "@/dls/Modal/Modal";
+import ModalContent from "@/dls/Modal/ModalContent";
+import ModalOverlay from "@/dls/Modal/ModalOverlay";
+import ModalTrigger from "@/dls/Modal/ModalTrigger";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import TransactionForm from "../Transactions/TransactionForm";
+import AddTransaction from "../Transactions/AddTransaction";
 import ProfileInfo from "./ProfileInfo";
 
 type Props = {};
@@ -32,16 +36,10 @@ const Header = (props: Props) => {
     <header className="flex justify-between my-4 items-center w-full px-2 lg:px-5">
       <Heading level={1}>{getHeaderTitle(pathname)}</Heading>
       <div className="flex items-center gap-4 h-full">
-        <button
-          type="submit"
-          className="border border-blue-500 text-blue-500 px-3 py-1 rounded-lg font-bold"
-        >
-          Tambah
-        </button>
+        <AddTransaction />
         <Divider vertical />
         <ProfileInfo />
       </div>
-      <TransactionForm />
     </header>
   );
 };

@@ -2,16 +2,31 @@ import Button from "@/dls/Button/Button";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import RadioButton from "@/dls/Form/Radio/RadioButton";
 import Heading from "@/dls/Heading";
+import IconWrapper from "@/dls/IconWrapper";
+import { Modal, ModalCloseTringger, ModalContent } from "@/dls/Modal";
+import ModalTrigger from "@/dls/Modal/ModalTrigger";
+
 import ArrowIcon from "@/icons/ArrowIcon";
+import XmarkIcon from "@/icons/XmarkIcon";
 import React from "react";
 
 type Props = {};
 
-const TransactionForm = (props: Props) => {
+const AddTransaction = (props: Props) => {
   return (
-    <div className="absolute left-0 top-0 h-screen w-full bg-transparent grid place-items-center z-50">
-      <div className="p-5 bg-white shadow-2xl max-w-lg rounded-lg space-y-6">
-        <Heading level={3}>Tambah Transaksi</Heading>
+    <Modal>
+      <ModalTrigger className="border border-blue-500 text-blue-500 px-3 py-1 rounded-lg font-bold">
+        Tambah
+      </ModalTrigger>
+      <ModalContent className="space-y-6">
+        <div className="flex items-center justify-between">
+          <Heading level={3}>Tambah Transaksi</Heading>
+          <ModalCloseTringger>
+            <IconWrapper className="text-blue-500 cursor-pointer">
+              <XmarkIcon />
+            </IconWrapper>
+          </ModalCloseTringger>
+        </div>
         <InputWithLabel
           id="description"
           type="text"
@@ -49,9 +64,9 @@ const TransactionForm = (props: Props) => {
         <Button type="submit" width="full">
           Tamabah
         </Button>
-      </div>
-    </div>
+      </ModalContent>
+    </Modal>
   );
 };
 
-export default TransactionForm;
+export default AddTransaction;

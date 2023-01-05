@@ -10,7 +10,7 @@ const AppLayout = ({ children }: Props) => {
   return (
     <Container>
       <Navbar />
-      <div className="flex flex-col w-full relative">
+      <div className="flex flex-col w-full">
         <Header />
         <main>{children}</main>
       </div>
