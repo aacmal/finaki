@@ -4,19 +4,18 @@ import Navbar from "@/components/Navbar/Navbar";
 
 type Props = {
   children: React.ReactNode;
-}
+};
 
 const AppLayout = ({ children }: Props) => {
   return (
     <Container>
       <Navbar />
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full relative">
         <Header />
         <main>{children}</main>
       </div>
     </Container>
   );
 };
-
 
 export default AppLayout;
