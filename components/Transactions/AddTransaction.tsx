@@ -62,7 +62,7 @@ const AddTransaction = (props: Props) => {
           />
         </div>
         <Button type="submit" width="full">
-          Tamabah
+          Tambah
         </Button>
       </ModalContent>
     </Modal>
