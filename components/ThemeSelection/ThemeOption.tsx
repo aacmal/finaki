@@ -10,13 +10,7 @@ type ThemeOptionProps = {
   onClick: () => void;
 };
 
-const ThemeOption = ({
-  active,
-  src,
-  alt,
-  className,
-  onClick,
-}: ThemeOptionProps) => {
+const ThemeOption = ({ active, src, alt, onClick }: ThemeOptionProps) => {
   return (
     <div
       className={classNames(
@@ -30,6 +24,7 @@ const ThemeOption = ({
         src={src}
         alt={alt}
         className="w-[10rem] md:w-[18rem] lg:w-[24rem] aspect-[4/3] rounded-2xl overflow-hidden"
+        priority
       />
     </div>
   );

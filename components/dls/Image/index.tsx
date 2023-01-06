@@ -5,13 +5,20 @@ type Props = {
   src: string;
   alt: string;
   className: string;
+  priority?: boolean;
 };
 
-const Image = ({ src, alt, className }: Props) => {
+const Image = ({ src, alt, className, priority }: Props) => {
   return (
     <div className={className}>
       <div className="h-full w-full relative">
-        <Img fill style={{ objectFit: "cover" }} src={src} alt={alt} />
+        <Img
+          priority={priority}
+          fill
+          style={{ objectFit: "cover" }}
+          src={src}
+          alt={alt}
+        />
       </div>
     </div>
   );
