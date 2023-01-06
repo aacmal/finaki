@@ -22,7 +22,7 @@ const ThemeSelection = (props: any) => {
     },
   ];
 
-  if (!hydrated) return null;
+  if (!hydrated) return <></>;
   return (
     <div>
       <Heading level={2} fontWeight="medium" className="mb-3">

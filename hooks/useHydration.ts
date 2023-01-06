@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import useStore from "../stores/store";
 
-const useHydration = () => {
-  const [hydrated, setHydrated] = useState(useStore.persist.hasHydrated);
+const useHydration = (): boolean  => {
+  const [hydrated, setHydrated] = useState<boolean>(false);
 
   useEffect(() => {
     // Note: This is just in case you want to take into account manual rehydration.
