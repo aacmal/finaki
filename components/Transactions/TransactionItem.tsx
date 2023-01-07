@@ -27,12 +27,12 @@ const TransactionItem = ({ transaction }: Props) => {
       )}
       <div
         className={classNames(
-          "flex gap-2 items-center w-full py-3 hover:bg-blue-100 rounded-xl px-4 group",
-          { "bg-blue-100": isOnEdit },
+          "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-xl px-4 group",
+          { "bg-blue-100 dark:bg-blue-900": isOnEdit },
           { "z-50": isOnEdit }
         )}
       >
-        <div className="w-[14%] hidden lg:block text-gray-500 group-hover:text-gray-900">
+        <div className="w-[14%] hidden lg:block text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
           {transaction.time}
         </div>
         <div className="w-[40%] lg:w-[30%] flex flex-col">
@@ -45,7 +45,7 @@ const TransactionItem = ({ transaction }: Props) => {
               className="border border-blue-200 -ml-3"
             />
           ) : (
-            <span className="font-bold lg:font-medium">
+            <span className="font-bold lg:font-medium text-slate-800 dark:text-slate-200">
               {transaction.description}
             </span>
           )}
@@ -66,7 +66,7 @@ const TransactionItem = ({ transaction }: Props) => {
           )}
         >
           {isOnEdit ? (
-            <div className="flex gap-1 ml-4">
+            <div className="flex gap-1 ml-4 dark:text-slate-200">
               <select className="bg-transparent">
                 <option className="text-blue-500" value="in">
                   in

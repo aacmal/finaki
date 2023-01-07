@@ -10,7 +10,7 @@ const BarChartHeader = ({ COLOR }: BarChartHeaderProps) => (
     <Heading level={3} fontWeight="medium">
       Perbandingan
     </Heading>
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 dark:text-slate-300">
       <div className="flex items-center">
         <div
           style={{ backgroundColor: COLOR["INCOME"] }}

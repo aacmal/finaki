@@ -1,65 +1,69 @@
-.inputWrapper{
-  position: relative;
+// .inputWithLabelWrapper{
+  // Disable this line because the module.scss file is not working with the darkmode and change the color in the global.scss file
 
-  label {
-    @apply text-gray-500;
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 0 5px;
-    transition: all 0.2s ease-in-out;
-  }
+  
+  // position: relative;
 
-  input{
-    @apply bg-gray-100;
-    transition: all 0.2s ease-in-out;
-    &:focus + label {
-      top: 0 !important;
-      left: 20px;
-      background-color: white;
-    }
+  // label {
+  //   @apply text-gray-500;
+  //   position: absolute;
+  //   left: 30px;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   padding: 0 5px;
+  //   transition: all 0.2s ease-in-out;
+  // }
 
-    &:not(:placeholder-shown) + label {
-      top: 0 !important;
-      left: 20px;
-      background-color: white;
-    }
+  // input{
+  //   @apply bg-gray-100;
+  //   transition: all 0.2s ease-in-out;
+  //   &:focus + label {
+  //     @apply bg-white dark:bg-slate-900;
+  //     top: 0 !important;
+  //     left: 20px;
+  //   }
 
-    &::placeholder {
-      color: transparent;
-    }
+  //   &:not(:placeholder-shown) + label {
+  //     @apply bg-white;
+  //     top: 0 !important;
+  //     left: 20px;
 
-    &:focus::placeholder {
-      @apply text-gray-400;
-      transition-delay: 100ms;
-    }
+  //   }
 
-    &:not(:placeholder-shown){
-      @apply ring-1 ring-gray-300 invalid:ring-pink-400;
-      background-color: white;
-    }
+  //   &::placeholder {
+  //     color: transparent;
+  //   }
 
-    &:not(:placeholder-shown) ~ .toggleHide {
-      display: block;
-    }
+  //   &:focus::placeholder {
+  //     @apply text-gray-400;
+  //     transition-delay: 100ms;
+  //   }
 
-    &:focus{
-      @apply bg-white ring-2 ring-blue-400;
-    }
+  //   &:not(:placeholder-shown){
+  //     @apply bg-white;
+  //     @apply ring-1 ring-gray-300 invalid:ring-pink-400;
+  //   }
 
-    &:focus:not(:placeholder-shown){
-      @apply ring-2 ring-blue-400 ;
-    }
-  }
+    // &:not(:placeholder-shown) ~ .toggleHide {
+    //   display: block;
+    // }
 
-  .toggleHide{
-    @apply text-gray-500;
-    display: none;
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-  }
-}
+  //   &:focus{
+  //     @apply bg-white ring-2 ring-blue-400;
+  //   }
+
+  //   &:focus:not(:placeholder-shown){
+  //     @apply ring-2 ring-blue-400 ;
+    // }
+//   }
+
+//   .toggleHide{
+//     @apply text-gray-500;
+//     display: none;
+//     position: absolute;
+//     right: 20px;
+//     top: 50%;
+//     transform: translateY(-50%);
+//     cursor: pointer;
+//   }
+// }

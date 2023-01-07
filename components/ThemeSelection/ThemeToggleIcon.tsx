@@ -25,7 +25,7 @@ const ThemeToggleIcon = (props: Props) => {
 
   if (!hydrated) return <></>;
   return (
-    <IconButton className="ml-2" onClick={toggleTheme}>
+    <IconButton className="ml-2 dark:text-slate-200" onClick={toggleTheme}>
       {colorTheme === Theme.Light ? <SunIcon /> : <MoonIcon />}
     </IconButton>
   );

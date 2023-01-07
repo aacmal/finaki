@@ -22,7 +22,7 @@ const ChartHeader = () => (
     <Heading fontWeight="medium" level={3}>
       Aktivitas
     </Heading>
-    <span className="text-sm">7 Hari</span>
+    <span className="text-sm dark:text-slate-300">7 Hari</span>
   </div>
 );
 
@@ -49,14 +49,19 @@ const AreaChart = ({ data }: Props) => {
             </linearGradient>
           </defs>
           <XAxis
-            style={{ fontSize: 13 }}
+            style={{ fontSize: 13, fill: "currentcolor" }}
             height={20}
             axisLine={false}
             tickLine={false}
             interval="preserveStartEnd"
             dataKey="name"
           />
-          <CartesianGrid opacity={0.5} vertical={false} horizontal={true} />
+          <CartesianGrid
+            opacity={0.5}
+            vertical={false}
+            className="dark:opacity-20"
+            horizontal={true}
+          />
           <Tooltip content={renderCustomizedTooltip} />
           <Area
             isAnimationActive

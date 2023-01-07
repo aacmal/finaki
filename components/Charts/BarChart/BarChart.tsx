@@ -34,7 +34,11 @@ const BarChart = ({ data }: Props) => {
         <BarChartHeader COLOR={COLOR} />
         <ChartWrapper className=" h-52 lg:h-72 w-full">
           <BaChart data={data}>
-            <CartesianGrid opacity={0.5} vertical={false} />
+            <CartesianGrid
+              className="dark:opacity-20"
+              opacity={0.5}
+              vertical={false}
+            />
             <Tooltip cursor={{ fill: "#0088FE", opacity: 0.1 }} />
             <Bar
               isAnimationActive
@@ -51,7 +55,7 @@ const BarChart = ({ data }: Props) => {
               fill={COLOR["OUTCOME"]}
             />
             <XAxis
-              style={{ fontSize: 13 }}
+              style={{ fontSize: 13, fill: "currentcolor" }}
               tickMargin={10}
               height={30}
               axisLine={false}
@@ -68,7 +72,7 @@ const BarChart = ({ data }: Props) => {
             <ArrowIcon direction="up" strokeWidth={3} stroke="currentColor" />
           }
           className={classNames(
-            "bg-blue-500 text-white shadow-xl shadow-blue-200"
+            "bg-blue-500 text-white shadow-xl shadow-blue-200 dark:shadow-blue-800"
           )}
         >
           Rp. 2.000.000
@@ -79,7 +83,7 @@ const BarChart = ({ data }: Props) => {
             <ArrowIcon direction="down" strokeWidth={3} stroke="currentColor" />
           }
           className={classNames(
-            "bg-orange-500 text-white shadow-xl shadow-orange-200"
+            "bg-orange-500 text-white shadow-xl shadow-orange-200 dark:shadow-orange-800"
           )}
         >
           -Rp. 2.000.000

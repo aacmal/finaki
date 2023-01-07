@@ -18,7 +18,7 @@ const ProfilePage = (props: Props) => {
       <Heading level={2} fontWeight="medium">
         Informasi tentang akun
       </Heading>
-      <div className="p-5 bg-white rounded-2xl flex flex-col gap-3 mt-4">
+      <div className="p-5 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-2xl flex flex-col gap-3 mt-4">
         <div className="flex  lg:flex-row flex-col lg:items-center">
           <span className="w-[18%] font-semibold">Nama</span>
           <span className="lg:ml-0 ml-3">{user?.name}</span>

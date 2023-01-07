@@ -33,7 +33,7 @@ const renderCustomizedLabel = (props: any) => {
             <span style={{ color: entry.color }} className="font-semibold">
               {percent}%
             </span>
-            <span>{entry.value}</span>
+            <span className="dark:text-slate-300">{entry.value}</span>
           </li>
         );
       })}

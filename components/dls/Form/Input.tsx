@@ -24,7 +24,7 @@ const Input = ({
     <input
       type={type}
       className={classNames(
-        "w-full py-1 px-2 rounded-md",
+        "w-full py-1 px-2 rounded-md dark:text-slate-200",
         {
           "bg-transparent": transparent,
         },

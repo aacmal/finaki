@@ -51,7 +51,7 @@ const LoginPage = (props: Props) => {
             Login
           </Button>
         </FormGroup>
-        <span className="text-center justify-self-end text-gray-600">
+        <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}
           <Link href={Routes.Register} className="text-blue-500">
             Daftar

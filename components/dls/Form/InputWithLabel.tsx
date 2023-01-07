@@ -36,7 +36,11 @@ const InputWithLabel = ({
 
   return (
     <div
-      className={classNames("flex flex-col", styles.inputWrapper, className)}
+      className={classNames(
+        "flex flex-col input-with-label-wrapper",
+        styles.inputWithLabelWrapper,
+        className
+      )}
     >
       <input
         className={classNames("w-full px-4 py-4 rounded-xl")}
@@ -67,7 +71,7 @@ const InputWithLabel = ({
       {type === "password" && (
         <IconWrapper
           onClick={() => setIsPasswordVisible((currentState) => !currentState)}
-          className={styles.toggleHide}
+          className={"toggleHide"}
         >
           <EyeIcon isVisible={isPasswordVisible} />
         </IconWrapper>

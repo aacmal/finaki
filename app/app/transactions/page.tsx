@@ -15,6 +15,8 @@ const getData = async () => {
 
 const Page = async (props: Props) => {
   const data = await getData();
+  console.log("Rendered in server");
+
   return (
     <>
       <AllTransactions data={data} />

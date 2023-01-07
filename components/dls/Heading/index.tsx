@@ -24,7 +24,7 @@ const Heading = ({
       role="heading"
       aria-level={level}
       className={classNames(
-        { "text-stone-700": defaultColor === "dark" },
+        { "text-stone-700 dark:text-slate-200": defaultColor === "dark" },
         { "text-gray-100": defaultColor === "bright" },
 
         { "lg:text-2xl text-xl": level === 1 },

@@ -17,7 +17,7 @@ const List = ({ index, length, type, name, date, hour, value }: ListProps) => {
   return (
     <li
       className={classNames("flex w-full py-3 items-center", {
-        "border-b": index !== length - 1,
+        "border-b dark:border-slate-500": index !== length - 1,
       })}
     >
       <span>
@@ -31,11 +31,17 @@ const List = ({ index, length, type, name, date, hour, value }: ListProps) => {
           />
         </IconWrapper>
       </span>
-      <span className="w-[30%] lg:w-[40%] font-medium">{name}</span>
+      <span className="w-[30%] lg:w-[40%] font-medium dark:text-slate-200">
+        {name}
+      </span>
       <span></span>
       <span className="flex flex-col">
-        <span className="font-medium text-sm md:text-base">{date}</span>
-        <span className="text-xs md:text-base ">{hour}</span>
+        <span className="font-medium text-sm md:text-base dark:text-slate-200">
+          {date}
+        </span>
+        <span className="text-xs md:text-base dark:text-slate-400 text-slate-500">
+          {hour}
+        </span>
       </span>
       <span
         className={classNames(

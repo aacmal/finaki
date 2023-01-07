@@ -13,7 +13,7 @@ const Button = ({ children, type, width, className }: Props) => {
     <button
       type={type}
       className={classNames(
-        "px-4 py-4 bg-blue-500 rounded-xl text-white transition-all hover:shadow-2xl hover:shadow-blue-200",
+        "px-4 py-4 bg-blue-500 rounded-xl text-white transition-all hover:shadow-2xl hover:shadow-blue-200 dark:hover:shadow-blue-700",
         { "w-full": width === "full" },
         { "w-auto": width === "auto" },
         { "w-fit": width === "fit" },

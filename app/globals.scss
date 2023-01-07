@@ -31,3 +31,78 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.recharts-cartesian-axis-tick text tspan {    
+  @apply dark:text-slate-400;
+}
+
+// this line bellow is for the InputWithLabel component, because the module.scss file is not working with the darkmode
+
+.input-with-label-wrapper{
+  position: relative;
+
+  label {
+    @apply text-slate-500 dark:text-slate-300;
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  input{
+    @apply bg-gray-100 text-slate-800 dark:text-slate-100 dark:bg-slate-500 ;
+    transition: all 0.2s ease-in-out;
+    &:focus + label {
+      @apply bg-white dark:bg-slate-600;
+      top: 0 !important;
+      left: 20px;
+    }
+
+    &:not(:placeholder-shown) + label {
+      @apply bg-white dark:bg-slate-600;
+      top: 0 !important;
+      left: 20px;
+
+    }
+
+    &::placeholder {
+      color: transparent;
+    }
+
+    &:focus::placeholder {
+      @apply text-gray-400;
+      transition-delay: 100ms;
+    }
+
+    &:not(:placeholder-shown){
+      @apply bg-white dark:bg-slate-600;
+      @apply ring-1 ring-gray-300 invalid:ring-pink-400;
+    }
+
+
+    &:focus{
+      @apply bg-white ring-2 ring-blue-400 dark:bg-slate-600;
+    }
+
+    &:focus:not(:placeholder-shown){
+      @apply ring-2 ring-blue-400 ;
+    }
+    
+    &:not(:placeholder-shown) ~ .toggleHide {
+      display: block;
+    }
+  }
+
+    .toggleHide{
+    @apply text-gray-500;
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+}
