@@ -1,7 +1,7 @@
 {
-  "name": "express-with-typescript-starter",
+  "name": "finaki-backend",
   "version": "1.0.0",
-  "description": "Starter repository for creating expressjs projects with typescript and eslint",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
