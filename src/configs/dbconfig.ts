@@ -9,8 +9,9 @@ dotenv.config();
 
 const dbConnection = async () => {
   try {
+    mongoose.set("strictQuery", false);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    await mongoose.createConnection(process.env.MONGO_URL!).asPromise();
+    await mongoose.connect(process.env.MONGO_URL!);
     console.log("Database connected");
   } catch (error) {
     console.log(error);
