@@ -1,3 +1,3 @@
 # Definition
 
-This is a starter repository for creating expressjs projects with typescript and eslint
+This project is backend service for finaki-app
