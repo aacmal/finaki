@@ -1,5 +1,5 @@
 import express from "express";
-import * as TransactionController from "../controllers/TransactionController";
+import * as TransactionController from "../controllers/transaction.controller";
 import { transactionValidator } from "../middlewares/validator";
 
 const route = express.Router();
