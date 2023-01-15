@@ -2,6 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import dbConnection from "./src/configs/dbconfig";
 import { TransactionRoute } from "./src/routes/transaction.route";
+import { UserRoute } from "./src/routes/user.route";
+import passport from "passport";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -16,6 +19,11 @@ app.get("/", (req, res) => {
 });
 
 app.use(express.json());
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+
+require("./src/configs/passport");
 
 // Logging request
 app.use((req, res, next) => {
@@ -24,7 +32,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/transaction", TransactionRoute);
+app.use("/api/transaction", passport.authenticate("jwt", { session: false }), TransactionRoute);
+app.use("/api/user", UserRoute);
 
 dbConnection().then(() => {
   app.listen(port, () => {
