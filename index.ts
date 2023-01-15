@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import dbConnection from "./src/configs/dbconfig";
-import { TransactionRoute } from "./src/routes/TransactionRoute";
+import { TransactionRoute } from "./src/routes/transaction.route";
 
 dotenv.config();
 const app = express();

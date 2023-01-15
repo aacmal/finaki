@@ -1,5 +1,4 @@
 // create services from Transaction
-
 import { ITransaction } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
 
