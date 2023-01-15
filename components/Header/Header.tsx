@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import AddTransaction from "../Transactions/AddTransaction";
 import ProfileInfo from "./ProfileInfo";
+import { Routes } from "@/types/Routes";
 
 type Props = {};
 
@@ -19,14 +20,16 @@ const Header = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   const getHeaderTitle = (pathname: string | null) => {
+    console.log(pathname);
+
     switch (pathname) {
-      case "/dashboard":
+      case Routes.Dashboard:
         return "Dashboard";
-      case "/transactions":
+      case Routes.Transactions:
         return "Transactions";
-      case "/settings":
+      case Routes.Settings:
         return "Settings";
-      case "/profile":
+      case Routes.Profile:
         return "Profile";
       default:
         return "Dashboard";
