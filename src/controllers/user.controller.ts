@@ -53,10 +53,8 @@ async function login(req: Request, res: Response) {
         if (error) {
           res.send(error);
         }
-
-        const body = { _id: user._id, email: user.email };
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const token = jwt.sign({ user: body }, JWT_SECRET!, { expiresIn: "7d" });
+        const token = jwt.sign({ _id: user._id }, JWT_SECRET!, { expiresIn: "7d" });
         return res.json({
           message: "Logged in successfully",
           data: {

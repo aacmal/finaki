@@ -44,7 +44,7 @@ passport.use(
     },
     async function (jwtPayload, done) {
       try {
-        const user = await User.findById(jwtPayload.user._id);
+        const user = await User.findById(jwtPayload._id);
         if (!user) {
           return done(null, false);
         }
