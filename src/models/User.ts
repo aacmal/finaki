@@ -1,17 +1,26 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
+const UserSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    transactions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Transaction",
+      },
+    ],
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  { timestamps: true },
+);
 
 UserSchema.pre("save", async function (next) {
   const hash = await bcrypt.hash(this.password, 10);

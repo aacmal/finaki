@@ -1,6 +1,7 @@
 // create services from Transaction
 import { ITransaction } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
+import User from "../models/User";
 
 // Path: src\services\transaction.service.ts
 
@@ -16,6 +17,16 @@ async function create(transactionData: ITransaction) {
 async function getAll() {
   try {
     return await Transaction.find();
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getTransactionByUser(userId: Express.User | undefined) {
+  try {
+    const data = await User.findById(userId).populate("transactions");
+
+    return data?.transactions;
   } catch (error) {
     throw error;
   }
@@ -47,4 +58,4 @@ async function remove(id: string) {
   }
 }
 
-export { create, getAll, getById, update, remove };
+export { create, getAll, getById, update, remove, getTransactionByUser };

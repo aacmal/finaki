@@ -2,10 +2,13 @@
 import { validationResult } from "express-validator";
 import * as Transaction from "../services/transaction.service";
 import { Request, Response } from "express";
+import * as UserService from "../services/user.service";
 
 async function getAllTransactions(req: Request, res: Response) {
   try {
-    const transactions = await Transaction.getAll();
+    // const transactions = await Transaction.getAll();
+    const userId = req.user;
+    const transactions = await Transaction.getTransactionByUser(userId);
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -19,8 +22,10 @@ async function createTransaction(req: Request, res: Response) {
   }
 
   try {
+    const userId = req.user;
     const { description, amount, type, category } = req.body;
     const newTransaction = await Transaction.create({ description, amount, type, category });
+    await UserService.pushTransaction(userId, newTransaction._id);
     res.status(201).json(newTransaction);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -44,8 +49,10 @@ async function updateTransaction(req: Request, res: Response) {
 
 async function deleteTransaction(req: Request, res: Response) {
   try {
+    const userId = req.user;
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
+    await UserService.removeTransaction(userId, id);
     res.json(deletedTransaction);
   } catch (error) {
     res.status(500).json({ message: error.message });

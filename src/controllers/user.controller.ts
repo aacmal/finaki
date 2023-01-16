@@ -89,6 +89,15 @@ async function login(req: Request, res: Response) {
   })(req, res);
 }
 
+async function getUser(req: Request, res: Response) {
+  try {
+    const user = await User.getById(req.user);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 // TODO: Add logout function
 
-export { createUser, login };
+export { createUser, login, getUser };
