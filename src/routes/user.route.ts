@@ -7,4 +7,5 @@ const route = express.Router();
 route.post("/register", userValidator, UserController.createUser);
 route.post("/login", userValidator, UserController.login);
 
-export const UserRoute = route;
+const UserRoute = route;
+export default UserRoute;

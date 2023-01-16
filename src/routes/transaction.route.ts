@@ -10,4 +10,5 @@ route.post("/add", transactionValidator, TransactionController.createTransaction
 route.put("/update", transactionValidator, TransactionController.updateTransaction);
 route.delete("/delete", TransactionController.deleteTransaction);
 
-export const TransactionRoute = route;
+const TransactionRoute = route;
+export default TransactionRoute;

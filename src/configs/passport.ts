@@ -46,11 +46,11 @@ passport.use(
       try {
         const user = await User.findById(jwtPayload._id);
         if (!user) {
-          return done(null, false);
+          return done(null, false, { message: "Something went wrong" });
         }
-        return done(null, true);
+        return done(null, user._id);
       } catch (error) {
-        return done(error);
+        return done(error, false, { message: "Something went wrong" });
       }
     },
   ),

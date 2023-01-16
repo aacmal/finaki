@@ -1,10 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import dbConnection from "./src/configs/dbconfig";
-import { TransactionRoute } from "./src/routes/transaction.route";
-import { UserRoute } from "./src/routes/user.route";
 import passport from "passport";
 import cors from "cors";
+import AppRoutes from "./src/routes";
 
 dotenv.config();
 const app = express();
@@ -32,8 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/transaction", passport.authenticate("jwt", { session: false }), TransactionRoute);
-app.use("/api/user", UserRoute);
+app.use("/api", AppRoutes);
 
 dbConnection().then(() => {
   app.listen(port, () => {

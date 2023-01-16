@@ -8,6 +8,12 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function generateToken(user: any) {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return jwt.sign({ _id: user._id }, JWT_SECRET!, { expiresIn: "7d" });
+}
+
 async function createUser(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {
@@ -22,12 +28,22 @@ async function createUser(req: Request, res: Response) {
       });
     }
     const newUser = await User.create({ email, password });
-    res.json({
-      message: "User has been created successfully",
-      data: {
-        id: newUser._id,
-        email: newUser.email,
-      },
+    req.login(newUser, { session: false }, (error) => {
+      if (error) {
+        res.send(error);
+      }
+
+      const token = generateToken(newUser);
+      res.json({
+        message: "User has been created successfully",
+        data: {
+          user: {
+            id: newUser._id,
+            email: newUser.email,
+          },
+          token: `Bearer ${token}`,
+        },
+      });
     });
   } catch (error) {
     res.json({
@@ -53,8 +69,7 @@ async function login(req: Request, res: Response) {
         if (error) {
           res.send(error);
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const token = jwt.sign({ _id: user._id }, JWT_SECRET!, { expiresIn: "7d" });
+        const token = generateToken(user);
         return res.json({
           message: "Logged in successfully",
           data: {
