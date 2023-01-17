@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import dbConnection from "./src/configs/dbconfig";
 import passport from "passport";
 import cors from "cors";
+import cookieParse from "cookie-parser";
 import AppRoutes from "./src/routes";
 
 dotenv.config();
@@ -20,9 +21,10 @@ app.get("/", (req, res) => {
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParse());
 app.use(passport.initialize());
 
-require("./src/configs/passport");
+require("./src/middlewares/passport");
 
 // Logging request
 app.use((req, res, next) => {

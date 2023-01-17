@@ -8,10 +8,20 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
     password: {
       type: String,
       required: true,
     },
+    refreshTokens: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RefreshToken",
+      },
+    ],
     transactions: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,6 +33,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
   const hash = await bcrypt.hash(this.password, 10);
   this.password = hash;
   next();

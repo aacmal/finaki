@@ -25,7 +25,7 @@ async function createTransaction(req: Request, res: Response) {
     const userId = req.user;
     const { description, amount, type, category } = req.body;
     const newTransaction = await Transaction.create({ description, amount, type, category });
-    await UserService.pushTransaction(userId, newTransaction._id);
+    await UserService.pushTransaction(userId as string, newTransaction._id);
     res.status(201).json(newTransaction);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -52,7 +52,7 @@ async function deleteTransaction(req: Request, res: Response) {
     const userId = req.user;
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
-    await UserService.removeTransaction(userId, id);
+    await UserService.pullTransaction(userId as string, id);
     res.json(deletedTransaction);
   } catch (error) {
     res.status(500).json({ message: error.message });

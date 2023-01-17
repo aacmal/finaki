@@ -2,11 +2,13 @@ import { Router } from "express";
 import TransactionRoute from "./transaction.route";
 import UserRoute from "./user.route";
 import { isAuthenticated } from "../middlewares/authentication";
+import AuthRouter from "./auth.router";
 
 const route = Router();
 
+route.use("/auth", AuthRouter);
+route.use("/user", isAuthenticated, UserRoute);
 route.use("/transaction", isAuthenticated, TransactionRoute);
-route.use("/user", UserRoute);
 
 const AppRoutes = route;
 export default AppRoutes;

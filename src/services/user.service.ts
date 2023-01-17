@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { IUser } from "../../types/User";
 import User from "../models/User";
+import RefreshToken from "../models/RefreshToken";
 
 async function isUnique(email: string) {
   const user = await User.findOne<IUser>({ email });
@@ -16,16 +17,16 @@ async function create(userData: IUser) {
   }
 }
 
-async function getById(id: Express.User | undefined) {
+async function getById(userId: string | undefined | Types.ObjectId) {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(userId);
     return user;
   } catch (error) {
     throw error;
   }
 }
 
-async function pushTransaction(userId: Express.User | undefined, transactionId: Types.ObjectId) {
+async function pushTransaction(userId: string | undefined | Types.ObjectId, transactionId: Types.ObjectId) {
   try {
     const user = await User.findById(userId);
     if (user) {
@@ -37,7 +38,7 @@ async function pushTransaction(userId: Express.User | undefined, transactionId: 
   }
 }
 
-async function removeTransaction(userId: Express.User | undefined, transactionId: string) {
+async function pullTransaction(userId: string | undefined | Types.ObjectId, transactionId: string) {
   try {
     await User.findByIdAndUpdate(
       {
@@ -57,4 +58,45 @@ async function removeTransaction(userId: Express.User | undefined, transactionId
   }
 }
 
-export { create, getById, isUnique, pushTransaction, removeTransaction };
+async function pushToken(userId: string | undefined | Types.ObjectId, tokenId: Types.ObjectId) {
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      user.refreshTokens.push(tokenId);
+      await user.save();
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function pullToken(userId: string | undefined | Types.ObjectId, tokenId: Types.ObjectId | string) {
+  try {
+    await User.findByIdAndUpdate(
+      {
+        _id: userId,
+      },
+      {
+        $pull: {
+          refreshTokens: tokenId,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function findByRefreshToken(token: string): Promise<IUser | null> {
+  try {
+    const tokenResult = await RefreshToken.findOne({ token }).populate("userId", { refreshTokens: 0, transactions: 0 });
+    return tokenResult?.userId as unknown as IUser;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { create, getById, isUnique, pushTransaction, pullTransaction, pushToken, pullToken, findByRefreshToken };

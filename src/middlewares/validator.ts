@@ -7,7 +7,13 @@ export const transactionValidator = [
   body("category").optional(),
 ];
 
-export const userValidator = [
+export const registerValidator = [
+  body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
+  body("name").notEmpty().withMessage("Name is required"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
+
+export const signValidator = [
   body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
