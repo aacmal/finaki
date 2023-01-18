@@ -1,5 +1,6 @@
 // create services from Transaction
-import { ITransaction } from "../../types/Transaction";
+import { Types } from "mongoose";
+import { ITotalTransaction, ITransaction } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
 import User from "../models/User";
 
@@ -58,4 +59,80 @@ async function remove(id: string) {
   }
 }
 
-export { create, getAll, getById, update, remove, getTransactionByUser };
+async function getTotalTransactionByPeriods(
+  userId: Types.ObjectId,
+  interval: "week" | "month",
+  timezone = "Asia/Jakarta",
+): Promise<ITotalTransaction[]> {
+  const intervals = interval === "week" ? 7 : 30;
+
+  const dateInterval = new Date().setDate(new Date().getDate() - intervals);
+  const currentDate = new Date();
+
+  const bounds = [new Date(dateInterval), currentDate];
+
+  try {
+    const totalTranscation = await Transaction.aggregate([
+      {
+        $match: {
+          userId: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $densify: {
+          field: "createdAt",
+          range: {
+            step: 1,
+            unit: "day",
+            bounds: bounds,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            day: {
+              $dayOfMonth: {
+                date: "$createdAt",
+                timezone: timezone,
+              },
+            },
+          },
+          timestamp: {
+            $first: "$createdAt",
+          },
+          in: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "in"] }, "$amount", 0],
+            },
+          },
+          out: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "out"] }, "$amount", 0],
+            },
+          },
+          totalAmount: {
+            $sum: "$amount",
+          },
+        },
+      },
+      {
+        $sort: {
+          timestamp: -1,
+        },
+      },
+      { $limit: intervals },
+      {
+        $sort: {
+          timestamp: 1,
+        },
+      },
+    ]);
+
+    return totalTranscation;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export { create, getAll, getById, update, remove, getTransactionByUser, getTotalTransactionByPeriods };

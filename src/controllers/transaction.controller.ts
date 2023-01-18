@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import * as Transaction from "../services/transaction.service";
 import { Request, Response } from "express";
 import * as UserService from "../services/user.service";
+import { Types } from "mongoose";
 
 async function getAllTransactions(req: Request, res: Response) {
   try {
@@ -24,7 +25,7 @@ async function createTransaction(req: Request, res: Response) {
   try {
     const userId = req.user;
     const { description, amount, type, category } = req.body;
-    const newTransaction = await Transaction.create({ description, amount, type, category });
+    const newTransaction = await Transaction.create({ userId, description, amount, type, category });
     await UserService.pushTransaction(userId as string, newTransaction._id);
     res.status(201).json(newTransaction);
   } catch (error) {
@@ -69,4 +70,30 @@ async function getTransactionById(req: Request, res: Response) {
   }
 }
 
-export { getAllTransactions, createTransaction, updateTransaction, deleteTransaction, getTransactionById };
+async function getTotalTransaction(req: Request, res: Response) {
+  try {
+    const userId = req.user;
+    const interval = (req.query.interval as "week" | "month") ?? "week";
+    const timezone = "Asia/Jakarta";
+
+    const totalTranscation = await Transaction.getTotalTransactionByPeriods(
+      userId as Types.ObjectId,
+      interval,
+      timezone,
+    );
+
+    if (!totalTranscation) return res.status(404).json({ message: "No data found" });
+    res.json(totalTranscation);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export {
+  getAllTransactions,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
+  getTransactionById,
+  getTotalTransaction,
+};
