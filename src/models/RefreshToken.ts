@@ -9,6 +9,10 @@ const RefreshToken = new mongoose.Schema({
     type: String,
     required: true,
   },
+  userAgent: {
+    type: String,
+    required: true,
+  },
   createdAt: {
     index: true,
     type: Date,

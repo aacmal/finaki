@@ -29,7 +29,7 @@ require("./src/middlewares/passport");
 // Logging request
 app.use((req, res, next) => {
   // eslint-disable-next-line no-console
-  console.log(`[${req.method}] ${req.path}`);
+  console.log(`[${req.method}] ${req.path} - ${req.get("user-agent")}`);
   next();
 });
 

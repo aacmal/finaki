@@ -6,8 +6,47 @@ import * as UserService from "../services/user.service";
 import { compare } from "bcrypt";
 import RefreshToken from "../models/RefreshToken";
 import jwt from "jsonwebtoken";
+import { IUser } from "../../types/User";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
+
+/**
+ * A Promise that returns a string of access token after user logged in or registered
+ * function to Generate access token and refresh token then set the refresh token as a cookie to the client then store the refresh token to the database.
+ *
+ * @param {Request} req - Request object
+ * @param {Response} res - Response object
+ * @param {IUser} user - User object
+ *
+ * @returns {string} access token string
+ **/
+async function generateAuthCredential(req: Request, res: Response, user: IUser): Promise<string> {
+  try {
+    // generate access token and refresh token
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+    // set refresh token as a cookie to the client
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      maxAge: MAX_AGE_REFRESH_TOKEN,
+      secure: false,
+    });
+
+    const userAgent = req.get("user-agent");
+    // save refresh token to database
+    const savedRefreshToken = await RefreshToken.create({
+      userId: user._id,
+      token: refreshToken,
+      userAgent: userAgent,
+    });
+    await UserService.pushToken(user._id, savedRefreshToken._id);
+
+    return accessToken;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function register(req: Request, res: Response) {
   const error = validationResult(req);
@@ -29,23 +68,13 @@ async function register(req: Request, res: Response) {
     }
     const newUser = await UserService.create({ email, name, password });
 
-    const access_token = generateAccessToken(newUser);
-    const refresh_token = generateRefreshToken(newUser);
-
-    res.cookie("refresh_token", refresh_token, {
-      httpOnly: true,
-      maxAge: MAX_AGE_REFRESH_TOKEN, // 3 months
-      secure: false,
-    });
-
-    // save refresh token to database
-    const savedRefreshToken = await RefreshToken.create({ userId: newUser._id, token: refresh_token });
-    await UserService.pushToken(newUser._id, savedRefreshToken._id);
+    // generate access token and refresh token
+    const accessToken = await generateAuthCredential(req, res, newUser);
 
     res.status(200).json({
       message: "User has been created successfully",
       data: {
-        access_token: `Bearer ${access_token}`,
+        access_token: `Bearer ${accessToken}`,
       },
     });
   } catch (error) {
@@ -89,19 +118,7 @@ async function sign(req: Request, res: Response) {
     }
 
     // generate access token and refresh token
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
-    // set refresh token as a cookie to the client
-    res.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      maxAge: MAX_AGE_REFRESH_TOKEN,
-      secure: false,
-    });
-
-    // save refresh token to database
-    const savedRefreshToken = await RefreshToken.create({ userId: user._id, token: refreshToken });
-    await UserService.pushToken(user._id, savedRefreshToken._id);
+    const accessToken = await generateAuthCredential(req, res, user);
 
     res.status(200).json({
       message: "User has been logged in successfully",
