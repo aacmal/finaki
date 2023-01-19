@@ -1,4 +1,5 @@
 import { GenericResponse, LoginResponse } from "@/types/Api";
+import axios from "axios";
 import { authApi } from "./config";
 
 export interface RegisterInput {
@@ -39,14 +40,14 @@ export const getUser = async () => {
   return response.data;
 };
 
-authApi.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      await refreshAccessToken();
-      return authApi(originalRequest);
-    }
-  }
-);
+// authApi.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
+//     if (error.response.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
+//       await refreshAccessToken();
+//       return authApi(originalRequest);
+//     }
+//   }
+// );

@@ -18,7 +18,9 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   required?: boolean;
   minLength?: number;
   className?: string;
-  error?: string;
+  error?: {
+    message: string;
+  };
 }
 
 // eslint-disable-next-line react/display-name
@@ -62,9 +64,9 @@ const InputWithLabel = forwardRef(
         {error && (
           <small
             role="alert"
-            className="text-red-500 absolute -bottom-5 font-semibold left-3"
+            className="text-red-400 absolute -bottom-5 font-semibold left-3"
           >
-            Error
+            {error.message}
           </small>
         )}
         {type === "password" && (

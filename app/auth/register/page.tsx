@@ -10,41 +10,44 @@ import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import { RegisterInput, registerUser } from "@/utils/api/authApi";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
+import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
+import classNames from "classnames";
 
 type Props = {};
 
 const RegisterPage = (props: Props) => {
-  const { register, handleSubmit } = useForm();
+  const router = useRouter();
 
-  // const { mutate, isLoading, error } = useMutation(
-  //   (userData: RegisterInput) => registerUser(userData),
-  //   {
-  //     onSuccess: (data) => {
-  //       console.log("success");
-  //       console.log(data);
-  //     },
-  //     onError: (error) => {
-  //       console.log("error");
-  //       console.log(error);
-  //     },
-  //   }
-  // );
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
 
-  const registerUserToBacked = (userData: RegisterInput) => {
-    registerUser(userData)
-      .then((data) => {
-        console.log("success");
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
+  const { mutate, isLoading, error, isSuccess } = useMutation(
+    (userData: RegisterInput) => registerUser(userData),
+    {
+      onSuccess: (data) => {
+        router.push(Routes.App);
+      },
+      onError: (error) => {
+        console.log((error as any).response.data.errors);
+        const errors = (error as any).response.data.errors;
+
+        errors.forEach(({ msg, param }: any) => {
+          setError(param, { message: msg }, { shouldFocus: true });
+        });
+      },
+    }
+  );
 
   const onSubmitHandler = (values: any) => {
-    console.log(values);
-    registerUserToBacked(values);
+    mutate(values);
   };
 
   return (
@@ -67,6 +70,7 @@ const RegisterPage = (props: Props) => {
             minLength={5}
             required
             {...register("email")}
+            error={errors.email as any}
           />
           <InputWithLabel
             label="Nama"
@@ -76,6 +80,7 @@ const RegisterPage = (props: Props) => {
             minLength={5}
             required
             {...register("name")}
+            error={errors.name as any}
           />
           <InputWithLabel
             label="Password"
@@ -85,9 +90,28 @@ const RegisterPage = (props: Props) => {
             minLength={5}
             required
             {...register("password")}
+            error={errors.password as any}
           />
           <Button width="full" type="submit" className="!mt-16">
-            Daftar
+            <div className="flex items-center justify-center">
+              <LoadingSpinner
+                className={classNames(
+                  "transition-all duration-500",
+                  {
+                    "max-w-0 mr-0": !isLoading && !isSuccess,
+                    "max-w-xs mr-3": isLoading,
+                  },
+                  { "max-w-xs mr-3": isSuccess }
+                )}
+              />
+              <span>
+                {isSuccess
+                  ? "Menuju Aplikasi"
+                  : isLoading
+                  ? "Mendaftar"
+                  : "Daftar"}
+              </span>
+            </div>
           </Button>
         </FormGroup>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">

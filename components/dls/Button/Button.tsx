@@ -6,9 +6,10 @@ type Props = {
   type: "submit" | "button";
   width: "full" | "auto" | "fit";
   className?: string;
+  isLoading?: boolean;
 };
 
-const Button = ({ children, type, width, className }: Props) => {
+const Button = ({ children, type, width, className, isLoading }: Props) => {
   return (
     <button
       type={type}
