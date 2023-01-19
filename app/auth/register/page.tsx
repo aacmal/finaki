@@ -8,16 +8,44 @@ import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
+import { RegisterInput, registerUser } from "@/utils/api/authApi";
 import Link from "next/link";
 import React from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {};
 
 const RegisterPage = (props: Props) => {
-  function onSubmitHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    alert("registered");
-  }
+  const { register, handleSubmit } = useForm();
+
+  // const { mutate, isLoading, error } = useMutation(
+  //   (userData: RegisterInput) => registerUser(userData),
+  //   {
+  //     onSuccess: (data) => {
+  //       console.log("success");
+  //       console.log(data);
+  //     },
+  //     onError: (error) => {
+  //       console.log("error");
+  //       console.log(error);
+  //     },
+  //   }
+  // );
+
+  const registerUserToBacked = (userData: RegisterInput) => {
+    registerUser(userData)
+      .then((data) => {
+        console.log("success");
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const onSubmitHandler = (values: any) => {
+    console.log(values);
+    registerUserToBacked(values);
+  };
 
   return (
     <AuthCard>
@@ -30,7 +58,7 @@ const RegisterPage = (props: Props) => {
         <Heading level={1} className="text-center mt-2">
           Selamat Datang!
         </Heading>
-        <FormGroup onSubmit={onSubmitHandler}>
+        <FormGroup onSubmit={handleSubmit(onSubmitHandler)}>
           <InputWithLabel
             label="Email"
             id="email"
@@ -38,14 +66,25 @@ const RegisterPage = (props: Props) => {
             placeholder="contoh@mail.com"
             minLength={5}
             required
+            {...register("email")}
+          />
+          <InputWithLabel
+            label="Nama"
+            id="nama"
+            type="text"
+            placeholder="Nama Lengkap"
+            minLength={5}
+            required
+            {...register("name")}
           />
           <InputWithLabel
             label="Password"
             id="password"
             type="password"
-            placeholder="masukan password anda"
+            placeholder="*******"
             minLength={5}
             required
+            {...register("password")}
           />
           <Button width="full" type="submit" className="!mt-16">
             Daftar
