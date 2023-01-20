@@ -1,11 +1,17 @@
 import { GenericResponse, LoginResponse } from "@/types/Api";
 import axios from "axios";
+import useStore from "../../stores/store";
 import { authApi } from "./config";
 
 export interface RegisterInput {
   email: string;
   password: string;
   name: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
 }
 
 const refreshAccessToken = async () => {
@@ -15,11 +21,8 @@ const refreshAccessToken = async () => {
   return response.data.accessToken;
 };
 
-export const loginUser = async (email: string, password: string) => {
-  const response = await authApi.post<LoginResponse>("/login", {
-    email,
-    password,
-  });
+export const loginUser = async (user: LoginInput) => {
+  const response = await authApi.post<LoginResponse>("/sign", user);
   return response.data.accessToken;
 };
 
@@ -40,14 +43,17 @@ export const getUser = async () => {
   return response.data;
 };
 
-// authApi.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       await refreshAccessToken();
-//       return authApi(originalRequest);
-//     }
+// authApi.interceptors.request.use(
+//   async (config) => {
+//     const currentDate = new Date();
+//     const currentAccessToken = useStore.getState().accessToken;
+//     console.log("currentAccessToken", currentAccessToken);
+
+//     const newAccessToken = await refreshAccessToken();
+
+//     return config;
+//   },
+//   (error) => {
+//     return Promise.reject(error);
 //   }
 // );
