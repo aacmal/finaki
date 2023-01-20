@@ -7,6 +7,7 @@ import Navigation from "@/components/Navbar/Navigation";
 import useTheme from "../hooks/useTheme";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import GetUserData from "./GetUserData";
 
 // font set up
 const font = Inter({
@@ -40,6 +41,7 @@ export default function RootLayout({
         className={classNames("bg-stone-100 dark:bg-slate-800", font.className)}
       >
         <QueryClientProvider client={queryClient}>
+          <GetUserData />
           <Navigation />
           <main>{children}</main>
           <ReactQueryDevtools />

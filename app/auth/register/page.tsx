@@ -32,7 +32,8 @@ const RegisterPage = (props: Props) => {
   const { mutate, isLoading, error, isSuccess } = useMutation(
     (userData: RegisterInput) => registerUser(userData),
     {
-      onSuccess: (data) => {
+      onSuccess: (res) => {
+        localStorage.setItem("access-token", res.data.access_token);
         router.push(Routes.App);
       },
       onError: (error) => {
@@ -92,7 +93,12 @@ const RegisterPage = (props: Props) => {
             {...register("password")}
             error={errors.password as any}
           />
-          <Button width="full" type="submit" className="!mt-16">
+          <Button
+            disabled={isLoading}
+            width="full"
+            type="submit"
+            className="!mt-16"
+          >
             <div className="flex items-center justify-center">
               <LoadingSpinner
                 className={classNames(
@@ -106,7 +112,7 @@ const RegisterPage = (props: Props) => {
               />
               <span>
                 {isSuccess
-                  ? "Menuju Aplikasi"
+                  ? "Sedang dialihkan"
                   : isLoading
                   ? "Mendaftar"
                   : "Daftar"}

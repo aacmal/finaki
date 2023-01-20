@@ -1,28 +1,25 @@
 import { Theme, ThemeState } from "@/types/Theme";
 import { User } from "@/types/User";
 import create from "zustand";
-import { persist } from "zustand/middleware"
+import { persist } from "zustand/middleware";
 
 interface Store {
   user: User | null;
   colorTheme: ThemeState;
-  setUser: (user: User) => void;
+  accessToken: string | null;
+  setToken: (token: string) => void;
+  setUser: (user: User | null) => void;
   setColorTheme: (theme: ThemeState) => void;
-}
-
-const currentUser = {
-  id: "1",
-  name: "John Doe",
-  email: "jogndoe@mail.com",
-  tokenTelegram: "1234456",
 }
 
 const useStore = create<Store>()(
   persist(
     (set) => ({
-      user: currentUser,
+      user: null,
       colorTheme: Theme.Light,
-      setUser: (user: User) => set({ user }),
+      accessToken: null,
+      setToken: (token: string) => set({ accessToken: token }),
+      setUser: (user) => set({ user }),
       setColorTheme: (theme: ThemeState) => set({ colorTheme: theme }),
     }),
     {
@@ -32,7 +29,7 @@ const useStore = create<Store>()(
           colorTheme: state.colorTheme,
         };
       },
-    },
+    }
   )
 );
 

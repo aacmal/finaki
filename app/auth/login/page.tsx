@@ -32,7 +32,8 @@ const LoginPage = (props: Props) => {
   const { mutate, isLoading, error, isSuccess } = useMutation(
     (userData: LoginInput) => loginUser(userData),
     {
-      onSuccess: (data) => {
+      onSuccess: (res) => {
+        localStorage.setItem("access-token", res.data.access_token);
         router.push(Routes.App);
       },
       onError: (error) => {
@@ -82,7 +83,12 @@ const LoginPage = (props: Props) => {
             error={errors.password as any}
             {...register("password")}
           />
-          <Button width="full" type="submit" className="!mt-16">
+          <Button
+            disabled={isLoading}
+            width="full"
+            type="submit"
+            className="!mt-16"
+          >
             <div className="flex items-center justify-center">
               <LoadingSpinner
                 className={classNames(
@@ -96,7 +102,7 @@ const LoginPage = (props: Props) => {
               />
               <span>
                 {isSuccess
-                  ? "Menuju Aplikasi"
+                  ? "Sedang dialihkan"
                   : isLoading
                   ? "Sedang Memproses"
                   : "Login"}

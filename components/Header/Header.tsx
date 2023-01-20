@@ -20,8 +20,6 @@ const Header = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
 
   const getHeaderTitle = (pathname: string | null) => {
-    console.log(pathname);
-
     switch (pathname) {
       case Routes.Dashboard:
         return "Dashboard";

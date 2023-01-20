@@ -14,46 +14,31 @@ export interface LoginInput {
   password: string;
 }
 
-const refreshAccessToken = async () => {
-  const response = await authApi.get<LoginResponse>("/refresh-token", {
+export const refreshAccessToken = async () => {
+  const response = await authApi.get("/refresh-token", {
     withCredentials: true,
   });
-  return response.data.accessToken;
+  return response.data;
 };
 
 export const loginUser = async (user: LoginInput) => {
-  const response = await authApi.post<LoginResponse>("/sign", user);
-  return response.data.accessToken;
+  const response = await authApi.post("/sign", user);
+  return response.data;
 };
 
 export const registerUser = async (user: RegisterInput) => {
   const response = await authApi.post("/register", user);
-  return response;
+  return response.data;
 };
 
 export const logoutUser = async () => {
-  const response = await authApi.delete<GenericResponse>("/logout", {
+  const response = await authApi.delete("/logout", {
     withCredentials: true,
   });
-  return response.data;
+  return response;
 };
 
 export const getUser = async () => {
   const response = await authApi.get<GenericResponse>("/user");
   return response.data;
 };
-
-// authApi.interceptors.request.use(
-//   async (config) => {
-//     const currentDate = new Date();
-//     const currentAccessToken = useStore.getState().accessToken;
-//     console.log("currentAccessToken", currentAccessToken);
-
-//     const newAccessToken = await refreshAccessToken();
-
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );

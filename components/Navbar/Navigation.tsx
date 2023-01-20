@@ -5,6 +5,7 @@ import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import useStore from "../../stores/store";
 import ThemeToggleIcon from "../ThemeSelection/ThemeToggleIcon";
 import NavigationLink from "./NavigationLink";
 
@@ -12,10 +13,9 @@ type Props = {};
 
 const Navigation = (props: Props) => {
   const pathname = usePathname();
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const user = useStore((state) => state.user);
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
   const isInAuthPage = pathname?.includes("auth");
-  console.log(pathname);
 
   if (pathname?.includes("app")) return <></>;
   return (
@@ -51,8 +51,9 @@ const Navigation = (props: Props) => {
           </NavigationLink>
         )}
         <div>
-          {isUserLoggedIn ? (
+          {user ? (
             <NavigationLink
+              type="secondary"
               isActive={pathname === Routes.Dashboard}
               href={Routes.Dashboard}
             >

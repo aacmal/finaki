@@ -7,7 +7,7 @@ export interface GenericResponse {
 
 export interface LoginResponse {
   status: string;
-  accessToken: string;
+  access_token: string;
 }
 
 export interface UserResponse {
