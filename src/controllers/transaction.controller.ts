@@ -27,7 +27,10 @@ async function createTransaction(req: Request, res: Response) {
     const { description, amount, type, category } = req.body;
     const newTransaction = await Transaction.create({ userId, description, amount, type, category });
     await UserService.pushTransaction(userId as string, newTransaction._id);
-    res.status(201).json(newTransaction);
+    res.status(201).json({
+      message: "Transaction has been created successfully",
+      data: newTransaction,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

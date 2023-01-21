@@ -5,6 +5,7 @@ import passport from "passport";
 import cors from "cors";
 import cookieParse from "cookie-parser";
 import AppRoutes from "./src/routes";
+import { corsConfig } from "./src/configs/cors";
 
 dotenv.config();
 const app = express();
@@ -18,8 +19,8 @@ app.get("/", (req, res) => {
   res.statusCode = 200;
 });
 
+app.use(cors(corsConfig));
 app.use(express.json());
-app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParse());
 app.use(passport.initialize());

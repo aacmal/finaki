@@ -74,7 +74,7 @@ async function register(req: Request, res: Response) {
     res.status(200).json({
       message: "User has been created successfully",
       data: {
-        access_token: `Bearer ${accessToken}`,
+        access_token: accessToken,
       },
     });
   } catch (error) {
@@ -110,7 +110,7 @@ async function sign(req: Request, res: Response) {
       return res.status(400).json({
         errors: [
           {
-            msg: "Password salahh",
+            msg: "Password salah",
             param: "password",
           },
         ],
@@ -123,7 +123,7 @@ async function sign(req: Request, res: Response) {
     res.status(200).json({
       message: "User has been logged in successfully",
       data: {
-        access_token: `Bearer ${accessToken}`,
+        access_token: accessToken,
       },
     });
   } catch (error) {
@@ -158,9 +158,9 @@ async function refreshToken(req: Request, res: Response) {
       }
       const accessToken = generateAccessToken(user);
       res.status(200).json({
-        message: "User has been logged in successfully",
+        message: "Access token has been refreshed successfully",
         data: {
-          access_token: `Bearer ${accessToken}`,
+          access_token: accessToken,
         },
       });
     });
