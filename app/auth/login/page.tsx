@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {};
@@ -29,13 +29,9 @@ const LoginPage = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess } = useMutation(
+  const { mutate, isLoading, error, isSuccess, data } = useMutation(
     (userData: LoginInput) => loginUser(userData),
     {
-      onSuccess: (res) => {
-        localStorage.setItem("access-token", res.data.access_token);
-        router.push(Routes.App);
-      },
       onError: (error) => {
         console.log((error as any).response.data.errors);
         const errors = (error as any).response.data.errors;
@@ -50,6 +46,14 @@ const LoginPage = (props: Props) => {
   function onSubmitHandler(values: any) {
     mutate(values);
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push(Routes.App);
+      localStorage.setItem("access-token", data.data.access_token);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
 
   return (
     <AuthCard>

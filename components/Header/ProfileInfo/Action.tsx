@@ -1,3 +1,5 @@
+"use client";
+
 import OnHoverWrapper from "@/dls/ActionWrapper/OnHoverWrapper";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowRectangleIcon from "@/icons/ArrowRectangleIcon";
@@ -24,6 +26,7 @@ const Action = (props: Props) => {
         localStorage.removeItem("access-token");
         router.push(Routes.Home);
         queryClient.invalidateQueries();
+        queryClient.removeQueries(["user"]);
       })
       .catch((err) => {
         console.log(err);

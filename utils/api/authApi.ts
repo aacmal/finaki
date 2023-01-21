@@ -1,7 +1,6 @@
 import { GenericResponse, LoginResponse } from "@/types/Api";
 import axios from "axios";
-import useStore from "../../stores/store";
-import { authApi } from "./config";
+import { BASE_URL } from "./config";
 
 export interface RegisterInput {
   email: string;
@@ -13,6 +12,14 @@ export interface LoginInput {
   email: string;
   password: string;
 }
+
+export const authApi = axios.create({
+  baseURL: `${BASE_URL}/auth`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
 
 export const refreshAccessToken = async () => {
   const response = await authApi.get("/refresh-token", {

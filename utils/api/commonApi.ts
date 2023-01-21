@@ -1,27 +1,40 @@
+import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { refreshAccessToken } from "./authApi";
-import { commonApi } from "./config";
+import { BASE_URL } from "./config";
+
+export const commonApi = axios.create({
+  baseURL: `${BASE_URL}/`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 commonApi.interceptors.request.use(
   async (config) => {
-    let currentToken = localStorage.getItem("access-token");
+    let currentToken = window?.localStorage.getItem("access-token");
 
     if (currentToken === null || currentToken === undefined) {
       const refreshToken = await refreshAccessToken();
-      localStorage.setItem("access-token", refreshToken.data.access_token);
+      window?.localStorage.setItem(
+        "access-token",
+        refreshToken.data.access_token
+      );
       currentToken = refreshToken.data.access_token;
     } else {
       const decodedToken = jwtDecode(currentToken);
       const currentTime = new Date().getTime();
       if ((decodedToken as any).exp * 1000 < currentTime) {
         const refreshToken = await refreshAccessToken();
-        console.log(refreshToken);
-        localStorage.setItem("access-token", refreshToken.data.access_token);
+        window?.localStorage.setItem(
+          "access-token",
+          refreshToken.data.access_token
+        );
         currentToken = refreshToken.data.access_token;
       }
     }
 
-    config.headers["Authorization"] = currentToken;
+    config.headers["Authorization"] = `Bearer ${currentToken}`;
 
     return config;
   },

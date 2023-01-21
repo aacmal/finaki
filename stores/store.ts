@@ -1,6 +1,6 @@
 import { Theme, ThemeState } from "@/types/Theme";
 import { User } from "@/types/User";
-import create from "zustand";
+import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface Store {

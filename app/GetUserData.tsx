@@ -1,6 +1,6 @@
 "use client";
 
-import { getUserData } from "@/utils/api/commonApi";
+import { getUserData, commonApi } from "@/utils/api/commonApi";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -11,12 +11,15 @@ const GetUserData = () => {
   const router = useRouter();
   useQuery(["user"], () => getUserData(), {
     onSuccess: (data) => {
-      console.log("user data", data);
-    },
-    onError: (error) => {
-      router.push("/auth/login");
+      setUser(data.user);
     },
   });
+
+  useEffect(() => {
+    commonApi.defaults.headers[
+      "Authorization"
+    ] = `Bearer ${localStorage.getItem("access-token")}`;
+  }, []);
 
   return <></>;
 };

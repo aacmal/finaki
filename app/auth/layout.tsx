@@ -1,10 +1,25 @@
-import React from "react";
+"use client";
+
+import { Routes } from "@/types/Routes";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AuthLayout = ({ children }: Props) => {
+  const { isSuccess } = useQuery(["user"]);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push(Routes.Home);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSuccess]);
+
   return (
     <div className="grid place-items-center w-screen h-screen">
       <div className="max-w-6xl w-[90%] lg:h-[60%] h-fit p-4 bg-white dark:bg-slate-600  dark:shadow-slate-800 rounded-2xl shadow-2xl shadow-slate-200">
