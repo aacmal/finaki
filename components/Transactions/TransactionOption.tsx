@@ -1,6 +1,7 @@
 "use client";
 
 import IconButton from "@/dls/IconButton";
+import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
 import CheckIcon from "@/icons/CheckIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PencilIcon from "@/icons/PencilIcon";
@@ -12,19 +13,27 @@ import React, { useState } from "react";
 type Props = {
   onEdit?: () => void;
   onDelete?: () => void;
-  onSave?: () => void;
   onCancel?: () => void;
   isOnEdit?: boolean;
+  isLoading?: boolean;
 };
 
 const TransactionOption = ({
   onEdit,
   onDelete,
-  onSave,
   onCancel,
+  isLoading,
   isOnEdit,
 }: Props) => {
   const [isHover, setIsHover] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 flex justify-center">
+        <LoadingSpinner className=" stroke-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -36,6 +45,7 @@ const TransactionOption = ({
         <>
           <div className="hidden lg:flex gap-3 justify-center">
             <IconButton
+              type="button"
               onClick={onEdit}
               className="text-blue-500 hover:bg-blue-200"
             >
@@ -83,16 +93,16 @@ const TransactionOption = ({
       ) : (
         <div className="flex gap-3 justify-center lg:static absolute right-0 lg:bg-transparent bg-white lg:shadow-none shadow-xl rounded-md lg:p-0 p-1 top-6">
           <IconButton
-            onClick={onSave}
-            className="text-green-600 hover:bg-green-600/10"
-          >
-            <CheckIcon strokeWidth={2} fill="none" stroke="currentColor" />
-          </IconButton>
-          <IconButton
             onClick={onCancel}
             className="text-red-600 hover:bg-red-600/10"
           >
             <XmarkIcon strokeWidth={2} fill="none" stroke="currentColor" />
+          </IconButton>
+          <IconButton
+            type="submit"
+            className="text-green-600 hover:bg-green-600/10"
+          >
+            <CheckIcon strokeWidth={2} fill="none" stroke="currentColor" />
           </IconButton>
         </div>
       )}

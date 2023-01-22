@@ -1,32 +1,26 @@
-import classNames from 'classnames'
-import React from 'react'
-import IconWrapper from '../IconWrapper'
+import classNames from "classnames";
+import React from "react";
+import IconWrapper from "../IconWrapper";
 
-type Props = {
-  children: React.ReactNode,
-  className?: string,
-  onClick?: () => void,
-  onMouseEnter?: () => void,
-  onMouseLeave?: () => void,
+interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
-const IconButton = ({
-  children,
-  className,
-  onClick, 
-  ...props
-}: Props) => {
+const IconButton = ({ children, className, onClick, ...props }: Props) => {
   return (
     <button
       onClick={onClick}
-      className={classNames("rounded p-1" , className)}
+      className={classNames("rounded p-1", className)}
+      type="button"
       {...props}
     >
-      <IconWrapper className="w-5">
-        {children}
-      </IconWrapper>
+      <IconWrapper className="w-5">{children}</IconWrapper>
     </button>
-  )
-}
+  );
+};
 
-export default IconButton
+export default IconButton;

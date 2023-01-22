@@ -12,30 +12,33 @@ type Props = {
 const TransactionList = ({ data }: Props) => {
   return (
     <>
-      {data.map((transactionData: TransactionData, index: number) => (
-        <div key={transactionData._id}>
-          <div className="flex items-center">
-            <h3 className="pl-4 font-bold text-gray-400">
-              {transactionData._id}
-            </h3>
-            <div
-              className={classNames(
-                "divider flex-1 ml-2 h-px bg-slate-300 dark:bg-slate-500",
-                { hidden: index === 0 },
-                { block: index > 0 }
-              )}
-            ></div>
+      {data.map((transactionData: TransactionData, index: number) => {
+        if (transactionData.transactions.length === 0) return;
+        return (
+          <div key={transactionData._id}>
+            <div className="flex items-center">
+              <h3 className="pl-4 font-bold text-gray-400">
+                {transactionData._id}
+              </h3>
+              <div
+                className={classNames(
+                  "divider flex-1 ml-2 h-px bg-slate-300 dark:bg-slate-500",
+                  { hidden: index === 0 },
+                  { block: index > 0 }
+                )}
+              ></div>
+            </div>
+            {transactionData.transactions.map(
+              (transaction: Transaction, index: number) => (
+                <TransactionItem
+                  key={transaction._id}
+                  transaction={transaction}
+                />
+              )
+            )}
           </div>
-          {transactionData.transactions.map(
-            (transaction: Transaction, index: number) => (
-              <TransactionItem
-                key={transaction._id}
-                transaction={transaction}
-              />
-            )
-          )}
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 };

@@ -8,12 +8,11 @@ type Props = {};
 
 const TransactionsPage = (props: Props) => {
   const { data, error } = useQuery(["transactions"], getTransactions, {
-    onSuccess: (data) => {
-      console.log("data", data);
-    },
+    onSuccess: (data) => {},
     onError: (error) => {
       console.log("error", error);
     },
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   return (

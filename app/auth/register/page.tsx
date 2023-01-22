@@ -106,7 +106,7 @@ const RegisterPage = (props: Props) => {
             <div className="flex items-center justify-center">
               <LoadingSpinner
                 className={classNames(
-                  "transition-all duration-500",
+                  "transition-all duration-500 stroke-white",
                   {
                     "max-w-0 mr-0": !isLoading && !isSuccess,
                     "max-w-xs mr-3": isLoading,

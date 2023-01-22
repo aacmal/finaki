@@ -15,16 +15,11 @@ export interface LoginInput {
 
 export const authApi = axios.create({
   baseURL: `${BASE_URL}/auth`,
-  headers: {
-    "Content-Type": "application/json",
-  },
   withCredentials: true,
 });
 
 export const refreshAccessToken = async () => {
-  const response = await authApi.get("/refresh-token", {
-    withCredentials: true,
-  });
+  const response = await authApi.get("/refresh-token");
   return response.data;
 };
 
@@ -39,9 +34,7 @@ export const registerUser = async (user: RegisterInput) => {
 };
 
 export const logoutUser = async () => {
-  const response = await authApi.delete("/logout", {
-    withCredentials: true,
-  });
+  const response = await authApi.delete("/logout");
   return response;
 };
 

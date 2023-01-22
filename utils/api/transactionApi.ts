@@ -3,7 +3,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { refreshAccessToken } from "./authApi";
 import { commonApi } from "./commonApi";
-import { BASE_URL } from "./config";
+import { BASE_URL, makeUrl } from "./config";
 
 interface NewTransactionResponse {
   message: string;
@@ -17,11 +17,16 @@ interface NewTransactionResponse {
   };
 }
 
-interface TransactionInput {
+export interface TransactionInput {
   description: string;
   amount: number;
   type: string;
   category?: string;
+}
+
+export interface EditTransactionInput {
+  id: string;
+  transactionInput: TransactionInput;
 }
 
 export const transactionApi = axios.create({
@@ -64,9 +69,9 @@ transactionApi.interceptors.request.use(
   }
 );
 
-export const createNewTransaction = async (data: TransactionInput) => {
+export const insertNewTransaction = async (data: TransactionInput) => {
   const response = await transactionApi.post<NewTransactionResponse>(
-    "/create",
+    "/add",
     data
   );
   return response.data;
@@ -75,4 +80,20 @@ export const createNewTransaction = async (data: TransactionInput) => {
 export const getTransactions = async () => {
   const response = await transactionApi.get<TransactionData[]>("/");
   return response.data;
+};
+
+export const editTransaction = async ({
+  id,
+  transactionInput,
+}: EditTransactionInput): Promise<Transaction> => {
+  const response = await transactionApi.put(
+    makeUrl("/update", { id }),
+    transactionInput
+  );
+  return response.data.data;
+};
+
+export const deleteTransaction = async (id: string): Promise<Transaction> => {
+  const response = await transactionApi.delete(makeUrl("/delete", { id }));
+  return response.data.data;
 };

@@ -1,13 +1,13 @@
-.radioButton{
-  @apply flex items-center;
-  list-style: none;
+// .radioButton{
+//   @apply flex items-center;
+//   list-style: none;
   
-  label{
-    cursor: pointer;
-    @apply  font-medium pl-3 pr-4 h-full py-4 w-full rounded-lg border-transparent border border-gray-200 text-sm;
-  }
+//   label{
+//     cursor: pointer;
+//     @apply  font-medium pl-3 pr-4 h-full py-4 w-full rounded-lg border-transparent border border-gray-200 text-sm;
+//   }
 
-  input:checked + label{
-    @apply border-blue-400 bg-blue-50;
-  }
-}
+//   input:checked + label{
+//     @apply border-blue-400 bg-blue-50;
+//   }
+// }
