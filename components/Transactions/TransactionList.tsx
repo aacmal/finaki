@@ -13,13 +13,10 @@ const TransactionList = ({ data }: Props) => {
   return (
     <>
       {data.map((transactionData: TransactionData, index: number) => (
-        <>
+        <div key={transactionData._id}>
           <div className="flex items-center">
-            <h3
-              className="pl-4 font-bold text-gray-400"
-              key={transactionData.date}
-            >
-              {transactionData.date}
+            <h3 className="pl-4 font-bold text-gray-400">
+              {transactionData._id}
             </h3>
             <div
               className={classNames(
@@ -31,10 +28,13 @@ const TransactionList = ({ data }: Props) => {
           </div>
           {transactionData.transactions.map(
             (transaction: Transaction, index: number) => (
-              <TransactionItem key={index} transaction={transaction} />
+              <TransactionItem
+                key={transaction._id}
+                transaction={transaction}
+              />
             )
           )}
-        </>
+        </div>
       ))}
     </>
   );

@@ -4,10 +4,14 @@ import TransactionHeader from "./TransactionHeader";
 import TransactionList from "./TransactionList";
 
 type Props = {
-  data: TransactionData[];
+  data: TransactionData[] | undefined;
 };
 
 const AllTransactions = ({ data }: Props) => {
+  if (!data) {
+    return <div>Error</div>;
+  }
+
   return (
     <>
       <div className="flex flex-col w-full">

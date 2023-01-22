@@ -1,14 +1,13 @@
-export interface Transaction{
-  id: string;
+export interface Transaction {
+  _id: string;
   amount: number;
-  date: string;
   description: string;
-  category: string;
+  category?: string;
   type: string;
   time: string;
 }
 
 export interface TransactionData {
+  _id: string;
   transactions: Transaction[];
-  date: string;
 }
