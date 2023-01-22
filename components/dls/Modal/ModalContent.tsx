@@ -14,7 +14,7 @@ const ModalContent = ({ children, closeOnOverlayClick, className }: Props) => {
   return (
     <div
       className={classNames(
-        "w-screen h-screen absolute top-0 left-0 grid place-items-center",
+        "w-screen h-screen fixed z-50 top-0 left-0 grid place-items-center",
         { invisible: !isOpen },
         { visible: isOpen }
       )}

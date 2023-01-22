@@ -8,6 +8,7 @@ import { Modal, ModalCloseTringger, ModalContent } from "@/dls/Modal";
 import ModalTrigger from "@/dls/Modal/ModalTrigger";
 
 import ArrowIcon from "@/icons/ArrowIcon";
+import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
 import {
   insertNewTransaction,
@@ -47,8 +48,13 @@ const AddTransaction = (props: Props) => {
 
   return (
     <Modal>
-      <ModalTrigger className="border border-blue-500 text-blue-500 px-3 py-1 rounded-lg font-bold">
-        Tambah
+      <ModalTrigger className="border border-blue-500 text-blue-500 rounded-2xl lg:bg-transparent dark:bg-slate-700 bg-white lg:shadow-none shadow-xl z-20 overflow-hidden lg:p-0 p-3 lg:rounded-lg font-semibold lg:static fixed bottom-28 right-10">
+        <div>
+          <span className="lg:block hidden px-3 py-1">Tambah Transaksi</span>
+          <div className="w-8 lg:hidden">
+            <PlusIcon strokeWidth={2} />
+          </div>
+        </div>
       </ModalTrigger>
       <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
         <ModalContent className="space-y-6 dark:bg-slate-600">

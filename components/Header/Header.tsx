@@ -38,7 +38,7 @@ const Header = (props: Props) => {
       <Heading level={1}>{getHeaderTitle(pathname)}</Heading>
       <div className="flex items-center gap-4 h-full">
         <AddTransaction />
-        <Divider vertical />
+        <Divider className="lg:block hidden" vertical />
         <ProfileInfo />
       </div>
     </header>

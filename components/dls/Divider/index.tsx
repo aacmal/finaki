@@ -4,9 +4,10 @@ import React from "react";
 type Props = {
   vertical?: boolean;
   horizontal?: boolean;
+  className?: string;
 };
 
-const Divider = ({ vertical, horizontal }: Props) => {
+const Divider = ({ vertical, horizontal, className }: Props) => {
   return (
     <div
       className={classNames(
@@ -16,7 +17,8 @@ const Divider = ({ vertical, horizontal }: Props) => {
         },
         {
           "h-px w-full": horizontal,
-        }
+        },
+        className
       )}
     ></div>
   );

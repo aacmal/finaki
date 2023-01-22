@@ -12,6 +12,17 @@ const AllTransactions = ({ data }: Props) => {
     return <div>Error</div>;
   }
 
+  if (data.length === 0)
+    return (
+      <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
+        <span>Tidak ada transaksi</span>
+        <br />
+        <strong className="text-lg font-normal">
+          Untuk menambahkan transaksi, klik icon +
+        </strong>
+      </div>
+    );
+
   return (
     <>
       <div className="flex flex-col w-full">
