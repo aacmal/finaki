@@ -1,28 +1,14 @@
 import classNames from "classnames";
 import React from "react";
 
-type Props = {
-  type: "text" | "number" | "password";
-  placeholder: string;
-  value?: string | number;
-  ref?: React.RefObject<HTMLInputElement>;
-  className?: string;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   transparent?: boolean;
-  onChange?: (value: string) => void;
-};
+  className?: string;
+}
 
-const Input = ({
-  type,
-  placeholder,
-  value,
-  ref,
-  transparent,
-  className,
-  onChange,
-}: Props) => {
+const Input = ({ transparent, className, ...props }: Props) => {
   return (
     <input
-      type={type}
       className={classNames(
         "w-full py-1 px-2 rounded-md dark:text-slate-200",
         {
@@ -30,7 +16,6 @@ const Input = ({
         },
         className
       )}
-      defaultValue={value}
     />
   );
 };

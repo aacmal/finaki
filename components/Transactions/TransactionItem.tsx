@@ -29,7 +29,7 @@ const TransactionItem = ({ transaction }: Props) => {
         className={classNames(
           "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-xl px-4 group",
           { "bg-blue-100 dark:bg-blue-900": isOnEdit },
-          { "z-50": isOnEdit }
+          { "z-50 relative": isOnEdit }
         )}
       >
         <div className="w-[14%] hidden lg:block text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
@@ -41,7 +41,7 @@ const TransactionItem = ({ transaction }: Props) => {
               type="text"
               placeholder="Deskripsi"
               transparent
-              value={transaction.description}
+              defaultValue={transaction.description}
               className="border border-blue-200 -ml-3"
             />
           ) : (
@@ -49,7 +49,7 @@ const TransactionItem = ({ transaction }: Props) => {
               {transaction.description}
             </span>
           )}
-          <span className="lg:hidden text-gray-600">{transaction.time}</span>
+          <span className="lg:hidden text-gray-500">{transaction.time}</span>
         </div>
         <div className="w-[10%] text-center">
           <span className="px-3 text-orange-700 bg-orange-200 text-sm rounded-3xl">
@@ -78,7 +78,7 @@ const TransactionItem = ({ transaction }: Props) => {
               <Input
                 type="number"
                 placeholder="amount"
-                value={transaction.amount}
+                defaultValue={transaction.amount}
                 transparent
                 className="border border-blue-200 text-right"
               />

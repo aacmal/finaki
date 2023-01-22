@@ -20,7 +20,7 @@ const TransactionList = ({ data }: Props) => {
             </h3>
             <div
               className={classNames(
-                "divider flex-1 ml-2 h-px bg-slate-300",
+                "divider flex-1 ml-2 h-px bg-slate-300 dark:bg-slate-500",
                 { hidden: index === 0 },
                 { block: index > 0 }
               )}

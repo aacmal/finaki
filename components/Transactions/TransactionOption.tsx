@@ -17,11 +17,21 @@ type Props = {
   isOnEdit?: boolean;
 };
 
-const TransactionOption = ({ onEdit, onDelete, onSave, onCancel, isOnEdit }: Props) => {
+const TransactionOption = ({
+  onEdit,
+  onDelete,
+  onSave,
+  onCancel,
+  isOnEdit,
+}: Props) => {
   const [isHover, setIsHover] = useState(false);
 
   return (
-    <div className={classNames("flex-1 text-center lg:static relative", {"lg:invisible lg:group-hover:visible": !isOnEdit})}>
+    <div
+      className={classNames("flex-1 text-center lg:static relative", {
+        "lg:invisible lg:group-hover:visible": !isOnEdit,
+      })}
+    >
       {!isOnEdit ? (
         <>
           <div className="hidden lg:flex gap-3 justify-center">
@@ -44,7 +54,7 @@ const TransactionOption = ({ onEdit, onDelete, onSave, onCancel, isOnEdit }: Pro
             className="lg:hidden"
           >
             <ElipsisVerticalIcon
-              className="w-5 h-5"
+              className="w-5 h-5 dark:text-slate-200 text-slate-900"
               strokeWidth={2}
               stroke="currentColor"
             />
@@ -72,11 +82,17 @@ const TransactionOption = ({ onEdit, onDelete, onSave, onCancel, isOnEdit }: Pro
         </>
       ) : (
         <div className="flex gap-3 justify-center lg:static absolute right-0 lg:bg-transparent bg-white lg:shadow-none shadow-xl rounded-md lg:p-0 p-1 top-6">
-          <IconButton onClick={onSave} className="text-green-600 hover:bg-green-600/10">
-            <CheckIcon strokeWidth={2} fill="none" stroke="currentColor"/>
+          <IconButton
+            onClick={onSave}
+            className="text-green-600 hover:bg-green-600/10"
+          >
+            <CheckIcon strokeWidth={2} fill="none" stroke="currentColor" />
           </IconButton>
-          <IconButton onClick={onCancel} className="text-red-600 hover:bg-red-600/10">
-            <XmarkIcon strokeWidth={2} fill="none" stroke="currentColor"/>
+          <IconButton
+            onClick={onCancel}
+            className="text-red-600 hover:bg-red-600/10"
+          >
+            <XmarkIcon strokeWidth={2} fill="none" stroke="currentColor" />
           </IconButton>
         </div>
       )}
