@@ -8,7 +8,7 @@ import { Types } from "mongoose";
 async function getAllTransactions(req: Request, res: Response) {
   try {
     // const transactions = await Transaction.getAll();
-    const userId = req.user;
+    const userId = req.user as Types.ObjectId;
     const transactions = await Transaction.getTransactionByUser(userId);
     res.json(transactions);
   } catch (error) {
@@ -45,7 +45,11 @@ async function updateTransaction(req: Request, res: Response) {
     const id = req.query.id as string;
     const { description, amount, type, category } = req.body;
     const updatedTransaction = await Transaction.update(id, { description, amount, type, category });
-    res.json(updatedTransaction);
+    if (!updatedTransaction) return res.status(404).json({ message: "Transaction not found" });
+    res.json({
+      message: "Transaction has been updated successfully",
+      data: updatedTransaction,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -57,7 +61,10 @@ async function deleteTransaction(req: Request, res: Response) {
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
     await UserService.pullTransaction(userId as string, id);
-    res.json(deletedTransaction);
+    res.json({
+      message: "Transaction has been deleted successfully",
+      data: deletedTransaction,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -92,6 +99,17 @@ async function getTotalTransaction(req: Request, res: Response) {
   }
 }
 
+async function recentTransactionByUser(req: Request, res: Response) {
+  try {
+    const userId = req.user;
+    const limit = parseInt(req.query.limit as string) ?? 5;
+    const transactions = await Transaction.getRecentTransactions(userId as Types.ObjectId, limit);
+    res.json(transactions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export {
   getAllTransactions,
   createTransaction,
@@ -99,4 +117,5 @@ export {
   deleteTransaction,
   getTransactionById,
   getTotalTransaction,
+  recentTransactionByUser,
 };

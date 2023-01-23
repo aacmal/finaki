@@ -2,7 +2,6 @@
 import { Types } from "mongoose";
 import { ITotalTransaction, ITransaction } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
-import User from "../models/User";
 
 // Path: src\services\transaction.service.ts
 
@@ -23,11 +22,54 @@ async function getAll() {
   }
 }
 
-async function getTransactionByUser(userId: Express.User | undefined) {
+async function getTransactionByUser(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
   try {
-    const data = await User.findById(userId).populate("transactions");
+    const allTransactions = await Transaction.aggregate([
+      {
+        $match: {
+          userId: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $sort: {
+          createdAt: -1,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%d-%m-%Y",
+              date: "$createdAt",
+              timezone: timezone,
+            },
+          },
+          transactions: {
+            $push: {
+              _id: "$_id",
+              description: "$description",
+              amount: "$amount",
+              type: "$type",
+              category: "$category",
+              time: {
+                $dateToString: {
+                  format: "%H:%M",
+                  date: "$createdAt",
+                  timezone: timezone,
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $sort: {
+          _id: -1,
+        },
+      },
+    ]);
 
-    return data?.transactions;
+    return allTransactions;
   } catch (error) {
     throw error;
   }
@@ -135,4 +177,24 @@ async function getTotalTransactionByPeriods(
   }
 }
 
-export { create, getAll, getById, update, remove, getTransactionByUser, getTotalTransactionByPeriods };
+async function getRecentTransactions(userId: Types.ObjectId, limit: number) {
+  try {
+    return await Transaction.find({ userId })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .select({ userId: 0, __v: 0, updatedAt: 0 });
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  create,
+  getAll,
+  getById,
+  update,
+  remove,
+  getTransactionByUser,
+  getTotalTransactionByPeriods,
+  getRecentTransactions,
+};

@@ -136,9 +136,10 @@ async function sign(req: Request, res: Response) {
 async function refreshToken(req: Request, res: Response) {
   try {
     const refreshToken = req.cookies.refresh_token;
+    console.log(refreshToken);
     if (!refreshToken) {
       return res.status(401).json({
-        message: "Unauthorized",
+        message: "Unauthorizedsadsd",
       });
     }
 
