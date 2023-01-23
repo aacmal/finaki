@@ -5,6 +5,7 @@ export interface Transaction {
   category?: string;
   type: string;
   time: string;
+  createdAt: string;
 }
 
 export interface TransactionData {

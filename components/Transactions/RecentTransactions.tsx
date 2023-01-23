@@ -1,15 +1,20 @@
+"use client";
+
 import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
+import { Transaction, TransactionData } from "@/types/Transaction";
 import classNames from "classnames";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import List from "./List";
 
 type RecentTransactionsProps = {
-  data: any[];
+  data: Transaction[] | undefined;
 };
 
 const RecentTransactions = ({ data }: RecentTransactionsProps) => {
+  if (!data) return <></>;
+
   return (
     <div className="flex-1 p-4 lg:p-7 bg-white/70 dark:bg-slate-700 shadow-xl shadow-zinc-200/60 dark:shadow-slate-800 rounded-3xl">
       <Heading fontWeight="medium" level={2} className="mb-4">
@@ -21,18 +26,19 @@ const RecentTransactions = ({ data }: RecentTransactionsProps) => {
             <span className='font-bold'>Nominal</span>
           </div> */}
       <ul>
-        {data.map((transaction, index) => (
-          <List
-            key={index}
-            index={index}
-            name={transaction.name}
-            type={transaction.type}
-            date={transaction.date}
-            hour={transaction.hour}
-            value={transaction.value}
-            length={data.length}
-          />
-        ))}
+        {data.map((transaction, index) => {
+          return (
+            <List
+              key={transaction._id}
+              index={index}
+              description={transaction.description}
+              type={transaction.type}
+              createdAt={transaction.createdAt}
+              amount={transaction.amount}
+              length={4}
+            />
+          );
+        })}
       </ul>
     </div>
   );

@@ -1,4 +1,4 @@
-"use client ";
+"use client";
 
 import TextWithIcon from "@/dls/TextWithIcon";
 import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
@@ -9,17 +9,14 @@ import AreaChart from "@/components/Charts/AreaChart";
 import BarChart from "@/components/Charts/BarChart/BarChart";
 import PieChart from "@/components/Charts/PieChart";
 import RecentTransactions from "@/components/Transactions/RecentTransactions";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getRecentTransactions,
+  getTotalTransactionByPeriod,
+} from "@/utils/api/transactionApi";
+import { TransactionData } from "@/types/Transaction";
 
 type Props = {};
-export const data = [
-  { name: "1 Des", in: 100, out: 350, total: 2400 },
-  { name: "2 Des", in: 200, out: 500, total: 2420 },
-  { name: "3 Des", in: 100, out: 100, total: 2200 },
-  { name: "4 Des", in: 400, out: 350, total: 2350 },
-  { name: "5 Des", in: 250, out: 250, total: 2150 },
-  { name: "6 Des", in: 300, out: 350, total: 2200 },
-  { name: "7 Des", in: 300, out: 400, total: 2600 },
-];
 
 const transactions = [
   {
@@ -65,13 +62,38 @@ const dataCategories = [
 ];
 
 const Page = (props: Props) => {
+  const { data: datax, isLoading } = useQuery(
+    ["total-transactions"],
+    () => getTotalTransactionByPeriod("week"),
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    }
+  );
+
+  const { data: recent } = useQuery(
+    ["recent-transactions"],
+    getRecentTransactions,
+    {
+      onSuccess: (data) => {
+        console.log(data);
+      },
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    }
+  );
+
   return (
     <div className="flex flex-col gap-4">
-      <AreaChart data={data} />
-      <BarChart data={data} />
+      <AreaChart data={datax} />
+      <BarChart data={datax} />
       <div className="flex gap-4 h-fit flex-col lg:flex-row">
         <PieChart data={dataCategories} />
-        <RecentTransactions data={transactions} />
+        <RecentTransactions data={recent} />
       </div>
     </div>
   );

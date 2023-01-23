@@ -1,6 +1,7 @@
 "use client";
 
 import Heading from "@/dls/Heading";
+import { TotalTransactionByDay } from "@/utils/api/transactionApi";
 import React from "react";
 
 import {
@@ -14,7 +15,7 @@ import ChartContainer from "./ChartContainer";
 import ChartWrapper from "./ChartWrapper";
 
 type Props = {
-  data: any[];
+  data: TotalTransactionByDay[] | undefined;
 };
 
 const ChartHeader = () => (
@@ -37,6 +38,8 @@ const renderCustomizedTooltip = ({ active, payload, label }: any) => {
 };
 
 const AreaChart = ({ data }: Props) => {
+  if (!data) return <></>;
+
   return (
     <ChartContainer className="lg:px-10">
       <ChartHeader />
@@ -44,8 +47,8 @@ const AreaChart = ({ data }: Props) => {
         <ArChart data={data}>
           <defs>
             <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis
@@ -54,7 +57,7 @@ const AreaChart = ({ data }: Props) => {
             axisLine={false}
             tickLine={false}
             interval="preserveStartEnd"
-            dataKey="name"
+            dataKey="_id.day"
           />
           <CartesianGrid
             opacity={0.5}
@@ -67,7 +70,7 @@ const AreaChart = ({ data }: Props) => {
             isAnimationActive
             strokeWidth={3}
             type="monotone"
-            dataKey="total"
+            dataKey="out"
             stroke="#3b82f6"
             fillOpacity={1}
             fill="url(#colorBl)"

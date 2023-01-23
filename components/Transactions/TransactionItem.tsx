@@ -27,7 +27,7 @@ const TransactionItem = ({ transaction }: Props) => {
   const deleteMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: (data) => {
-      // queryClient.invalidateQueries(["transactions"]);
+      queryClient.refetchQueries(["total-transactions"]);
       queryClient.setQueryData(["transactions"], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
@@ -46,12 +46,9 @@ const TransactionItem = ({ transaction }: Props) => {
   const editMutation = useMutation({
     mutationFn: editTransaction,
     onSuccess: (data) => {
-      console.log(data);
       setIsOnEdit(false);
-      // queryClient.invalidateQueries(["transactions"]);
+      queryClient.refetchQueries(["total-transactions"]);
       queryClient.setQueryData(["transactions"], (oldData: any) => {
-        console.log("old Data", oldData);
-
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
             _id: transactionData._id,
@@ -69,8 +66,6 @@ const TransactionItem = ({ transaction }: Props) => {
           };
           return newTransactionData;
         });
-
-        console.log("new Data", newData);
 
         return newData;
       });

@@ -10,6 +10,7 @@ import ModalTrigger from "@/dls/Modal/ModalTrigger";
 import ArrowIcon from "@/icons/ArrowIcon";
 import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
+import { Transaction } from "@/types/Transaction";
 import {
   insertNewTransaction,
   TransactionInput,
@@ -23,12 +24,18 @@ type Props = {};
 
 const AddTransaction = (props: Props) => {
   const { handleSubmit, register, reset } = useForm();
-  const queryCleint = useQueryClient();
+  const queryClient = useQueryClient();
 
   const { isLoading, mutate, isSuccess } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
-      queryCleint.invalidateQueries(["transactions"]);
+      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
+        return [data.data, ...oldData];
+      });
+      queryClient.invalidateQueries(["transactions"]);
+      queryClient.refetchQueries(["total-transactions"]);
+      console.log(data);
+
       reset();
     },
     onError: () => {
@@ -48,7 +55,7 @@ const AddTransaction = (props: Props) => {
 
   return (
     <Modal>
-      <ModalTrigger className="border border-blue-500 text-blue-500 rounded-2xl lg:bg-transparent dark:bg-slate-700 bg-white lg:shadow-none shadow-xl z-20 overflow-hidden lg:p-0 p-3 lg:rounded-lg font-semibold lg:static fixed bottom-28 right-10">
+      <ModalTrigger className="border border-blue-500 text-blue-500 rounded-2xl lg:bg-transparent dark:lg:bg-transparent dark:bg-slate-700 bg-white lg:shadow-none shadow-xl z-20 overflow-hidden lg:p-0 p-3 lg:rounded-lg font-semibold lg:static fixed bottom-28 right-10">
         <div>
           <span className="lg:block hidden px-3 py-1">Tambah Transaksi</span>
           <div className="w-8 lg:hidden">

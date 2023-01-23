@@ -6,14 +6,29 @@ import React from "react";
 type ListProps = {
   index: number;
   length: number;
-  type: "in" | "out";
-  name: string;
-  date: string;
-  hour: string;
-  value: number;
+  type: string;
+  description: string;
+  createdAt: string;
+  amount: number;
 };
 
-const List = ({ index, length, type, name, date, hour, value }: ListProps) => {
+const List = ({
+  index,
+  length,
+  type,
+  description,
+  createdAt,
+  amount,
+}: ListProps) => {
+  const date = new Date(createdAt).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "short",
+  });
+  const hour = new Date(createdAt).toLocaleTimeString("id-ID", {
+    hour: "numeric",
+    minute: "numeric",
+  });
+
   return (
     <li
       className={classNames("flex w-full py-3 items-center", {
@@ -32,7 +47,7 @@ const List = ({ index, length, type, name, date, hour, value }: ListProps) => {
         </IconWrapper>
       </span>
       <span className="w-[30%] lg:w-[40%] font-medium dark:text-slate-200">
-        {name}
+        {description}
       </span>
       <span></span>
       <span className="flex flex-col">
@@ -50,7 +65,7 @@ const List = ({ index, length, type, name, date, hour, value }: ListProps) => {
           { "text-orange-500": type === "out" }
         )}
       >
-        {type === "in" ? "+" : "-"}Rp. {value}
+        {type === "in" ? "+" : "-"}Rp. {amount}
       </span>
     </li>
   );

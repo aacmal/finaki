@@ -3,6 +3,7 @@
 import Heading from "@/dls/Heading";
 import TextWithIcon from "@/dls/TextWithIcon";
 import ArrowIcon from "@/icons/ArrowIcon";
+import { TotalTransactionByDay } from "@/utils/api/transactionApi";
 import classNames from "classnames";
 import React from "react";
 import {
@@ -19,7 +20,7 @@ import ChartWrapper from "../ChartWrapper";
 import BarChartHeader from "./BarChartHeader";
 
 type Props = {
-  data: any[];
+  data: TotalTransactionByDay[] | undefined;
 };
 
 const COLOR = {
@@ -28,6 +29,18 @@ const COLOR = {
 };
 
 const BarChart = ({ data }: Props) => {
+  if (!data) return <></>;
+
+  const totalIncome = data.reduce((acc, curr) => acc + curr.in, 0);
+  const totalOutcome = data.reduce((acc, curr) => acc + curr.out, 0);
+  const total = totalIncome - totalOutcome;
+  // no decimal point
+  const currencyFormat = new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+  });
+
   return (
     <ChartContainer className="flex gap-4 lg:flex-row flex-col">
       <div className="flex-1">
@@ -60,7 +73,7 @@ const BarChart = ({ data }: Props) => {
               height={30}
               axisLine={false}
               tickLine={false}
-              dataKey="name"
+              dataKey="_id.day"
             />
           </BaChart>
         </ChartWrapper>
@@ -75,7 +88,7 @@ const BarChart = ({ data }: Props) => {
             "bg-blue-500 text-white shadow-xl shadow-blue-200 dark:shadow-blue-800"
           )}
         >
-          Rp. 2.000.000
+          {currencyFormat.format(totalIncome)}
         </TextWithIcon>
         <TextWithIcon
           iconPosition="left"
@@ -86,10 +99,13 @@ const BarChart = ({ data }: Props) => {
             "bg-orange-500 text-white shadow-xl shadow-orange-200 dark:shadow-orange-800"
           )}
         >
-          -Rp. 2.000.000
+          -{currencyFormat.format(totalOutcome)}
         </TextWithIcon>
-        <Heading level={4} fontWeight="medium" className="mt-6">
-          Total Profit: Rp. 0
+        <Heading level={4} fontWeight="medium" className={"mt-6"}>
+          Total Profit:{" "}
+          <span className={classNames({ "text-red-400": total < 0 })}>
+            {currencyFormat.format(total)}
+          </span>
         </Heading>
       </div>
     </ChartContainer>

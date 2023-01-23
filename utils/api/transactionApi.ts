@@ -29,6 +29,16 @@ export interface EditTransactionInput {
   transactionInput: TransactionInput;
 }
 
+export interface TotalTransactionByDay {
+  _id: {
+    day: number;
+  };
+  timestamp: string;
+  in: number;
+  out: number;
+  totalAmount: number;
+}
+
 export const transactionApi = axios.create({
   baseURL: `${BASE_URL}/transaction`,
   headers: {
@@ -96,4 +106,24 @@ export const editTransaction = async ({
 export const deleteTransaction = async (id: string): Promise<Transaction> => {
   const response = await transactionApi.delete(makeUrl("/delete", { id }));
   return response.data.data;
+};
+
+export const getTotalTransactionByPeriod = async (
+  interval: "month" | "week"
+): Promise<TotalTransactionByDay[]> => {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const response = await transactionApi.get(
+    makeUrl("/total", { interval, timezone })
+  );
+
+  return response.data;
+};
+
+export const getRecentTransactions = async (): Promise<Transaction[]> => {
+  const limit = 4;
+  const response = await transactionApi.get<Transaction[]>(
+    makeUrl("/recent", { limit })
+  );
+
+  return response.data;
 };
