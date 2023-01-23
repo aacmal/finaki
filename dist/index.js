@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const dbconfig_1 = __importDefault(require("./src/configs/dbconfig"));
 const passport_1 = __importDefault(require("passport"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -32,9 +33,9 @@ app.use((req, res, next) => {
     next();
 });
 app.use("/api", routes_1.default);
-app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Server running at http://localhost:${port}`);
+(0, dbconfig_1.default)().then(() => {
+    app.listen(port, () => {
+        // eslint-disable-next-line no-console
+        console.log(`Server running at http://localhost:${port}`);
+    });
 });
-// dbConnection().then(() => {
-// });
