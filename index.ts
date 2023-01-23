@@ -36,9 +36,9 @@ app.use((req, res, next) => {
 
 app.use("/api", AppRoutes);
 
-dbConnection().then(() => {
-  app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    console.log(`Server running at http://localhost:${port}`);
-  });
+app.listen(port, () => {
+  // eslint-disable-next-line no-console
+  console.log(`Server running at http://localhost:${port}`);
 });
+// dbConnection().then(() => {
+// });
