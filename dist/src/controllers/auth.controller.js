@@ -34,6 +34,7 @@ const UserService = __importStar(require("../services/user.service"));
 const bcrypt_1 = require("bcrypt");
 const RefreshToken_1 = __importDefault(require("../models/RefreshToken"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const __1 = require("../..");
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -166,7 +167,7 @@ async function refreshToken(req, res) {
             });
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
-        jsonwebtoken_1.default.verify(refreshToken, generateToken_1.REFRESH_TOKEN_SECRET, (error, decoded) => {
+        jsonwebtoken_1.default.verify(refreshToken, __1.REFRESH_TOKEN_SECRET, (error, decoded) => {
             if (error) {
                 return res.status(403).json({
                     message: "Forbidden",

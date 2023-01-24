@@ -3,15 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.REFRESH_TOKEN_SECRET = exports.ACCESS_TOKEN_SECRET = void 0;
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const dbconfig_1 = __importDefault(require("./src/configs/dbconfig"));
 const passport_1 = __importDefault(require("passport"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const routes_1 = __importDefault(require("./src/routes"));
 const cors_2 = require("./src/configs/cors");
+const dbconfig_1 = __importDefault(require("./src/configs/dbconfig"));
 dotenv_1.default.config();
+exports.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET_KEY;
+exports.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET_KEY;
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.get("/", (req, res) => {
@@ -33,9 +36,11 @@ app.use((req, res, next) => {
     next();
 });
 app.use("/api", routes_1.default);
-(0, dbconfig_1.default)().then(() => {
-    app.listen(port, () => {
+app.listen(port, () => {
+    (0, dbconfig_1.default)().catch((error) => {
         // eslint-disable-next-line no-console
-        console.log(`Server running at http://localhost:${port}`);
+        console.log(error);
     });
+    // eslint-disable-next-line no-console
+    console.log(`Server is running at http://localhost:${port}`);
 });

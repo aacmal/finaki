@@ -7,18 +7,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const dbConnection = async () => {
-    try {
-        mongoose_1.default.set("strictQuery", false);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        await mongoose_1.default.connect(process.env.MONGO_URL);
-        console.log("Database connected");
-    }
-    catch (error) {
-        console.log(error);
-        throw new Error("Error connecting to database");
-    }
-};
-exports.default = dbConnection;
+// import dotenv from "dotenv";
+// dotenv.config();
+// const dbConnection = async () => {
+//   try {
+//     mongoose.set("strictQuery", false);
+//     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+//     await mongoose.connect(process.env.MONGO_URL!);
+//     console.log("Database connected");
+//   } catch (error) {
+//     console.log(error);
+//     throw new Error("Error connecting to database");
+//   }
+// };
+mongoose_1.default.set("strictQuery", false);
+const database = async () => mongoose_1.default
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    .connect(process.env.MONGO_URL)
+    .then(() => {
+    console.log("Database connected");
+})
+    .catch((error) => {
+    console.log(error);
+    throw new Error("Error connecting to database");
+});
+exports.default = database;

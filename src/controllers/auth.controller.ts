@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { REFRESH_TOKEN_SECRET, generateAccessToken, generateRefreshToken } from "../utils/generateToken";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateToken";
 import User from "../models/User";
 import * as UserService from "../services/user.service";
 import { compare } from "bcrypt";
 import RefreshToken from "../models/RefreshToken";
 import jwt from "jsonwebtoken";
 import { IUser } from "../../types/User";
+import { REFRESH_TOKEN_SECRET } from "../..";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
@@ -136,7 +137,6 @@ async function sign(req: Request, res: Response) {
 async function refreshToken(req: Request, res: Response) {
   try {
     const refreshToken = req.cookies.refresh_token;
-    console.log(refreshToken);
     if (!refreshToken) {
       return res.status(401).json({
         message: "Unauthorizedsadsd",
