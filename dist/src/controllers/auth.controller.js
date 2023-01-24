@@ -154,7 +154,6 @@ exports.sign = sign;
 async function refreshToken(req, res) {
     try {
         const refreshToken = req.cookies.refresh_token;
-        console.log(refreshToken);
         if (!refreshToken) {
             return res.status(401).json({
                 message: "Unauthorizedsadsd",
