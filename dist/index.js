@@ -36,11 +36,11 @@ app.use((req, res, next) => {
     next();
 });
 app.use("/api", routes_1.default);
+(0, dbconfig_1.default)().catch((error) => {
+    // eslint-disable-next-line no-console
+    console.log(error);
+});
 app.listen(port, () => {
-    (0, dbconfig_1.default)().catch((error) => {
-        // eslint-disable-next-line no-console
-        console.log(error);
-    });
     // eslint-disable-next-line no-console
     console.log(`Server is running at http://localhost:${port}`);
 });

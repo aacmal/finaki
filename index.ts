@@ -40,11 +40,11 @@ app.use((req, res, next) => {
 
 app.use("/api", AppRoutes);
 
+database().catch((error) => {
+  // eslint-disable-next-line no-console
+  console.log(error);
+});
 app.listen(port, () => {
-  database().catch((error) => {
-    // eslint-disable-next-line no-console
-    console.log(error);
-  });
   // eslint-disable-next-line no-console
   console.log(`Server is running at http://localhost:${port}`);
 });
