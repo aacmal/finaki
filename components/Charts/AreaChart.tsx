@@ -70,7 +70,7 @@ const AreaChart = ({ data }: Props) => {
             isAnimationActive
             strokeWidth={3}
             type="monotone"
-            dataKey="out"
+            dataKey="totalAmount"
             stroke="#3b82f6"
             fillOpacity={1}
             fill="url(#colorBl)"
