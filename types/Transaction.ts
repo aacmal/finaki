@@ -15,6 +15,7 @@ export interface ITotalTransaction {
   _id: {
     day: number;
   };
+  timestamp: Date;
   in: number;
   out: number;
   totalAmount: number;

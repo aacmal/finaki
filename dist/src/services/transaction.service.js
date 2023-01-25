@@ -49,6 +49,9 @@ async function getTransactionByUser(userId, timezone = "Asia/Jakarta") {
                             timezone: timezone,
                         },
                     },
+                    timestamp: {
+                        $first: "$createdAt",
+                    },
                     transactions: {
                         $push: {
                             _id: "$_id",
@@ -69,7 +72,7 @@ async function getTransactionByUser(userId, timezone = "Asia/Jakarta") {
             },
             {
                 $sort: {
-                    _id: -1,
+                    timestamp: -1,
                 },
             },
         ]);
@@ -112,23 +115,11 @@ exports.remove = remove;
 async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/Jakarta") {
     const intervals = interval === "week" ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
-    const currentDate = new Date();
-    const bounds = [new Date(dateInterval), currentDate];
     try {
         const totalTranscation = await Transaction_1.default.aggregate([
             {
                 $match: {
                     userId: new mongoose_1.Types.ObjectId(userId),
-                },
-            },
-            {
-                $densify: {
-                    field: "createdAt",
-                    range: {
-                        step: 1,
-                        unit: "day",
-                        bounds: bounds,
-                    },
                 },
             },
             {
@@ -159,19 +150,38 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
                     },
                 },
             },
-            {
-                $sort: {
-                    timestamp: -1,
-                },
-            },
             { $limit: intervals },
             {
                 $sort: {
                     timestamp: 1,
                 },
             },
+            {
+                $project: {
+                    _id: 1,
+                    timestamp: 1,
+                    in: 1,
+                    out: 1,
+                    totalAmount: 1,
+                },
+            },
         ]);
-        return totalTranscation;
+        const totalTransactionByPeriods = [];
+        for (let i = 1; i <= intervals; i++) {
+            const date = new Date(dateInterval);
+            date.setDate(date.getDate() + i);
+            const transaction = totalTranscation.find((transaction) => transaction._id.day === date.getDate());
+            totalTransactionByPeriods.push({
+                _id: {
+                    day: date.getDate(),
+                },
+                timestamp: date,
+                in: transaction ? transaction.in : 0,
+                out: transaction ? transaction.out : 0,
+                totalAmount: transaction ? transaction.totalAmount : 0,
+            });
+        }
+        return totalTransactionByPeriods;
     }
     catch (error) {
         throw error;
