@@ -1,11 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import NavLink from "./AppNavLink";
 
 import GridIcon from "@/icons/GridIcon";
 import ArrowsIcon from "@/icons/ArrowsIcon";
 import GearIcon from "@/icons/GearIcon";
+import WalletIcon from "@/icons/WalletIcon";
 import { defaultIconProps } from "@/types/IconProps";
 import { Routes } from "@/types/Routes";
 import AppNavLink from "./AppNavLink";
@@ -23,6 +23,13 @@ const AppNav = (props: Props) => {
         active={pathname === Routes.Dashboard}
       >
         Dashboard
+      </AppNavLink>
+      <AppNavLink
+        icon={<WalletIcon {...defaultIconProps} />}
+        href={Routes.Wallet}
+        active={pathname === Routes.Wallet}
+      >
+        Wallet
       </AppNavLink>
       <AppNavLink
         icon={<ArrowsIcon {...defaultIconProps} />}

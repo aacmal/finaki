@@ -23,6 +23,8 @@ const Header = (props: Props) => {
     switch (pathname) {
       case Routes.Dashboard:
         return "Dashboard";
+      case Routes.Wallet:
+        return "My Wallet";
       case Routes.Transactions:
         return "Transactions";
       case Routes.Settings:
@@ -30,7 +32,7 @@ const Header = (props: Props) => {
       case Routes.Profile:
         return "Profile";
       default:
-        return "Dashboard";
+        return "Error";
     }
   };
   return (
