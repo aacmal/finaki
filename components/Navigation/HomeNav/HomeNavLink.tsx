@@ -10,7 +10,7 @@ type Props = {
   className?: string;
 };
 
-const NavigationLink = ({
+const HomeNavLink = ({
   children,
   isActive,
   href,
@@ -39,4 +39,4 @@ const NavigationLink = ({
   );
 };
 
-export default NavigationLink;
+export default HomeNavLink;

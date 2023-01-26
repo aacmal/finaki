@@ -3,6 +3,8 @@ import React from "react";
 import TransactionHeader from "./TransactionHeader";
 import TransactionList from "./TransactionList";
 
+//TODO: Refactor this component and fix error
+
 type Props = {
   data: TransactionData[] | undefined;
 };
@@ -18,7 +20,7 @@ const AllTransactions = ({ data }: Props) => {
         <span>Tidak ada transaksi</span>
         <br />
         <strong className="text-lg font-normal">
-          Untuk menambahkan transaksi, klik icon +
+          Untuk menambahkan transaksi, klik icon + atau tambah transaksi
         </strong>
       </div>
     );

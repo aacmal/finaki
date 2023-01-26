@@ -1,4 +1,5 @@
 import Button from "@/dls/Button/Button";
+import LoadingButton from "@/dls/Button/LoadingButton";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import RadioButton from "@/dls/Form/Radio/RadioButton";
 import Heading from "@/dls/Heading";
@@ -26,20 +27,20 @@ const AddTransaction = (props: Props) => {
   const { handleSubmit, register, reset } = useForm();
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, isSuccess } = useMutation({
+  const { isLoading, mutate, isSuccess, isError } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
       queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
+        if (!oldData) return;
         return [data.data, ...oldData];
       });
       queryClient.invalidateQueries(["transactions"]);
       queryClient.refetchQueries(["total-transactions"]);
-      console.log(data);
 
       reset();
     },
-    onError: () => {
-      console.log("error");
+    onError: (error) => {
+      console.log("error", error);
     },
   });
 
@@ -49,7 +50,6 @@ const AddTransaction = (props: Props) => {
       amount: values.amount,
       type: values["transaction-type"],
     };
-    console.log(data);
     mutate(data);
   };
 
@@ -125,22 +125,15 @@ const AddTransaction = (props: Props) => {
               {...register("amount")}
             />
           </div>
-          <Button type="submit" disabled={isLoading} width="full">
-            <div className="flex items-center justify-center">
-              <LoadingSpinner
-                className={classNames(
-                  "transition-all duration-500 stroke-white",
-                  {
-                    "max-w-0 mr-0": !isLoading,
-                    "max-w-xs mr-3": isLoading,
-                  }
-                )}
-              />
-              <span>
-                {isLoading ? "Menambahkan" : !isSuccess ? "Tambah" : "Ulangi"}
-              </span>
-            </div>
-          </Button>
+          <LoadingButton
+            isLoading={isLoading}
+            onLoadingText="Menambahkan"
+            isSuccess={isSuccess}
+            onSuccessText="Tambah lagi"
+            isError={isError}
+            onErrorText="Gagal, coba lagi"
+            title="Tambah"
+          />
         </ModalContent>
       </form>
     </Modal>

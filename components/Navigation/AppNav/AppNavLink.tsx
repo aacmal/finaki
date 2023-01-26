@@ -10,7 +10,7 @@ type NavLinkProps = {
   active?: boolean;
 };
 
-const NavLink = ({ href, children, icon, active = false }: NavLinkProps) => {
+const AppNavLink = ({ href, children, icon, active = false }: NavLinkProps) => {
   return (
     <Link href={href}>
       <div
@@ -33,4 +33,4 @@ const NavLink = ({ href, children, icon, active = false }: NavLinkProps) => {
   );
 };
 
-export default NavLink;
+export default AppNavLink;

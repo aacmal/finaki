@@ -12,7 +12,7 @@ type ListProps = {
   amount: number;
 };
 
-const List = ({
+const RecentItem = ({
   index,
   length,
   type,
@@ -71,4 +71,4 @@ const List = ({
   );
 };
 
-export default List;
+export default RecentItem;

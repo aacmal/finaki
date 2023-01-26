@@ -3,11 +3,11 @@
 import { Inter } from "@next/font/google";
 import classNames from "classnames";
 import "./globals.scss";
-import Navigation from "@/components/Navbar/Navigation";
 import useTheme from "../hooks/useTheme";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GetUserData from "./GetUserData";
+import HomeNav from "@/components/Navigation/HomeNav/HomeNav";
 
 // font set up
 const font = Inter({
@@ -42,7 +42,7 @@ export default function RootLayout({
       >
         <QueryClientProvider client={queryClient}>
           <GetUserData />
-          <Navigation />
+          <HomeNav />
           <main>{children}</main>
           <ReactQueryDevtools />
         </QueryClientProvider>

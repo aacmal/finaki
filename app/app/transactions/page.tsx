@@ -1,6 +1,6 @@
 "use client";
 
-import AllTransactions from "@/components/Transactions/AllTransactions";
+import AllTransactions from "@/components/Transactions/AllTransactions/AllTransactions";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactions } from "@/utils/api/transactionApi";
 

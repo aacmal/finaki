@@ -47,13 +47,13 @@ const TransactionOption = ({
             <IconButton
               type="button"
               onClick={onEdit}
-              className="text-blue-500 hover:bg-blue-200"
+              className="text-blue-500 hover:bg-blue-200 dark:hover:bg-blue-600/30"
             >
               <PencilIcon />
             </IconButton>
             <IconButton
               onClick={onDelete}
-              className="text-red-500 hover:bg-red-200"
+              className="text-red-500 hover:bg-red-200 dark:hover:bg-red-600/30"
             >
               <TrashIcon />
             </IconButton>
@@ -78,13 +78,13 @@ const TransactionOption = ({
           >
             <IconButton
               onClick={onEdit}
-              className="text-blue-500 hover:bg-blue-200"
+              className="text-blue-500 hover:bg-blue-200 dark:hover:bg-blue-600/30"
             >
               <PencilIcon />
             </IconButton>
             <IconButton
               onClick={onDelete}
-              className="text-red-500 hover:bg-red-200"
+              className="text-red-500 hover:bg-red-200 dark:hover:bg-red-600/30"
             >
               <TrashIcon />
             </IconButton>

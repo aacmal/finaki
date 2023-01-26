@@ -3,6 +3,7 @@
 import AuthCard from "@/components/AuthCard/AuthCard";
 import AuthCardContent from "@/components/AuthCard/AuthCardContent";
 import Button from "@/dls/Button/Button";
+import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
@@ -87,32 +88,14 @@ const LoginPage = (props: Props) => {
             error={errors.password as any}
             {...register("password")}
           />
-          <Button
-            disabled={isLoading}
-            width="full"
-            type="submit"
-            className="!mt-16"
-          >
-            <div className="flex items-center justify-center">
-              <LoadingSpinner
-                className={classNames(
-                  "transition-all duration-500 stroke-white",
-                  {
-                    "max-w-0 mr-0": !isLoading && !isSuccess,
-                    "max-w-xs mr-3": isLoading,
-                  },
-                  { "max-w-xs mr-3": isSuccess }
-                )}
-              />
-              <span>
-                {isSuccess
-                  ? "Sedang dialihkan"
-                  : isLoading
-                  ? "Sedang Memproses"
-                  : "Login"}
-              </span>
-            </div>
-          </Button>
+          <LoadingButton
+            loadingOnSuccess
+            isLoading={isLoading}
+            onLoadingText="Sedang Memproses"
+            isSuccess={isSuccess}
+            onSuccessText="Sedang dialihkan"
+            title="Login"
+          />
         </FormGroup>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}

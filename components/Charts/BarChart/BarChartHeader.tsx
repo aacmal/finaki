@@ -1,15 +1,12 @@
-import Heading from "@/dls/Heading";
 import React from "react";
+import ChartHeader from "../ChartHeader";
 
 type BarChartHeaderProps = {
   COLOR: any;
 };
 
 const BarChartHeader = ({ COLOR }: BarChartHeaderProps) => (
-  <div className="flex justify-between px-4 items-center mb-5">
-    <Heading level={3} fontWeight="medium">
-      Perbandingan
-    </Heading>
+  <ChartHeader title="Perbandingan">
     <div className="flex items-center gap-4 dark:text-slate-300">
       <div className="flex items-center">
         <div
@@ -26,6 +23,6 @@ const BarChartHeader = ({ COLOR }: BarChartHeaderProps) => (
         <span className="text-sm">Keluar</span>
       </div>
     </div>
-  </div>
+  </ChartHeader>
 );
 export default BarChartHeader;

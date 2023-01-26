@@ -92,8 +92,8 @@ const TransactionItem = ({ transaction }: Props) => {
       <form onSubmit={handleSubmit(onSaveHandler)}>
         <div
           className={classNames(
-            "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-xl px-4 group",
-            { "bg-blue-100 dark:bg-blue-900": isOnEdit },
+            "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl px-4 group",
+            { "bg-blue-100 dark:bg-blue-900/50": isOnEdit },
             { "z-50 relative": isOnEdit }
           )}
         >
@@ -115,13 +115,13 @@ const TransactionItem = ({ transaction }: Props) => {
                 {transaction.description}
               </span>
             )}
-            <span
+            <div
               className={classNames(
                 "lg:hidden text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900"
               )}
             >
               {transaction.time}
-            </span>
+            </div>
           </div>
           <div className="w-[10%] text-center">
             <span className="px-3 text-orange-700 bg-orange-200 text-sm rounded-3xl">

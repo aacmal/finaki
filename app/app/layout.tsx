@@ -2,8 +2,9 @@
 
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
-import Navbar from "@/components/Navbar/Navbar";
+import AppNav from "@/components/Navigation/AppNav/AppNav";
 import { Routes } from "@/types/Routes";
+import { getUserData } from "@/utils/api/commonApi";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ const AppLayout = ({ children }: Props) => {
   const router = useRouter();
 
   const { isLoading, data, isError } = useQuery(["user"], {
+    queryFn: getUserData,
     onError: (error) => {
       console.log("user error", error);
     },
@@ -40,7 +42,7 @@ const AppLayout = ({ children }: Props) => {
 
   return (
     <Container>
-      <Navbar />
+      <AppNav />
       <div className="flex flex-col w-full">
         <Header />
         <main>{children}</main>

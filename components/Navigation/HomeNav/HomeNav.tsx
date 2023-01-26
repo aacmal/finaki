@@ -5,13 +5,13 @@ import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import useStore from "../../stores/store";
-import ThemeToggleIcon from "../ThemeSelection/ThemeToggleIcon";
-import NavigationLink from "./NavigationLink";
+import useStore from "../../../stores/store";
+import ThemeToggleIcon from "../../ThemeSelection/ThemeToggleIcon";
+import HomeNavLink from "./HomeNavLink";
 
 type Props = {};
 
-const Navigation = (props: Props) => {
+const HomeNav = (props: Props) => {
   const pathname = usePathname();
   const user = useStore((state) => state.user);
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
@@ -43,38 +43,35 @@ const Navigation = (props: Props) => {
             Finaki
           </Heading>
         ) : (
-          <NavigationLink
-            isActive={pathname === Routes.Home}
-            href={Routes.Home}
-          >
+          <HomeNavLink isActive={pathname === Routes.Home} href={Routes.Home}>
             Home
-          </NavigationLink>
+          </HomeNavLink>
         )}
         <div>
           {user ? (
-            <NavigationLink
+            <HomeNavLink
               type="secondary"
               isActive={pathname === Routes.Dashboard}
               href={Routes.Dashboard}
             >
               Dashboard
-            </NavigationLink>
+            </HomeNavLink>
           ) : (
             <>
-              <NavigationLink
+              <HomeNavLink
                 isActive={pathname === Routes.Login}
                 href={Routes.Login}
               >
                 Login
-              </NavigationLink>
-              <NavigationLink
+              </HomeNavLink>
+              <HomeNavLink
                 isActive={pathname === Routes.Register}
                 href={Routes.Register}
                 type={isInAuthPage ? "primary" : "secondary"}
                 className="ml-3"
               >
                 Register
-              </NavigationLink>
+              </HomeNavLink>
             </>
           )}
         </div>
@@ -84,4 +81,4 @@ const Navigation = (props: Props) => {
   );
 };
 
-export default Navigation;
+export default HomeNav;
