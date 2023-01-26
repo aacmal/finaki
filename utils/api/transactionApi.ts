@@ -2,7 +2,6 @@ import { Transaction, TransactionData } from "@/types/Transaction";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { refreshAccessToken } from "./authApi";
-import { commonApi } from "./commonApi";
 import { BASE_URL, makeUrl } from "./config";
 
 interface NewTransactionResponse {
@@ -87,7 +86,7 @@ export const insertNewTransaction = async (data: TransactionInput) => {
   return response.data;
 };
 
-export const getTransactions = async () => {
+export const getTransactionsByDate = async () => {
   const response = await transactionApi.get<TransactionData[]>("/");
   return response.data;
 };
@@ -119,10 +118,11 @@ export const getTotalTransactionByPeriod = async (
   return response.data;
 };
 
-export const getRecentTransactions = async (): Promise<Transaction[]> => {
-  const limit = 4;
+export const getAllTransactions = async (
+  limit: number
+): Promise<Transaction[]> => {
   const response = await transactionApi.get<Transaction[]>(
-    makeUrl("/recent", { limit })
+    makeUrl("/all", { limit })
   );
 
   return response.data;

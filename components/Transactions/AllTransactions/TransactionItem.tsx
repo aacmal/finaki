@@ -27,7 +27,9 @@ const TransactionItem = ({ transaction }: Props) => {
   const deleteMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: (data) => {
+      // refetch total transactions
       queryClient.refetchQueries(["total-transactions"]);
+      // update transactions data
       queryClient.setQueryData(["transactions"], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
@@ -40,6 +42,14 @@ const TransactionItem = ({ transaction }: Props) => {
         });
         return newData;
       });
+      // update recent transactions data
+      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
+        if (!oldData) return;
+        const newData = oldData.filter(
+          (transaction: Transaction) => transaction._id !== data._id
+        );
+        return newData;
+      });
     },
   });
 
@@ -47,7 +57,11 @@ const TransactionItem = ({ transaction }: Props) => {
     mutationFn: editTransaction,
     onSuccess: (data) => {
       setIsOnEdit(false);
+      console.log("edit", data);
+
+      // refetch total transactions
       queryClient.refetchQueries(["total-transactions"]);
+      // update transactions data
       queryClient.setQueryData(["transactions"], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
@@ -67,6 +81,24 @@ const TransactionItem = ({ transaction }: Props) => {
           return newTransactionData;
         });
 
+        return newData;
+      });
+      // update recent transaction data
+      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
+        if (!oldData) return;
+        const newData: Transaction[] = oldData.map(
+          (oldTransaction: Transaction) => {
+            if (oldTransaction._id === data._id) {
+              return {
+                ...oldTransaction,
+                description: data.description,
+                amount: data.amount,
+                type: data.type,
+              };
+            }
+            return oldTransaction;
+          }
+        );
         return newData;
       });
     },

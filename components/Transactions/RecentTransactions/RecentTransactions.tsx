@@ -10,28 +10,33 @@ type RecentTransactionsProps = {
 };
 
 const RecentTransactions = ({ data }: RecentTransactionsProps) => {
-  if (!data) return <></>;
+  if (data) {
+    const slicedData = data.slice(0, 4);
+    const lengthData = slicedData.length;
 
-  return (
-    <ChartContainer className="flex-1">
-      <ChartHeader title="Transaksi terbaru" />
-      <ul>
-        {data.map((transaction, index) => {
-          return (
-            <RecentItem
-              key={transaction._id}
-              index={index}
-              description={transaction.description}
-              type={transaction.type}
-              createdAt={transaction.createdAt}
-              amount={transaction.amount}
-              length={4}
-            />
-          );
-        })}
-      </ul>
-    </ChartContainer>
-  );
+    return (
+      <ChartContainer className="flex-1">
+        <ChartHeader title="Transaksi terbaru" />
+        <ul>
+          {slicedData.map((transaction, index) => {
+            return (
+              <RecentItem
+                key={transaction._id}
+                index={index}
+                description={transaction.description}
+                type={transaction.type}
+                createdAt={transaction.createdAt}
+                amount={transaction.amount}
+                length={lengthData}
+              />
+            );
+          })}
+        </ul>
+      </ChartContainer>
+    );
+  }
+
+  return <></>;
 };
 
 export default RecentTransactions;

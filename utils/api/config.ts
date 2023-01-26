@@ -2,7 +2,7 @@
 export const BASE_URL =
   process.env.NODE_ENV === "production"
     ? "https://finaki-backend.acmal.me/api"
-    : "http://localhost:3000/api";
+    : "http://localhost:3001/api";
 
 export const makeUrl = (path: string, parameters: any) => {
   if (!parameters) return path;

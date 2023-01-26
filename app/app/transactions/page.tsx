@@ -2,12 +2,12 @@
 
 import AllTransactions from "@/components/Transactions/AllTransactions/AllTransactions";
 import { useQuery } from "@tanstack/react-query";
-import { getTransactions } from "@/utils/api/transactionApi";
+import { getTransactionsByDate } from "@/utils/api/transactionApi";
 
 type Props = {};
 
 const TransactionsPage = (props: Props) => {
-  const { data, error } = useQuery(["transactions"], getTransactions, {
+  const { data, error } = useQuery(["transactions"], getTransactionsByDate, {
     onSuccess: (data) => {},
     onError: (error) => {
       console.log("error", error);

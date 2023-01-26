@@ -7,7 +7,7 @@ import PieChart from "@/components/Charts/PieChart/PieChart";
 import RecentTransactions from "@/components/Transactions/RecentTransactions/RecentTransactions";
 import { useQuery } from "@tanstack/react-query";
 import {
-  getRecentTransactions,
+  getAllTransactions,
   getTotalTransactionByPeriod,
 } from "@/utils/api/transactionApi";
 
@@ -30,7 +30,7 @@ const Page = (props: Props) => {
 
   const recentTransactionsQuery = useQuery(
     ["recent-transactions"],
-    getRecentTransactions,
+    () => getAllTransactions(4),
     {
       onSuccess: (data) => {
         console.log(data);
