@@ -5,11 +5,11 @@ import { Request, Response } from "express";
 import * as UserService from "../services/user.service";
 import { Types } from "mongoose";
 
-async function getAllTransactions(req: Request, res: Response) {
+async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
     // const transactions = await Transaction.getAll();
     const userId = req.user as Types.ObjectId;
-    const transactions = await Transaction.getTransactionByUser(userId);
+    const transactions = await Transaction.getTransactionByDate(userId);
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -99,11 +99,11 @@ async function getTotalTransaction(req: Request, res: Response) {
   }
 }
 
-async function recentTransactionByUser(req: Request, res: Response) {
+async function getAllTransactions(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const limit = parseInt(req.query.limit as string) ?? 5;
-    const transactions = await Transaction.getRecentTransactions(userId as Types.ObjectId, limit);
+    const limit = parseInt(req.query.limit as string) ?? 0;
+    const transactions = await Transaction.getTransactions(userId as Types.ObjectId, limit);
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -111,11 +111,11 @@ async function recentTransactionByUser(req: Request, res: Response) {
 }
 
 export {
-  getAllTransactions,
+  getAllTransactionsByDate,
   createTransaction,
   updateTransaction,
   deleteTransaction,
   getTransactionById,
   getTotalTransaction,
-  recentTransactionByUser,
+  getAllTransactions,
 };

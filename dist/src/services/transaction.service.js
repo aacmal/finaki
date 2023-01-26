@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecentTransactions = exports.getTotalTransactionByPeriods = exports.getTransactionByUser = exports.remove = exports.update = exports.getById = exports.getAll = exports.create = void 0;
+exports.getRecentTransactions = exports.getTotalTransactionByPeriods = exports.getTransactionByDate = exports.remove = exports.update = exports.getById = exports.getTransactions = exports.create = void 0;
 // create services from Transaction
 const mongoose_1 = require("mongoose");
 const Transaction_1 = __importDefault(require("../models/Transaction"));
@@ -18,16 +18,19 @@ async function create(transactionData) {
     }
 }
 exports.create = create;
-async function getAll() {
+async function getTransactions(userId, limit) {
     try {
-        return await Transaction_1.default.find();
+        return await Transaction_1.default.find({ userId: userId })
+            .sort({ createdAt: -1 })
+            .select({ userId: 0, __v: 0 })
+            .limit(limit !== null && limit !== void 0 ? limit : 0);
     }
     catch (error) {
         throw error;
     }
 }
-exports.getAll = getAll;
-async function getTransactionByUser(userId, timezone = "Asia/Jakarta") {
+exports.getTransactions = getTransactions;
+async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
     try {
         const allTransactions = await Transaction_1.default.aggregate([
             {
@@ -82,7 +85,7 @@ async function getTransactionByUser(userId, timezone = "Asia/Jakarta") {
         throw error;
     }
 }
-exports.getTransactionByUser = getTransactionByUser;
+exports.getTransactionByDate = getTransactionByDate;
 async function getById(id) {
     try {
         return await Transaction_1.default.findById(id);

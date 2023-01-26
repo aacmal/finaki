@@ -23,23 +23,23 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recentTransactionByUser = exports.getTotalTransaction = exports.getTransactionById = exports.deleteTransaction = exports.updateTransaction = exports.createTransaction = exports.getAllTransactions = void 0;
+exports.getAllTransactions = exports.getTotalTransaction = exports.getTransactionById = exports.deleteTransaction = exports.updateTransaction = exports.createTransaction = exports.getAllTransactionsByDate = void 0;
 // import Transaction from "../models/Transaction";
 const express_validator_1 = require("express-validator");
 const Transaction = __importStar(require("../services/transaction.service"));
 const UserService = __importStar(require("../services/user.service"));
-async function getAllTransactions(req, res) {
+async function getAllTransactionsByDate(req, res) {
     try {
         // const transactions = await Transaction.getAll();
         const userId = req.user;
-        const transactions = await Transaction.getTransactionByUser(userId);
+        const transactions = await Transaction.getTransactionByDate(userId);
         res.json(transactions);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getAllTransactions = getAllTransactions;
+exports.getAllTransactionsByDate = getAllTransactionsByDate;
 async function createTransaction(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
@@ -124,16 +124,16 @@ async function getTotalTransaction(req, res) {
     }
 }
 exports.getTotalTransaction = getTotalTransaction;
-async function recentTransactionByUser(req, res) {
+async function getAllTransactions(req, res) {
     var _a;
     try {
         const userId = req.user;
-        const limit = (_a = parseInt(req.query.limit)) !== null && _a !== void 0 ? _a : 5;
-        const transactions = await Transaction.getRecentTransactions(userId, limit);
+        const limit = (_a = parseInt(req.query.limit)) !== null && _a !== void 0 ? _a : 0;
+        const transactions = await Transaction.getTransactions(userId, limit);
         res.json(transactions);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.recentTransactionByUser = recentTransactionByUser;
+exports.getAllTransactions = getAllTransactions;

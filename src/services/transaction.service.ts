@@ -14,15 +14,18 @@ async function create(transactionData: ITransaction) {
   }
 }
 
-async function getAll() {
+async function getTransactions(userId: Types.ObjectId, limit?: number) {
   try {
-    return await Transaction.find();
+    return await Transaction.find({ userId: userId })
+      .sort({ createdAt: -1 })
+      .select({ userId: 0, __v: 0 })
+      .limit(limit ?? 0);
   } catch (error) {
     throw error;
   }
 }
 
-async function getTransactionByUser(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
+async function getTransactionByDate(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
   try {
     const allTransactions = await Transaction.aggregate([
       {
@@ -205,11 +208,11 @@ async function getRecentTransactions(userId: Types.ObjectId, limit: number) {
 
 export {
   create,
-  getAll,
+  getTransactions,
   getById,
   update,
   remove,
-  getTransactionByUser,
+  getTransactionByDate,
   getTotalTransactionByPeriods,
   getRecentTransactions,
 };

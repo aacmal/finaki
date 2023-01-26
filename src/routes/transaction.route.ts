@@ -4,8 +4,8 @@ import { transactionValidator } from "../middlewares/validator";
 
 const route = Router();
 
-route.get("/", TransactionController.getAllTransactions);
-route.get("/recent", TransactionController.recentTransactionByUser);
+route.get("/", TransactionController.getAllTransactionsByDate);
+route.get("/all", TransactionController.getAllTransactions);
 route.get("/total", TransactionController.getTotalTransaction);
 route.get("/:id", TransactionController.getTransactionById);
 route.delete("/delete", TransactionController.deleteTransaction);
