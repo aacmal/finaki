@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -7,11 +30,26 @@ exports.getRecentTransactions = exports.getTotalTransactionByPeriods = exports.g
 // create services from Transaction
 const mongoose_1 = require("mongoose");
 const Transaction_1 = __importDefault(require("../models/Transaction"));
+const UserService = __importStar(require("./user.service"));
+const WalletService = __importStar(require("./wallet.service"));
 // Path: src\services\transaction.service.ts
 async function create(transactionData) {
     try {
+        if (transactionData.walletId) {
+            const wallet = await WalletService.getById(transactionData.walletId);
+            if (!wallet)
+                throw new Error("Wallet not found");
+            if (transactionData.type === "out" && wallet.balance < transactionData.amount)
+                throw new Error("Insufficient balance");
+        }
+        // Create transaction
         const transaction = new Transaction_1.default(transactionData);
-        return await transaction.save();
+        const newTransaction = await transaction.save();
+        // Push transaction to user and wallet
+        await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
+        // if walletId null or undefined, don't push transaction to wallet
+        await WalletService.pushTransaction(newTransaction.walletId, newTransaction._id, newTransaction.type === "in" ? newTransaction.amount : -newTransaction.amount);
+        return newTransaction;
     }
     catch (error) {
         throw error;
@@ -108,7 +146,12 @@ async function update(id, transactionData) {
 exports.update = update;
 async function remove(id) {
     try {
-        return await Transaction_1.default.findByIdAndDelete(id);
+        const deletedTransacion = await Transaction_1.default.findByIdAndDelete(id);
+        if (!deletedTransacion)
+            throw new Error("Transaction not found");
+        await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
+        await WalletService.pullTransaction(deletedTransacion.walletId, deletedTransacion._id, deletedTransacion.type === "in" ? deletedTransacion.amount : -deletedTransacion.amount);
+        return deletedTransacion;
     }
     catch (error) {
         throw error;

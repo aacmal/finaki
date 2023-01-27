@@ -17,3 +17,8 @@ export const signValidator = [
   body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
+
+export const walletValidator = [
+  body("name").notEmpty().withMessage("Name is required"),
+  body("balance").notEmpty().withMessage("Balance is required").isNumeric().withMessage("Balance must be a number"),
+];

@@ -2,7 +2,6 @@
 import { validationResult } from "express-validator";
 import * as Transaction from "../services/transaction.service";
 import { Request, Response } from "express";
-import * as UserService from "../services/user.service";
 import { Types } from "mongoose";
 
 async function getAllTransactionsByDate(req: Request, res: Response) {
@@ -24,9 +23,8 @@ async function createTransaction(req: Request, res: Response) {
 
   try {
     const userId = req.user;
-    const { description, amount, type, category } = req.body;
-    const newTransaction = await Transaction.create({ userId, description, amount, type, category });
-    await UserService.pushTransaction(userId as string, newTransaction._id);
+    const { description, amount, type, walletId } = req.body;
+    const newTransaction = await Transaction.create({ userId, description, amount, type, walletId });
     res.status(201).json({
       message: "Transaction has been created successfully",
       data: newTransaction,
@@ -43,8 +41,8 @@ async function updateTransaction(req: Request, res: Response) {
   }
   try {
     const id = req.query.id as string;
-    const { description, amount, type, category } = req.body;
-    const updatedTransaction = await Transaction.update(id, { description, amount, type, category });
+    const { description, amount, type } = req.body;
+    const updatedTransaction = await Transaction.update(id, { description, amount, type });
     if (!updatedTransaction) return res.status(404).json({ message: "Transaction not found" });
     res.json({
       message: "Transaction has been updated successfully",
@@ -57,13 +55,14 @@ async function updateTransaction(req: Request, res: Response) {
 
 async function deleteTransaction(req: Request, res: Response) {
   try {
-    const userId = req.user;
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
-    await UserService.pullTransaction(userId as string, id);
+
     res.json({
       message: "Transaction has been deleted successfully",
-      data: deletedTransaction,
+      data: {
+        _id: deletedTransaction._id,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

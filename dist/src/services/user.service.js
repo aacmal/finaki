@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findByRefreshToken = exports.pullToken = exports.pushToken = exports.pullTransaction = exports.pushTransaction = exports.isUnique = exports.getById = exports.create = void 0;
+exports.pullWallet = exports.pushWallet = exports.findByRefreshToken = exports.pullToken = exports.pushToken = exports.pullTransaction = exports.pushTransaction = exports.isUnique = exports.getById = exports.create = void 0;
 const User_1 = __importDefault(require("../models/User"));
 const RefreshToken_1 = __importDefault(require("../models/RefreshToken"));
 async function isUnique(email) {
@@ -91,6 +91,41 @@ async function pullToken(userId, tokenId) {
     }
 }
 exports.pullToken = pullToken;
+async function pushWallet(userId, walletId) {
+    try {
+        console.log("pushWallet");
+        await User_1.default.findByIdAndUpdate({
+            _id: userId,
+        }, {
+            $push: {
+                wallets: walletId,
+            },
+        }, {
+            new: true,
+        });
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.pushWallet = pushWallet;
+async function pullWallet(userId, walletId) {
+    try {
+        await User_1.default.findByIdAndUpdate({
+            _id: userId,
+        }, {
+            $pull: {
+                wallets: walletId,
+            },
+        }, {
+            new: true,
+        });
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.pullWallet = pullWallet;
 async function findByRefreshToken(token) {
     try {
         const tokenResult = await RefreshToken_1.default.findOne({ token }).populate("userId", { refreshTokens: 0, transactions: 0 });

@@ -2,13 +2,34 @@
 import { Types } from "mongoose";
 import { ITotalTransaction, ITransaction } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
+import * as UserService from "./user.service";
+import * as WalletService from "./wallet.service";
 
 // Path: src\services\transaction.service.ts
 
 async function create(transactionData: ITransaction) {
   try {
+    if (transactionData.walletId) {
+      const wallet = await WalletService.getById(transactionData.walletId as Types.ObjectId);
+      if (!wallet) throw new Error("Wallet not found");
+      if (transactionData.type === "out" && wallet.balance < transactionData.amount)
+        throw new Error("Insufficient balance");
+    }
+
+    // Create transaction
     const transaction = new Transaction(transactionData);
-    return await transaction.save();
+    const newTransaction = await transaction.save();
+
+    // Push transaction to user and wallet
+    await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
+    // if walletId null or undefined, don't push transaction to wallet
+    await WalletService.pushTransaction(
+      newTransaction.walletId,
+      newTransaction._id,
+      newTransaction.type === "in" ? newTransaction.amount : -newTransaction.amount,
+    );
+
+    return newTransaction;
   } catch (error) {
     throw error;
   }
@@ -101,7 +122,17 @@ async function update(id: string, transactionData: ITransaction) {
 
 async function remove(id: string) {
   try {
-    return await Transaction.findByIdAndDelete(id);
+    const deletedTransacion = await Transaction.findByIdAndDelete(id);
+    if (!deletedTransacion) throw new Error("Transaction not found");
+
+    await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
+    await WalletService.pullTransaction(
+      deletedTransacion.walletId,
+      deletedTransacion._id,
+      deletedTransacion.type === "in" ? deletedTransacion.amount : -deletedTransacion.amount,
+    );
+
+    return deletedTransacion;
   } catch (error) {
     throw error;
   }
