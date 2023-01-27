@@ -6,7 +6,7 @@ export interface ITransaction {
   description: string;
   type: "in" | "out";
   amount: number;
-  category?: string;
+  walletId?: Types.ObjectId | null;
   createdAt?: Date;
   updatedAt?: Date;
 }

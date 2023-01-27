@@ -19,10 +19,20 @@ const UserSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    defaultWallet: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Wallet",
+    },
     refreshTokens: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
             ref: "RefreshToken",
+        },
+    ],
+    wallets: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: "Wallet",
         },
     ],
     transactions: [

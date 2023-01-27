@@ -27,7 +27,6 @@ exports.getAllTransactions = exports.getTotalTransaction = exports.getTransactio
 // import Transaction from "../models/Transaction";
 const express_validator_1 = require("express-validator");
 const Transaction = __importStar(require("../services/transaction.service"));
-const UserService = __importStar(require("../services/user.service"));
 async function getAllTransactionsByDate(req, res) {
     try {
         // const transactions = await Transaction.getAll();
@@ -47,9 +46,8 @@ async function createTransaction(req, res) {
     }
     try {
         const userId = req.user;
-        const { description, amount, type, category } = req.body;
-        const newTransaction = await Transaction.create({ userId, description, amount, type, category });
-        await UserService.pushTransaction(userId, newTransaction._id);
+        const { description, amount, type, walletId } = req.body;
+        const newTransaction = await Transaction.create({ userId, description, amount, type, walletId });
         res.status(201).json({
             message: "Transaction has been created successfully",
             data: newTransaction,
@@ -67,8 +65,8 @@ async function updateTransaction(req, res) {
     }
     try {
         const id = req.query.id;
-        const { description, amount, type, category } = req.body;
-        const updatedTransaction = await Transaction.update(id, { description, amount, type, category });
+        const { description, amount, type } = req.body;
+        const updatedTransaction = await Transaction.update(id, { description, amount, type });
         if (!updatedTransaction)
             return res.status(404).json({ message: "Transaction not found" });
         res.json({
@@ -83,13 +81,13 @@ async function updateTransaction(req, res) {
 exports.updateTransaction = updateTransaction;
 async function deleteTransaction(req, res) {
     try {
-        const userId = req.user;
         const id = req.query.id;
         const deletedTransaction = await Transaction.remove(id);
-        await UserService.pullTransaction(userId, id);
         res.json({
             message: "Transaction has been deleted successfully",
-            data: deletedTransaction,
+            data: {
+                _id: deletedTransaction._id,
+            },
         });
     }
     catch (error) {

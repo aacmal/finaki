@@ -7,6 +7,11 @@ const TransactionSchema = new mongoose.Schema(
       required: true,
       ref: "User",
     },
+    walletId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Wallet",
+      required: false,
+    },
     description: {
       type: String,
       required: true,
@@ -18,10 +23,6 @@ const TransactionSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-    },
-    category: {
-      type: String,
-      required: false,
     },
   },
   { timestamps: true },

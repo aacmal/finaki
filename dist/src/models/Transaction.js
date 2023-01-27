@@ -10,6 +10,11 @@ const TransactionSchema = new mongoose_1.default.Schema({
         required: true,
         ref: "User",
     },
+    walletId: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "Wallet",
+        required: false,
+    },
     description: {
         type: String,
         required: true,
@@ -21,10 +26,6 @@ const TransactionSchema = new mongoose_1.default.Schema({
     type: {
         type: String,
         required: true,
-    },
-    category: {
-        type: String,
-        required: false,
     },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Transaction", TransactionSchema);

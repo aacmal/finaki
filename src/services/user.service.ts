@@ -38,7 +38,7 @@ async function pushTransaction(userId: string | undefined | Types.ObjectId, tran
   }
 }
 
-async function pullTransaction(userId: string | undefined | Types.ObjectId, transactionId: string) {
+async function pullTransaction(userId: Types.ObjectId, transactionId: Types.ObjectId) {
   try {
     await User.findByIdAndUpdate(
       {
@@ -90,6 +90,48 @@ async function pullToken(userId: string | undefined | Types.ObjectId, tokenId: T
   }
 }
 
+async function pushWallet(userId: Types.ObjectId, walletId: Types.ObjectId) {
+  try {
+    console.log("pushWallet");
+
+    await User.findByIdAndUpdate(
+      {
+        _id: userId,
+      },
+      {
+        $push: {
+          wallets: walletId,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function pullWallet(userId: Types.ObjectId, walletId: Types.ObjectId) {
+  try {
+    await User.findByIdAndUpdate(
+      {
+        _id: userId,
+      },
+      {
+        $pull: {
+          wallets: walletId,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function findByRefreshToken(token: string): Promise<IUser | null> {
   try {
     const tokenResult = await RefreshToken.findOne({ token }).populate("userId", { refreshTokens: 0, transactions: 0 });
@@ -99,4 +141,15 @@ async function findByRefreshToken(token: string): Promise<IUser | null> {
   }
 }
 
-export { create, getById, isUnique, pushTransaction, pullTransaction, pushToken, pullToken, findByRefreshToken };
+export {
+  create,
+  getById,
+  isUnique,
+  pushTransaction,
+  pullTransaction,
+  pushToken,
+  pullToken,
+  findByRefreshToken,
+  pushWallet,
+  pullWallet,
+};
