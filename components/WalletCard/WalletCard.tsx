@@ -3,6 +3,7 @@ import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import classNames from "classnames";
 import React from "react";
 import { WalletColor, walletColors } from "./constants";
+import WalletCardDropdown from "./WalletCardDropdown";
 
 type Props = {
   isDefault?: boolean;
@@ -35,9 +36,7 @@ const WalletCard = ({ isDefault, color, name, balance, link }: Props) => {
         >
           {name}
         </div>
-        <IconWrapper className="text-white hover:bg-slate-300/30 rounded cursor-pointer lg:hidden block group-hover:block">
-          <ElipsisVerticalIcon />
-        </IconWrapper>
+        <WalletCardDropdown colorKey={color} />
       </div>
       <div className="flex justify-between">
         <div>

@@ -6,8 +6,7 @@ export type WalletColor =
   | "purple"
   | "yellow"
   | "gray"
-  | "lime"
-  | "fuchsia";
+  | "cyan";
 
 export const walletColors = {
   blue: "from-blue-400 to-blue-600",
@@ -17,6 +16,16 @@ export const walletColors = {
   purple: "from-purple-400 to-purple-600",
   yellow: "from-yellow-400 to-yellow-600",
   gray: "from-gray-400 to-gray-600",
-  lime: "from-lime-400 to-lime-600",
-  fuchsia: "from-fuchsia-400 to-fuchsia-600",
+  cyan: "from-cyan-400 to-cyan-600",
+};
+
+export const indicatorColor = {
+  blue: "bg-blue-500",
+  orange: "bg-orange-500",
+  green: "bg-green-500",
+  red: "bg-red-500",
+  purple: "bg-purple-500",
+  yellow: "bg-yellow-500",
+  gray: "bg-gray-500",
+  cyan: "bg-cyan-500",
 };
