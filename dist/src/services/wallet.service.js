@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteById = exports.create = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
+exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const UserService = __importStar(require("./user.service"));
 async function pushTransaction(walletId, transactionId, amount) {
@@ -107,25 +107,29 @@ async function deleteById(walletId) {
     }
 }
 exports.deleteById = deleteById;
-// export async function increseBalance(walletId: Types.ObjectId, amount: number) {
-//   try {
-//     const wallet = await Wallet.findById(walletId);
-//     if (wallet) {
-//       wallet.balance += amount;
-//       await wallet.save();
-//     }
-//   } catch (error) {
-//     throw error;
-//   }
-// }
-// export async function decreaseBalance(walletId: Types.ObjectId, amount: number) {
-//   try {
-//     const wallet = await Wallet.findById(walletId);
-//     if (wallet) {
-//       wallet.balance -= amount;
-//       await wallet.save();
-//     }
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+async function increseBalance(walletId, amount) {
+    try {
+        const wallet = await Wallet_1.default.findById(walletId);
+        if (wallet) {
+            wallet.balance = wallet.balance + amount;
+            await wallet.save();
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.increseBalance = increseBalance;
+async function decreseBalance(walletId, amount) {
+    try {
+        const wallet = await Wallet_1.default.findById(walletId);
+        if (wallet) {
+            wallet.balance = wallet.balance - amount;
+            await wallet.save();
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.decreseBalance = decreseBalance;

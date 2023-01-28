@@ -7,6 +7,7 @@ import * as WalletService from "./wallet.service";
 
 // Path: src\services\transaction.service.ts
 
+// Create new Transaction
 async function create(transactionData: ITransaction) {
   try {
     if (transactionData.walletId) {
@@ -16,7 +17,7 @@ async function create(transactionData: ITransaction) {
         throw new Error("Insufficient balance");
     }
 
-    // Create transaction
+    // Create transaction data
     const transaction = new Transaction(transactionData);
     const newTransaction = await transaction.save();
 
@@ -112,9 +113,27 @@ async function getById(id: string) {
 
 async function update(id: string, transactionData: ITransaction) {
   try {
-    return await Transaction.findByIdAndUpdate(id, transactionData, {
-      new: true,
+    const updatedTransaction = await Transaction.findByIdAndUpdate(id, transactionData, {
+      new: false,
     });
+    if (!updatedTransaction) return;
+
+    const isTypeChanged = updatedTransaction.type !== transactionData.type;
+    const isAmountChanged = updatedTransaction.amount !== transactionData.amount;
+
+    updatedTransaction.description = transactionData.description;
+
+    if (updatedTransaction.walletId && (isTypeChanged || isAmountChanged)) {
+      updatedTransaction.type = transactionData.type;
+      updatedTransaction.amount = transactionData.amount;
+      if (updatedTransaction.type === "in") {
+        await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
+      } else {
+        await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
+      }
+    }
+
+    return updatedTransaction;
   } catch (error) {
     throw error;
   }
@@ -123,7 +142,7 @@ async function update(id: string, transactionData: ITransaction) {
 async function remove(id: string) {
   try {
     const deletedTransacion = await Transaction.findByIdAndDelete(id);
-    if (!deletedTransacion) throw new Error("Transaction not found");
+    if (!deletedTransacion) return;
 
     await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
     await WalletService.pullTransaction(

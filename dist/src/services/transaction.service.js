@@ -33,6 +33,7 @@ const Transaction_1 = __importDefault(require("../models/Transaction"));
 const UserService = __importStar(require("./user.service"));
 const WalletService = __importStar(require("./wallet.service"));
 // Path: src\services\transaction.service.ts
+// Create new Transaction
 async function create(transactionData) {
     try {
         if (transactionData.walletId) {
@@ -42,7 +43,7 @@ async function create(transactionData) {
             if (transactionData.type === "out" && wallet.balance < transactionData.amount)
                 throw new Error("Insufficient balance");
         }
-        // Create transaction
+        // Create transaction data
         const transaction = new Transaction_1.default(transactionData);
         const newTransaction = await transaction.save();
         // Push transaction to user and wallet
@@ -135,9 +136,25 @@ async function getById(id) {
 exports.getById = getById;
 async function update(id, transactionData) {
     try {
-        return await Transaction_1.default.findByIdAndUpdate(id, transactionData, {
-            new: true,
+        const updatedTransaction = await Transaction_1.default.findByIdAndUpdate(id, transactionData, {
+            new: false,
         });
+        if (!updatedTransaction)
+            return;
+        const isTypeChanged = updatedTransaction.type !== transactionData.type;
+        const isAmountChanged = updatedTransaction.amount !== transactionData.amount;
+        updatedTransaction.description = transactionData.description;
+        if (updatedTransaction.walletId && (isTypeChanged || isAmountChanged)) {
+            updatedTransaction.type = transactionData.type;
+            updatedTransaction.amount = transactionData.amount;
+            if (updatedTransaction.type === "in") {
+                await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
+            }
+            else {
+                await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
+            }
+        }
+        return updatedTransaction;
     }
     catch (error) {
         throw error;
@@ -148,7 +165,7 @@ async function remove(id) {
     try {
         const deletedTransacion = await Transaction_1.default.findByIdAndDelete(id);
         if (!deletedTransacion)
-            throw new Error("Transaction not found");
+            return;
         await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
         await WalletService.pullTransaction(deletedTransacion.walletId, deletedTransacion._id, deletedTransacion.type === "in" ? deletedTransacion.amount : -deletedTransacion.amount);
         return deletedTransacion;

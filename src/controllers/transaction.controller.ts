@@ -43,7 +43,9 @@ async function updateTransaction(req: Request, res: Response) {
     const id = req.query.id as string;
     const { description, amount, type } = req.body;
     const updatedTransaction = await Transaction.update(id, { description, amount, type });
+
     if (!updatedTransaction) return res.status(404).json({ message: "Transaction not found" });
+
     res.json({
       message: "Transaction has been updated successfully",
       data: updatedTransaction,
@@ -57,6 +59,8 @@ async function deleteTransaction(req: Request, res: Response) {
   try {
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
+
+    if (!deletedTransaction) return res.status(404).json({ message: "Transaction not found" });
 
     res.json({
       message: "Transaction has been deleted successfully",
