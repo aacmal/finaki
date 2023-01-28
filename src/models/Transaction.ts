@@ -16,6 +16,11 @@ const TransactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    initialAmount: {
+      type: Number,
+      required: true,
+      immutable: true,
+    },
     amount: {
       type: Number,
       required: true,

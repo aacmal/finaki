@@ -1,12 +1,12 @@
 // create services from Transaction
 import { Types } from "mongoose";
-import { ITotalTransaction, ITransaction } from "../../types/Transaction";
+import { ITotalTransaction, ITransaction, TransactionType } from "../../types/Transaction";
 import Transaction from "../models/Transaction";
 import * as UserService from "./user.service";
 import * as WalletService from "./wallet.service";
-
 // Path: src\services\transaction.service.ts
 
+// Create new Transaction
 async function create(transactionData: ITransaction) {
   try {
     if (transactionData.walletId) {
@@ -16,9 +16,11 @@ async function create(transactionData: ITransaction) {
         throw new Error("Insufficient balance");
     }
 
-    // Create transaction
-    const transaction = new Transaction(transactionData);
-    const newTransaction = await transaction.save();
+    // Create transaction data
+    const newTransaction = await Transaction.create({
+      ...transactionData,
+      initialAmount: transactionData.amount,
+    });
 
     // Push transaction to user and wallet
     await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
@@ -112,9 +114,27 @@ async function getById(id: string) {
 
 async function update(id: string, transactionData: ITransaction) {
   try {
-    return await Transaction.findByIdAndUpdate(id, transactionData, {
-      new: true,
+    const updatedTransaction = await Transaction.findByIdAndUpdate(id, transactionData, {
+      new: false,
     });
+    if (!updatedTransaction) return;
+
+    const isTypeChanged = updatedTransaction.type !== transactionData.type;
+    const isAmountChanged = updatedTransaction.amount !== transactionData.amount;
+
+    updatedTransaction.description = transactionData.description;
+
+    if (updatedTransaction.walletId && (isTypeChanged || isAmountChanged)) {
+      updatedTransaction.type = transactionData.type;
+      updatedTransaction.amount = transactionData.amount;
+      if (updatedTransaction.type === "in") {
+        await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
+      } else {
+        await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
+      }
+    }
+
+    return updatedTransaction;
   } catch (error) {
     throw error;
   }
@@ -122,17 +142,34 @@ async function update(id: string, transactionData: ITransaction) {
 
 async function remove(id: string) {
   try {
-    const deletedTransacion = await Transaction.findByIdAndDelete(id);
-    if (!deletedTransacion) throw new Error("Transaction not found");
+    const transaction = await Transaction.findById(id);
+    // if transaction not found, return null
+    if (!transaction) return;
 
-    await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
+    // check if transaction type is out
+    // and wallet balance is less than transaction amount then throw error
+    if (transaction.walletId) {
+      const walletBalance = await WalletService.getBalance(transaction.walletId as Types.ObjectId);
+      if (transaction.type === TransactionType.IN && walletBalance < transaction.amount) {
+        throw new Error("Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus");
+      }
+    }
+
+    // delete transaction
+    const deletedTransaction = await transaction.delete();
+
+    // remove transactionId from user collection
+    await UserService.pullTransaction(deletedTransaction.userId, deletedTransaction._id);
+
+    // remove transactionId from wallet collection
+    // and decrese balance or increse balance based on transaction type
     await WalletService.pullTransaction(
-      deletedTransacion.walletId,
-      deletedTransacion._id,
-      deletedTransacion.type === "in" ? deletedTransacion.amount : -deletedTransacion.amount,
+      deletedTransaction.walletId,
+      deletedTransaction._id,
+      deletedTransaction.type === "in" ? deletedTransaction.amount : -deletedTransaction.amount,
     );
 
-    return deletedTransacion;
+    return deletedTransaction;
   } catch (error) {
     throw error;
   }

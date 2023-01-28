@@ -66,6 +66,16 @@ export async function getById(walletId: Types.ObjectId) {
   }
 }
 
+export async function getBalance(walletId: Types.ObjectId) {
+  try {
+    const wallet = await Wallet.findById(walletId);
+    if (!wallet) throw new Error("Wallet not found");
+    return wallet.balance;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function create(walletData: any) {
   try {
     const wallet = new Wallet(walletData);
@@ -92,26 +102,27 @@ export async function deleteById(walletId: Types.ObjectId) {
   }
 }
 
-// export async function increseBalance(walletId: Types.ObjectId, amount: number) {
-//   try {
-//     const wallet = await Wallet.findById(walletId);
-//     if (wallet) {
-//       wallet.balance += amount;
-//       await wallet.save();
-//     }
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+export async function increseBalance(walletId: Types.ObjectId, amount: number) {
+  try {
+    const wallet = await Wallet.findById(walletId);
+    if (wallet) {
+      wallet.balance = wallet.balance + amount;
+      await wallet.save();
+    }
+  } catch (error) {
+    throw error;
+  }
+}
 
-// export async function decreaseBalance(walletId: Types.ObjectId, amount: number) {
-//   try {
-//     const wallet = await Wallet.findById(walletId);
-//     if (wallet) {
-//       wallet.balance -= amount;
-//       await wallet.save();
-//     }
-//   } catch (error) {
-//     throw error;
-//   }
-// }
+export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
+  try {
+    const wallet = await Wallet.findById(walletId);
+
+    if (wallet) {
+      wallet.balance = wallet.balance - amount;
+      await wallet.save();
+    }
+  } catch (error) {
+    throw error;
+  }
+}
