@@ -29,7 +29,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRecentTransactions = exports.getTotalTransactionByPeriods = exports.getTransactionByDate = exports.remove = exports.update = exports.getById = exports.getTransactions = exports.create = void 0;
 // create services from Transaction
 const mongoose_1 = require("mongoose");
-const Transaction_1 = __importDefault(require("../models/Transaction"));
+const Transaction_1 = require("../../types/Transaction");
+const Transaction_2 = __importDefault(require("../models/Transaction"));
 const UserService = __importStar(require("./user.service"));
 const WalletService = __importStar(require("./wallet.service"));
 // Path: src\services\transaction.service.ts
@@ -44,8 +45,10 @@ async function create(transactionData) {
                 throw new Error("Insufficient balance");
         }
         // Create transaction data
-        const transaction = new Transaction_1.default(transactionData);
-        const newTransaction = await transaction.save();
+        const newTransaction = await Transaction_2.default.create({
+            ...transactionData,
+            initialAmount: transactionData.amount,
+        });
         // Push transaction to user and wallet
         await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
         // if walletId null or undefined, don't push transaction to wallet
@@ -59,7 +62,7 @@ async function create(transactionData) {
 exports.create = create;
 async function getTransactions(userId, limit) {
     try {
-        return await Transaction_1.default.find({ userId: userId })
+        return await Transaction_2.default.find({ userId: userId })
             .sort({ createdAt: -1 })
             .select({ userId: 0, __v: 0 })
             .limit(limit !== null && limit !== void 0 ? limit : 0);
@@ -71,7 +74,7 @@ async function getTransactions(userId, limit) {
 exports.getTransactions = getTransactions;
 async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
     try {
-        const allTransactions = await Transaction_1.default.aggregate([
+        const allTransactions = await Transaction_2.default.aggregate([
             {
                 $match: {
                     userId: new mongoose_1.Types.ObjectId(userId),
@@ -127,7 +130,7 @@ async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
 exports.getTransactionByDate = getTransactionByDate;
 async function getById(id) {
     try {
-        return await Transaction_1.default.findById(id);
+        return await Transaction_2.default.findById(id);
     }
     catch (error) {
         throw error;
@@ -136,7 +139,7 @@ async function getById(id) {
 exports.getById = getById;
 async function update(id, transactionData) {
     try {
-        const updatedTransaction = await Transaction_1.default.findByIdAndUpdate(id, transactionData, {
+        const updatedTransaction = await Transaction_2.default.findByIdAndUpdate(id, transactionData, {
             new: false,
         });
         if (!updatedTransaction)
@@ -163,12 +166,26 @@ async function update(id, transactionData) {
 exports.update = update;
 async function remove(id) {
     try {
-        const deletedTransacion = await Transaction_1.default.findByIdAndDelete(id);
-        if (!deletedTransacion)
+        const transaction = await Transaction_2.default.findById(id);
+        // if transaction not found, return null
+        if (!transaction)
             return;
-        await UserService.pullTransaction(deletedTransacion.userId, deletedTransacion._id);
-        await WalletService.pullTransaction(deletedTransacion.walletId, deletedTransacion._id, deletedTransacion.type === "in" ? deletedTransacion.amount : -deletedTransacion.amount);
-        return deletedTransacion;
+        // check if transaction type is out
+        // and wallet balance is less than transaction amount then throw error
+        if (transaction.walletId) {
+            const walletBalance = await WalletService.getBalance(transaction.walletId);
+            if (transaction.type === Transaction_1.TransactionType.IN && walletBalance < transaction.amount) {
+                throw new Error("Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus");
+            }
+        }
+        // delete transaction
+        const deletedTransaction = await transaction.delete();
+        // remove transactionId from user collection
+        await UserService.pullTransaction(deletedTransaction.userId, deletedTransaction._id);
+        // remove transactionId from wallet collection
+        // and decrese balance or increse balance based on transaction type
+        await WalletService.pullTransaction(deletedTransaction.walletId, deletedTransaction._id, deletedTransaction.type === "in" ? deletedTransaction.amount : -deletedTransaction.amount);
+        return deletedTransaction;
     }
     catch (error) {
         throw error;
@@ -179,7 +196,7 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
     const intervals = interval === "week" ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
     try {
-        const totalTranscation = await Transaction_1.default.aggregate([
+        const totalTranscation = await Transaction_2.default.aggregate([
             {
                 $match: {
                     userId: new mongoose_1.Types.ObjectId(userId),
@@ -253,7 +270,7 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
 exports.getTotalTransactionByPeriods = getTotalTransactionByPeriods;
 async function getRecentTransactions(userId, limit) {
     try {
-        return await Transaction_1.default.find({ userId })
+        return await Transaction_2.default.find({ userId })
             .sort({ createdAt: -1 })
             .limit(limit)
             .select({ userId: 0, __v: 0, updatedAt: 0 });

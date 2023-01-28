@@ -1,10 +1,15 @@
 import { Types } from "mongoose";
 
+export enum TransactionType {
+  IN = "in",
+  OUT = "out",
+}
+
 export interface ITransaction {
   _id?: string | Types.ObjectId;
   userId?: string | Types.ObjectId | Express.User | undefined;
   description: string;
-  type: "in" | "out";
+  type: TransactionType;
   amount: number;
   walletId?: Types.ObjectId | null;
   createdAt?: Date;

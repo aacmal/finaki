@@ -83,6 +83,7 @@ async function deleteTransaction(req, res) {
     try {
         const id = req.query.id;
         const deletedTransaction = await Transaction.remove(id);
+        // console.log(deletedTransaction);
         if (!deletedTransaction)
             return res.status(404).json({ message: "Transaction not found" });
         res.json({

@@ -66,6 +66,16 @@ export async function getById(walletId: Types.ObjectId) {
   }
 }
 
+export async function getBalance(walletId: Types.ObjectId) {
+  try {
+    const wallet = await Wallet.findById(walletId);
+    if (!wallet) throw new Error("Wallet not found");
+    return wallet.balance;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function create(walletData: any) {
   try {
     const wallet = new Wallet(walletData);

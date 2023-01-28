@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
+exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const UserService = __importStar(require("./user.service"));
 async function pushTransaction(walletId, transactionId, amount) {
@@ -82,6 +82,18 @@ async function getById(walletId) {
     }
 }
 exports.getById = getById;
+async function getBalance(walletId) {
+    try {
+        const wallet = await Wallet_1.default.findById(walletId);
+        if (!wallet)
+            throw new Error("Wallet not found");
+        return wallet.balance;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.getBalance = getBalance;
 async function create(walletData) {
     try {
         const wallet = new Wallet_1.default(walletData);
