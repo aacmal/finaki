@@ -127,11 +127,52 @@ export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
   }
 }
 
-export async function updateBalance(walletId: Types.ObjectId, updateBalance: number) {
+export async function updateBalance(walletId: Types.ObjectId) {
   try {
+    const currentBalance = await Wallet.aggregate([
+      {
+        $match: {
+          _id: new Types.ObjectId(walletId),
+        },
+      },
+      {
+        $lookup: {
+          from: "transactions",
+          localField: "transactions",
+          foreignField: "_id",
+          as: "transaction",
+        },
+      },
+      {
+        $project: {
+          balance: {
+            $sum: {
+              $map: {
+                input: "$transaction",
+                in: {
+                  $cond: [
+                    {
+                      $eq: ["$$this.type", "in"],
+                    },
+                    "$$this.amount",
+                    {
+                      $multiply: ["$$this.amount", -1],
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    if (!currentBalance[0]) throw new Error("Wallet not found");
+    console.log("currentBalance", currentBalance[0].balance);
+
     await Wallet.findByIdAndUpdate(walletId, {
       $set: {
-        balance: updateBalance,
+        balance: currentBalance[0].balance,
       },
     });
   } catch (error) {

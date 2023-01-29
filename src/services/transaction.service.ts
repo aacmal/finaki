@@ -4,6 +4,7 @@ import { ITotalTransaction, ITransaction, TransactionType } from "../../types/Tr
 import Transaction from "../models/Transaction";
 import * as UserService from "./user.service";
 import * as WalletService from "./wallet.service";
+import Wallet from "../models/Wallet";
 // Path: src\services\transaction.service.ts
 
 // Create new Transaction
@@ -17,10 +18,7 @@ async function create(transactionData: ITransaction) {
     }
 
     // Create transaction data
-    const newTransaction = await Transaction.create({
-      ...transactionData,
-      initialAmount: transactionData.amount,
-    });
+    const newTransaction = await Transaction.create(transactionData);
 
     // Push transaction to user and wallet
     await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
@@ -123,41 +121,45 @@ async function update(id: string, newTransaction: ITransaction) {
     oldTransaction.description = newTransaction.description;
 
     if (oldTransaction.walletId && (isTypeChanged || isAmountChanged)) {
-      oldTransaction.type = newTransaction.type;
-      oldTransaction.amount = newTransaction.amount;
-
-      // example 1: current wallet balance is 0 and added transaction with amount 6000 type out
-      // initialAmount is 6000 type out, and new amount is 3000 type out too
-      // so the difference will be initalAmount - newAmount = 6000 - 3000 = 3000
-      // because the transaction type is out, so the difference will be 3000 * -1 = -3000
-      // currentWalletBalance + difference = -6000 + (-3000) = -9000
-      // so the wallet balance will be -9000
-
-      // example 2: current wallet balance is 0 and added transaction with amount 6000 type in
-      // initialAmount is 6000 type in, and new amount is 3000 type in too
-      // so the difference will be initalAmount - newAmount = 6000 - 3000 = 3000
-      // the difference will be added to wallet balance
-      // curentWalletBalance + difference = 6000 + 3000 = 9000
-      // so the wallet balance will be 9000
-
       const currentWalletBalance = await WalletService.getBalance(oldTransaction.walletId as Types.ObjectId);
-      // if transaction type is out and wallet balance is less than transaction amount then throw error
-      if (newTransaction.type === TransactionType.OUT && currentWalletBalance < newTransaction.amount) {
+
+      console.log(oldTransaction.amount, newTransaction.amount);
+
+      // for transaction type IN validation, if the change transaction amount causes the balance to be less than 0 then return false
+      const differenceAmount = oldTransaction.amount - newTransaction.amount;
+      console.log(currentWalletBalance, differenceAmount);
+
+      const isBalanceEnough = currentWalletBalance - differenceAmount >= 0;
+      const typeInIsValid = newTransaction.type === TransactionType.IN && !isBalanceEnough;
+
+      // for transaction type OUT validation, if balance is less than transaction amount then return false
+      const isBalanceEnoughForTypeChangesToOut =
+        currentWalletBalance - (oldTransaction.amount + newTransaction.amount) >= 0;
+      const typeOutIsValid =
+        (newTransaction.type === TransactionType.OUT && currentWalletBalance < newTransaction.amount) ||
+        !isBalanceEnoughForTypeChangesToOut;
+
+      // throw error if type IN or type OUT is not valid
+      if (typeInIsValid || typeOutIsValid) {
         throw new Error(
           "Tidak bisa melakuakan perubahan pada transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus. Silahkan lakukan perubahan pada jumlah transaksi",
         );
       }
 
-      // if (updatedTransaction.type === "in") {
-      //   await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
-      // } else {
-      //   await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
-      // }
+      oldTransaction.type = newTransaction.type;
+      oldTransaction.amount = newTransaction.amount;
+      const updatedTransaction = await oldTransaction.save(); // return updated transaction
+
+      // update balance in wallet collection based on transaction type
+      await WalletService.updateBalance(updatedTransaction.walletId as Types.ObjectId);
+
+      return updatedTransaction;
     }
 
-    const updatedTransaction = await oldTransaction.save();
+    oldTransaction.type = newTransaction.type;
+    oldTransaction.amount = newTransaction.amount;
 
-    return updatedTransaction;
+    return await oldTransaction.save(); // return updated transaction
   } catch (error) {
     throw error;
   }
@@ -169,13 +171,26 @@ async function remove(id: string) {
     // if transaction not found, return null
     if (!transaction) return;
 
+    const wallet = await Wallet.findById(transaction.walletId);
     // check if transaction type is out
     // and wallet balance is less than transaction amount then throw error
-    if (transaction.walletId) {
-      const walletBalance = await WalletService.getBalance(transaction.walletId as Types.ObjectId);
-      if (transaction.type === TransactionType.IN && walletBalance < transaction.amount) {
+    console.log(wallet);
+
+    if (wallet) {
+      if (transaction.type === TransactionType.IN && wallet.balance < transaction.amount) {
         throw new Error("Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus");
       }
+      const deletedTransaction = await transaction.delete();
+
+      // remove transactionId from wallet collection
+      // and decrese balance or increse balance based on transaction type
+      await WalletService.pullTransaction(
+        deletedTransaction.walletId,
+        deletedTransaction._id,
+        deletedTransaction.type === "in" ? deletedTransaction.amount : -deletedTransaction.amount,
+      );
+
+      return deletedTransaction;
     }
 
     // delete transaction
@@ -183,14 +198,6 @@ async function remove(id: string) {
 
     // remove transactionId from user collection
     await UserService.pullTransaction(deletedTransaction.userId, deletedTransaction._id);
-
-    // remove transactionId from wallet collection
-    // and decrese balance or increse balance based on transaction type
-    await WalletService.pullTransaction(
-      deletedTransaction.walletId,
-      deletedTransaction._id,
-      deletedTransaction.type === "in" ? deletedTransaction.amount : -deletedTransaction.amount,
-    );
 
     return deletedTransaction;
   } catch (error) {

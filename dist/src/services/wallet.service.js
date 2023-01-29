@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBalance = exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
+const mongoose_1 = require("mongoose");
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const UserService = __importStar(require("./user.service"));
 async function pushTransaction(walletId, transactionId, amount) {
@@ -145,11 +146,51 @@ async function decreseBalance(walletId, amount) {
     }
 }
 exports.decreseBalance = decreseBalance;
-async function updateBalance(walletId, updateBalance) {
+async function updateBalance(walletId) {
     try {
+        const currentBalance = await Wallet_1.default.aggregate([
+            {
+                $match: {
+                    _id: new mongoose_1.Types.ObjectId(walletId),
+                },
+            },
+            {
+                $lookup: {
+                    from: "transactions",
+                    localField: "transactions",
+                    foreignField: "_id",
+                    as: "transaction",
+                },
+            },
+            {
+                $project: {
+                    balance: {
+                        $sum: {
+                            $map: {
+                                input: "$transaction",
+                                in: {
+                                    $cond: [
+                                        {
+                                            $eq: ["$$this.type", "in"],
+                                        },
+                                        "$$this.amount",
+                                        {
+                                            $multiply: ["$$this.amount", -1],
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        ]);
+        if (!currentBalance[0])
+            throw new Error("Wallet not found");
+        console.log("currentBalance", currentBalance[0].balance);
         await Wallet_1.default.findByIdAndUpdate(walletId, {
             $set: {
-                balance: updateBalance,
+                balance: currentBalance[0].balance,
             },
         });
     }

@@ -12,6 +12,7 @@ const WalletSchema = new mongoose_1.default.Schema({
     balance: {
         type: Number,
         required: true,
+        min: [0, "Balance cannot be negative"],
     },
     userId: {
         type: mongoose_1.default.Schema.Types.ObjectId,
