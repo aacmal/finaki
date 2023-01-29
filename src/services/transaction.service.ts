@@ -112,27 +112,50 @@ async function getById(id: string) {
   }
 }
 
-async function update(id: string, transactionData: ITransaction) {
+async function update(id: string, newTransaction: ITransaction) {
   try {
-    const updatedTransaction = await Transaction.findByIdAndUpdate(id, transactionData, {
-      new: false,
-    });
-    if (!updatedTransaction) return;
+    const oldTransaction = await Transaction.findById(id);
+    if (!oldTransaction) return;
 
-    const isTypeChanged = updatedTransaction.type !== transactionData.type;
-    const isAmountChanged = updatedTransaction.amount !== transactionData.amount;
+    const isTypeChanged = oldTransaction.type !== newTransaction.type;
+    const isAmountChanged = oldTransaction.amount !== newTransaction.amount;
 
-    updatedTransaction.description = transactionData.description;
+    oldTransaction.description = newTransaction.description;
 
-    if (updatedTransaction.walletId && (isTypeChanged || isAmountChanged)) {
-      updatedTransaction.type = transactionData.type;
-      updatedTransaction.amount = transactionData.amount;
-      if (updatedTransaction.type === "in") {
-        await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
-      } else {
-        await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
+    if (oldTransaction.walletId && (isTypeChanged || isAmountChanged)) {
+      oldTransaction.type = newTransaction.type;
+      oldTransaction.amount = newTransaction.amount;
+
+      // example 1: current wallet balance is 0 and added transaction with amount 6000 type out
+      // initialAmount is 6000 type out, and new amount is 3000 type out too
+      // so the difference will be initalAmount - newAmount = 6000 - 3000 = 3000
+      // because the transaction type is out, so the difference will be 3000 * -1 = -3000
+      // currentWalletBalance + difference = -6000 + (-3000) = -9000
+      // so the wallet balance will be -9000
+
+      // example 2: current wallet balance is 0 and added transaction with amount 6000 type in
+      // initialAmount is 6000 type in, and new amount is 3000 type in too
+      // so the difference will be initalAmount - newAmount = 6000 - 3000 = 3000
+      // the difference will be added to wallet balance
+      // curentWalletBalance + difference = 6000 + 3000 = 9000
+      // so the wallet balance will be 9000
+
+      const currentWalletBalance = await WalletService.getBalance(oldTransaction.walletId as Types.ObjectId);
+      // if transaction type is out and wallet balance is less than transaction amount then throw error
+      if (newTransaction.type === TransactionType.OUT && currentWalletBalance < newTransaction.amount) {
+        throw new Error(
+          "Tidak bisa melakuakan perubahan pada transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus. Silahkan lakukan perubahan pada jumlah transaksi",
+        );
       }
+
+      // if (updatedTransaction.type === "in") {
+      //   await WalletService.increseBalance(updatedTransaction.walletId, transactionData.amount);
+      // } else {
+      //   await WalletService.decreseBalance(updatedTransaction.walletId, transactionData.amount);
+      // }
     }
+
+    const updatedTransaction = await oldTransaction.save();
 
     return updatedTransaction;
   } catch (error) {

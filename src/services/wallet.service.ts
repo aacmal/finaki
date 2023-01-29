@@ -126,3 +126,15 @@ export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
     throw error;
   }
 }
+
+export async function updateBalance(walletId: Types.ObjectId, updateBalance: number) {
+  try {
+    await Wallet.findByIdAndUpdate(walletId, {
+      $set: {
+        balance: updateBalance,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+}
