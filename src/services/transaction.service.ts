@@ -115,35 +115,52 @@ async function update(id: string, newTransaction: ITransaction) {
     const oldTransaction = await Transaction.findById(id);
     if (!oldTransaction) return;
 
+    const currentWallet = await Wallet.findById(oldTransaction.walletId as Types.ObjectId);
+
     const isTypeChanged = oldTransaction.type !== newTransaction.type;
     const isAmountChanged = oldTransaction.amount !== newTransaction.amount;
 
     oldTransaction.description = newTransaction.description;
 
-    if (oldTransaction.walletId && (isTypeChanged || isAmountChanged)) {
-      const currentWalletBalance = await WalletService.getBalance(oldTransaction.walletId as Types.ObjectId);
+    if (currentWallet && (isTypeChanged || isAmountChanged)) {
+      const validateTransaction = (status: boolean) => {
+        if (status)
+          throw new Error(
+            "Tidak dapat melakuakan perubahan pada transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus. Silahkan lakukan perubahan pada jumlah transaksi",
+          );
+      };
 
-      console.log(oldTransaction.amount, newTransaction.amount);
+      // explanation of Type out validation:
+      // 1. if the old transaction type is OUT, then the new transaction amount must not bring the wallet balance below zero or negative.
+      // example: the current balance is 500, then I created a new transaction with amount 500 by Type out,
+      // so the balance will be 0. So I will edit transaction amount to 700, this is cannot apply the update because :
+      // (oldTransaction.type === TransactionType.OUT && currentWallet.balance - (newTransaction.amount - oldTransaction.amount) >= 0)
+      // 0 - (700 - 500) = -200; -200 is negative number
 
-      // for transaction type IN validation, if the change transaction amount causes the balance to be less than 0 then return false
-      const differenceAmount = oldTransaction.amount - newTransaction.amount;
-      console.log(currentWalletBalance, differenceAmount);
+      // 2. Actually the second condition for if the old transaction type is IN change to OUT
+      // example: the current balance is 500, then I created a new transaction with Type In by 500,
+      // so the balance will be 1000, then I edit the transaction to Type Out with amount 600, this transaction cannot updated because:
+      // currentWallet.balance - (oldTransaction.amount + newTransaction.amount) >= 0
+      // 500 - (500 + 600) = -600; -600 is negative number so return false
+      const typeOutValidation =
+        (oldTransaction.type === TransactionType.OUT &&
+          currentWallet.balance - (newTransaction.amount - oldTransaction.amount) >= 0) ||
+        currentWallet.balance - (oldTransaction.amount + newTransaction.amount) >= 0;
 
-      const isBalanceEnough = currentWalletBalance - differenceAmount >= 0;
-      const typeInIsValid = newTransaction.type === TransactionType.IN && !isBalanceEnough;
+      // explanation of type in validation:
+      // 1. validation type IN is simple than OUT, the purpose is for prevent wallet balance to negative same as type OUT too;
+      // example: I have two transaction, Transaciton 1 is 600 Type IN and transaction 2 is 600 Type OUT so the balance will be 0;
+      // in this case, I will edit Transaction I amount to 300, this is cannot apply the update because:
+      // currentWallet.balance - (oldTransaction.amount - newTransaction.amount) >= 0
+      // 0 - (600 - 300) = -300; -300 is negative number then return false to throw Error
+      const typeInValidation = currentWallet.balance - (oldTransaction.amount - newTransaction.amount) >= 0;
 
-      // for transaction type OUT validation, if balance is less than transaction amount then return false
-      const isBalanceEnoughForTypeChangesToOut =
-        currentWalletBalance - (oldTransaction.amount + newTransaction.amount) >= 0;
-      const typeOutIsValid =
-        (newTransaction.type === TransactionType.OUT && currentWalletBalance < newTransaction.amount) ||
-        !isBalanceEnoughForTypeChangesToOut;
-
-      // throw error if type IN or type OUT is not valid
-      if (typeInIsValid || typeOutIsValid) {
-        throw new Error(
-          "Tidak bisa melakuakan perubahan pada transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus. Silahkan lakukan perubahan pada jumlah transaksi",
-        );
+      if (newTransaction.type === TransactionType.OUT) {
+        validateTransaction(!typeOutValidation);
+      } else if (newTransaction.type === TransactionType.IN) {
+        validateTransaction(!typeInValidation);
+      } else {
+        throw new Error("Ada yang salah");
       }
 
       oldTransaction.type = newTransaction.type;
@@ -174,7 +191,6 @@ async function remove(id: string) {
     const wallet = await Wallet.findById(transaction.walletId);
     // check if transaction type is out
     // and wallet balance is less than transaction amount then throw error
-    console.log(wallet);
 
     if (wallet) {
       if (transaction.type === TransactionType.IN && wallet.balance < transaction.amount) {

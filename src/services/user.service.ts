@@ -92,8 +92,6 @@ async function pullToken(userId: string | undefined | Types.ObjectId, tokenId: T
 
 async function pushWallet(userId: Types.ObjectId, walletId: Types.ObjectId) {
   try {
-    console.log("pushWallet");
-
     await User.findByIdAndUpdate(
       {
         _id: userId,

@@ -1,6 +1,8 @@
 import { Types } from "mongoose";
 import Wallet from "../models/Wallet";
 import * as UserService from "./user.service";
+import Transaction from "../models/Transaction";
+import User from "../models/User";
 
 export async function pushTransaction(
   walletId: Types.ObjectId | undefined,
@@ -89,12 +91,30 @@ export async function create(walletData: any) {
   }
 }
 
-export async function deleteById(walletId: Types.ObjectId) {
+export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: boolean) {
   try {
     const wallet = await Wallet.findById(walletId);
-
     if (!wallet) return;
 
+    if (deleteTransactions) {
+      await Transaction.deleteMany({
+        _id: {
+          $in: wallet.transactions,
+        },
+      });
+      await User.updateOne(
+        {
+          _id: wallet.userId,
+        },
+        {
+          $pull: {
+            transactions: {
+              $in: wallet.transactions,
+            },
+          },
+        },
+      );
+    }
     await UserService.pullWallet(wallet.userId, walletId);
     return await wallet.remove();
   } catch (error) {
@@ -168,7 +188,6 @@ export async function updateBalance(walletId: Types.ObjectId) {
     ]);
 
     if (!currentBalance[0]) throw new Error("Wallet not found");
-    console.log("currentBalance", currentBalance[0].balance);
 
     await Wallet.findByIdAndUpdate(walletId, {
       $set: {

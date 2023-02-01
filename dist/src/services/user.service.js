@@ -93,7 +93,6 @@ async function pullToken(userId, tokenId) {
 exports.pullToken = pullToken;
 async function pushWallet(userId, walletId) {
     try {
-        console.log("pushWallet");
         await User_1.default.findByIdAndUpdate({
             _id: userId,
         }, {

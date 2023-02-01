@@ -30,6 +30,8 @@ exports.updateBalance = exports.decreseBalance = exports.increseBalance = export
 const mongoose_1 = require("mongoose");
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const UserService = __importStar(require("./user.service"));
+const Transaction_1 = __importDefault(require("../models/Transaction"));
+const User_1 = __importDefault(require("../models/User"));
 async function pushTransaction(walletId, transactionId, amount) {
     try {
         if (!walletId)
@@ -107,11 +109,27 @@ async function create(walletData) {
     }
 }
 exports.create = create;
-async function deleteById(walletId) {
+async function deleteById(walletId, deleteTransactions) {
     try {
         const wallet = await Wallet_1.default.findById(walletId);
         if (!wallet)
             return;
+        if (deleteTransactions) {
+            await Transaction_1.default.deleteMany({
+                _id: {
+                    $in: wallet.transactions,
+                },
+            });
+            await User_1.default.updateOne({
+                _id: wallet.userId,
+            }, {
+                $pull: {
+                    transactions: {
+                        $in: wallet.transactions,
+                    },
+                },
+            });
+        }
         await UserService.pullWallet(wallet.userId, walletId);
         return await wallet.remove();
     }
@@ -187,7 +205,6 @@ async function updateBalance(walletId) {
         ]);
         if (!currentBalance[0])
             throw new Error("Wallet not found");
-        console.log("currentBalance", currentBalance[0].balance);
         await Wallet_1.default.findByIdAndUpdate(walletId, {
             $set: {
                 balance: currentBalance[0].balance,
