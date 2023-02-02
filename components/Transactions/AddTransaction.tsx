@@ -64,7 +64,7 @@ const AddTransaction = (props: Props) => {
         </div>
       </ModalTrigger>
       <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
-        <ModalContent className="space-y-6 dark:bg-slate-600">
+        <ModalContent className="space-y-6">
           <div className="flex items-center justify-between">
             <Heading level={3}>Tambah Transaksi</Heading>
             <ModalCloseTringger>

@@ -25,7 +25,7 @@ const ModalContent = ({ children, closeOnOverlayClick, className }: Props) => {
       />
       <div
         className={classNames(
-          "p-5 bg-white shadow-2xl w-[90%] -mt-32 lg:mt-0 max-w-lg rounded-lg z-[52] duration-200 transition-all transform",
+          "p-5 bg-white shadow-2xl w-[90%] -mt-32 lg:mt-0 max-w-lg rounded-lg z-[52] duration-200 transition-all transform dark:bg-slate-600",
           { "scale-75 -translate-y-20 invisible opacity-0": !isOpen },
           { "scale-100 translate-y-0 visible opacity-100": isOpen },
           className

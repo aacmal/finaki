@@ -26,7 +26,7 @@ const LoadingButton = ({
   loadingOnSuccess,
 }: Props) => {
   return (
-    <Button disabled={isLoading} width={width} type="submit" className="!mt-16">
+    <Button disabled={isLoading} width={width} type="submit">
       <div className="flex items-center justify-center">
         <LoadingSpinner
           className={classNames(
