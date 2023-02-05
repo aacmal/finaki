@@ -20,5 +20,10 @@ export const signValidator = [
 
 export const walletValidator = [
   body("name").notEmpty().withMessage("Name is required"),
-  body("balance").notEmpty().withMessage("Balance is required").isNumeric().withMessage("Balance must be a number"),
+  body("initialBalance")
+    .optional()
+    .isNumeric()
+    .withMessage("Balance must be a number")
+    .isInt({ min: 0 })
+    .withMessage("Balance must be greater than 0"),
 ];

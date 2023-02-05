@@ -30,6 +30,8 @@ exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const WalletService = __importStar(require("../services/wallet.service"));
 const express_validator_1 = require("express-validator");
+const TransactionService = __importStar(require("../services/transaction.service"));
+const Transaction_1 = require("../../types/Transaction");
 async function createWallet(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
@@ -37,12 +39,21 @@ async function createWallet(req, res) {
     }
     try {
         const userId = req.user;
-        const { name, balance } = req.body;
+        const { name, initialBalance } = req.body;
         const newWallet = await WalletService.create({
             userId,
             name,
-            balance,
+            balance: initialBalance || 0,
         });
+        if (initialBalance) {
+            await TransactionService.create({
+                userId,
+                walletId: newWallet._id,
+                description: `Pembuatan dompet ${newWallet.name}`,
+                amount: initialBalance,
+                type: Transaction_1.TransactionType.IN,
+            });
+        }
         return res.status(201).json({
             message: "Wallet has been created successfully",
             data: {

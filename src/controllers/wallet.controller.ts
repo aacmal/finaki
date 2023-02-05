@@ -3,6 +3,8 @@ import Wallet from "../models/Wallet";
 import * as WalletService from "../services/wallet.service";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
+import * as TransactionService from "../services/transaction.service";
+import { TransactionType } from "../../types/Transaction";
 
 export async function createWallet(req: Request, res: Response) {
   const error = validationResult(req);
@@ -12,12 +14,23 @@ export async function createWallet(req: Request, res: Response) {
 
   try {
     const userId = req.user;
-    const { name, balance } = req.body;
+    const { name, initialBalance } = req.body;
     const newWallet = await WalletService.create({
       userId,
       name,
-      balance,
+      balance: initialBalance || 0,
     });
+
+    if (initialBalance) {
+      await TransactionService.create({
+        userId,
+        walletId: newWallet._id,
+        description: `Pembuatan dompet ${newWallet.name}`,
+        amount: initialBalance,
+        type: TransactionType.IN,
+      });
+    }
+
     return res.status(201).json({
       message: "Wallet has been created successfully",
       data: {

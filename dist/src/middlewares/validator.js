@@ -19,5 +19,10 @@ exports.signValidator = [
 ];
 exports.walletValidator = [
     (0, express_validator_1.body)("name").notEmpty().withMessage("Name is required"),
-    (0, express_validator_1.body)("balance").notEmpty().withMessage("Balance is required").isNumeric().withMessage("Balance must be a number"),
+    (0, express_validator_1.body)("initialBalance")
+        .optional()
+        .isNumeric()
+        .withMessage("Balance must be a number")
+        .isInt({ min: 0 })
+        .withMessage("Balance must be greater than 0"),
 ];
