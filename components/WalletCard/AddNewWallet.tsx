@@ -6,11 +6,29 @@ import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
 import { Modal, ModalCloseTringger, ModalContent } from "@/dls/Modal";
 import ModalTrigger from "@/dls/Modal/ModalTrigger";
+import Option from "@/dls/Select/Option";
+import Select from "@/dls/Select/Select";
 import XmarkIcon from "@/icons/XmarkIcon";
+import { useForm } from "react-hook-form";
+import { indicatorColor } from "./constants";
+import { ColorCircle } from "./WalletCardDropdown";
 
 type Props = {};
 
 const AddNewWallet = (props: Props) => {
+  const { register, handleSubmit, getValues } = useForm();
+
+  const onSubmitHandler = (e: any) => {
+    e.preventDefault();
+    const { name, color, balance } = e.target;
+    const walletData = {
+      name: name.value,
+      color: color.value,
+      balance: balance.value,
+    };
+    console.log(walletData);
+  };
+
   return (
     <Modal>
       <ModalTrigger>
@@ -29,7 +47,7 @@ const AddNewWallet = (props: Props) => {
             </IconWrapper>
           </ModalCloseTringger>
         </div>
-        <form action="">
+        <form action="" onSubmit={onSubmitHandler}>
           <div className="mt-8 space-y-8">
             <InputWithLabel
               label="Nama Dompet"
@@ -37,13 +55,28 @@ const AddNewWallet = (props: Props) => {
               type="text"
               placeholder="Dompet Utama"
               required
+              {...register("name")}
             />
-            <InputWithLabel
-              label="Saldo Awal"
-              id="wallet-balance"
-              type="number"
-              placeholder="Rp. 12000 (opsional)"
-            />
+            <div className="flex items-center gap-4">
+              <Select required placeholder="Warna" {...register("color")}>
+                {Object.keys(indicatorColor).map((key: string) => (
+                  <Option key={key} value={key}>
+                    <div className="flex items-center gap-3 capitalize">
+                      <ColorCircle dataColor={(indicatorColor as any)[key]} />
+                      {key}
+                    </div>
+                  </Option>
+                ))}
+              </Select>
+              <InputWithLabel
+                label="Saldo Awal"
+                id="wallet-balance"
+                type="number"
+                placeholder="Rp. 12000 (opsional)"
+                className="w-full"
+                {...register("balance")}
+              />
+            </div>
             <LoadingButton
               title="Tambah Dompet"
               isLoading={false}

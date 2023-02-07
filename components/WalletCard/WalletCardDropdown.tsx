@@ -21,7 +21,7 @@ const ButtonTrigger = () => (
   </button>
 );
 
-const ColorCircle = ({ dataColor }: { dataColor: string }) => (
+export const ColorCircle = ({ dataColor }: { dataColor: string }) => (
   <div className={`w-3 h-3 rounded-full ${dataColor}`}></div>
 );
 
