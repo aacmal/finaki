@@ -25,4 +25,5 @@ exports.walletValidator = [
         .withMessage("Balance must be a number")
         .isInt({ min: 0 })
         .withMessage("Balance must be greater than 0"),
+    (0, express_validator_1.body)("color").notEmpty().withMessage("Color is required"),
 ];

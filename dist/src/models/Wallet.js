@@ -19,6 +19,10 @@ const WalletSchema = new mongoose_1.default.Schema({
         ref: "User",
         required: true,
     },
+    color: {
+        type: String,
+        required: true,
+    },
     transactions: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,

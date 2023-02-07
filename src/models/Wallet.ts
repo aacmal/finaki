@@ -16,6 +16,10 @@ const WalletSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    color: {
+      type: String,
+      required: true,
+    },
     transactions: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -14,14 +14,15 @@ export async function createWallet(req: Request, res: Response) {
 
   try {
     const userId = req.user;
-    const { name, initialBalance } = req.body;
+    const { name, initialBalance, color } = req.body;
     const newWallet = await WalletService.create({
       userId,
       name,
+      color,
       balance: initialBalance || 0,
     });
 
-    if (initialBalance) {
+    if (initialBalance > 0) {
       await TransactionService.create({
         userId,
         walletId: newWallet._id,
@@ -36,6 +37,7 @@ export async function createWallet(req: Request, res: Response) {
       data: {
         _id: newWallet._id,
         name: newWallet.name,
+        color: newWallet.color,
         balance: newWallet.balance,
       },
     });
@@ -51,6 +53,7 @@ export async function getAllWallets(req: Request, res: Response) {
       _id: 1,
       name: 1,
       balance: 1,
+      color: 1,
     });
     return res.status(200).json({
       message: "Wallets has been fetched successfully",

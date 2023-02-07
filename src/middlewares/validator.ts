@@ -26,4 +26,5 @@ export const walletValidator = [
     .withMessage("Balance must be a number")
     .isInt({ min: 0 })
     .withMessage("Balance must be greater than 0"),
+  body("color").notEmpty().withMessage("Color is required"),
 ];
