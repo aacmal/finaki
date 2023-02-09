@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import Wallet from "../models/Wallet";
 import * as WalletService from "../services/wallet.service";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
-import * as TransactionService from "../services/transaction.service";
-import { TransactionType } from "../../types/Transaction";
-import Transaction from "../models/Transaction";
+import { TransactionType } from "../interfaces/Transaction";
+import TransactionModel from "../models/transaction.model";
+import WalletModel from "../models/wallet.model";
 
 export async function createWallet(req: Request, res: Response) {
   const error = validationResult(req);
@@ -25,7 +24,7 @@ export async function createWallet(req: Request, res: Response) {
     });
 
     if (balance > 0) {
-      const transaction = await Transaction.create({
+      const transaction = await TransactionModel.create({
         userId,
         walletId: newWallet._id,
         description: `Pembuatan dompet ${newWallet.name}`,
@@ -53,8 +52,7 @@ export async function createWallet(req: Request, res: Response) {
 export async function getAllWallets(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const totalBalance = await WalletService.getTotalBalance(userId as Types.ObjectId);
-    const wallets = await Wallet.find({ userId: userId })
+    const wallets = await WalletModel.find({ userId: userId })
       .select({
         _id: 1,
         name: 1,
@@ -64,10 +62,7 @@ export async function getAllWallets(req: Request, res: Response) {
       .sort({ createdAt: -1 });
     return res.status(200).json({
       message: "Wallets has been fetched successfully",
-      data: {
-        wallets,
-        totalBalance,
-      },
+      data: wallets,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -76,7 +71,7 @@ export async function getAllWallets(req: Request, res: Response) {
 
 export async function deleteWallet(req: Request, res: Response) {
   try {
-    const id = req.query.id as unknown;
+    const id = req.params.id as unknown;
     const deleteTransaction = (req.query.deleteTransactions as unknown as boolean) || false;
 
     const deletedWallet = await WalletService.deleteById(id as Types.ObjectId, deleteTransaction);
@@ -87,6 +82,99 @@ export async function deleteWallet(req: Request, res: Response) {
       data: {
         _id: deletedWallet._id,
       },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function updateWallet(req: Request, res: Response) {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+  try {
+    const id = req.params.id as unknown;
+    const { name, color } = req.body;
+
+    const updatedWallet = await WalletModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        name,
+        color,
+      },
+      {
+        new: true,
+      },
+    ).select({
+      _id: 1,
+      name: 1,
+      color: 1,
+    });
+
+    if (!updatedWallet) return res.status(404).json({ message: "Wallet not found" });
+
+    res.json({
+      message: "Wallet has been updated successfully",
+      data: updatedWallet,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function updateWalletColor(req: Request, res: Response) {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+
+  try {
+    const id = req.params.id as unknown;
+    const { color } = req.body;
+
+    const updatedColor = await WalletModel.findOneAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        $set: {
+          color,
+        },
+      },
+      {
+        new: true,
+      },
+    ).select({
+      _id: 1,
+      color: 1,
+    });
+    if (!updatedColor) return res.status(404).json({ message: "Wallet not found" });
+    res.json({
+      message: "Wallet color has been updated successfully",
+      data: updatedColor,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getOneWallet(req: Request, res: Response) {
+  try {
+    const id = req.params.id as unknown;
+    const wallet = await WalletModel.findById(id).select({
+      _id: 1,
+      name: 1,
+      color: 1,
+      balance: 1,
+    });
+
+    if (!wallet) return res.status(404).json({ message: "Wallet not found" });
+    res.json({
+      message: "Wallet has been fetched successfully",
+      data: wallet,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import jwt from "jsonwebtoken";
-import { IUser } from "../../types/User";
+import { IUser } from "../interfaces/User";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../..";
 
 export function generateAccessToken(user: IUser) {

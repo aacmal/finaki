@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.walletValidator = exports.signValidator = exports.registerValidator = exports.transactionValidator = void 0;
+exports.walletColorValidator = exports.updateWalletValidator = exports.walletValidator = exports.signValidator = exports.registerValidator = exports.transactionValidator = void 0;
 const express_validator_1 = require("express-validator");
 exports.transactionValidator = [
     (0, express_validator_1.body)("description").notEmpty().withMessage("Description is required"),
@@ -27,3 +27,8 @@ exports.walletValidator = [
         .withMessage("Balance must be greater than 0"),
     (0, express_validator_1.body)("color").notEmpty().withMessage("Color is required"),
 ];
+exports.updateWalletValidator = [
+    (0, express_validator_1.body)("name").notEmpty().withMessage("Name is required"),
+    (0, express_validator_1.body)("color").notEmpty().withMessage("color is required"),
+];
+exports.walletColorValidator = [(0, express_validator_1.body)("color").notEmpty().withMessage("Color is required")];

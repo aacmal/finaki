@@ -4,7 +4,7 @@ import * as Transaction from "../services/transaction.service";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
-async function getAllTransactionsByDate(req: Request, res: Response) {
+export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
     // const transactions = await Transaction.getAll();
     const userId = req.user as Types.ObjectId;
@@ -15,7 +15,7 @@ async function getAllTransactionsByDate(req: Request, res: Response) {
   }
 }
 
-async function createTransaction(req: Request, res: Response) {
+export async function createTransaction(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res.status(400).json({ errors: error.array() });
@@ -34,7 +34,7 @@ async function createTransaction(req: Request, res: Response) {
   }
 }
 
-async function updateTransaction(req: Request, res: Response) {
+export async function updateTransaction(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res.status(400).json({ errors: error.array() });
@@ -55,7 +55,7 @@ async function updateTransaction(req: Request, res: Response) {
   }
 }
 
-async function deleteTransaction(req: Request, res: Response) {
+export async function deleteTransaction(req: Request, res: Response) {
   try {
     const id = req.query.id as string;
     const deletedTransaction = await Transaction.remove(id);
@@ -73,7 +73,7 @@ async function deleteTransaction(req: Request, res: Response) {
   }
 }
 
-async function getTransactionById(req: Request, res: Response) {
+export async function getTransactionById(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const transaction = await Transaction.getById(id);
@@ -83,7 +83,7 @@ async function getTransactionById(req: Request, res: Response) {
   }
 }
 
-async function getTotalTransaction(req: Request, res: Response) {
+export async function getTotalTransaction(req: Request, res: Response) {
   try {
     const userId = req.user;
     const interval = (req.query.interval as "week" | "month") ?? "week";
@@ -102,7 +102,7 @@ async function getTotalTransaction(req: Request, res: Response) {
   }
 }
 
-async function getAllTransactions(req: Request, res: Response) {
+export async function getAllTransactions(req: Request, res: Response) {
   try {
     const userId = req.user;
     const limit = parseInt(req.query.limit as string) ?? 0;
@@ -112,13 +112,3 @@ async function getAllTransactions(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
-export {
-  getAllTransactionsByDate,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
-  getTransactionById,
-  getTotalTransaction,
-  getAllTransactions,
-};

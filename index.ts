@@ -3,9 +3,9 @@ import dotenv from "dotenv";
 import passport from "passport";
 import cors from "cors";
 import cookieParse from "cookie-parser";
-import AppRoutes from "./src/routes";
-import { corsConfig } from "./src/configs/cors";
-import database from "./src/configs/dbconfig";
+import AppRoutes from "./src/routes/index.route";
+import { corsConfig } from "./src/configs/cors.config";
+import database from "./src/configs/database.config";
 
 dotenv.config();
 

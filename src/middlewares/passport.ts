@@ -1,5 +1,5 @@
 import passport from "passport";
-import User from "../models/User";
+import UserModel from "../models/user.model";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { ACCESS_TOKEN_SECRET } from "../..";
 
@@ -13,7 +13,7 @@ passport.use(
     },
     async function (jwtPayload, done) {
       try {
-        const user = await User.findById(jwtPayload._id);
+        const user = await UserModel.findById(jwtPayload._id);
         if (!user) {
           return done(null, false, { message: "Something went wrong" });
         }

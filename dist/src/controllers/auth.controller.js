@@ -29,10 +29,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.refreshToken = exports.sign = exports.register = void 0;
 const express_validator_1 = require("express-validator");
 const generateToken_1 = require("../utils/generateToken");
-const User_1 = __importDefault(require("../models/User"));
+const user_model_1 = __importDefault(require("../models/user.model"));
 const UserService = __importStar(require("../services/user.service"));
 const bcrypt_1 = require("bcrypt");
-const RefreshToken_1 = __importDefault(require("../models/RefreshToken"));
+const token_model_1 = __importDefault(require("../models/token.model"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const __1 = require("../..");
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
@@ -59,7 +59,7 @@ async function generateAuthCredential(req, res, user) {
         });
         const userAgent = req.get("user-agent");
         // save refresh token to database
-        const savedRefreshToken = await RefreshToken_1.default.create({
+        const savedRefreshToken = await token_model_1.default.create({
             userId: user._id,
             token: refreshToken,
             userAgent: userAgent,
@@ -112,7 +112,7 @@ async function sign(req, res) {
     }
     try {
         const { email, password } = req.body;
-        const user = await User_1.default.findOne({ email });
+        const user = await user_model_1.default.findOne({ email });
         if (!user) {
             return res.status(400).json({
                 errors: [
@@ -197,7 +197,7 @@ async function logout(req, res) {
                 message: "Something went wrong",
             });
         }
-        const deletedRefreshToken = await RefreshToken_1.default.findOneAndDelete({ token: refreshToken });
+        const deletedRefreshToken = await token_model_1.default.findOneAndDelete({ token: refreshToken });
         if (!deletedRefreshToken) {
             return res.status(500).json({
                 message: "Something went wrong",

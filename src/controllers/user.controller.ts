@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as UserService from "../services/user.service";
 
-async function getUser(req: Request, res: Response) {
+export async function getUser(req: Request, res: Response) {
   try {
     const userId = req.user;
     const user = await UserService.getById(userId as string);
@@ -18,7 +18,3 @@ async function getUser(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-
-// TODO: Add logout function
-
-export { getUser };

@@ -1,24 +1,23 @@
 // create services from Transaction
 import { Types } from "mongoose";
-import { ITotalTransaction, ITransaction, TransactionType } from "../../types/Transaction";
-import Transaction from "../models/Transaction";
+import { ITotalTransaction, ITransaction, TransactionType } from "../interfaces/Transaction";
 import * as UserService from "./user.service";
 import * as WalletService from "./wallet.service";
-import Wallet from "../models/Wallet";
-// Path: src\services\transaction.service.ts
+import TransactionModel from "../models/transaction.model";
+import WalletModel from "../models/wallet.model";
 
 // Create new Transaction
-async function create(transactionData: ITransaction) {
+export async function create(transactionData: ITransaction) {
   try {
     if (transactionData.walletId) {
       const wallet = await WalletService.getById(transactionData.walletId as Types.ObjectId);
-      if (!wallet) throw new Error("Wallet not found");
-      if (transactionData.type === "out" && wallet.balance < transactionData.amount)
-        throw new Error("Insufficient balance");
+      if (!wallet) throw new Error("Dompet tidak ditemukan");
+      if (transactionData.type === TransactionType.OUT && wallet.balance < transactionData.amount)
+        throw new Error("Saldo tidak mencukupi");
     }
 
     // Create transaction data
-    const newTransaction = await Transaction.create(transactionData);
+    const newTransaction = await TransactionModel.create(transactionData);
 
     // Push transaction to user and wallet
     await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
@@ -26,7 +25,7 @@ async function create(transactionData: ITransaction) {
     await WalletService.pushTransaction(
       newTransaction.walletId,
       newTransaction._id,
-      newTransaction.type === "in" ? newTransaction.amount : -newTransaction.amount,
+      newTransaction.type === TransactionType.IN ? newTransaction.amount : -newTransaction.amount,
     );
 
     return newTransaction;
@@ -35,9 +34,9 @@ async function create(transactionData: ITransaction) {
   }
 }
 
-async function getTransactions(userId: Types.ObjectId, limit?: number) {
+export async function getTransactions(userId: Types.ObjectId, limit?: number) {
   try {
-    return await Transaction.find({ userId: userId })
+    return await TransactionModel.find({ userId: userId })
       .sort({ createdAt: -1 })
       .select({ userId: 0, __v: 0 })
       .limit(limit ?? 0);
@@ -46,9 +45,9 @@ async function getTransactions(userId: Types.ObjectId, limit?: number) {
   }
 }
 
-async function getTransactionByDate(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
+export async function getTransactionByDate(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
   try {
-    const allTransactions = await Transaction.aggregate([
+    const allTransactions = await TransactionModel.aggregate([
       {
         $match: {
           userId: new Types.ObjectId(userId),
@@ -102,20 +101,20 @@ async function getTransactionByDate(userId: Types.ObjectId, timezone = "Asia/Jak
   }
 }
 
-async function getById(id: string) {
+export async function getById(id: string) {
   try {
-    return await Transaction.findById(id);
+    return await TransactionModel.findById(id);
   } catch (error) {
     throw error;
   }
 }
 
-async function update(id: string, newTransaction: ITransaction) {
+export async function update(id: string, newTransaction: ITransaction) {
   try {
-    const oldTransaction = await Transaction.findById(id);
+    const oldTransaction = await TransactionModel.findById(id);
     if (!oldTransaction) return;
 
-    const currentWallet = await Wallet.findById(oldTransaction.walletId as Types.ObjectId);
+    const currentWallet = await WalletModel.findById(oldTransaction.walletId as Types.ObjectId);
 
     const isTypeChanged = oldTransaction.type !== newTransaction.type;
     const isAmountChanged = oldTransaction.amount !== newTransaction.amount;
@@ -182,13 +181,13 @@ async function update(id: string, newTransaction: ITransaction) {
   }
 }
 
-async function remove(id: string) {
+export async function remove(id: string) {
   try {
-    const transaction = await Transaction.findById(id);
+    const transaction = await TransactionModel.findById(id);
     // if transaction not found, return null
     if (!transaction) return;
 
-    const wallet = await Wallet.findById(transaction.walletId);
+    const wallet = await WalletModel.findById(transaction.walletId);
     // check if transaction type is out
     // and wallet balance is less than transaction amount then throw error
 
@@ -203,7 +202,7 @@ async function remove(id: string) {
       await WalletService.pullTransaction(
         deletedTransaction.walletId,
         deletedTransaction._id,
-        deletedTransaction.type === "in" ? deletedTransaction.amount : -deletedTransaction.amount,
+        deletedTransaction.type === TransactionType.IN ? deletedTransaction.amount : -deletedTransaction.amount,
       );
 
       return deletedTransaction;
@@ -221,7 +220,7 @@ async function remove(id: string) {
   }
 }
 
-async function getTotalTransactionByPeriods(
+export async function getTotalTransactionByPeriods(
   userId: Types.ObjectId,
   interval: "week" | "month",
   timezone = "Asia/Jakarta",
@@ -231,7 +230,7 @@ async function getTotalTransactionByPeriods(
   const dateInterval = new Date().setDate(new Date().getDate() - intervals);
 
   try {
-    const totalTranscation = await Transaction.aggregate([
+    const totalTranscation = await TransactionModel.aggregate([
       {
         $match: {
           userId: new Types.ObjectId(userId),
@@ -308,25 +307,3 @@ async function getTotalTransactionByPeriods(
     throw error;
   }
 }
-
-async function getRecentTransactions(userId: Types.ObjectId, limit: number) {
-  try {
-    return await Transaction.find({ userId })
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .select({ userId: 0, __v: 0, updatedAt: 0 });
-  } catch (error) {
-    throw error;
-  }
-}
-
-export {
-  create,
-  getTransactions,
-  getById,
-  update,
-  remove,
-  getTransactionByDate,
-  getTotalTransactionByPeriods,
-  getRecentTransactions,
-};

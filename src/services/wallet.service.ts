@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
-import Wallet from "../models/Wallet";
-import * as UserService from "./user.service";
-import Transaction from "../models/Transaction";
-import User from "../models/User";
+import * as UserService from "../services/user.service";
+import WalletModel from "../models/wallet.model";
+import TransactionModel from "../models/transaction.model";
+import UserModel from "../models/token.model";
 
 export async function pushTransaction(
   walletId: Types.ObjectId | undefined,
@@ -11,7 +11,7 @@ export async function pushTransaction(
 ) {
   try {
     if (!walletId) return;
-    await Wallet.findByIdAndUpdate(
+    await WalletModel.findByIdAndUpdate(
       {
         _id: walletId,
       },
@@ -39,7 +39,7 @@ export async function pullTransaction(
 ) {
   try {
     if (!walletId) return;
-    await Wallet.findByIdAndUpdate(
+    await WalletModel.findByIdAndUpdate(
       {
         _id: walletId,
       },
@@ -62,7 +62,7 @@ export async function pullTransaction(
 
 export async function getById(walletId: Types.ObjectId) {
   try {
-    return await Wallet.findById(walletId);
+    return await WalletModel.findById(walletId);
   } catch (error) {
     throw error;
   }
@@ -70,7 +70,7 @@ export async function getById(walletId: Types.ObjectId) {
 
 export async function getBalance(walletId: Types.ObjectId) {
   try {
-    const wallet = await Wallet.findById(walletId);
+    const wallet = await WalletModel.findById(walletId);
     if (!wallet) throw new Error("Wallet not found");
     return wallet.balance;
   } catch (error) {
@@ -80,7 +80,7 @@ export async function getBalance(walletId: Types.ObjectId) {
 
 export async function create(walletData: any) {
   try {
-    const wallet = new Wallet(walletData);
+    const wallet = new WalletModel(walletData);
     const savedWallet = await wallet.save();
 
     await UserService.pushWallet(walletData.userId, savedWallet._id);
@@ -93,16 +93,16 @@ export async function create(walletData: any) {
 
 export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: boolean) {
   try {
-    const wallet = await Wallet.findById(walletId);
+    const wallet = await WalletModel.findById(walletId);
     if (!wallet) return;
 
     if (deleteTransactions) {
-      await Transaction.deleteMany({
+      await TransactionModel.deleteMany({
         _id: {
           $in: wallet.transactions,
         },
       });
-      await User.updateOne(
+      await UserModel.updateOne(
         {
           _id: wallet.userId,
         },
@@ -124,7 +124,7 @@ export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: 
 
 export async function increseBalance(walletId: Types.ObjectId, amount: number) {
   try {
-    const wallet = await Wallet.findById(walletId);
+    const wallet = await WalletModel.findById(walletId);
     if (wallet) {
       wallet.balance = wallet.balance + amount;
       await wallet.save();
@@ -136,7 +136,7 @@ export async function increseBalance(walletId: Types.ObjectId, amount: number) {
 
 export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
   try {
-    const wallet = await Wallet.findById(walletId);
+    const wallet = await WalletModel.findById(walletId);
 
     if (wallet) {
       wallet.balance = wallet.balance - amount;
@@ -149,7 +149,7 @@ export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
 
 export async function updateBalance(walletId: Types.ObjectId) {
   try {
-    const currentBalance = await Wallet.aggregate([
+    const currentBalance = await WalletModel.aggregate([
       {
         $match: {
           _id: new Types.ObjectId(walletId),
@@ -189,7 +189,7 @@ export async function updateBalance(walletId: Types.ObjectId) {
 
     if (!currentBalance[0]) throw new Error("Wallet not found");
 
-    await Wallet.findByIdAndUpdate(walletId, {
+    await WalletModel.findByIdAndUpdate(walletId, {
       $set: {
         balance: currentBalance[0].balance,
       },
@@ -201,7 +201,7 @@ export async function updateBalance(walletId: Types.ObjectId) {
 
 export async function getTotalBalance(userId: Types.ObjectId) {
   try {
-    const totalBalance = await Wallet.aggregate([
+    const totalBalance = await WalletModel.aggregate([
       {
         $match: {
           userId: new Types.ObjectId(userId),

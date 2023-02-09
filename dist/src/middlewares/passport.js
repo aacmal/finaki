@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
-const User_1 = __importDefault(require("../models/User"));
+const user_model_1 = __importDefault(require("../models/user.model"));
 const passport_jwt_1 = require("passport-jwt");
 const __1 = require("../..");
 // JWT middleware authentication
@@ -14,7 +14,7 @@ passport_1.default.use(new passport_jwt_1.Strategy({
     jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
 }, async function (jwtPayload, done) {
     try {
-        const user = await User_1.default.findById(jwtPayload._id);
+        const user = await user_model_1.default.findById(jwtPayload._id);
         if (!user) {
             return done(null, false, { message: "Something went wrong" });
         }

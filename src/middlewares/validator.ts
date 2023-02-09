@@ -28,3 +28,10 @@ export const walletValidator = [
     .withMessage("Balance must be greater than 0"),
   body("color").notEmpty().withMessage("Color is required"),
 ];
+
+export const updateWalletValidator = [
+  body("name").notEmpty().withMessage("Name is required"),
+  body("color").notEmpty().withMessage("color is required"),
+];
+
+export const walletColorValidator = [body("color").notEmpty().withMessage("Color is required")];

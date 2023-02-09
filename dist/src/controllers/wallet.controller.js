@@ -26,12 +26,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
-const Wallet_1 = __importDefault(require("../models/Wallet"));
+exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const WalletService = __importStar(require("../services/wallet.service"));
 const express_validator_1 = require("express-validator");
-const Transaction_1 = require("../../types/Transaction");
-const Transaction_2 = __importDefault(require("../models/Transaction"));
+const Transaction_1 = require("../interfaces/Transaction");
+const transaction_model_1 = __importDefault(require("../models/transaction.model"));
+const wallet_model_1 = __importDefault(require("../models/wallet.model"));
 async function createWallet(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
@@ -47,7 +47,7 @@ async function createWallet(req, res) {
             balance: balance || 0,
         });
         if (balance > 0) {
-            const transaction = await Transaction_2.default.create({
+            const transaction = await transaction_model_1.default.create({
                 userId,
                 walletId: newWallet._id,
                 description: `Pembuatan dompet ${newWallet.name}`,
@@ -75,8 +75,7 @@ exports.createWallet = createWallet;
 async function getAllWallets(req, res) {
     try {
         const userId = req.user;
-        const totalBalance = await WalletService.getTotalBalance(userId);
-        const wallets = await Wallet_1.default.find({ userId: userId })
+        const wallets = await wallet_model_1.default.find({ userId: userId })
             .select({
             _id: 1,
             name: 1,
@@ -86,10 +85,7 @@ async function getAllWallets(req, res) {
             .sort({ createdAt: -1 });
         return res.status(200).json({
             message: "Wallets has been fetched successfully",
-            data: {
-                wallets,
-                totalBalance,
-            },
+            data: wallets,
         });
     }
     catch (error) {
@@ -99,7 +95,7 @@ async function getAllWallets(req, res) {
 exports.getAllWallets = getAllWallets;
 async function deleteWallet(req, res) {
     try {
-        const id = req.query.id;
+        const id = req.params.id;
         const deleteTransaction = req.query.deleteTransactions || false;
         const deletedWallet = await WalletService.deleteById(id, deleteTransaction);
         if (!deletedWallet)
@@ -116,3 +112,88 @@ async function deleteWallet(req, res) {
     }
 }
 exports.deleteWallet = deleteWallet;
+async function updateWallet(req, res) {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+    try {
+        const id = req.params.id;
+        const { name, color } = req.body;
+        const updatedWallet = await wallet_model_1.default.findOneAndUpdate({
+            _id: id,
+        }, {
+            name,
+            color,
+        }, {
+            new: true,
+        }).select({
+            _id: 1,
+            name: 1,
+            color: 1,
+        });
+        if (!updatedWallet)
+            return res.status(404).json({ message: "Wallet not found" });
+        res.json({
+            message: "Wallet has been updated successfully",
+            data: updatedWallet,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.updateWallet = updateWallet;
+async function updateWalletColor(req, res) {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+    try {
+        const id = req.params.id;
+        const { color } = req.body;
+        const updatedColor = await wallet_model_1.default.findOneAndUpdate({
+            _id: id,
+        }, {
+            $set: {
+                color,
+            },
+        }, {
+            new: true,
+        }).select({
+            _id: 1,
+            color: 1,
+        });
+        if (!updatedColor)
+            return res.status(404).json({ message: "Wallet not found" });
+        res.json({
+            message: "Wallet color has been updated successfully",
+            data: updatedColor,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.updateWalletColor = updateWalletColor;
+async function getOneWallet(req, res) {
+    try {
+        const id = req.params.id;
+        const wallet = await wallet_model_1.default.findById(id).select({
+            _id: 1,
+            name: 1,
+            color: 1,
+            balance: 1,
+        });
+        if (!wallet)
+            return res.status(404).json({ message: "Wallet not found" });
+        res.json({
+            message: "Wallet has been fetched successfully",
+            data: wallet,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.getOneWallet = getOneWallet;

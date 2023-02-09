@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken";
-import User from "../models/User";
+import UserModel from "../models/user.model";
 import * as UserService from "../services/user.service";
 import { compare } from "bcrypt";
-import RefreshToken from "../models/RefreshToken";
+import TokenModel from "../models/token.model";
 import jwt from "jsonwebtoken";
-import { IUser } from "../../types/User";
+import { IUser } from "../interfaces/User";
 import { REFRESH_TOKEN_SECRET } from "../..";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
@@ -36,7 +36,7 @@ async function generateAuthCredential(req: Request, res: Response, user: IUser):
 
     const userAgent = req.get("user-agent");
     // save refresh token to database
-    const savedRefreshToken = await RefreshToken.create({
+    const savedRefreshToken = await TokenModel.create({
       userId: user._id,
       token: refreshToken,
       userAgent: userAgent,
@@ -93,7 +93,7 @@ async function sign(req: Request, res: Response) {
 
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(400).json({
         errors: [
@@ -182,7 +182,7 @@ async function logout(req: Request, res: Response) {
       });
     }
 
-    const deletedRefreshToken = await RefreshToken.findOneAndDelete({ token: refreshToken });
+    const deletedRefreshToken = await TokenModel.findOneAndDelete({ token: refreshToken });
     if (!deletedRefreshToken) {
       return res.status(500).json({
         message: "Something went wrong",
