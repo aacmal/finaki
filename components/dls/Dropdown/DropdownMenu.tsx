@@ -1,14 +1,20 @@
 import * as RadixDropdown from "@radix-ui/react-dropdown-menu";
 
-type Props = {
+interface Props {
   trigger: React.ReactNode;
   children: React.ReactNode;
   align?: "start" | "center" | "end";
-};
+  onOpenChange?: (open: boolean) => void;
+}
 
-const DropdownMenu = ({ trigger, children, align = "end" }: Props) => {
+const DropdownMenu = ({
+  trigger,
+  children,
+  align = "end",
+  onOpenChange,
+}: Props) => {
   return (
-    <RadixDropdown.Root>
+    <RadixDropdown.Root onOpenChange={onOpenChange}>
       <RadixDropdown.Trigger asChild>
         <div>{trigger}</div>
       </RadixDropdown.Trigger>

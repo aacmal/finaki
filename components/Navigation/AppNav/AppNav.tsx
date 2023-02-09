@@ -27,7 +27,7 @@ const AppNav = (props: Props) => {
       <AppNavLink
         icon={<WalletIcon {...defaultIconProps} />}
         href={Routes.Wallet}
-        active={pathname === Routes.Wallet}
+        active={pathname?.includes(Routes.Wallet)}
       >
         Wallet
       </AppNavLink>

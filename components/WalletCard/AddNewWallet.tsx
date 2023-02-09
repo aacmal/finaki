@@ -9,6 +9,8 @@ import ModalTrigger from "@/dls/Modal/ModalTrigger";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
 import XmarkIcon from "@/icons/XmarkIcon";
+import { createNewWallet } from "@/utils/api/wallet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { indicatorColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
@@ -16,7 +18,16 @@ import { ColorCircle } from "./WalletCardDropdown";
 type Props = {};
 
 const AddNewWallet = (props: Props) => {
+  const queryClient = useQueryClient();
+
   const { register, handleSubmit, getValues } = useForm();
+  const { mutate, isLoading, isSuccess } = useMutation({
+    mutationFn: createNewWallet,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["wallets"]);
+      console.log(data);
+    },
+  });
 
   const onSubmitHandler = (e: any) => {
     e.preventDefault();
@@ -26,13 +37,14 @@ const AddNewWallet = (props: Props) => {
       color: color.value,
       balance: balance.value,
     };
+    mutate(walletData);
     console.log(walletData);
   };
 
   return (
     <Modal>
       <ModalTrigger>
-        <div className="dark:text-slate-800 font-medium dark:bg-slate-50 px-3 py-2 rounded-lg w-auto">
+        <div className="dark:text-slate-800 font-medium text-slate-50 bg-slate-600 dark:bg-slate-50 px-3 py-2 rounded-lg w-auto">
           Tambah dompet
         </div>
       </ModalTrigger>
@@ -79,9 +91,9 @@ const AddNewWallet = (props: Props) => {
             </div>
             <LoadingButton
               title="Tambah Dompet"
-              isLoading={false}
+              isLoading={isLoading}
               onLoadingText="Menambahkan dompet"
-              isSuccess={false}
+              isSuccess={isSuccess}
               onSuccessText="Dompet berhasil ditambahkan"
             />
           </div>

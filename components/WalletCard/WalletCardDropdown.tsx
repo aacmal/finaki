@@ -9,10 +9,13 @@ import IconWrapper from "@/dls/IconWrapper";
 import ChevronIcon from "@/icons/ChevronIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PencilIcon from "@/icons/PencilIcon";
+import TrashIcon from "@/icons/TrashIcon";
 import { indicatorColor, WalletColor } from "./constants";
 
 type Props = {
   colorKey: WalletColor;
+  handleUpdateColor: () => void;
+  setColorKey: (color: WalletColor) => void;
 };
 
 const ButtonTrigger = () => (
@@ -34,10 +37,20 @@ const SubMenuTrigger = () => (
   </div>
 );
 
-const WalletCardDropdown = ({ colorKey }: Props) => {
+const WalletCardDropdown = ({
+  colorKey,
+  handleUpdateColor,
+  setColorKey,
+}: Props) => {
+  const updateWhenClose = (isOpen: boolean) => {
+    if (!isOpen) {
+      handleUpdateColor();
+    }
+  };
+
   return (
-    <DropdownMenu trigger={<ButtonTrigger />}>
-      <DropdownItem icon={<PencilIcon />}>Ubah nama dompet</DropdownItem>
+    <DropdownMenu onOpenChange={updateWhenClose} trigger={<ButtonTrigger />}>
+      {/* <DropdownItem icon={<PencilIcon />}>Ubah nama dompet</DropdownItem> */}
       <DropdownCheckboxItem shouldCloseAfterClick checked={false}>
         Jadikan dompet utama
       </DropdownCheckboxItem>
@@ -47,7 +60,7 @@ const WalletCardDropdown = ({ colorKey }: Props) => {
       >
         {Object.keys(indicatorColor).map((key: string) => (
           <DropdownItem
-            onClick={() => console.log(key)}
+            onClick={() => setColorKey(key as WalletColor)}
             key={key}
             icon={<ColorCircle dataColor={(indicatorColor as any)[key]} />}
           >
@@ -55,6 +68,12 @@ const WalletCardDropdown = ({ colorKey }: Props) => {
           </DropdownItem>
         ))}
       </DropdownSubMenu>
+      <DropdownItem
+        className="hover:!bg-red-400 hover:!text-white"
+        icon={<TrashIcon />}
+      >
+        Hapus dompet
+      </DropdownItem>
     </DropdownMenu>
   );
 };
