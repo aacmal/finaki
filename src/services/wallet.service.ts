@@ -198,3 +198,35 @@ export async function updateBalance(walletId: Types.ObjectId) {
     throw error;
   }
 }
+
+export async function getTotalBalance(userId: Types.ObjectId) {
+  try {
+    const totalBalance = await Wallet.aggregate([
+      {
+        $match: {
+          userId: new Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: "$userId",
+          totalBalance: {
+            $sum: "$balance",
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalBalance: 1,
+        },
+      },
+    ]);
+
+    if (!totalBalance[0]) return 0;
+
+    return totalBalance[0].totalBalance;
+  } catch (error) {
+    throw error;
+  }
+}

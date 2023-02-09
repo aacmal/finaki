@@ -30,8 +30,8 @@ exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const WalletService = __importStar(require("../services/wallet.service"));
 const express_validator_1 = require("express-validator");
-const TransactionService = __importStar(require("../services/transaction.service"));
 const Transaction_1 = require("../../types/Transaction");
+const Transaction_2 = __importDefault(require("../models/Transaction"));
 async function createWallet(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
@@ -39,21 +39,23 @@ async function createWallet(req, res) {
     }
     try {
         const userId = req.user;
-        const { name, initialBalance, color } = req.body;
+        const { name, balance, color } = req.body;
         const newWallet = await WalletService.create({
             userId,
             name,
             color,
-            balance: initialBalance || 0,
+            balance: balance || 0,
         });
-        if (initialBalance > 0) {
-            await TransactionService.create({
+        if (balance > 0) {
+            const transaction = await Transaction_2.default.create({
                 userId,
                 walletId: newWallet._id,
                 description: `Pembuatan dompet ${newWallet.name}`,
-                amount: initialBalance,
+                amount: balance,
                 type: Transaction_1.TransactionType.IN,
             });
+            newWallet.transactions.push(transaction._id);
+            await newWallet.save();
         }
         return res.status(201).json({
             message: "Wallet has been created successfully",
@@ -73,15 +75,21 @@ exports.createWallet = createWallet;
 async function getAllWallets(req, res) {
     try {
         const userId = req.user;
-        const wallets = await Wallet_1.default.find({ userId: userId }).select({
+        const totalBalance = await WalletService.getTotalBalance(userId);
+        const wallets = await Wallet_1.default.find({ userId: userId })
+            .select({
             _id: 1,
             name: 1,
             balance: 1,
             color: 1,
-        });
+        })
+            .sort({ createdAt: -1 });
         return res.status(200).json({
             message: "Wallets has been fetched successfully",
-            data: wallets,
+            data: {
+                wallets,
+                totalBalance,
+            },
         });
     }
     catch (error) {

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBalance = exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
+exports.getTotalBalance = exports.updateBalance = exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
 const mongoose_1 = require("mongoose");
 const Wallet_1 = __importDefault(require("../models/Wallet"));
 const UserService = __importStar(require("./user.service"));
@@ -216,3 +216,35 @@ async function updateBalance(walletId) {
     }
 }
 exports.updateBalance = updateBalance;
+async function getTotalBalance(userId) {
+    try {
+        const totalBalance = await Wallet_1.default.aggregate([
+            {
+                $match: {
+                    userId: new mongoose_1.Types.ObjectId(userId),
+                },
+            },
+            {
+                $group: {
+                    _id: "$userId",
+                    totalBalance: {
+                        $sum: "$balance",
+                    },
+                },
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalBalance: 1,
+                },
+            },
+        ]);
+        if (!totalBalance[0])
+            return 0;
+        return totalBalance[0].totalBalance;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.getTotalBalance = getTotalBalance;

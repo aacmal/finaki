@@ -5,6 +5,7 @@ import { validationResult } from "express-validator";
 import { Types } from "mongoose";
 import * as TransactionService from "../services/transaction.service";
 import { TransactionType } from "../../types/Transaction";
+import Transaction from "../models/Transaction";
 
 export async function createWallet(req: Request, res: Response) {
   const error = validationResult(req);
@@ -14,22 +15,25 @@ export async function createWallet(req: Request, res: Response) {
 
   try {
     const userId = req.user;
-    const { name, initialBalance, color } = req.body;
+    const { name, balance, color } = req.body;
+
     const newWallet = await WalletService.create({
       userId,
       name,
       color,
-      balance: initialBalance || 0,
+      balance: balance || 0,
     });
 
-    if (initialBalance > 0) {
-      await TransactionService.create({
+    if (balance > 0) {
+      const transaction = await Transaction.create({
         userId,
         walletId: newWallet._id,
         description: `Pembuatan dompet ${newWallet.name}`,
-        amount: initialBalance,
+        amount: balance,
         type: TransactionType.IN,
       });
+      newWallet.transactions.push(transaction._id);
+      await newWallet.save();
     }
 
     return res.status(201).json({
@@ -49,15 +53,21 @@ export async function createWallet(req: Request, res: Response) {
 export async function getAllWallets(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const wallets = await Wallet.find({ userId: userId }).select({
-      _id: 1,
-      name: 1,
-      balance: 1,
-      color: 1,
-    });
+    const totalBalance = await WalletService.getTotalBalance(userId as Types.ObjectId);
+    const wallets = await Wallet.find({ userId: userId })
+      .select({
+        _id: 1,
+        name: 1,
+        balance: 1,
+        color: 1,
+      })
+      .sort({ createdAt: -1 });
     return res.status(200).json({
       message: "Wallets has been fetched successfully",
-      data: wallets,
+      data: {
+        wallets,
+        totalBalance,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
