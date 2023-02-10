@@ -3,6 +3,7 @@ import * as UserService from "../services/user.service";
 import WalletModel from "../models/wallet.model";
 import TransactionModel from "../models/transaction.model";
 import UserModel from "../models/token.model";
+import { IWallet } from "interfaces/Wallet";
 
 export async function pushTransaction(
   walletId: Types.ObjectId | undefined,
@@ -78,11 +79,9 @@ export async function getBalance(walletId: Types.ObjectId) {
   }
 }
 
-export async function create(walletData: any) {
+export async function create(walletData: IWallet) {
   try {
-    const wallet = new WalletModel(walletData);
-    const savedWallet = await wallet.save();
-
+    const savedWallet = await WalletModel.create(walletData);
     await UserService.pushWallet(walletData.userId, savedWallet._id);
 
     return savedWallet;

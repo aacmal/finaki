@@ -99,8 +99,7 @@ async function getBalance(walletId) {
 exports.getBalance = getBalance;
 async function create(walletData) {
     try {
-        const wallet = new wallet_model_1.default(walletData);
-        const savedWallet = await wallet.save();
+        const savedWallet = await wallet_model_1.default.create(walletData);
         await UserService.pushWallet(walletData.userId, savedWallet._id);
         return savedWallet;
     }

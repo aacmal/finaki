@@ -13,7 +13,7 @@ export async function createWallet(req: Request, res: Response) {
   }
 
   try {
-    const userId = req.user;
+    const userId = req.user as Types.ObjectId;
     const { name, balance, color } = req.body;
 
     const newWallet = await WalletService.create({
