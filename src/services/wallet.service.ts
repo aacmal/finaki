@@ -3,63 +3,7 @@ import * as UserService from "../services/user.service";
 import WalletModel from "../models/wallet.model";
 import TransactionModel from "../models/transaction.model";
 import UserModel from "../models/token.model";
-import { IWallet } from "interfaces/Wallet";
-
-export async function pushTransaction(
-  walletId: Types.ObjectId | undefined,
-  transactionId: Types.ObjectId,
-  amount: number,
-) {
-  try {
-    if (!walletId) return;
-    await WalletModel.findByIdAndUpdate(
-      {
-        _id: walletId,
-      },
-      {
-        $push: {
-          transactions: transactionId,
-        },
-        $inc: {
-          balance: amount,
-        },
-      },
-      {
-        new: true,
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function pullTransaction(
-  walletId: Types.ObjectId | undefined,
-  transactionId: Types.ObjectId,
-  amount: number,
-) {
-  try {
-    if (!walletId) return;
-    await WalletModel.findByIdAndUpdate(
-      {
-        _id: walletId,
-      },
-      {
-        $pull: {
-          transactions: transactionId,
-        },
-        $inc: {
-          balance: -amount,
-        },
-      },
-      {
-        new: true,
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
-}
+import { IWalletData } from "../interfaces/Wallet";
 
 export async function getById(walletId: Types.ObjectId) {
   try {
@@ -79,7 +23,7 @@ export async function getBalance(walletId: Types.ObjectId) {
   }
 }
 
-export async function create(walletData: IWallet) {
+export async function create(walletData: IWalletData) {
   try {
     const savedWallet = await WalletModel.create(walletData);
     await UserService.pushWallet(walletData.userId, savedWallet._id);
@@ -116,31 +60,6 @@ export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: 
     }
     await UserService.pullWallet(wallet.userId, walletId);
     return await wallet.remove();
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function increseBalance(walletId: Types.ObjectId, amount: number) {
-  try {
-    const wallet = await WalletModel.findById(walletId);
-    if (wallet) {
-      wallet.balance = wallet.balance + amount;
-      await wallet.save();
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function decreseBalance(walletId: Types.ObjectId, amount: number) {
-  try {
-    const wallet = await WalletModel.findById(walletId);
-
-    if (wallet) {
-      wallet.balance = wallet.balance - amount;
-      await wallet.save();
-    }
   } catch (error) {
     throw error;
   }

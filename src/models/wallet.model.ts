@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const WalletSchema = new mongoose.Schema(
+export const WalletSchema = new mongoose.Schema(
   {
     name: {
       type: String,

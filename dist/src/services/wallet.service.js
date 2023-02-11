@@ -26,56 +26,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTotalBalance = exports.updateBalance = exports.decreseBalance = exports.increseBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = exports.pullTransaction = exports.pushTransaction = void 0;
+exports.getTotalBalance = exports.updateBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = void 0;
 const mongoose_1 = require("mongoose");
 const UserService = __importStar(require("../services/user.service"));
 const wallet_model_1 = __importDefault(require("../models/wallet.model"));
 const transaction_model_1 = __importDefault(require("../models/transaction.model"));
 const token_model_1 = __importDefault(require("../models/token.model"));
-async function pushTransaction(walletId, transactionId, amount) {
-    try {
-        if (!walletId)
-            return;
-        await wallet_model_1.default.findByIdAndUpdate({
-            _id: walletId,
-        }, {
-            $push: {
-                transactions: transactionId,
-            },
-            $inc: {
-                balance: amount,
-            },
-        }, {
-            new: true,
-        });
-    }
-    catch (error) {
-        throw error;
-    }
-}
-exports.pushTransaction = pushTransaction;
-async function pullTransaction(walletId, transactionId, amount) {
-    try {
-        if (!walletId)
-            return;
-        await wallet_model_1.default.findByIdAndUpdate({
-            _id: walletId,
-        }, {
-            $pull: {
-                transactions: transactionId,
-            },
-            $inc: {
-                balance: -amount,
-            },
-        }, {
-            new: true,
-        });
-    }
-    catch (error) {
-        throw error;
-    }
-}
-exports.pullTransaction = pullTransaction;
 async function getById(walletId) {
     try {
         return await wallet_model_1.default.findById(walletId);
@@ -137,32 +93,6 @@ async function deleteById(walletId, deleteTransactions) {
     }
 }
 exports.deleteById = deleteById;
-async function increseBalance(walletId, amount) {
-    try {
-        const wallet = await wallet_model_1.default.findById(walletId);
-        if (wallet) {
-            wallet.balance = wallet.balance + amount;
-            await wallet.save();
-        }
-    }
-    catch (error) {
-        throw error;
-    }
-}
-exports.increseBalance = increseBalance;
-async function decreseBalance(walletId, amount) {
-    try {
-        const wallet = await wallet_model_1.default.findById(walletId);
-        if (wallet) {
-            wallet.balance = wallet.balance - amount;
-            await wallet.save();
-        }
-    }
-    catch (error) {
-        throw error;
-    }
-}
-exports.decreseBalance = decreseBalance;
 async function updateBalance(walletId) {
     try {
         const currentBalance = await wallet_model_1.default.aggregate([

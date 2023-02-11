@@ -37,8 +37,9 @@ const wallet_model_1 = __importDefault(require("../models/wallet.model"));
 // Create new Transaction
 async function create(transactionData) {
     try {
+        let wallet;
         if (transactionData.walletId) {
-            const wallet = await WalletService.getById(transactionData.walletId);
+            wallet = await wallet_model_1.default.findById(transactionData.walletId);
             if (!wallet)
                 throw new Error("Dompet tidak ditemukan");
             if (transactionData.type === Transaction_1.TransactionType.OUT && wallet.balance < transactionData.amount)
@@ -48,8 +49,12 @@ async function create(transactionData) {
         const newTransaction = await transaction_model_1.default.create(transactionData);
         // Push transaction to user and wallet
         await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
-        // if walletId null or undefined, don't push transaction to wallet
-        await WalletService.pushTransaction(newTransaction.walletId, newTransaction._id, newTransaction.type === Transaction_1.TransactionType.IN ? newTransaction.amount : -newTransaction.amount);
+        // if transaction has walletId, push transaction to wallet, and update wallet balance
+        if (wallet) {
+            wallet.transactions.push(newTransaction._id);
+            wallet.balance += transactionData.type === Transaction_1.TransactionType.IN ? transactionData.amount : -transactionData.amount;
+            await wallet.save();
+        }
         return newTransaction;
     }
     catch (error) {
@@ -134,15 +139,15 @@ async function getById(id) {
     }
 }
 exports.getById = getById;
-async function update(id, newTransaction) {
+async function update(id, newTransactionData) {
     try {
         const oldTransaction = await transaction_model_1.default.findById(id);
         if (!oldTransaction)
             return;
         const currentWallet = await wallet_model_1.default.findById(oldTransaction.walletId);
-        const isTypeChanged = oldTransaction.type !== newTransaction.type;
-        const isAmountChanged = oldTransaction.amount !== newTransaction.amount;
-        oldTransaction.description = newTransaction.description;
+        const isTypeChanged = oldTransaction.type !== newTransactionData.type;
+        const isAmountChanged = oldTransaction.amount !== newTransactionData.amount;
+        oldTransaction.description = newTransactionData.description;
         if (currentWallet && (isTypeChanged || isAmountChanged)) {
             const validateTransaction = (status) => {
                 if (status)
@@ -152,41 +157,41 @@ async function update(id, newTransaction) {
             // 1. if the old transaction type is OUT, then the new transaction amount must not bring the wallet balance below zero or negative.
             // example: the current balance is 500, then I created a new transaction with amount 500 by Type out,
             // so the balance will be 0. So I will edit transaction amount to 700, this is cannot apply the update because :
-            // (oldTransaction.type === TransactionType.OUT && currentWallet.balance - (newTransaction.amount - oldTransaction.amount) >= 0)
+            // (oldTransaction.type === TransactionType.OUT && currentWallet.balance - (newTransactionData.amount - oldTransaction.amount) >= 0)
             // 0 - (700 - 500) = -200; -200 is negative number
             // 2. Actually the second condition for if the old transaction type is IN change to OUT
             // example: the current balance is 500, then I created a new transaction with Type In by 500,
             // so the balance will be 1000, then I edit the transaction to Type Out with amount 600, this transaction cannot updated because:
-            // currentWallet.balance - (oldTransaction.amount + newTransaction.amount) >= 0
+            // currentWallet.balance - (oldTransaction.amount + newTransactionData.amount) >= 0
             // 500 - (500 + 600) = -600; -600 is negative number so return false
             const typeOutValidation = (oldTransaction.type === Transaction_1.TransactionType.OUT &&
-                currentWallet.balance - (newTransaction.amount - oldTransaction.amount) >= 0) ||
-                currentWallet.balance - (oldTransaction.amount + newTransaction.amount) >= 0;
+                currentWallet.balance - (newTransactionData.amount - oldTransaction.amount) >= 0) ||
+                currentWallet.balance - (oldTransaction.amount + newTransactionData.amount) >= 0;
             // explanation of type in validation:
             // 1. validation type IN is simple than OUT, the purpose is for prevent wallet balance to negative same as type OUT too;
             // example: I have two transaction, Transaciton 1 is 600 Type IN and transaction 2 is 600 Type OUT so the balance will be 0;
             // in this case, I will edit Transaction I amount to 300, this is cannot apply the update because:
-            // currentWallet.balance - (oldTransaction.amount - newTransaction.amount) >= 0
+            // currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0
             // 0 - (600 - 300) = -300; -300 is negative number then return false to throw Error
-            const typeInValidation = currentWallet.balance - (oldTransaction.amount - newTransaction.amount) >= 0;
-            if (newTransaction.type === Transaction_1.TransactionType.OUT) {
+            const typeInValidation = currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0;
+            if (newTransactionData.type === Transaction_1.TransactionType.OUT) {
                 validateTransaction(!typeOutValidation);
             }
-            else if (newTransaction.type === Transaction_1.TransactionType.IN) {
+            else if (newTransactionData.type === Transaction_1.TransactionType.IN) {
                 validateTransaction(!typeInValidation);
             }
             else {
                 throw new Error("Ada yang salah");
             }
-            oldTransaction.type = newTransaction.type;
-            oldTransaction.amount = newTransaction.amount;
+            oldTransaction.type = newTransactionData.type;
+            oldTransaction.amount = newTransactionData.amount;
             const updatedTransaction = await oldTransaction.save(); // return updated transaction
             // update balance in wallet collection based on transaction type
             await WalletService.updateBalance(updatedTransaction.walletId);
             return updatedTransaction;
         }
-        oldTransaction.type = newTransaction.type;
-        oldTransaction.amount = newTransaction.amount;
+        oldTransaction.type = newTransactionData.type;
+        oldTransaction.amount = newTransactionData.amount;
         return await oldTransaction.save(); // return updated transaction
     }
     catch (error) {
@@ -210,7 +215,10 @@ async function remove(id) {
             const deletedTransaction = await transaction.delete();
             // remove transactionId from wallet collection
             // and decrese balance or increse balance based on transaction type
-            await WalletService.pullTransaction(deletedTransaction.walletId, deletedTransaction._id, deletedTransaction.type === Transaction_1.TransactionType.IN ? deletedTransaction.amount : -deletedTransaction.amount);
+            wallet.transactions.pull(deletedTransaction._id);
+            wallet.balance -=
+                deletedTransaction.type === Transaction_1.TransactionType.IN ? deletedTransaction.amount : -deletedTransaction.amount;
+            await wallet.save();
             return deletedTransaction;
         }
         // delete transaction

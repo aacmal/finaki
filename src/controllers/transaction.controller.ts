@@ -1,6 +1,6 @@
 // import Transaction from "../models/Transaction";
 import { validationResult } from "express-validator";
-import * as Transaction from "../services/transaction.service";
+import * as TransactionService from "../services/transaction.service";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 
@@ -8,7 +8,7 @@ export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
     // const transactions = await Transaction.getAll();
     const userId = req.user as Types.ObjectId;
-    const transactions = await Transaction.getTransactionByDate(userId);
+    const transactions = await TransactionService.getTransactionByDate(userId);
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -22,9 +22,9 @@ export async function createTransaction(req: Request, res: Response) {
   }
 
   try {
-    const userId = req.user;
+    const userId = req.user as Types.ObjectId;
     const { description, amount, type, walletId } = req.body;
-    const newTransaction = await Transaction.create({ userId, description, amount, type, walletId });
+    const newTransaction = await TransactionService.create({ userId, description, amount, type, walletId });
     res.status(201).json({
       message: "Transaction has been created successfully",
       data: newTransaction,
@@ -42,7 +42,7 @@ export async function updateTransaction(req: Request, res: Response) {
   try {
     const id = req.query.id as string;
     const { description, amount, type } = req.body;
-    const updatedTransaction = await Transaction.update(id, { description, amount, type });
+    const updatedTransaction = await TransactionService.update(id, { description, amount, type });
 
     if (!updatedTransaction) return res.status(404).json({ message: "Transaction not found" });
 
@@ -58,7 +58,7 @@ export async function updateTransaction(req: Request, res: Response) {
 export async function deleteTransaction(req: Request, res: Response) {
   try {
     const id = req.query.id as string;
-    const deletedTransaction = await Transaction.remove(id);
+    const deletedTransaction = await TransactionService.remove(id);
     // console.log(deletedTransaction);
     if (!deletedTransaction) return res.status(404).json({ message: "Transaction not found" });
 
@@ -76,7 +76,7 @@ export async function deleteTransaction(req: Request, res: Response) {
 export async function getTransactionById(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const transaction = await Transaction.getById(id);
+    const transaction = await TransactionService.getById(id);
     res.json(transaction);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -89,7 +89,7 @@ export async function getTotalTransaction(req: Request, res: Response) {
     const interval = (req.query.interval as "week" | "month") ?? "week";
     const timezone = "Asia/Jakarta";
 
-    const totalTranscation = await Transaction.getTotalTransactionByPeriods(
+    const totalTranscation = await TransactionService.getTotalTransactionByPeriods(
       userId as Types.ObjectId,
       interval,
       timezone,
@@ -106,7 +106,7 @@ export async function getAllTransactions(req: Request, res: Response) {
   try {
     const userId = req.user;
     const limit = parseInt(req.query.limit as string) ?? 0;
-    const transactions = await Transaction.getTransactions(userId as Types.ObjectId, limit);
+    const transactions = await TransactionService.getTransactions(userId as Types.ObjectId, limit);
     res.json(transactions);
   } catch (error) {
     res.status(500).json({ message: error.message });
