@@ -42,9 +42,9 @@ export async function create(transactionData: ICreateTransactionInput) {
 
 export async function getTransactions(userId: Types.ObjectId, limit?: number) {
   try {
-    return await TransactionModel.find({ userId: userId })
+    return await TransactionModel.find({ userId: userId, includeInCalculation: true })
       .sort({ createdAt: -1 })
-      .select({ userId: 0, __v: 0 })
+      .select({ userId: 0, __v: 0, includeInCalculation: 0 })
       .limit(limit ?? 0);
   } catch (error) {
     throw error;
@@ -57,6 +57,7 @@ export async function getTransactionByDate(userId: Types.ObjectId, timezone = "A
       {
         $match: {
           userId: new Types.ObjectId(userId),
+          includeInCalculation: true,
         },
       },
       {
@@ -239,6 +240,7 @@ export async function getTotalTransactionByPeriods(
       {
         $match: {
           userId: new Types.ObjectId(userId),
+          includeInCalculation: true,
         },
       },
       {

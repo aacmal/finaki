@@ -20,13 +20,23 @@ exports.TransactionSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    note: {
+        type: String,
+        required: false,
+    },
     amount: {
         type: Number,
         required: true,
     },
     type: {
         type: String,
+        enum: ["in", "out"],
         required: true,
+    },
+    includeInCalculation: {
+        type: Boolean,
+        required: false,
+        default: true,
     },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Transaction", exports.TransactionSchema);

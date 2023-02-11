@@ -10,9 +10,12 @@ export type ITransactionModel = InferSchemaType<typeof TransactionSchema> & Docu
 
 export type ITransactionData = InferSchemaType<typeof TransactionSchema>;
 
-export type ICreateTransactionInput = Pick<ITransactionData, "userId" | "walletId" | "description" | "amount" | "type">;
+export type ICreateTransactionInput = Pick<
+  ITransactionData,
+  "userId" | "walletId" | "description" | "note" | "amount" | "type" | "includeInCalculation"
+>;
 
-export type IUpdateTransactionInput = Pick<ITransactionData, "description" | "amount" | "type">;
+export type IUpdateTransactionInput = Pick<ITransactionData, "description" | "note" | "amount" | "type">;
 
 export interface ITotalTransaction {
   _id: {

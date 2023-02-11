@@ -2,6 +2,7 @@ import { body } from "express-validator";
 
 export const transactionValidator = [
   body("description").notEmpty().withMessage("Description is required"),
+  body("note").optional(),
   body("amount").notEmpty().withMessage("Amount is required").isNumeric().withMessage("Amount must be a number"),
   body("type").notEmpty().withMessage("Type is required"),
   body("category").optional(),
@@ -35,3 +36,15 @@ export const updateWalletValidator = [
 ];
 
 export const walletColorValidator = [body("color").notEmpty().withMessage("Color is required")];
+
+export const transferWalletBalanceValidator = [
+  body("sourceWallet").notEmpty().withMessage("Source wallet is required"),
+  body("destinationWallet").notEmpty().withMessage("Destination wallet is required"),
+  body("amount")
+    .notEmpty()
+    .withMessage("Amount is required")
+    .isNumeric()
+    .withMessage("Amount must be a number")
+    .isInt({ min: 0 })
+    .withMessage("Amount must be greater than 0"),
+];

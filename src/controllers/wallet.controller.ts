@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as WalletService from "../services/wallet.service";
+import * as TransactionService from "../services/transaction.service";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
 import { TransactionType } from "../interfaces/Transaction";
@@ -175,6 +176,46 @@ export async function getOneWallet(req: Request, res: Response) {
     res.json({
       message: "Wallet has been fetched successfully",
       data: wallet,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function transferWalletBalance(req: Request, res: Response) {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+  try {
+    const { sourceWallet, destinationWallet, amount, note } = req.body;
+
+    const origin = await TransactionService.create({
+      userId: req.user as Types.ObjectId,
+      walletId: sourceWallet,
+      description: "Transfer saldo ke dompet lain",
+      amount,
+      note,
+      type: TransactionType.OUT,
+      includeInCalculation: false,
+    });
+
+    const destination = await TransactionService.create({
+      userId: req.user as Types.ObjectId,
+      walletId: destinationWallet,
+      description: "Transfer saldo dari dompet lain",
+      amount,
+      note,
+      type: TransactionType.IN,
+      includeInCalculation: false,
+    });
+
+    res.json({
+      message: "Transfer has been completed successfully",
+      data: {
+        origin,
+        destination,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -23,8 +23,8 @@ export async function createTransaction(req: Request, res: Response) {
 
   try {
     const userId = req.user as Types.ObjectId;
-    const { description, amount, type, walletId } = req.body;
-    const newTransaction = await TransactionService.create({ userId, description, amount, type, walletId });
+    const { description, note, amount, type, walletId } = req.body;
+    const newTransaction = await TransactionService.create({ userId, description, note, amount, type, walletId });
     res.status(201).json({
       message: "Transaction has been created successfully",
       data: newTransaction,

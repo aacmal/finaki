@@ -64,9 +64,9 @@ async function create(transactionData) {
 exports.create = create;
 async function getTransactions(userId, limit) {
     try {
-        return await transaction_model_1.default.find({ userId: userId })
+        return await transaction_model_1.default.find({ userId: userId, includeInCalculation: true })
             .sort({ createdAt: -1 })
-            .select({ userId: 0, __v: 0 })
+            .select({ userId: 0, __v: 0, includeInCalculation: 0 })
             .limit(limit !== null && limit !== void 0 ? limit : 0);
     }
     catch (error) {
@@ -80,6 +80,7 @@ async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
             {
                 $match: {
                     userId: new mongoose_1.Types.ObjectId(userId),
+                    includeInCalculation: true,
                 },
             },
             {
@@ -240,6 +241,7 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
             {
                 $match: {
                     userId: new mongoose_1.Types.ObjectId(userId),
+                    includeInCalculation: true,
                 },
             },
             {

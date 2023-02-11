@@ -16,13 +16,23 @@ export const TransactionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    note: {
+      type: String,
+      required: false,
+    },
     amount: {
       type: Number,
       required: true,
     },
     type: {
       type: String,
+      enum: ["in", "out"],
       required: true,
+    },
+    includeInCalculation: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   { timestamps: true },

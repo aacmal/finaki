@@ -26,8 +26,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
+exports.transferWalletBalance = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const WalletService = __importStar(require("../services/wallet.service"));
+const TransactionService = __importStar(require("../services/transaction.service"));
 const express_validator_1 = require("express-validator");
 const Transaction_1 = require("../interfaces/Transaction");
 const transaction_model_1 = __importDefault(require("../models/transaction.model"));
@@ -197,3 +198,41 @@ async function getOneWallet(req, res) {
     }
 }
 exports.getOneWallet = getOneWallet;
+async function transferWalletBalance(req, res) {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+    try {
+        const { sourceWallet, destinationWallet, amount, note } = req.body;
+        const origin = await TransactionService.create({
+            userId: req.user,
+            walletId: sourceWallet,
+            description: "Transfer saldo ke dompet lain",
+            amount,
+            note,
+            type: Transaction_1.TransactionType.OUT,
+            includeInCalculation: false,
+        });
+        const destination = await TransactionService.create({
+            userId: req.user,
+            walletId: destinationWallet,
+            description: "Transfer saldo dari dompet lain",
+            amount,
+            note,
+            type: Transaction_1.TransactionType.IN,
+            includeInCalculation: false,
+        });
+        res.json({
+            message: "Transfer has been completed successfully",
+            data: {
+                origin,
+                destination,
+            },
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.transferWalletBalance = transferWalletBalance;
