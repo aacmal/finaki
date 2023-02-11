@@ -13,5 +13,5 @@ const route = (0, express_1.Router)();
 route.use("/auth", auth_route_1.default);
 route.use("/user", authentication_1.isAuthenticated, user_route_1.default);
 route.use("/wallets", authentication_1.isAuthenticated, wallet_route_1.default);
-route.use("/transaction", authentication_1.isAuthenticated, transaction_route_1.default);
+route.use("/transactions", authentication_1.isAuthenticated, transaction_route_1.default);
 exports.default = route;

@@ -10,6 +10,6 @@ const route = Router();
 route.use("/auth", AuthRouter);
 route.use("/user", isAuthenticated, UserRoute);
 route.use("/wallets", isAuthenticated, WalletRoute);
-route.use("/transaction", isAuthenticated, TransactionRoute);
+route.use("/transactions", isAuthenticated, TransactionRoute);
 
 export default route;

@@ -81,7 +81,7 @@ async function updateTransaction(req, res) {
 exports.updateTransaction = updateTransaction;
 async function deleteTransaction(req, res) {
     try {
-        const id = req.query.id;
+        const id = req.params.id;
         const deletedTransaction = await TransactionService.remove(id);
         // console.log(deletedTransaction);
         if (!deletedTransaction)

@@ -57,7 +57,7 @@ export async function updateTransaction(req: Request, res: Response) {
 
 export async function deleteTransaction(req: Request, res: Response) {
   try {
-    const id = req.query.id as string;
+    const id = req.params.id as string;
     const deletedTransaction = await TransactionService.remove(id);
     // console.log(deletedTransaction);
     if (!deletedTransaction) return res.status(404).json({ message: "Transaction not found" });

@@ -4,14 +4,12 @@ import { transactionValidator } from "../middlewares/validator";
 
 const route = Router();
 
-route.get("/", TransactionController.getAllTransactionsByDate);
-route.get("/all", TransactionController.getAllTransactions);
+route.post("/", transactionValidator, TransactionController.createTransaction);
+route.put("/", transactionValidator, TransactionController.updateTransaction);
+route.get("/", TransactionController.getAllTransactions);
+route.delete("/:id", TransactionController.deleteTransaction);
+route.get("/by-date", TransactionController.getAllTransactionsByDate);
 route.get("/total", TransactionController.getTotalTransaction);
 route.get("/:id", TransactionController.getTransactionById);
-route.delete("/delete", TransactionController.deleteTransaction);
 
-route.post("/add", transactionValidator, TransactionController.createTransaction);
-route.put("/update", transactionValidator, TransactionController.updateTransaction);
-
-const TransactionRoute = route;
-export default TransactionRoute;
+export default route;
