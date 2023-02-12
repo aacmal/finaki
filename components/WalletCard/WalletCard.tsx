@@ -1,6 +1,6 @@
 import IconWrapper from "@/dls/IconWrapper";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
-import { WalletData } from "@/utils/api/types/Wallet";
+import { WalletData } from "@/types/Wallet";
 import { updateWalletColor } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

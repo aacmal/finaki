@@ -1,7 +1,5 @@
 "use client";
 
-import { TotalTransactionByDay } from "@/utils/api/transactionApi";
-
 import {
   AreaChart as ArChart,
   Area,
@@ -15,12 +13,18 @@ import ChartWrapper from "../ChartWrapper";
 import renderAreaTooltip from "./AreaTooltip";
 
 type Props = {
-  data: TotalTransactionByDay[] | undefined;
+  data:
+    | {
+        day: string;
+        timestamp: string;
+        value: number;
+      }[]
+    | undefined;
 };
 
 const AreaChart = ({ data }: Props) => {
   if (!data) return <></>;
-
+  console.log(data);
   return (
     <ChartContainer>
       <ChartHeader title="Aktivitas">
@@ -40,7 +44,7 @@ const AreaChart = ({ data }: Props) => {
             axisLine={false}
             tickLine={false}
             interval="preserveStartEnd"
-            dataKey="_id.day"
+            dataKey="day"
           />
           <CartesianGrid
             opacity={0.5}
@@ -53,7 +57,7 @@ const AreaChart = ({ data }: Props) => {
             isAnimationActive
             strokeWidth={2}
             type="monotone"
-            dataKey="totalAmount"
+            dataKey="value"
             stroke="#3b82f6"
             fillOpacity={1}
             fill="url(#colorBl)"

@@ -17,6 +17,7 @@
     "paths": {
       "@/icons/*": ["./components/icons/*"],
       "@/types/*": ["./types/*"],
+      "@/api/*": ["./utils/api/*"],
       "@/dls/*": ["./components/dls/*"],
       "@/components/*": ["./components/*"],
       "@/utils/*": ["./utils/*"],

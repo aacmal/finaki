@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getAllTransactions,
   getTotalTransactionByPeriod,
-} from "@/utils/api/transactionApi";
+} from "@/api/transaction";
 
 type Props = {};
 
@@ -39,9 +39,15 @@ const Page = (props: Props) => {
     }
   );
 
+  const areaChartData = totalTransactionQuery.data?.map((item) => ({
+    day: item._id.day as unknown as string,
+    timestamp: item.timestamp,
+    value: item.totalAmount,
+  }));
+
   return (
     <div className="flex flex-col gap-4">
-      <AreaChart data={totalTransactionQuery.data} />
+      <AreaChart data={areaChartData} />
       <BarChart data={totalTransactionQuery.data} />
       <div className="flex gap-4 h-fit flex-col lg:flex-row">
         <PieChart data={null} />

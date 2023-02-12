@@ -3,7 +3,7 @@
 import Heading from "@/dls/Heading";
 import TextWithIcon from "@/dls/TextWithIcon";
 import ArrowIcon from "@/icons/ArrowIcon";
-import { TotalTransactionByDay } from "@/utils/api/transactionApi";
+import { TotalTransactionByDay } from "@/types/Transaction";
 import classNames from "classnames";
 import React from "react";
 import {

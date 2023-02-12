@@ -1,18 +1,16 @@
 "use client";
 
+import { LoginInput } from "@/api/types/AuthAPI";
 import AuthCard from "@/components/AuthCard/AuthCard";
 import AuthCardContent from "@/components/AuthCard/AuthCardContent";
-import Button from "@/dls/Button/Button";
 import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
 import { Routes } from "@/types/Routes";
-import { LoginInput, loginUser } from "@/utils/api/authApi";
+import { loginUser } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
-import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -51,7 +49,7 @@ const LoginPage = (props: Props) => {
   useEffect(() => {
     if (isSuccess) {
       router.push(Routes.App);
-      localStorage.setItem("access-token", data.data.access_token);
+      localStorage.setItem("access-token", data.accessToken);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);

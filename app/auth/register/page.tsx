@@ -8,15 +8,14 @@ import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
-import { RegisterInput, registerUser } from "@/utils/api/authApi";
+import { registerUser } from "@/utils/api/authApi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
-import classNames from "classnames";
 import LoadingButton from "@/dls/Button/LoadingButton";
+import { RegisterInput } from "@/api/types/AuthAPI";
 
 type Props = {};
 
@@ -50,7 +49,7 @@ const RegisterPage = (props: Props) => {
 
   useEffect(() => {
     if (isSuccess) {
-      localStorage.setItem("access-token", data.data.access_token);
+      localStorage.setItem("access-token", data.accessToken);
       router.push(Routes.App);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

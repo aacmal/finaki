@@ -2,7 +2,7 @@
 
 import AllTransactions from "@/components/Transactions/AllTransactions/AllTransactions";
 import { useQuery } from "@tanstack/react-query";
-import { getTransactionsByDate } from "@/utils/api/transactionApi";
+import { getTransactionsByDate } from "@/api/transaction";
 
 type Props = {};
 

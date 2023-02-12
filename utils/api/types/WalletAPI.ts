@@ -1,13 +1,7 @@
+import { WalletData } from "@/types/Wallet";
 import { GenericResponse } from "./Api";
 
 export interface WalletInput {
-  name: string;
-  balance?: number;
-  color: string;
-}
-
-export interface WalletData {
-  _id: string;
   name: string;
   balance?: number;
   color: string;

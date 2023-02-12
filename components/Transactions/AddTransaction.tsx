@@ -12,14 +12,12 @@ import ArrowIcon from "@/icons/ArrowIcon";
 import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { Transaction } from "@/types/Transaction";
-import {
-  insertNewTransaction,
-  TransactionInput,
-} from "@/utils/api/transactionApi";
+import { insertNewTransaction } from "@/api/transaction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { TransactionInput } from "@/api/types/TransactionAPI";
 
 type Props = {};
 

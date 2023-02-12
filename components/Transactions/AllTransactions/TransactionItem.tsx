@@ -2,16 +2,13 @@
 
 import Input from "@/dls/Form/Input";
 import { Transaction, TransactionData } from "@/types/Transaction";
-import {
-  deleteTransaction,
-  editTransaction,
-  TransactionInput,
-} from "@/utils/api/transactionApi";
+import { deleteTransaction, editTransaction } from "@/api/transaction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import TransactionOption from "./TransactionOption";
+import { TransactionInput } from "@/api/types/TransactionAPI";
 
 type Props = {
   transaction: Transaction;
@@ -157,7 +154,7 @@ const TransactionItem = ({ transaction }: Props) => {
           </div>
           <div className="w-[10%] text-center">
             <span className="px-3 text-orange-700 bg-orange-200 text-sm rounded-3xl">
-              {transaction.category}
+              {"null"}
             </span>
           </div>
           <div

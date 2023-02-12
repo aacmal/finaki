@@ -16,21 +16,15 @@ instance.interceptors.request.use(
 
     if (currentToken === null || currentToken === undefined) {
       const refreshToken = await refreshAccessToken();
-      window?.localStorage.setItem(
-        "access-token",
-        refreshToken.data.access_token
-      );
-      currentToken = refreshToken.data.access_token;
+      window?.localStorage.setItem("access-token", refreshToken.accessToken);
+      currentToken = refreshToken.accessToken;
     } else {
       const decodedToken = jwtDecode(currentToken);
       const currentTime = new Date().getTime();
       if ((decodedToken as any).exp * 1000 < currentTime) {
         const refreshToken = await refreshAccessToken();
-        window?.localStorage.setItem(
-          "access-token",
-          refreshToken.data.access_token
-        );
-        currentToken = refreshToken.data.access_token;
+        window?.localStorage.setItem("access-token", refreshToken.accessToken);
+        currentToken = refreshToken.accessToken;
       }
     }
 

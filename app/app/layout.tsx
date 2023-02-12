@@ -1,10 +1,10 @@
 "use client";
 
+import { getUserData } from "@/api/user";
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
 import AppNav from "@/components/Navigation/AppNav/AppNav";
 import { Routes } from "@/types/Routes";
-import { getUserData } from "@/utils/api/commonApi";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -19,7 +19,7 @@ const AppLayout = ({ children }: Props) => {
   const router = useRouter();
 
   const { isLoading, data, isError } = useQuery(["user"], {
-    queryFn: getUserData,
+    queryFn: () => getUserData(),
     onError: (error) => {
       console.log("user error", error);
     },

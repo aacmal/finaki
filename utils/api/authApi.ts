@@ -1,17 +1,13 @@
-import { GenericResponse, LoginResponse } from "@/types/Api";
 import axios from "axios";
 import { BASE_URL } from "./config";
-
-export interface RegisterInput {
-  email: string;
-  password: string;
-  name: string;
-}
-
-export interface LoginInput {
-  email: string;
-  password: string;
-}
+import { GenericResponse } from "./types/Api";
+import {
+  LoginInput,
+  LoginResponse,
+  LogoutResponse,
+  RefreshTokenResponse,
+  RegisterInput,
+} from "./types/AuthAPI";
 
 export const authApi = axios.create({
   baseURL: `${BASE_URL}/auth`,
@@ -19,26 +15,26 @@ export const authApi = axios.create({
 });
 
 export const refreshAccessToken = async () => {
-  const response = await authApi.get("/refresh-token");
-  return response.data;
+  const response = await authApi.get<RefreshTokenResponse>("/refresh-token");
+  return response.data.data;
 };
 
-export const loginUser = async (user: LoginInput) => {
-  const response = await authApi.post("/sign", user);
-  return response.data;
+export const loginUser = async (data: LoginInput) => {
+  const response = await authApi.post<LoginResponse>("/sign", data);
+  return response.data.data;
 };
 
-export const registerUser = async (user: RegisterInput) => {
-  const response = await authApi.post("/register", user);
-  return response.data;
+export const registerUser = async (data: RegisterInput) => {
+  const response = await authApi.post<LoginResponse>("/register", data);
+  return response.data.data;
 };
 
 export const logoutUser = async () => {
-  const response = await authApi.delete("/logout");
-  return response;
+  const response = await authApi.delete<LogoutResponse>("/logout");
+  return response.data.message;
 };
 
 export const getUser = async () => {
   const response = await authApi.get<GenericResponse>("/user");
-  return response.data;
+  return response.data.data;
 };

@@ -5,7 +5,7 @@ import {
   AllWalletResponse,
   WalletResponse,
   UpdatedWalletColorResponse,
-} from "./types/Wallet";
+} from "./types/WalletAPI";
 
 export const createNewWallet = async (data: WalletInput) => {
   const response = await instance.post("/wallets", data);
