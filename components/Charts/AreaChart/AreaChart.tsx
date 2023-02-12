@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import {
   AreaChart as ArChart,
   Area,
@@ -11,8 +12,10 @@ import ChartContainer from "../ChartContainer";
 import ChartHeader from "../ChartHeader";
 import ChartWrapper from "../ChartWrapper";
 import renderAreaTooltip from "./AreaTooltip";
+import { stopColor } from "./constants";
 
 type Props = {
+  chartName?: string;
   data:
     | {
         day: string;
@@ -20,22 +23,48 @@ type Props = {
         value: number;
       }[]
     | undefined;
+  size?: "medium" | "large";
+  theme?: "default" | "transparent";
+  xAxis?: boolean;
+  horizonalLines?: boolean;
 };
 
-const AreaChart = ({ data }: Props) => {
+const AreaChart = ({
+  data,
+  size = "large",
+  theme = "default",
+  xAxis = true,
+  horizonalLines = true,
+  chartName,
+}: Props) => {
   if (!data) return <></>;
   console.log(data);
   return (
-    <ChartContainer>
-      <ChartHeader title="Aktivitas">
-        <span className="text-sm">7 Hari</span>
-      </ChartHeader>
-      <ChartWrapper className="w-full h-52">
+    <ChartContainer theme={theme}>
+      {chartName && (
+        <ChartHeader title="Aktivitas">
+          <span className="text-sm">7 Hari</span>
+        </ChartHeader>
+      )}
+      <ChartWrapper
+        className={classNames("w-full", {
+          "h-44 md:h-52": size === "large",
+          "h-40 md:h-44": size === "medium",
+        })}
+      >
         <ArChart data={data}>
           <defs>
             <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.07} />
+              <stop
+                offset="0%"
+                stopColor={(stopColor as any)[theme]}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="100%"
+                stopColor={(stopColor as any)[theme]}
+                stopOpacity={0.05}
+              />
             </linearGradient>
           </defs>
           <XAxis
@@ -45,12 +74,14 @@ const AreaChart = ({ data }: Props) => {
             tickLine={false}
             interval="preserveStartEnd"
             dataKey="day"
+            visibility={xAxis ? "visible" : "hidden"}
           />
           <CartesianGrid
             opacity={0.5}
             vertical={false}
             className="dark:opacity-20"
             horizontal={true}
+            visibility={horizonalLines ? "visible" : "hidden"}
           />
           <Tooltip content={renderAreaTooltip} />
           <Area
@@ -58,7 +89,7 @@ const AreaChart = ({ data }: Props) => {
             strokeWidth={2}
             type="monotone"
             dataKey="value"
-            stroke="#3b82f6"
+            stroke={(stopColor as any)[theme]}
             fillOpacity={1}
             fill="url(#colorBl)"
           />

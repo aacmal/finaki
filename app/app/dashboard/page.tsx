@@ -47,7 +47,7 @@ const Page = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <AreaChart data={areaChartData} />
+      <AreaChart chartName="Aktivitas" data={areaChartData} />
       <BarChart data={totalTransactionQuery.data} />
       <div className="flex gap-4 h-fit flex-col lg:flex-row">
         <PieChart data={null} />
