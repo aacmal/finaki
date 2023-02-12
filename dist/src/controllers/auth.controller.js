@@ -94,7 +94,7 @@ async function register(req, res) {
         res.status(200).json({
             message: "User has been created successfully",
             data: {
-                access_token: accessToken,
+                accessToken,
             },
         });
     }
@@ -140,7 +140,7 @@ async function sign(req, res) {
         res.status(200).json({
             message: "User has been logged in successfully",
             data: {
-                access_token: accessToken,
+                accessToken,
             },
         });
     }
@@ -176,7 +176,7 @@ async function refreshToken(req, res) {
             res.status(200).json({
                 message: "Access token has been refreshed successfully",
                 data: {
-                    access_token: accessToken,
+                    accessToken,
                 },
             });
         });

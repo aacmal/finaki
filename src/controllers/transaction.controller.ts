@@ -77,7 +77,10 @@ export async function getTransactionById(req: Request, res: Response) {
   try {
     const id = req.params.id;
     const transaction = await TransactionService.getById(id);
-    res.json(transaction);
+    res.json({
+      message: "Transaction has been fetched successfully",
+      data: transaction,
+    });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -96,7 +99,10 @@ export async function getTotalTransaction(req: Request, res: Response) {
     );
 
     if (!totalTranscation) return res.status(404).json({ message: "No data found" });
-    res.json(totalTranscation);
+    res.json({
+      message: "Total transaction has been fetched successfully",
+      data: totalTranscation,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -107,7 +113,10 @@ export async function getAllTransactions(req: Request, res: Response) {
     const userId = req.user;
     const limit = parseInt(req.query.limit as string) ?? 0;
     const transactions = await TransactionService.getTransactions(userId as Types.ObjectId, limit);
-    res.json(transactions);
+    res.json({
+      message: "Transactions has been fetched successfully",
+      data: transactions,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

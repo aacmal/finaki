@@ -102,7 +102,10 @@ async function getTransactionById(req, res) {
     try {
         const id = req.params.id;
         const transaction = await TransactionService.getById(id);
-        res.json(transaction);
+        res.json({
+            message: "Transaction has been fetched successfully",
+            data: transaction,
+        });
     }
     catch (error) {
         res.status(404).json({ message: error.message });
@@ -118,7 +121,10 @@ async function getTotalTransaction(req, res) {
         const totalTranscation = await TransactionService.getTotalTransactionByPeriods(userId, interval, timezone);
         if (!totalTranscation)
             return res.status(404).json({ message: "No data found" });
-        res.json(totalTranscation);
+        res.json({
+            message: "Total transaction has been fetched successfully",
+            data: totalTranscation,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -131,7 +137,10 @@ async function getAllTransactions(req, res) {
         const userId = req.user;
         const limit = (_a = parseInt(req.query.limit)) !== null && _a !== void 0 ? _a : 0;
         const transactions = await TransactionService.getTransactions(userId, limit);
-        res.json(transactions);
+        res.json({
+            message: "Transactions has been fetched successfully",
+            data: transactions,
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

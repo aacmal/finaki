@@ -75,7 +75,7 @@ async function register(req: Request, res: Response) {
     res.status(200).json({
       message: "User has been created successfully",
       data: {
-        access_token: accessToken,
+        accessToken,
       },
     });
   } catch (error) {
@@ -124,7 +124,7 @@ async function sign(req: Request, res: Response) {
     res.status(200).json({
       message: "User has been logged in successfully",
       data: {
-        access_token: accessToken,
+        accessToken,
       },
     });
   } catch (error) {
@@ -161,7 +161,7 @@ async function refreshToken(req: Request, res: Response) {
       res.status(200).json({
         message: "Access token has been refreshed successfully",
         data: {
-          access_token: accessToken,
+          accessToken,
         },
       });
     });
