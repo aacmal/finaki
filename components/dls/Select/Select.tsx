@@ -11,6 +11,7 @@ interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
   children: React.ReactNode;
   placeholder: string;
   name: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export type SelectContextType = {
@@ -57,6 +58,18 @@ const Select = forwardRef(function Select(
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedValue) {
+      props.onChange?.({
+        target: {
+          name: props.name,
+          value: selectedValue,
+        },
+      } as React.ChangeEvent<HTMLInputElement>);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedValue]);
+
   return (
     <div
       className="select bg-gray-100 relative text-slate-800 dark:text-slate-100 dark:bg-slate-500 px-3 w-32 py-4 whitespace-pre rounded-xl cursor-pointer focus:ring-2 dark:focus:ring-slate-400 outline-none transition-all duration-200"
@@ -64,12 +77,11 @@ const Select = forwardRef(function Select(
       onClick={toggle}
     >
       <input
-        {...props}
-        type="text"
+        aria-hidden="true"
         className="sr-only"
-        value={selectedValue || ""}
         ref={ref}
-        onChange={() => {}} // this is to prevent error
+        {...props}
+        value={props.value || ""}
       />
       <div className="flex items-center justify-between">
         <div className="capitalize">{selectedValue || placeholder}</div>

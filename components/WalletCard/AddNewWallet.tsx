@@ -1,5 +1,6 @@
 "use cleint";
 
+import { WalletInput } from "@/api/types/WalletAPI";
 import LoadingButton from "@/dls/Button/LoadingButton";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
@@ -11,7 +12,7 @@ import Select from "@/dls/Select/Select";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { createNewWallet } from "@/utils/api/wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { indicatorColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
 
@@ -20,25 +21,21 @@ type Props = {};
 const AddNewWallet = (props: Props) => {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, getValues } = useForm();
+  const { register, handleSubmit, control } = useForm();
   const { mutate, isLoading, isSuccess } = useMutation({
     mutationFn: createNewWallet,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["wallets"]);
-      console.log(data);
+      queryClient.setQueryData(["wallets"], (oldData: any) => {
+        return [data, ...oldData];
+      });
+      queryClient.refetchQueries(["total-transactions"]);
+      queryClient.invalidateQueries(["transactions"]);
+      queryClient.invalidateQueries(["recent-transactions"]);
     },
   });
 
-  const onSubmitHandler = (e: any) => {
-    e.preventDefault();
-    const { name, color, balance } = e.target;
-    const walletData = {
-      name: name.value,
-      color: color.value,
-      balance: balance.value,
-    };
-    mutate(walletData);
-    console.log(walletData);
+  const onSubmitHandler = (data: any) => {
+    mutate(data as WalletInput);
   };
 
   return (
@@ -59,7 +56,7 @@ const AddNewWallet = (props: Props) => {
             </IconWrapper>
           </ModalCloseTringger>
         </div>
-        <form action="" onSubmit={onSubmitHandler}>
+        <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
           <div className="mt-8 space-y-8">
             <InputWithLabel
               label="Nama Dompet"
@@ -70,16 +67,24 @@ const AddNewWallet = (props: Props) => {
               {...register("name")}
             />
             <div className="flex items-center gap-4">
-              <Select required placeholder="Warna" {...register("color")}>
-                {Object.keys(indicatorColor).map((key: string) => (
-                  <Option key={key} value={key}>
-                    <div className="flex items-center gap-3 capitalize">
-                      <ColorCircle dataColor={(indicatorColor as any)[key]} />
-                      {key}
-                    </div>
-                  </Option>
-                ))}
-              </Select>
+              <Controller
+                name="color"
+                control={control}
+                render={({ field }) => (
+                  <Select required placeholder="Warna" {...field}>
+                    {Object.keys(indicatorColor).map((key: string) => (
+                      <Option key={key} value={key}>
+                        <div className="flex items-center gap-3 capitalize">
+                          <ColorCircle
+                            dataColor={(indicatorColor as any)[key]}
+                          />
+                          {key}
+                        </div>
+                      </Option>
+                    ))}
+                  </Select>
+                )}
+              />
               <InputWithLabel
                 label="Saldo Awal"
                 id="wallet-balance"
