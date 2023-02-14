@@ -31,7 +31,7 @@ const ModalContent = ({ children, closeOnOverlayClick, className }: Props) => {
           className
         )}
       >
-        {children}
+        {isOpen && children}
       </div>
     </div>
   );

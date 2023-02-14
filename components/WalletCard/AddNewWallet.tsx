@@ -74,7 +74,12 @@ const AddNewWallet = (props: Props) => {
                 name="color"
                 control={control}
                 render={({ field }) => (
-                  <Select required placeholder="Warna" {...field}>
+                  <Select
+                    minWidth="w-24"
+                    required
+                    placeholder="Warna"
+                    {...field}
+                  >
                     {Object.keys(indicatorColor).map((key: string) => (
                       <Option key={key} value={key}>
                         <div className="flex items-center gap-3 capitalize">
