@@ -1,5 +1,6 @@
 import IconWrapper from "@/dls/IconWrapper";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
+import { QueryKey } from "@/types/QueryKey";
 import { WalletData } from "@/types/Wallet";
 import { updateWalletColor } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
@@ -34,8 +35,7 @@ const WalletCard = ({
     mutationFn: updateWalletColor,
     onSuccess: (data) => {
       // update colorKey in cache
-      queryClient.setQueryData(["wallets"], (oldData: any) => {
-        console.log("oldData", oldData);
+      queryClient.setQueryData([QueryKey.WALLETS], (oldData: any) => {
         return oldData.map((wallet: WalletData) => {
           if (wallet._id === id) {
             return { ...wallet, color: data.color };

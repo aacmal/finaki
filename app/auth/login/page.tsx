@@ -28,22 +28,20 @@ const LoginPage = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation(
-    (userData: LoginInput) => loginUser(userData),
-    {
-      onError: (error) => {
-        console.log((error as any).response.data.errors);
-        const errors = (error as any).response.data.errors;
+  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+    mutationFn: loginUser,
+    onError: (error) => {
+      console.log((error as any).response.data.errors);
+      const errors = (error as any).response.data.errors;
 
-        errors.forEach(({ msg, param }: any) => {
-          setError(param, { message: msg }, { shouldFocus: true });
-        });
-      },
-    }
-  );
+      errors.forEach(({ msg, param }: any) => {
+        setError(param, { message: msg }, { shouldFocus: true });
+      });
+    },
+  });
 
   function onSubmitHandler(values: any) {
-    mutate(values);
+    mutate(values as LoginInput);
   }
 
   useEffect(() => {

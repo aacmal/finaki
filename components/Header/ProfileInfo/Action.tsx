@@ -4,6 +4,7 @@ import OnHoverWrapper from "@/dls/ActionWrapper/OnHoverWrapper";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowRectangleIcon from "@/icons/ArrowRectangleIcon";
 import UserIcon from "@/icons/UserIcon";
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { logoutUser } from "@/utils/api/authApi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -26,7 +27,7 @@ const Action = (props: Props) => {
         localStorage.removeItem("access-token");
         router.push(Routes.Home);
         queryClient.invalidateQueries();
-        queryClient.removeQueries(["user"]);
+        queryClient.removeQueries([QueryKey.USER]);
       })
       .catch((err) => {
         console.log(err);

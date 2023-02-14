@@ -3,16 +3,17 @@
 import AllTransactions from "@/components/Transactions/AllTransactions/AllTransactions";
 import { useQuery } from "@tanstack/react-query";
 import { getTransactionsByDate } from "@/api/transaction";
+import { QueryKey } from "@/types/QueryKey";
 
 type Props = {};
 
 const TransactionsPage = (props: Props) => {
-  const { data, error } = useQuery(["transactions"], getTransactionsByDate, {
-    onSuccess: (data) => {},
+  const { data, error } = useQuery({
+    queryKey: [QueryKey.TRANSACTIONS],
+    queryFn: getTransactionsByDate,
     onError: (error) => {
-      console.log("error", error);
+      console.log(error);
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   return (

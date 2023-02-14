@@ -18,6 +18,7 @@ import classNames from "classnames";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { TransactionInput } from "@/api/types/TransactionAPI";
+import { QueryKey } from "@/types/QueryKey";
 
 type Props = {};
 
@@ -28,12 +29,15 @@ const AddTransaction = (props: Props) => {
   const { isLoading, mutate, isSuccess, isError } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
-      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
-        if (!oldData) return;
-        return [data.data, ...oldData];
-      });
-      queryClient.invalidateQueries(["transactions"]);
-      queryClient.refetchQueries(["total-transactions"]);
+      queryClient.setQueryData(
+        [QueryKey.RECENT_TRANSACTIONS],
+        (oldData: any) => {
+          if (!oldData) return;
+          return [data.data, ...oldData];
+        }
+      );
+      queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
+      queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
       reset();
     },

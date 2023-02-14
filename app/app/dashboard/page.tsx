@@ -10,34 +10,26 @@ import {
   getAllTransactions,
   getTotalTransactionByPeriod,
 } from "@/api/transaction";
+import { QueryKey } from "@/types/QueryKey";
 
 type Props = {};
 
 const Page = (props: Props) => {
-  const totalTransactionQuery = useQuery(
-    ["total-transactions"],
-    () => getTotalTransactionByPeriod("week"),
-    {
-      onSuccess: (data) => {
-        // console.log(data);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    }
-  );
+  const totalTransactionQuery = useQuery({
+    queryKey: [QueryKey.TOTAL_TRANSACTIONS],
+    queryFn: () => getTotalTransactionByPeriod("week"),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
-  const recentTransactionsQuery = useQuery(
-    ["recent-transactions"],
-    () => getAllTransactions(4),
-    {
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    }
-  );
+  const recentTransactionsQuery = useQuery({
+    queryKey: [QueryKey.RECENT_TRANSACTIONS],
+    queryFn: () => getAllTransactions(4),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   const areaChartData = totalTransactionQuery.data?.map((item) => ({
     day: item._id.day as unknown as string,

@@ -1,5 +1,6 @@
 "use client";
 
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,7 @@ type Props = {
 };
 
 const AuthLayout = ({ children }: Props) => {
-  const { isSuccess } = useQuery(["user"]);
+  const { isSuccess } = useQuery([QueryKey.USER]);
   const router = useRouter();
 
   useEffect(() => {

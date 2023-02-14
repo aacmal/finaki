@@ -9,6 +9,7 @@ import ArrowIcon from "@/icons/ArrowIcon";
 import ArrowsIcon from "@/icons/ArrowsIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PlusIcon from "@/icons/PlusIcon";
+import { QueryKey } from "@/types/QueryKey";
 import { getOneWallet } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useQuery } from "@tanstack/react-query";
@@ -28,12 +29,11 @@ const WalletPage = (props: Props) => {
   const router = useRouter();
   const id = urlPath!.split("/")[3];
   const { data } = useQuery({
-    queryKey: ["wallets", id],
+    queryKey: [QueryKey.WALLETS, id],
     queryFn: () => getOneWallet(id),
-    onSuccess: (data) => {
-      console.log("one wallet", data);
+    onError: (error) => {
+      console.log(error);
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const areaChartData = [

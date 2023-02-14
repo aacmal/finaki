@@ -29,22 +29,19 @@ const RegisterPage = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation(
-    (userData: RegisterInput) => registerUser(userData),
-    {
-      onError: (error) => {
-        // console.log((error as any).response.data.errors);
-        const errors = (error as any).response.data.errors;
+  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+    mutationFn: registerUser,
+    onError: (error) => {
+      const errors = (error as any).response.data.errors;
 
-        errors.forEach(({ msg, param }: any) => {
-          setError(param, { message: msg }, { shouldFocus: true });
-        });
-      },
-    }
-  );
+      errors.forEach(({ msg, param }: any) => {
+        setError(param, { message: msg }, { shouldFocus: true });
+      });
+    },
+  });
 
   const onSubmitHandler = (values: any) => {
-    mutate(values);
+    mutate(values as RegisterInput);
   };
 
   useEffect(() => {

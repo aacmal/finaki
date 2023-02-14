@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import TransactionOption from "./TransactionOption";
 import { TransactionInput } from "@/api/types/TransactionAPI";
+import { QueryKey } from "@/types/QueryKey";
 
 type Props = {
   transaction: Transaction;
@@ -25,9 +26,9 @@ const TransactionItem = ({ transaction }: Props) => {
     mutationFn: deleteTransaction,
     onSuccess: (data) => {
       // refetch total transactions
-      queryClient.refetchQueries(["total-transactions"]);
+      queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
       // update transactions data
-      queryClient.setQueryData(["transactions"], (oldData: any) => {
+      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
             _id: transactionData._id,
@@ -40,13 +41,16 @@ const TransactionItem = ({ transaction }: Props) => {
         return newData;
       });
       // update recent transactions data
-      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
-        if (!oldData) return;
-        const newData = oldData.filter(
-          (transaction: Transaction) => transaction._id !== data._id
-        );
-        return newData;
-      });
+      queryClient.setQueryData(
+        [QueryKey.RECENT_TRANSACTIONS],
+        (oldData: any) => {
+          if (!oldData) return;
+          const newData = oldData.filter(
+            (transaction: Transaction) => transaction._id !== data._id
+          );
+          return newData;
+        }
+      );
     },
   });
 
@@ -54,12 +58,10 @@ const TransactionItem = ({ transaction }: Props) => {
     mutationFn: editTransaction,
     onSuccess: (data) => {
       setIsOnEdit(false);
-      console.log("edit", data);
-
       // refetch total transactions
-      queryClient.refetchQueries(["total-transactions"]);
+      queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
       // update transactions data
-      queryClient.setQueryData(["transactions"], (oldData: any) => {
+      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
           const newTransactionData: TransactionData = {
             _id: transactionData._id,
@@ -81,23 +83,26 @@ const TransactionItem = ({ transaction }: Props) => {
         return newData;
       });
       // update recent transaction data
-      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
-        if (!oldData) return;
-        const newData: Transaction[] = oldData.map(
-          (oldTransaction: Transaction) => {
-            if (oldTransaction._id === data._id) {
-              return {
-                ...oldTransaction,
-                description: data.description,
-                amount: data.amount,
-                type: data.type,
-              };
+      queryClient.setQueryData(
+        [QueryKey.RECENT_TRANSACTIONS],
+        (oldData: any) => {
+          if (!oldData) return;
+          const newData: Transaction[] = oldData.map(
+            (oldTransaction: Transaction) => {
+              if (oldTransaction._id === data._id) {
+                return {
+                  ...oldTransaction,
+                  description: data.description,
+                  amount: data.amount,
+                  type: data.type,
+                };
+              }
+              return oldTransaction;
             }
-            return oldTransaction;
-          }
-        );
-        return newData;
-      });
+          );
+          return newData;
+        }
+      );
     },
   });
 

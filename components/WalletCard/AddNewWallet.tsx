@@ -10,6 +10,7 @@ import ModalTrigger from "@/dls/Modal/ModalTrigger";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
 import XmarkIcon from "@/icons/XmarkIcon";
+import { QueryKey } from "@/types/QueryKey";
 import { createNewWallet } from "@/utils/api/wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
@@ -25,12 +26,14 @@ const AddNewWallet = (props: Props) => {
   const { mutate, isLoading, isSuccess } = useMutation({
     mutationFn: createNewWallet,
     onSuccess: (data) => {
-      queryClient.setQueryData(["wallets"], (oldData: any) => {
+      queryClient.setQueryData([QueryKey.WALLETS], (oldData: any) => {
         return [data, ...oldData];
       });
-      queryClient.refetchQueries(["total-transactions"]);
-      queryClient.invalidateQueries(["transactions"]);
-      queryClient.invalidateQueries(["recent-transactions"]);
+      if (data.balance > 0) {
+        queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
+        queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
+        queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
+      }
     },
   });
 
@@ -86,7 +89,7 @@ const AddNewWallet = (props: Props) => {
                 )}
               />
               <InputWithLabel
-                label="Saldo Awal"
+                label="Saldo Awal (opsional)"
                 id="wallet-balance"
                 type="number"
                 placeholder="Rp. 12000 (opsional)"

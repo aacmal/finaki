@@ -4,6 +4,7 @@ import { getUserData } from "@/api/user";
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
 import AppNav from "@/components/Navigation/AppNav/AppNav";
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -18,11 +19,13 @@ const AppLayout = ({ children }: Props) => {
   const setUser = useStore((state) => state.setUser);
   const router = useRouter();
 
-  const { isLoading, data, isError } = useQuery(["user"], {
-    queryFn: () => getUserData(),
-    onError: (error) => {
-      console.log("user error", error);
+  const { isLoading, data, isError } = useQuery({
+    queryKey: [QueryKey.USER],
+    queryFn: getUserData,
+    onSuccess: (data) => {
+      setUser(data);
     },
+    staleTime: 0,
   });
 
   useEffect(() => {

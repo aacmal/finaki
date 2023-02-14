@@ -4,6 +4,7 @@ import AddNewWallet from "@/components/WalletCard/AddNewWallet";
 import WalletCard from "@/components/WalletCard/WalletCard";
 import Button from "@/dls/Button/Button";
 import Heading from "@/dls/Heading";
+import { QueryKey } from "@/types/QueryKey";
 import { getAllWallets } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useQuery } from "@tanstack/react-query";
@@ -12,12 +13,9 @@ type Props = {};
 
 const AllWalletsPage = (props: Props) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["wallets"],
+    queryKey: [QueryKey.WALLETS],
     queryFn: getAllWallets,
-    onSuccess: (data) => {
-      console.log("all wallets", data);
-    },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    onSuccess: (data) => {},
   });
 
   if (isLoading) return <Heading level={3}>Mengambil data...</Heading>;
