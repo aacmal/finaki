@@ -10,9 +10,11 @@ import ChevronIcon from "@/icons/ChevronIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PencilIcon from "@/icons/PencilIcon";
 import TrashIcon from "@/icons/TrashIcon";
+import useStore from "../../stores/store";
 import { indicatorColor, WalletColor } from "./constants";
 
 type Props = {
+  id: string;
   colorKey: WalletColor;
   handleUpdateColor: () => void;
   setColorKey: (color: WalletColor) => void;
@@ -39,9 +41,12 @@ const SubMenuTrigger = () => (
 
 const WalletCardDropdown = ({
   colorKey,
+  id,
   handleUpdateColor,
   setColorKey,
 }: Props) => {
+  const setDeleteWalletId = useStore((state) => state.setDeleteWalletId);
+
   const updateWhenClose = (isOpen: boolean) => {
     if (!isOpen) {
       handleUpdateColor();
@@ -69,8 +74,10 @@ const WalletCardDropdown = ({
         ))}
       </DropdownSubMenu>
       <DropdownItem
+        shouldCloseAfterClick
         className="hover:!bg-red-400 hover:!text-white"
         icon={<TrashIcon />}
+        onClick={() => setDeleteWalletId(id)}
       >
         Hapus dompet
       </DropdownItem>

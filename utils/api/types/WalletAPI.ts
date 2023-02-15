@@ -1,5 +1,5 @@
 import { WalletData } from "@/types/Wallet";
-import { GenericResponse } from "./Api";
+import { GenericRequest, GenericResponse } from "./Api";
 
 export interface WalletInput {
   name: string;
@@ -27,5 +27,14 @@ export interface UpdatedWalletColorResponse extends GenericResponse {
   data: {
     _id: string;
     color: string;
+  };
+}
+
+export interface DeleteWalletRequest extends GenericRequest {
+  param: {
+    id: string;
+  };
+  query: {
+    deleteTransactions: boolean;
   };
 }

@@ -43,6 +43,11 @@ const WalletCard = ({
           return wallet;
         });
       });
+
+      // update single wallet color in cache
+      queryClient.setQueryData([QueryKey.WALLETS, id], (oldData: any) => {
+        return { ...oldData, color: data.color };
+      });
     },
     onError: () => {
       // reset colorKey to initColorKey
@@ -74,6 +79,7 @@ const WalletCard = ({
           {name}
         </Link>
         <WalletCardDropdown
+          id={id}
           handleUpdateColor={handleUpdateColor}
           setColorKey={setColorKey}
           colorKey={colorKey}

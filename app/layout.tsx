@@ -8,6 +8,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GetUserData from "./GetUserData";
 import HomeNav from "@/components/Navigation/HomeNav/HomeNav";
+import { Toaster } from "react-hot-toast";
 
 // font set up
 const font = Inter({
@@ -42,6 +43,7 @@ export default function RootLayout({
         className={classNames("bg-stone-100 dark:bg-slate-800", font.className)}
       >
         <QueryClientProvider client={queryClient}>
+          <Toaster />
           <GetUserData />
           <HomeNav />
           <main>{children}</main>

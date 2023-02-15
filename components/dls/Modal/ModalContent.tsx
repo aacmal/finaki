@@ -7,9 +7,15 @@ type Props = {
   children: React.ReactNode;
   closeOnOverlayClick?: boolean;
   className?: string;
+  onClickOverlay?: () => void;
 };
 
-const ModalContent = ({ children, closeOnOverlayClick, className }: Props) => {
+const ModalContent = ({
+  children,
+  closeOnOverlayClick,
+  className,
+  onClickOverlay,
+}: Props) => {
   const { isOpen, close } = useContext(ModalContext);
   return (
     <div
@@ -21,7 +27,12 @@ const ModalContent = ({ children, closeOnOverlayClick, className }: Props) => {
     >
       <ModalOverlay
         className={classNames({ invisible: !isOpen }, { visible: isOpen })}
-        onClick={closeOnOverlayClick && close}
+        onClick={() => {
+          if (closeOnOverlayClick) {
+            close();
+          }
+          onClickOverlay && onClickOverlay();
+        }}
       />
       <div
         className={classNames(

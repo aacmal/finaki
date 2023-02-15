@@ -1,4 +1,5 @@
 import { instance } from "./api";
+import { makeUrl } from "./config";
 import {
   UpdatedWalletResponse,
   WalletInput,
@@ -6,6 +7,7 @@ import {
   WalletResponse,
   UpdatedWalletColorResponse,
   CreatedWalletResponse,
+  DeleteWalletRequest,
 } from "./types/WalletAPI";
 
 export const createNewWallet = async (data: WalletInput) => {
@@ -27,8 +29,11 @@ export const updateWallet = async (id: string, data: WalletInput) => {
   return response.data.data;
 };
 
-export const deleteWallet = async (id: string) => {
-  const response = await instance.delete(`/wallets/${id}`);
+export const deleteWallet = async (data: DeleteWalletRequest) => {
+  console.log(data);
+  const response = await instance.delete(
+    makeUrl(`/wallets/${data.param.id}`, data?.query)
+  );
   return response.data.data;
 };
 

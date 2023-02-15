@@ -7,6 +7,8 @@ interface Store {
   user: User | null;
   colorTheme: ThemeState;
   accessToken: string | null;
+  deleteWalletId: string | null;
+  setDeleteWalletId: (id: string | null) => void;
   setToken: (token: string) => void;
   setUser: (user: User | null) => void;
   setColorTheme: (theme: ThemeState) => void;
@@ -18,6 +20,8 @@ const useStore = create<Store>()(
       user: null,
       colorTheme: Theme.Light,
       accessToken: null,
+      deleteWalletId: null,
+      setDeleteWalletId: (id: string | null) => set({ deleteWalletId: id }),
       setToken: (token: string) => set({ accessToken: token }),
       setUser: (user) => set({ user }),
       setColorTheme: (theme: ThemeState) => set({ colorTheme: theme }),
