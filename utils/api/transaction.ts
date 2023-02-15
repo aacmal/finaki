@@ -14,7 +14,7 @@ export const insertNewTransaction = async (data: TransactionInput) => {
     "/transactions",
     data
   );
-  return response.data;
+  return response.data.data;
 };
 
 export const getTransactionsByDate = async () => {

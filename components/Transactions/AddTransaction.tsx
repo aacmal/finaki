@@ -13,33 +13,59 @@ import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { Transaction } from "@/types/Transaction";
 import { insertNewTransaction } from "@/api/transaction";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { TransactionInput } from "@/api/types/TransactionAPI";
 import { QueryKey } from "@/types/QueryKey";
+import { getAllWallets } from "@/api/wallet";
+import Select from "@/dls/Select/Select";
+import Option from "@/dls/Select/Option";
+import { indicatorColor } from "../WalletCard/constants";
+import { currencyFormat } from "@/utils/currencyFormat";
 
 type Props = {};
 
 const AddTransaction = (props: Props) => {
-  const { handleSubmit, register, reset } = useForm();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    control,
+    setError,
+    formState: { errors },
+  } = useForm();
   const queryClient = useQueryClient();
+
+  const walletQuery = useQuery({
+    queryKey: [QueryKey.WALLETS],
+    queryFn: getAllWallets,
+    onSuccess: (data) => {
+      // console.log(data);
+    },
+  });
 
   const { isLoading, mutate, isSuccess, isError } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
+      reset();
+      console.log("success", data);
       queryClient.setQueryData(
         [QueryKey.RECENT_TRANSACTIONS],
         (oldData: any) => {
           if (!oldData) return;
-          return [data.data, ...oldData];
+          return [data, ...oldData];
         }
       );
       queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
+      queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
-      reset();
+      if (data.walletId) {
+        queryClient.refetchQueries([QueryKey.WALLETS]);
+        queryClient.invalidateQueries([QueryKey.WALLETS, data.walletId]);
+      }
     },
     onError: (error) => {
       console.log("error", error);
@@ -51,7 +77,26 @@ const AddTransaction = (props: Props) => {
       description: values.description,
       amount: values.amount,
       type: values["transaction-type"],
+      walletId: values.wallet ?? null,
     };
+    const walletBalance = walletQuery.data?.find(
+      (wallet) => wallet._id === values.wallet
+    )?.balance;
+
+    if (values["transaction-type"] === "out" && walletBalance! < data.amount) {
+      setError(
+        "amount",
+        {
+          type: "manual",
+          message: "Saldo tidak mencukupi",
+        },
+        { shouldFocus: true }
+      );
+      return;
+    }
+
+    console.log(data, walletBalance);
+    // reset();
     mutate(data);
   };
 
@@ -124,9 +169,36 @@ const AddTransaction = (props: Props) => {
               className="flex-1"
               minLength={2}
               required
+              error={errors.amount as any}
               {...register("amount")}
             />
           </div>
+          <Controller
+            name="wallet"
+            control={control}
+            render={({ field }) => (
+              <Select
+                optional
+                className="w-full"
+                required={false}
+                placeholder="Pilih Dompet (Opsional)"
+                {...field}
+              >
+                {walletQuery.data?.map((wallet) => (
+                  <Option
+                    className={classNames(
+                      "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
+                      (indicatorColor as any)[wallet.color]
+                    )}
+                    key={wallet._id}
+                    value={wallet._id}
+                  >
+                    {wallet.name}
+                  </Option>
+                ))}
+              </Select>
+            )}
+          />
           <LoadingButton
             isLoading={isLoading}
             onLoadingText="Menambahkan"

@@ -4,7 +4,7 @@ import { SelectContext, SelectContextType } from "./Select";
 
 type Props = {
   children: React.ReactNode;
-  value: string;
+  value: string | null;
   className?: string;
 };
 
@@ -14,7 +14,8 @@ const Option = ({ children, value, className }: Props) => {
   return (
     <div
       className={classNames({
-        "p-1 dark:hover:bg-slate-400/30 rounded-md": !className,
+        "p-1 dark:hover:bg-slate-400/30 rounded-md hover:bg-slate-200/50":
+          !className,
         [className as string]: className,
       })}
       onClick={() =>

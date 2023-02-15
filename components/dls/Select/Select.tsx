@@ -6,17 +6,19 @@ import { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
 import { createContext, forwardRef } from "react";
 import { useForm } from "react-hook-form";
+import Option from "./Option";
 
 interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
   children: React.ReactNode;
   placeholder: string;
   name: string;
   minWidth?: string;
+  optional?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 type SelectedValue = {
-  value: string;
+  value: string | null;
   label: string;
 };
 
@@ -31,7 +33,7 @@ export type SelectContextType = {
 export const SelectContext = createContext<SelectContextType | null>(null);
 
 const Select = forwardRef(function Select(
-  { className, children, placeholder, ...props }: SelectProps,
+  { className, children, placeholder, optional, ...props }: SelectProps,
   ref: React.Ref<HTMLInputElement>
 ) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -55,7 +57,6 @@ const Select = forwardRef(function Select(
   useEffect(() => {
     // close the select when user clicks outside of the select
     function handleClickOutside(event: MouseEvent) {
-      console.log("handleClickOutside");
       const target = event.target as HTMLElement;
       if (!target.closest(".select")) {
         close();
@@ -79,9 +80,25 @@ const Select = forwardRef(function Select(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedValue]);
 
+  useEffect(() => {
+    if (props.value === undefined) {
+      setSelectedValue({
+        value: null,
+        label: placeholder,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.value]);
+
   return (
     <div
-      className="select bg-gray-100 relative text-slate-800 dark:text-slate-100 dark:bg-slate-500 px-3 w-auto py-4 whitespace-pre rounded-xl cursor-pointer focus:ring-2 dark:focus:ring-slate-400 outline-none transition-all duration-200"
+      className={classNames(
+        "select bg-gray-100 relative text-slate-800 dark:text-slate-100 dark:bg-slate-500 px-3 w-auto py-4 whitespace-pre rounded-xl cursor-pointer focus:ring-2 focus:ring-blue-400 outline-none transition-all duration-200",
+        {
+          "!bg-transparent ring-1 ring-gray-300": selectedValue?.value,
+          "bg-gray-100": !selectedValue?.value,
+        }
+      )}
       tabIndex={0}
       onClick={toggle}
     >
@@ -92,6 +109,7 @@ const Select = forwardRef(function Select(
         onChange={props.onChange}
         name={props.name}
         onBlur={props.onBlur}
+        required={props.required}
         value={props.value || ""}
       />
       <div
@@ -100,7 +118,7 @@ const Select = forwardRef(function Select(
           props.minWidth
         )}
       >
-        <div>{selectedValue?.label || placeholder}</div>
+        <div>{selectedValue?.value ? selectedValue.label : placeholder}</div>
         <IconWrapper className="w-4">
           <ChevronIcon
             className={classNames(
@@ -122,6 +140,7 @@ const Select = forwardRef(function Select(
             { "max-h-96 max-w-96 p-1": isOpen }
           )}
         >
+          {optional && <Option value={null}>Tidak Memilih</Option>}
           {children}
         </div>
       </SelectContext.Provider>
