@@ -4,10 +4,11 @@ import {
   UpdatedWalletResponse,
   WalletInput,
   AllWalletResponse,
-  WalletResponse,
+  WalletDetailsResponse,
   UpdatedWalletColorResponse,
   CreatedWalletResponse,
   DeleteWalletRequest,
+  WalletBalanceActivityResponse,
 } from "./types/WalletAPI";
 
 export const createNewWallet = async (data: WalletInput) => {
@@ -38,7 +39,7 @@ export const deleteWallet = async (data: DeleteWalletRequest) => {
 };
 
 export const getOneWallet = async (id: string) => {
-  const response = await instance.get<WalletResponse>(`/wallets/${id}`);
+  const response = await instance.get<WalletDetailsResponse>(`/wallets/${id}`);
   return response.data.data;
 };
 
@@ -49,3 +50,10 @@ export const updateWalletColor = async ({ id, color }: any) => {
   );
   return response.data.data;
 };
+
+// export const getWalletBalanceActivity = async (walletId: string) => {
+//   const response = await instance.get<WalletBalanceActivityResponse>(
+//     `/wallets/${walletId}/balance-activity`
+//   );
+//   return response.data.data;
+// };

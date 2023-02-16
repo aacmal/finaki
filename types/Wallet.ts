@@ -5,3 +5,8 @@ export interface WalletData {
   color: string;
   creadtedAt?: string;
 }
+
+export interface BalanceActivity {
+  timestamp: string;
+  value: number;
+}

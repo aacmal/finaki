@@ -36,44 +36,6 @@ const WalletPage = (props: Props) => {
     },
   });
 
-  const areaChartData = [
-    {
-      day: "1",
-      timestamp: "1620000000000",
-      value: 0,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-    {
-      day: "2",
-      timestamp: "1620000000000",
-      value: 3000,
-    },
-  ];
-
   if (!data) return <Heading level={3}>Terjadi Kesalahan</Heading>;
   return (
     <div
@@ -95,7 +57,7 @@ const WalletPage = (props: Props) => {
         theme="transparent"
         xAxis={false}
         horizonalLines={false}
-        data={areaChartData}
+        data={data.balanceActivity}
       />
       <div className="text-center text-xl font-bold text-slate-50">
         {data.name} <br />

@@ -18,7 +18,7 @@ type Props = {
   chartName?: string;
   data:
     | {
-        day: string;
+        day?: string;
         timestamp: string;
         value: number;
       }[]
@@ -38,7 +38,6 @@ const AreaChart = ({
   chartName,
 }: Props) => {
   if (!data) return <></>;
-  console.log(data);
   return (
     <ChartContainer theme={theme}>
       {chartName && (
