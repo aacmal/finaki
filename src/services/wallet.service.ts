@@ -3,7 +3,7 @@ import * as UserService from "../services/user.service";
 import WalletModel from "../models/wallet.model";
 import TransactionModel from "../models/transaction.model";
 import UserModel from "../models/token.model";
-import { IWalletData } from "../interfaces/Wallet";
+import { BalanceActivity, IWalletData } from "../interfaces/Wallet";
 
 export async function getById(walletId: Types.ObjectId) {
   try {
@@ -143,6 +143,99 @@ export async function getTotalBalance(userId: Types.ObjectId) {
     if (!totalBalance[0]) return 0;
 
     return totalBalance[0].totalBalance;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function balanceActivity(walletId: Types.ObjectId, interval: "week" | "month") {
+  try {
+    const intervals = interval === "week" ? 7 : 30;
+    const dateInterval = new Date().setDate(new Date().getDate() - intervals);
+
+    const walletTransactions = await TransactionModel.aggregate([
+      {
+        $match: {
+          walletId: new Types.ObjectId(walletId),
+        },
+      },
+      {
+        $group: {
+          _id: {
+            day: {
+              $dayOfMonth: {
+                date: "$createdAt",
+                timezone: "Asia/Jakarta",
+              },
+            },
+          },
+          timestamp: {
+            $first: "$createdAt",
+          },
+          in: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "in"] }, "$amount", 0],
+            },
+          },
+          out: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "out"] }, "$amount", 0],
+            },
+          },
+          profit: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "in"] }, "$amount", -"$amount"],
+            },
+          },
+        },
+      },
+      {
+        $limit: intervals,
+      },
+      {
+        $sort: {
+          timestamp: 1,
+        },
+      },
+      {
+        $project: {
+          _id: "$_id.day",
+          timestamp: 1,
+          in: 1,
+          out: 1,
+          profit: 1,
+        },
+      },
+    ]);
+
+    const balanceActivityResult: BalanceActivity[] = [];
+    let lastBalance = 0;
+    for (let i = 1; i <= intervals; i++) {
+      const date = new Date(dateInterval);
+      date.setDate(date.getDate() + i);
+
+      const wallet = walletTransactions.find((transaction) => transaction._id === date.getDate());
+      lastBalance = wallet ? wallet.profit : lastBalance;
+
+      balanceActivityResult.push({
+        timestamp: date,
+        value: lastBalance,
+      });
+    }
+
+    return balanceActivityResult;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getWalletTransactions(walletId: Types.ObjectId) {
+  try {
+    const transactions = await TransactionModel.find({
+      walletId: new Types.ObjectId(walletId),
+    });
+
+    return transactions;
   } catch (error) {
     throw error;
   }

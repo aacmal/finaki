@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTotalBalance = exports.updateBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = void 0;
+exports.getWalletTransactions = exports.balanceActivity = exports.getTotalBalance = exports.updateBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = void 0;
 const mongoose_1 = require("mongoose");
 const UserService = __importStar(require("../services/user.service"));
 const wallet_model_1 = __importDefault(require("../models/wallet.model"));
@@ -177,3 +177,92 @@ async function getTotalBalance(userId) {
     }
 }
 exports.getTotalBalance = getTotalBalance;
+async function balanceActivity(walletId, interval) {
+    try {
+        const intervals = interval === "week" ? 7 : 30;
+        const dateInterval = new Date().setDate(new Date().getDate() - intervals);
+        const walletTransactions = await transaction_model_1.default.aggregate([
+            {
+                $match: {
+                    walletId: new mongoose_1.Types.ObjectId(walletId),
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        day: {
+                            $dayOfMonth: {
+                                date: "$createdAt",
+                                timezone: "Asia/Jakarta",
+                            },
+                        },
+                    },
+                    timestamp: {
+                        $first: "$createdAt",
+                    },
+                    in: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "in"] }, "$amount", 0],
+                        },
+                    },
+                    out: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "out"] }, "$amount", 0],
+                        },
+                    },
+                    profit: {
+                        $sum: {
+                            $cond: [{ $eq: ["$type", "in"] }, "$amount", -"$amount"],
+                        },
+                    },
+                },
+            },
+            {
+                $limit: intervals,
+            },
+            {
+                $sort: {
+                    timestamp: 1,
+                },
+            },
+            {
+                $project: {
+                    _id: "$_id.day",
+                    timestamp: 1,
+                    in: 1,
+                    out: 1,
+                    profit: 1,
+                },
+            },
+        ]);
+        const balanceActivityResult = [];
+        let lastBalance = 0;
+        for (let i = 1; i <= intervals; i++) {
+            const date = new Date(dateInterval);
+            date.setDate(date.getDate() + i);
+            const wallet = walletTransactions.find((transaction) => transaction._id === date.getDate());
+            lastBalance = wallet ? wallet.profit : lastBalance;
+            balanceActivityResult.push({
+                timestamp: date,
+                value: lastBalance,
+            });
+        }
+        return balanceActivityResult;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.balanceActivity = balanceActivity;
+async function getWalletTransactions(walletId) {
+    try {
+        const transactions = await transaction_model_1.default.find({
+            walletId: new mongoose_1.Types.ObjectId(walletId),
+        });
+        return transactions;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.getWalletTransactions = getWalletTransactions;
