@@ -7,7 +7,7 @@ exports.transactionValidator = [
     (0, express_validator_1.body)("note").optional(),
     (0, express_validator_1.body)("amount").notEmpty().withMessage("Amount is required").isNumeric().withMessage("Amount must be a number"),
     (0, express_validator_1.body)("type").notEmpty().withMessage("Type is required"),
-    (0, express_validator_1.body)("category").optional(),
+    (0, express_validator_1.body)("wallet").optional(),
 ];
 exports.registerValidator = [
     (0, express_validator_1.body)("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),

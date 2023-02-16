@@ -73,9 +73,9 @@ export async function getAllWallets(req: Request, res: Response) {
 export async function deleteWallet(req: Request, res: Response) {
   try {
     const id = req.params.id as unknown;
-    const deleteTransaction = (req.query.deleteTransactions as unknown as boolean) || false;
+    const deleteTransactions = req.query.deleteTransactions as unknown as string;
 
-    const deletedWallet = await WalletService.deleteById(id as Types.ObjectId, deleteTransaction);
+    const deletedWallet = await WalletService.deleteById(id as Types.ObjectId, deleteTransactions);
     if (!deletedWallet) return res.status(404).json({ message: "Wallet not found" });
 
     res.json({

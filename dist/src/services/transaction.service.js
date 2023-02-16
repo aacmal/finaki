@@ -39,6 +39,7 @@ async function create(transactionData) {
     try {
         let wallet;
         if (transactionData.walletId) {
+            transactionData.amount = Number(transactionData.amount);
             wallet = await wallet_model_1.default.findById(transactionData.walletId);
             if (!wallet)
                 throw new Error("Dompet tidak ditemukan");
@@ -145,6 +146,7 @@ async function update(id, newTransactionData) {
         const oldTransaction = await transaction_model_1.default.findById(id);
         if (!oldTransaction)
             return;
+        newTransactionData.amount = Number(newTransactionData.amount);
         const currentWallet = await wallet_model_1.default.findById(oldTransaction.walletId);
         const isTypeChanged = oldTransaction.type !== newTransactionData.type;
         const isAmountChanged = oldTransaction.amount !== newTransactionData.amount;

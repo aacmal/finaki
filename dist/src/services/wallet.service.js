@@ -69,7 +69,7 @@ async function deleteById(walletId, deleteTransactions) {
         const wallet = await wallet_model_1.default.findById(walletId);
         if (!wallet)
             return;
-        if (deleteTransactions) {
+        if (deleteTransactions === "true") {
             await transaction_model_1.default.deleteMany({
                 _id: {
                     $in: wallet.transactions,

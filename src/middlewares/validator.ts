@@ -5,7 +5,7 @@ export const transactionValidator = [
   body("note").optional(),
   body("amount").notEmpty().withMessage("Amount is required").isNumeric().withMessage("Amount must be a number"),
   body("type").notEmpty().withMessage("Type is required"),
-  body("category").optional(),
+  body("wallet").optional(),
 ];
 
 export const registerValidator = [

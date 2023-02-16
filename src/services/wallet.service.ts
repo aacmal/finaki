@@ -34,12 +34,11 @@ export async function create(walletData: IWalletData) {
   }
 }
 
-export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: boolean) {
+export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: string) {
   try {
     const wallet = await WalletModel.findById(walletId);
     if (!wallet) return;
-
-    if (deleteTransactions) {
+    if (deleteTransactions === "true") {
       await TransactionModel.deleteMany({
         _id: {
           $in: wallet.transactions,

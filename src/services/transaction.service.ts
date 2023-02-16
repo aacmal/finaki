@@ -16,12 +16,12 @@ export async function create(transactionData: ICreateTransactionInput) {
   try {
     let wallet;
     if (transactionData.walletId) {
+      transactionData.amount = Number(transactionData.amount);
       wallet = await WalletModel.findById(transactionData.walletId);
       if (!wallet) throw new Error("Dompet tidak ditemukan");
       if (transactionData.type === TransactionType.OUT && wallet.balance < transactionData.amount)
         throw new Error("Saldo tidak mencukupi");
     }
-
     // Create transaction data
     const newTransaction = await TransactionModel.create(transactionData);
 
@@ -120,6 +120,7 @@ export async function update(id: string, newTransactionData: IUpdateTransactionI
   try {
     const oldTransaction = await TransactionModel.findById(id);
     if (!oldTransaction) return;
+    newTransactionData.amount = Number(newTransactionData.amount);
 
     const currentWallet = await WalletModel.findById(oldTransaction.walletId as Types.ObjectId);
 
