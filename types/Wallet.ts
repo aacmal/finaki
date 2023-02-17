@@ -6,7 +6,7 @@ export interface WalletData {
   creadtedAt?: string;
 }
 
-export interface BalanceActivity {
+export interface BalanceHistory {
   timestamp: string;
   value: number;
 }

@@ -6,9 +6,6 @@ import WalletOption from "@/components/WalletCard/WalletOption";
 import Heading from "@/dls/Heading";
 import IconButton from "@/dls/IconButton";
 import ArrowIcon from "@/icons/ArrowIcon";
-import ArrowsIcon from "@/icons/ArrowsIcon";
-import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
-import PlusIcon from "@/icons/PlusIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { getOneWallet } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
@@ -57,7 +54,7 @@ const WalletPage = (props: Props) => {
         theme="transparent"
         xAxis={false}
         horizonalLines={false}
-        data={data.balanceActivity}
+        data={data.balanceHistory}
       />
       <div className="text-center text-xl font-bold text-slate-50">
         {data.name} <br />

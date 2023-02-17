@@ -1,4 +1,4 @@
-import { BalanceActivity, WalletData } from "@/types/Wallet";
+import { BalanceHistory, WalletData } from "@/types/Wallet";
 import { GenericRequest, GenericResponse } from "./Api";
 
 export interface WalletInput {
@@ -40,11 +40,11 @@ export interface DeleteWalletRequest extends GenericRequest {
 }
 
 export interface WalletBalanceActivityResponse extends GenericResponse {
-  data: BalanceActivity[];
+  data: BalanceHistory[];
 }
 
 export interface WalletDetailsResponse extends GenericResponse {
   data: WalletData & {
-    balanceActivity: BalanceActivity[];
+    balanceHistory: BalanceHistory[];
   };
 }
