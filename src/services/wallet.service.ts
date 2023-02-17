@@ -3,7 +3,7 @@ import * as UserService from "../services/user.service";
 import WalletModel from "../models/wallet.model";
 import TransactionModel from "../models/transaction.model";
 import UserModel from "../models/token.model";
-import { BalanceActivity, IWalletData } from "../interfaces/Wallet";
+import { BalanceHistory, IWalletData } from "../interfaces/Wallet";
 
 export async function getById(walletId: Types.ObjectId) {
   try {
@@ -148,12 +148,12 @@ export async function getTotalBalance(userId: Types.ObjectId) {
   }
 }
 
-export async function balanceActivity(walletId: Types.ObjectId, interval: "week" | "month") {
+export async function balanceHistory(walletId: Types.ObjectId, interval: "week" | "month") {
   try {
     const intervals = interval === "week" ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
 
-    const walletTransactions = await TransactionModel.aggregate([
+    const walletTransactionsPerDay = await TransactionModel.aggregate([
       {
         $match: {
           walletId: new Types.ObjectId(walletId),
@@ -182,11 +182,6 @@ export async function balanceActivity(walletId: Types.ObjectId, interval: "week"
               $cond: [{ $eq: ["$type", "out"] }, "$amount", 0],
             },
           },
-          profit: {
-            $sum: {
-              $cond: [{ $eq: ["$type", "in"] }, "$amount", -"$amount"],
-            },
-          },
         },
       },
       {
@@ -203,27 +198,26 @@ export async function balanceActivity(walletId: Types.ObjectId, interval: "week"
           timestamp: 1,
           in: 1,
           out: 1,
-          profit: 1,
         },
       },
     ]);
 
-    const balanceActivityResult: BalanceActivity[] = [];
+    const balanceHistoryResult: BalanceHistory[] = [];
     let lastBalance = 0;
     for (let i = 1; i <= intervals; i++) {
       const date = new Date(dateInterval);
       date.setDate(date.getDate() + i);
 
-      const wallet = walletTransactions.find((transaction) => transaction._id === date.getDate());
-      lastBalance = wallet ? wallet.profit : lastBalance;
+      const walletTransaction = walletTransactionsPerDay.find((transaction) => transaction._id === date.getDate());
+      lastBalance = walletTransaction ? lastBalance + (walletTransaction.in - walletTransaction.out) : lastBalance;
 
-      balanceActivityResult.push({
+      balanceHistoryResult.push({
         timestamp: date,
         value: lastBalance,
       });
     }
 
-    return balanceActivityResult;
+    return balanceHistoryResult;
   } catch (error) {
     throw error;
   }

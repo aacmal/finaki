@@ -174,13 +174,13 @@ export async function getOneWallet(req: Request, res: Response) {
 
     if (!wallet) return res.status(404).json({ message: "Wallet not found" });
 
-    const balanceActivity = await WalletService.balanceActivity(wallet._id as Types.ObjectId, "week");
+    const balanceHistory = await WalletService.balanceHistory(wallet._id as Types.ObjectId, "week");
 
     res.json({
       message: "Wallet has been fetched successfully",
       data: {
         ...wallet.toJSON(),
-        balanceActivity,
+        balanceHistory,
       },
     });
   } catch (error) {
