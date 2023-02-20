@@ -33,7 +33,14 @@ export type SelectContextType = {
 export const SelectContext = createContext<SelectContextType | null>(null);
 
 const Select = forwardRef(function Select(
-  { className, children, placeholder, optional, ...props }: SelectProps,
+  {
+    className,
+    children,
+    placeholder,
+    optional,
+    disabled,
+    ...props
+  }: SelectProps,
   ref: React.Ref<HTMLInputElement>
 ) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -42,6 +49,7 @@ const Select = forwardRef(function Select(
   );
 
   function toggle() {
+    if (disabled) return;
     setIsOpen(!isOpen);
   }
 
@@ -97,7 +105,8 @@ const Select = forwardRef(function Select(
         {
           "!bg-transparent ring-1 ring-gray-300": selectedValue?.value,
           "bg-gray-100": !selectedValue?.value,
-        }
+        },
+        className
       )}
       tabIndex={0}
       onClick={toggle}
@@ -135,7 +144,7 @@ const Select = forwardRef(function Select(
         <div
           role="list"
           className={classNames(
-            "absolute overflow-auto p-1 bg-white shadow-xl text-slate-800 dark:text-slate-100 dark:bg-slate-500 top-16 left-0 w-full rounded-lg transition-[max-height] ",
+            "absolute overflow-auto p-1 bg-white shadow-xl text-slate-800 dark:text-slate-100 dark:bg-slate-500 top-16 left-0 w-full rounded-lg transition-[max-height] z-50",
             { "max-h-0 max-w-0 p-0": !isOpen },
             { "max-h-96 max-w-96 p-1": isOpen }
           )}

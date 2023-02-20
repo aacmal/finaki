@@ -14,6 +14,7 @@ type Props = {
   loadingOnSuccess?: boolean;
   styleButton?: "primary" | "secondary" | "danger";
   onClick?: () => void;
+  className?: string;
 };
 
 const LoadingButton = ({
@@ -27,6 +28,7 @@ const LoadingButton = ({
   title,
   loadingOnSuccess,
   styleButton,
+  className,
   onClick,
 }: Props) => {
   return (
@@ -36,6 +38,7 @@ const LoadingButton = ({
       disabled={isLoading}
       width={width}
       type="submit"
+      className={className}
     >
       <div className="flex items-center justify-center">
         <LoadingSpinner

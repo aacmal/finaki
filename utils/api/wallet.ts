@@ -9,6 +9,7 @@ import {
   CreatedWalletResponse,
   DeleteWalletRequest,
   WalletBalanceActivityResponse,
+  TransferBalance,
 } from "./types/WalletAPI";
 
 export const createNewWallet = async (data: WalletInput) => {
@@ -50,6 +51,11 @@ export const updateWalletColor = async ({ id, color }: any) => {
   );
   return response.data.data;
 };
+
+export const transferBalance = async (data: TransferBalance) => {
+  const response = await instance.post(`/wallets/transfer-balance`, data);
+  return response.data.data;
+}
 
 // export const getWalletBalanceActivity = async (walletId: string) => {
 //   const response = await instance.get<WalletBalanceActivityResponse>(

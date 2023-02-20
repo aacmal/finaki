@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useStore from "../../stores/store";
+import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
 
 type Props = {
   children: React.ReactNode;
@@ -44,13 +45,16 @@ const AppLayout = ({ children }: Props) => {
   }
 
   return (
-    <Container>
-      <AppNav />
-      <div className="flex flex-col w-full">
-        <Header />
-        <main>{children}</main>
-      </div>
-    </Container>
+    <>
+      <Container>
+        <AppNav />
+        <div className="flex flex-col w-full">
+          <Header />
+          <main>{children}</main>
+        </div>
+      </Container>
+      <TransferBalanceDialog />
+    </>
   );
 };
 

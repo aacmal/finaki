@@ -48,3 +48,9 @@ export interface WalletDetailsResponse extends GenericResponse {
     balanceHistory: BalanceHistory[];
   };
 }
+
+export interface TransferBalance {
+  sourceWallet: string;
+  destinationWallet: string;
+  amount: number;
+}
