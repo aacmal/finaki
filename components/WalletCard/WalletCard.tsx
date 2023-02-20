@@ -45,9 +45,11 @@ const WalletCard = ({
       });
 
       // update single wallet color in cache
-      queryClient.setQueryData([QueryKey.WALLETS, id], (oldData: any) => {
-        return { ...oldData, color: data.color };
-      });
+      if (queryClient.getQueryData([QueryKey.WALLETS, id])) {
+        queryClient.setQueryData([QueryKey.WALLETS, id], (oldData: any) => {
+          return { ...oldData, color: data.color };
+        });
+      }
     },
     onError: () => {
       // reset colorKey to initColorKey
