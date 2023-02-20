@@ -32,7 +32,7 @@ route.get("/", WalletController.getAllWallets);
 route.put("/:id", validator_1.walletValidator, WalletController.updateWallet);
 route.delete("/:id", validator_1.updateWalletValidator, WalletController.deleteWallet);
 route.get("/:id", WalletController.getOneWallet);
-route.post("/:id/transfer", validator_1.transferWalletBalanceValidator, WalletController.transferWalletBalance);
+route.post("/transfer-balance", validator_1.transferWalletBalanceValidator, WalletController.transferWalletBalance);
 route.patch("/:id/color", validator_1.walletColorValidator, WalletController.updateWalletColor);
 const WalletRoute = route;
 exports.default = WalletRoute;

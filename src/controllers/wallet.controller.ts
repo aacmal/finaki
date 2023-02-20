@@ -196,6 +196,10 @@ export async function transferWalletBalance(req: Request, res: Response) {
   try {
     const { sourceWallet, destinationWallet, amount, note } = req.body;
 
+    if (sourceWallet === destinationWallet) {
+      return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
+    }
+
     const origin = await TransactionService.create({
       userId: req.user as Types.ObjectId,
       walletId: sourceWallet,
