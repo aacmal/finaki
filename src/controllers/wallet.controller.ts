@@ -213,7 +213,7 @@ export async function transferWalletBalance(req: Request, res: Response) {
     const destination = await TransactionService.create({
       userId: req.user as Types.ObjectId,
       walletId: destinationWallet,
-      description: "Transfer saldo dari dompet lain",
+      description: "Terima saldo dari dompet lain",
       amount,
       note,
       type: TransactionType.IN,
@@ -227,6 +227,28 @@ export async function transferWalletBalance(req: Request, res: Response) {
         destination,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function walletTransactions(req: Request, res: Response){
+  try {
+    const id = req.params.id as unknown;
+    const transactions = await WalletModel.findById(id).populate({
+      path: "transactions",
+      select: {
+        includeInCalculation: 0,
+        userId: 0,
+        walletId: 0,
+        __v: 0
+      },
+      options: { sort: { createdAt: -1 } }
+    });
+    res.json({
+      message: "Wallet transactions has been fetched successfully",
+      data: transactions?.transactions
+    })
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

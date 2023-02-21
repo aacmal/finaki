@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transferWalletBalance = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
+exports.walletTransactions = exports.transferWalletBalance = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const WalletService = __importStar(require("../services/wallet.service"));
 const TransactionService = __importStar(require("../services/transaction.service"));
 const express_validator_1 = require("express-validator");
@@ -224,7 +224,7 @@ async function transferWalletBalance(req, res) {
         const destination = await TransactionService.create({
             userId: req.user,
             walletId: destinationWallet,
-            description: "Transfer saldo dari dompet lain",
+            description: "Terima saldo dari dompet lain",
             amount,
             note,
             type: Transaction_1.TransactionType.IN,
@@ -243,3 +243,26 @@ async function transferWalletBalance(req, res) {
     }
 }
 exports.transferWalletBalance = transferWalletBalance;
+async function walletTransactions(req, res) {
+    try {
+        const id = req.params.id;
+        const transactions = await wallet_model_1.default.findById(id).populate({
+            path: "transactions",
+            select: {
+                includeInCalculation: 0,
+                userId: 0,
+                walletId: 0,
+                __v: 0
+            },
+            options: { sort: { createdAt: -1 } }
+        });
+        res.json({
+            message: "Wallet transactions has been fetched successfully",
+            data: transactions === null || transactions === void 0 ? void 0 : transactions.transactions
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.walletTransactions = walletTransactions;
