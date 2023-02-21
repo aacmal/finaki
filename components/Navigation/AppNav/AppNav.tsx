@@ -16,7 +16,7 @@ const AppNav = (props: Props) => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex justify-around lg:justify-start lg:flex-col gap-4 h-fit fixed lg:static bottom-0 p-3 lg:p-0 shadow-2xl lg:shadow-none shadow-gray-700 bg-white dark:bg-slate-700 z-50 left-0 w-screen lg:w-fit lg:mt-20 lg:bg-transparent dark:lg:bg-transparent">
+    <nav className="flex justify-around lg:justify-start lg:flex-col gap-4 h-fit fixed lg:sticky lg:top-4 bottom-0 p-3 lg:p-0 shadow-2xl lg:shadow-none shadow-gray-700 bg-white dark:bg-slate-700 z-50 left-0 w-screen lg:w-fit lg:mt-20 lg:bg-transparent dark:lg:bg-transparent">
       <AppNavLink
         icon={<GridIcon {...defaultIconProps} />}
         href={Routes.Dashboard}

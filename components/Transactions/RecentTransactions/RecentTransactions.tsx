@@ -22,12 +22,11 @@ const RecentTransactions = ({ data }: RecentTransactionsProps) => {
             return (
               <RecentItem
                 key={transaction._id}
-                index={index}
+                isLastItem={index === lengthData - 1}
                 description={transaction.description}
                 type={transaction.type}
                 createdAt={transaction.createdAt}
                 amount={transaction.amount}
-                length={lengthData}
               />
             );
           })}

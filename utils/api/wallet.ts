@@ -12,6 +12,8 @@ import {
   TransferBalance,
 } from "./types/WalletAPI";
 
+import { TransactionsResponse } from "./types/TransactionAPI";
+
 export const createNewWallet = async (data: WalletInput) => {
   const response = await instance.post<CreatedWalletResponse>("/wallets", data);
   return response.data.data;
@@ -54,6 +56,11 @@ export const updateWalletColor = async ({ id, color }: any) => {
 
 export const transferBalance = async (data: TransferBalance) => {
   const response = await instance.post(`/wallets/transfer-balance`, data);
+  return response.data.data;
+}
+
+export const getWalletTransactions = async (id: string) => {
+  const response = await instance.get<TransactionsResponse>(`/wallets/${id}/transactions`);
   return response.data.data;
 }
 
