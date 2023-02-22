@@ -23,7 +23,8 @@ import { getAllWallets } from "@/api/wallet";
 import Select from "@/dls/Select/Select";
 import Option from "@/dls/Select/Option";
 import { indicatorColor } from "../WalletCard/constants";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 
 type Props = {};
 
@@ -50,7 +51,6 @@ const AddTransaction = (props: Props) => {
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
       reset();
-      console.log("success", data);
       queryClient.setQueryData(
         [QueryKey.RECENT_TRANSACTIONS],
         (oldData: any) => {
@@ -75,7 +75,7 @@ const AddTransaction = (props: Props) => {
   const onSubmitHandler = (values: any) => {
     const data: TransactionInput = {
       description: values.description,
-      amount: values.amount,
+      amount: removeCurrencyFormat(values.amount),
       type: values["transaction-type"],
       walletId: values.wallet ?? null,
     };
@@ -94,9 +94,6 @@ const AddTransaction = (props: Props) => {
       );
       return;
     }
-
-    console.log(data, walletBalance);
-    // reset();
     mutate(data);
   };
 
@@ -130,7 +127,7 @@ const AddTransaction = (props: Props) => {
             required
             {...register("description")}
           />
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-5 flex-col lg:flex-row">
             <ul className="flex gap-2">
               <RadioButton
                 id="in"
@@ -161,16 +158,15 @@ const AddTransaction = (props: Props) => {
                 {...register("transaction-type")}
               />
             </ul>
-            <InputWithLabel
+            <CurrencyInput
               id="amount"
-              type="number"
               placeholder="Rp. 12000"
               label="Jumlah"
               className="flex-1"
               minLength={2}
               required
-              error={errors.amount as any}
               {...register("amount")}
+              error={errors.amount as any}
             />
           </div>
           <Controller

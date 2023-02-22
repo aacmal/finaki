@@ -7,9 +7,14 @@ import ChartHeader from "../ChartHeader";
 import ChartWrapper from "../ChartWrapper";
 import renderPieLabel from "./PieLabel";
 import renderPieTooltip from "./PieTooltip";
+import { PIE_CHART } from "../constant";
 
 type Props = {
-  data: any;
+  data: {
+    name: string;
+    value: number;
+    color: string;
+  }[];
   width?: number;
   height?: number;
 };
@@ -32,7 +37,7 @@ const PieChart = ({ data }: Props) => {
         <PiChart>
           <Pie
             dataKey="value"
-            data={dummyData}
+            data={data}
             isAnimationActive={true}
             cx="50%"
             cy="50%"
@@ -40,8 +45,11 @@ const PieChart = ({ data }: Props) => {
             innerRadius={50}
             blendStroke={true}
           >
-            {dummyData.map((entry: any, index: number) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            {data?.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={(PIE_CHART as any)[entry.color]}
+              />
             ))}
           </Pie>
           <Legend

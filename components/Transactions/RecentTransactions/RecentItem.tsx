@@ -53,11 +53,10 @@ const RecentItem = ({
       </span>
       <span>
         <span className={classNames("font-medium")}>{description}</span>
-        <span className="flex items-center">
-          <span className="font-medium text-sm md:text-base mr-1">{date}</span>
+        <span className="flex items-center text-sm">
+          <span className="font-medium mr-1">{date}</span>
           <span
             className={classNames(
-              "text-sm md:text-base",
               {
                 "dark:text-slate-400 text-slate-500": theme === "default",
               },

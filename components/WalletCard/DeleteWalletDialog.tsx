@@ -33,8 +33,6 @@ const DeleteWalletDialog = (props: Props) => {
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: deleteWallet,
     onSuccess: (data) => {
-      console.log(data);
-
       // remove deleted wallet from cache
       queryClient.removeQueries([QueryKey.WALLETS, deleteId]);
       queryClient.setQueryData([QueryKey.WALLETS], (oldData: any) => {

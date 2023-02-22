@@ -34,7 +34,6 @@ export const updateWallet = async (id: string, data: WalletInput) => {
 };
 
 export const deleteWallet = async (data: DeleteWalletRequest) => {
-  console.log(data);
   const response = await instance.delete(
     makeUrl(`/wallets/${data.param.id}`, data?.query)
   );

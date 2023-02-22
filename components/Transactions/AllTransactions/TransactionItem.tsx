@@ -10,6 +10,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import TransactionOption from "./TransactionOption";
 import { TransactionInput } from "@/api/types/TransactionAPI";
 import { QueryKey } from "@/types/QueryKey";
+import { currencyFormat } from "@/utils/currencyFormat";
 
 type Props = {
   transaction: Transaction;
@@ -197,7 +198,7 @@ const TransactionItem = ({ transaction }: Props) => {
             ) : (
               <span>
                 {transaction.type === "out" ? "-" : "+"}
-                {transaction.amount}
+                {currencyFormat(transaction.amount, {})}
               </span>
             )}
           </div>

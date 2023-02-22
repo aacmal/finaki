@@ -35,7 +35,6 @@ const InputWithLabel = forwardRef(
       <div
         className={classNames(
           "flex flex-col input-with-label-wrapper",
-          styles.inputWithLabelWrapper,
           className
         )}
       >

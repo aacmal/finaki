@@ -33,9 +33,6 @@ const WalletPage = (props: Props) => {
   const walletTransactionsQuery = useQuery({
     queryKey: [QueryKey.WALLETS, id, QueryKey.TRANSACTIONS],
     queryFn: () => getWalletTransactions(id),
-    onSuccess: (data) => {
-      console.log(data);
-    },
   });
 
   if (!walletDataQuery.data) {

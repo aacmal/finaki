@@ -16,6 +16,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { indicatorColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
 
 type Props = {};
 
@@ -38,7 +40,10 @@ const AddNewWallet = (props: Props) => {
   });
 
   const onSubmitHandler = (data: any) => {
-    mutate(data as WalletInput);
+    mutate({
+      ...data,
+      balance: removeCurrencyFormat(data.balance),
+    });
   };
 
   return (
@@ -60,7 +65,7 @@ const AddNewWallet = (props: Props) => {
           </ModalCloseTringger>
         </div>
         <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
-          <div className="mt-8 space-y-8">
+          <div className="mt-8 space-y-5">
             <InputWithLabel
               label="Nama Dompet"
               id="wallet-name"
@@ -69,13 +74,13 @@ const AddNewWallet = (props: Props) => {
               required
               {...register("name")}
             />
-            <div className="flex items-center gap-4">
+            <div className="flex md:items-center gap-5 flex-col md:flex-row">
               <Controller
                 name="color"
                 control={control}
                 render={({ field }) => (
                   <Select
-                    minWidth="w-24"
+                    minWidth=" min-w-[6rem]"
                     required
                     placeholder="Warna"
                     {...field}
@@ -93,10 +98,9 @@ const AddNewWallet = (props: Props) => {
                   </Select>
                 )}
               />
-              <InputWithLabel
+              <CurrencyInput
                 label="Saldo Awal (opsional)"
                 id="wallet-balance"
-                type="number"
                 placeholder="Rp. 12000 (opsional)"
                 className="w-full"
                 {...register("balance")}
