@@ -1,24 +1,27 @@
 "use client";
 
-import { getUserData, commonApi } from "@/utils/api/commonApi";
+import { instance } from "@/api/api";
+import { getUserData } from "@/api/user";
+import { QueryKey } from "@/types/QueryKey";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useStore from "../stores/store";
 
 const GetUserData = () => {
   const setUser = useStore((state) => state.setUser);
-  const router = useRouter();
-  useQuery(["user"], () => getUserData(), {
+  useQuery({
+    queryKey: [QueryKey.USER],
+    queryFn: getUserData,
     onSuccess: (data) => {
-      setUser(data.user);
+      setUser(data);
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
-    commonApi.defaults.headers[
-      "Authorization"
-    ] = `Bearer ${localStorage.getItem("access-token")}`;
+    instance.defaults.headers["Authorization"] = `Bearer ${localStorage.getItem(
+      "access-token"
+    )}`;
   }, []);
 
   return <></>;

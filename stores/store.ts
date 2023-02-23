@@ -7,6 +7,16 @@ interface Store {
   user: User | null;
   colorTheme: ThemeState;
   accessToken: string | null;
+  deleteWalletId: string | null;
+  transferBalanceState: {
+    sourceWalletId: string | null;
+    setSourceWalletId: (id: string | null) => void;
+    destinationWalletId: string | null;
+    setDestinationWalletId: (id: string | null) => void;
+    isOpen: boolean;
+    setOpen: (isOpen: boolean) => void;
+  },
+  setDeleteWalletId: (id: string | null) => void;
   setToken: (token: string) => void;
   setUser: (user: User | null) => void;
   setColorTheme: (theme: ThemeState) => void;
@@ -14,10 +24,20 @@ interface Store {
 
 const useStore = create<Store>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       colorTheme: Theme.Light,
       accessToken: null,
+      deleteWalletId: null,
+      transferBalanceState: {
+        sourceWalletId: null,
+        setSourceWalletId: (id: string | null) => set({ transferBalanceState: { ...get().transferBalanceState, sourceWalletId: id } }),
+        destinationWalletId: null,
+        setDestinationWalletId: (id: string | null) => set({ transferBalanceState: { ...get().transferBalanceState, destinationWalletId: id } }),
+        isOpen: false,
+        setOpen: (isOpen: boolean) => set({ transferBalanceState: { ...get().transferBalanceState, isOpen } }),
+      },
+      setDeleteWalletId: (id: string | null) => set({ deleteWalletId: id }),
       setToken: (token: string) => set({ accessToken: token }),
       setUser: (user) => set({ user }),
       setColorTheme: (theme: ThemeState) => set({ colorTheme: theme }),

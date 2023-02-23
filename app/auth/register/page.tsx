@@ -8,14 +8,14 @@ import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
-import { RegisterInput, registerUser } from "@/utils/api/authApi";
+import { registerUser } from "@/utils/api/authApi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
-import classNames from "classnames";
+import LoadingButton from "@/dls/Button/LoadingButton";
+import { RegisterInput } from "@/api/types/AuthAPI";
 
 type Props = {};
 
@@ -29,27 +29,24 @@ const RegisterPage = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation(
-    (userData: RegisterInput) => registerUser(userData),
-    {
-      onError: (error) => {
-        console.log((error as any).response.data.errors);
-        const errors = (error as any).response.data.errors;
+  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+    mutationFn: registerUser,
+    onError: (error) => {
+      const errors = (error as any).response.data.errors;
 
-        errors.forEach(({ msg, param }: any) => {
-          setError(param, { message: msg }, { shouldFocus: true });
-        });
-      },
-    }
-  );
+      errors.forEach(({ msg, param }: any) => {
+        setError(param, { message: msg }, { shouldFocus: true });
+      });
+    },
+  });
 
   const onSubmitHandler = (values: any) => {
-    mutate(values);
+    mutate(values as RegisterInput);
   };
 
   useEffect(() => {
     if (isSuccess) {
-      localStorage.setItem("access-token", data.data.access_token);
+      localStorage.setItem("access-token", data.accessToken);
       router.push(Routes.App);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -97,32 +94,14 @@ const RegisterPage = (props: Props) => {
             {...register("password")}
             error={errors.password as any}
           />
-          <Button
-            disabled={isLoading}
-            width="full"
-            type="submit"
-            className="!mt-16"
-          >
-            <div className="flex items-center justify-center">
-              <LoadingSpinner
-                className={classNames(
-                  "transition-all duration-500 stroke-white",
-                  {
-                    "max-w-0 mr-0": !isLoading && !isSuccess,
-                    "max-w-xs mr-3": isLoading,
-                  },
-                  { "max-w-xs mr-3": isSuccess }
-                )}
-              />
-              <span>
-                {isSuccess
-                  ? "Sedang dialihkan"
-                  : isLoading
-                  ? "Mendaftar"
-                  : "Daftar"}
-              </span>
-            </div>
-          </Button>
+          <LoadingButton
+            loadingOnSuccess
+            isLoading={isLoading}
+            onLoadingText="Mendaftar"
+            isSuccess={isSuccess}
+            onSuccessText="Sedang dialihkan"
+            title="Daftar"
+          />
         </FormGroup>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Sudah punya akun?{" "}

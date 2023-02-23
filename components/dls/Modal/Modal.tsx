@@ -1,19 +1,29 @@
 import { createContext, useState } from "react";
 
-type Props = {
+type ModalProps = {
   children: React.ReactNode;
+  defaultOpen?: boolean;
+  stateOpen?: boolean;
+  onClose?: () => void;
 };
 
 export const ModalContext = createContext<any>(false);
 // create provider
-export const ModalProvider = (props: any) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+export const Modal = ({
+  children,
+  defaultOpen,
+  stateOpen,
+  ...props
+}: ModalProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(defaultOpen ?? false);
 
   function open() {
     setIsOpen(true);
   }
+
   function close() {
     setIsOpen(false);
+    props.onClose && props.onClose();
   }
 
   if (typeof window !== "undefined") {
@@ -25,16 +35,10 @@ export const ModalProvider = (props: any) => {
   }
 
   return (
-    <ModalContext.Provider value={{ isOpen, open, close }}>
-      {props.children}
+    <ModalContext.Provider value={{ isOpen: stateOpen ?? isOpen, open, close }}>
+      {children}
     </ModalContext.Provider>
   );
-};
-
-const Modal = (props: Props) => {
-  // create context
-
-  return <ModalProvider>{props.children}</ModalProvider>;
 };
 
 export default Modal;

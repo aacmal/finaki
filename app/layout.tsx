@@ -3,11 +3,12 @@
 import { Inter } from "@next/font/google";
 import classNames from "classnames";
 import "./globals.scss";
-import Navigation from "@/components/Navbar/Navigation";
 import useTheme from "../hooks/useTheme";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import GetUserData from "./GetUserData";
+import HomeNav from "@/components/Navigation/HomeNav/HomeNav";
+import { Toaster } from "react-hot-toast";
 
 // font set up
 const font = Inter({
@@ -20,6 +21,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes
     },
   },
 });
@@ -41,8 +43,9 @@ export default function RootLayout({
         className={classNames("bg-stone-100 dark:bg-slate-800", font.className)}
       >
         <QueryClientProvider client={queryClient}>
+          <Toaster />
           <GetUserData />
-          <Navigation />
+          <HomeNav />
           <main>{children}</main>
           <ReactQueryDevtools />
         </QueryClientProvider>

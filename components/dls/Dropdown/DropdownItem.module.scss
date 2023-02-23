@@ -1,0 +1,19 @@
+.dropdownItem {
+  @apply py-1 pr-2 rounded hover:bg-blue-100 pl-7 relative text-slate-600 cursor-default;
+
+  .itemIndicator{
+    width: 25px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+
+    svg{
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

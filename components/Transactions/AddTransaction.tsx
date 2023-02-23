@@ -1,4 +1,5 @@
 import Button from "@/dls/Button/Button";
+import LoadingButton from "@/dls/Button/LoadingButton";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import RadioButton from "@/dls/Form/Radio/RadioButton";
 import Heading from "@/dls/Heading";
@@ -11,45 +12,88 @@ import ArrowIcon from "@/icons/ArrowIcon";
 import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { Transaction } from "@/types/Transaction";
-import {
-  insertNewTransaction,
-  TransactionInput,
-} from "@/utils/api/transactionApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { insertNewTransaction } from "@/api/transaction";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import { TransactionInput } from "@/api/types/TransactionAPI";
+import { QueryKey } from "@/types/QueryKey";
+import { getAllWallets } from "@/api/wallet";
+import Select from "@/dls/Select/Select";
+import Option from "@/dls/Select/Option";
+import { indicatorColor } from "../WalletCard/constants";
+import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 
 type Props = {};
 
 const AddTransaction = (props: Props) => {
-  const { handleSubmit, register, reset } = useForm();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    control,
+    setError,
+    formState: { errors },
+  } = useForm();
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, isSuccess } = useMutation({
+  const walletQuery = useQuery({
+    queryKey: [QueryKey.WALLETS],
+    queryFn: getAllWallets,
+    onSuccess: (data) => {
+      // console.log(data);
+    },
+  });
+
+  const { isLoading, mutate, isSuccess, isError } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
-      queryClient.setQueryData(["recent-transactions"], (oldData: any) => {
-        return [data.data, ...oldData];
-      });
-      queryClient.invalidateQueries(["transactions"]);
-      queryClient.refetchQueries(["total-transactions"]);
-      console.log(data);
-
       reset();
+      queryClient.setQueryData(
+        [QueryKey.RECENT_TRANSACTIONS],
+        (oldData: any) => {
+          if (!oldData) return;
+          return [data, ...oldData];
+        }
+      );
+      queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
+      queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
+      queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
+
+      if (data.walletId) {
+        queryClient.refetchQueries([QueryKey.WALLETS]);
+        queryClient.invalidateQueries([QueryKey.WALLETS, data.walletId]);
+      }
     },
-    onError: () => {
-      console.log("error");
+    onError: (error) => {
+      console.log("error", error);
     },
   });
 
   const onSubmitHandler = (values: any) => {
     const data: TransactionInput = {
       description: values.description,
-      amount: values.amount,
+      amount: removeCurrencyFormat(values.amount),
       type: values["transaction-type"],
+      walletId: values.wallet ?? null,
     };
-    console.log(data);
+    const walletBalance = walletQuery.data?.find(
+      (wallet) => wallet._id === values.wallet
+    )?.balance;
+
+    if (values["transaction-type"] === "out" && walletBalance! < data.amount) {
+      setError(
+        "amount",
+        {
+          type: "manual",
+          message: "Saldo tidak mencukupi",
+        },
+        { shouldFocus: true }
+      );
+      return;
+    }
     mutate(data);
   };
 
@@ -64,7 +108,7 @@ const AddTransaction = (props: Props) => {
         </div>
       </ModalTrigger>
       <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
-        <ModalContent className="space-y-6 dark:bg-slate-600">
+        <ModalContent className="space-y-6">
           <div className="flex items-center justify-between">
             <Heading level={3}>Tambah Transaksi</Heading>
             <ModalCloseTringger>
@@ -83,7 +127,7 @@ const AddTransaction = (props: Props) => {
             required
             {...register("description")}
           />
-          <div className="flex gap-3 items-center">
+          <div className="flex gap-5 flex-col lg:flex-row">
             <ul className="flex gap-2">
               <RadioButton
                 id="in"
@@ -114,33 +158,52 @@ const AddTransaction = (props: Props) => {
                 {...register("transaction-type")}
               />
             </ul>
-            <InputWithLabel
+            <CurrencyInput
               id="amount"
-              type="number"
               placeholder="Rp. 12000"
               label="Jumlah"
               className="flex-1"
               minLength={2}
               required
               {...register("amount")}
+              error={errors.amount as any}
             />
           </div>
-          <Button type="submit" disabled={isLoading} width="full">
-            <div className="flex items-center justify-center">
-              <LoadingSpinner
-                className={classNames(
-                  "transition-all duration-500 stroke-white",
-                  {
-                    "max-w-0 mr-0": !isLoading,
-                    "max-w-xs mr-3": isLoading,
-                  }
-                )}
-              />
-              <span>
-                {isLoading ? "Menambahkan" : !isSuccess ? "Tambah" : "Ulangi"}
-              </span>
-            </div>
-          </Button>
+          <Controller
+            name="wallet"
+            control={control}
+            render={({ field }) => (
+              <Select
+                optional
+                className="w-full"
+                required={false}
+                placeholder="Pilih Dompet (Opsional)"
+                {...field}
+              >
+                {walletQuery.data?.map((wallet) => (
+                  <Option
+                    className={classNames(
+                      "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
+                      (indicatorColor as any)[wallet.color]
+                    )}
+                    key={wallet._id}
+                    value={wallet._id}
+                  >
+                    {wallet.name}
+                  </Option>
+                ))}
+              </Select>
+            )}
+          />
+          <LoadingButton
+            isLoading={isLoading}
+            onLoadingText="Menambahkan"
+            isSuccess={isSuccess}
+            onSuccessText="Tambah lagi"
+            isError={isError}
+            onErrorText="Gagal, coba lagi"
+            title="Tambah"
+          />
         </ModalContent>
       </form>
     </Modal>

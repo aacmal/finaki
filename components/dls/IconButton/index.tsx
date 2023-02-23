@@ -5,16 +5,29 @@ import IconWrapper from "../IconWrapper";
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   className?: string;
+  shape?: "circle" | "square";
   onClick?: () => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }
 
-const IconButton = ({ children, className, onClick, ...props }: Props) => {
+const IconButton = ({
+  children,
+  className,
+  shape = "square",
+  onClick,
+  ...props
+}: Props) => {
   return (
     <button
       onClick={onClick}
-      className={classNames("rounded p-1", className)}
+      className={classNames(
+        "rounded p-1",
+        {
+          "rounded-full": shape === "circle",
+        },
+        className
+      )}
       type="button"
       {...props}
     >

@@ -5,15 +5,26 @@ type Props = {
   width?: string;
   height?: number;
   className?: string;
-  isBorder?: boolean;
+  border?: boolean;
+  theme?: "default" | "transparent";
 };
 
-const ChartContainer = ({ isBorder = false, className, children }: Props) => {
+const ChartContainer = ({
+  border = false,
+  className,
+  children,
+  theme = "default",
+}: Props) => {
   return (
     <div
       className={classNames(
-        "p-3 lg:p-5 rounded-3xl bg-white/70 dark:bg-slate-700 shadow-xl shadow-zinc-200/60 dark:shadow-slate-800",
-        { "border-2 border-gray-200": isBorder },
+        { "border-2 border-gray-200": border },
+        {
+          "bg-white/70 dark:bg-slate-700 shadow-xl shadow-zinc-200/60 dark:shadow-slate-800 p-3 lg:p-5 rounded-3xl  lg:px-7":
+            theme === "default",
+
+          "bg-transparent !text-slate-50": theme === "transparent",
+        },
         className
       )}
     >

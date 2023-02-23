@@ -3,14 +3,13 @@
 import Heading from "@/dls/Heading";
 import TextWithIcon from "@/dls/TextWithIcon";
 import ArrowIcon from "@/icons/ArrowIcon";
-import { TotalTransactionByDay } from "@/utils/api/transactionApi";
+import { TotalTransactionByDay } from "@/types/Transaction";
 import classNames from "classnames";
 import React from "react";
 import {
   BarChart as BaChart,
   CartesianGrid,
   Tooltip,
-  Legend,
   Bar,
   XAxis,
 } from "recharts";
@@ -18,6 +17,7 @@ import ChartContainer from "../ChartContainer";
 import ChartWrapper from "../ChartWrapper";
 
 import BarChartHeader from "./BarChartHeader";
+import renderBarTooltip from "./BarTooltip";
 
 type Props = {
   data: TotalTransactionByDay[] | undefined;
@@ -52,7 +52,10 @@ const BarChart = ({ data }: Props) => {
               opacity={0.5}
               vertical={false}
             />
-            <Tooltip cursor={{ fill: "#0088FE", opacity: 0.1 }} />
+            <Tooltip
+              cursor={{ fill: "#0088FE", opacity: 0.1 }}
+              content={renderBarTooltip}
+            />
             <Bar
               isAnimationActive
               radius={[10, 10, 10, 10]}

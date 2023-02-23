@@ -1,99 +1,59 @@
 "use client";
 
-import TextWithIcon from "@/dls/TextWithIcon";
-import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
-import ArrowIcon from "@/icons/ArrowIcon";
-import classNames from "classnames";
 import React from "react";
-import AreaChart from "@/components/Charts/AreaChart";
+import AreaChart from "@/components/Charts/AreaChart/AreaChart";
 import BarChart from "@/components/Charts/BarChart/BarChart";
-import PieChart from "@/components/Charts/PieChart";
-import RecentTransactions from "@/components/Transactions/RecentTransactions";
-import { useQuery } from "@tanstack/react-query";
+import PieChart from "@/components/Charts/PieChart/PieChart";
+import RecentTransactions from "@/components/Transactions/RecentTransactions/RecentTransactions";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  getRecentTransactions,
+  getAllTransactions,
   getTotalTransactionByPeriod,
-} from "@/utils/api/transactionApi";
-import { TransactionData } from "@/types/Transaction";
+} from "@/api/transaction";
+import { QueryKey } from "@/types/QueryKey";
+import { WalletData } from "@/types/Wallet";
 
 type Props = {};
 
-const transactions = [
-  {
-    name: "Beli Baju",
-    category: "Cloth",
-    type: "out",
-    value: 3000,
-    date: "2 Desember",
-    hour: "18:64",
-  },
-  {
-    name: "Beli Baju",
-    category: "Cloth",
-    type: "in",
-    value: 3000,
-    date: "2 Desember",
-    hour: "18:64",
-  },
-  {
-    name: "Beli Baju",
-    category: "Cloth",
-    type: "in",
-    value: 3000,
-    date: "2 Desember",
-    hour: "18:64",
-  },
-  {
-    name: "Beli Baju",
-    category: "Cloth",
-    type: "out",
-    value: 3000,
-    date: "2 Desember",
-    hour: "18:64",
-  },
-];
-
-const dataCategories = [
-  { name: "Food", value: 400 },
-  { name: "Transport", value: 300 },
-  { name: "Clothes", value: 300 },
-  { name: "Entertainment", value: 200 },
-  { name: "Others", value: 278 },
-];
-
 const Page = (props: Props) => {
-  const { data: datax, isLoading } = useQuery(
-    ["total-transactions"],
-    () => getTotalTransactionByPeriod("week"),
-    {
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    }
-  );
+  const queryClient = useQueryClient();
 
-  const { data: recent } = useQuery(
-    ["recent-transactions"],
-    getRecentTransactions,
-    {
-      onSuccess: (data) => {
-        console.log(data);
-      },
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    }
-  );
+  const totalTransactionQuery = useQuery({
+    queryKey: [QueryKey.TOTAL_TRANSACTIONS],
+    queryFn: () => getTotalTransactionByPeriod("week"),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const recentTransactionsQuery = useQuery({
+    queryKey: [QueryKey.RECENT_TRANSACTIONS],
+    queryFn: () => getAllTransactions(4),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const areaChartData = totalTransactionQuery.data?.map((item) => ({
+    day: item._id.day as unknown as string,
+    timestamp: item.timestamp,
+    value: item.totalAmount,
+  }));
+
+  const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
+  const pieChartData = wallets?.map((wallets: any) => ({
+    name: wallets.name,
+    value: wallets.balance,
+    color: wallets.color,
+  }));
 
   return (
     <div className="flex flex-col gap-4">
-      <AreaChart data={datax} />
-      <BarChart data={datax} />
+      <AreaChart chartName="Aktivitas" data={areaChartData} />
+      <BarChart data={totalTransactionQuery.data} />
       <div className="flex gap-4 h-fit flex-col lg:flex-row">
-        <PieChart data={dataCategories} />
-        <RecentTransactions data={recent} />
+        <PieChart data={pieChartData} />
+        <RecentTransactions data={recentTransactionsQuery.data} />
       </div>
     </div>
   );

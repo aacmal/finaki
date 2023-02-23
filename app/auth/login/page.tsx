@@ -1,17 +1,16 @@
 "use client";
 
+import { LoginInput } from "@/api/types/AuthAPI";
 import AuthCard from "@/components/AuthCard/AuthCard";
 import AuthCardContent from "@/components/AuthCard/AuthCardContent";
-import Button from "@/dls/Button/Button";
+import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
 import { Routes } from "@/types/Routes";
-import { LoginInput, loginUser } from "@/utils/api/authApi";
+import { loginUser } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
-import classNames from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -29,28 +28,26 @@ const LoginPage = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation(
-    (userData: LoginInput) => loginUser(userData),
-    {
-      onError: (error) => {
-        console.log((error as any).response.data.errors);
-        const errors = (error as any).response.data.errors;
+  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+    mutationFn: loginUser,
+    onError: (error) => {
+      console.log((error as any).response.data.errors);
+      const errors = (error as any).response.data.errors;
 
-        errors.forEach(({ msg, param }: any) => {
-          setError(param, { message: msg }, { shouldFocus: true });
-        });
-      },
-    }
-  );
+      errors.forEach(({ msg, param }: any) => {
+        setError(param, { message: msg }, { shouldFocus: true });
+      });
+    },
+  });
 
   function onSubmitHandler(values: any) {
-    mutate(values);
+    mutate(values as LoginInput);
   }
 
   useEffect(() => {
     if (isSuccess) {
       router.push(Routes.App);
-      localStorage.setItem("access-token", data.data.access_token);
+      localStorage.setItem("access-token", data.accessToken);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
@@ -87,32 +84,14 @@ const LoginPage = (props: Props) => {
             error={errors.password as any}
             {...register("password")}
           />
-          <Button
-            disabled={isLoading}
-            width="full"
-            type="submit"
-            className="!mt-16"
-          >
-            <div className="flex items-center justify-center">
-              <LoadingSpinner
-                className={classNames(
-                  "transition-all duration-500 stroke-white",
-                  {
-                    "max-w-0 mr-0": !isLoading && !isSuccess,
-                    "max-w-xs mr-3": isLoading,
-                  },
-                  { "max-w-xs mr-3": isSuccess }
-                )}
-              />
-              <span>
-                {isSuccess
-                  ? "Sedang dialihkan"
-                  : isLoading
-                  ? "Sedang Memproses"
-                  : "Login"}
-              </span>
-            </div>
-          </Button>
+          <LoadingButton
+            loadingOnSuccess
+            isLoading={isLoading}
+            onLoadingText="Sedang Memproses"
+            isSuccess={isSuccess}
+            onSuccessText="Sedang dialihkan"
+            title="Login"
+          />
         </FormGroup>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}

@@ -1,13 +1,16 @@
 "use client";
 
+import { getUserData } from "@/api/user";
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
-import Navbar from "@/components/Navbar/Navbar";
+import AppNav from "@/components/Navigation/AppNav/AppNav";
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useStore from "../../stores/store";
+import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
 
 type Props = {
   children: React.ReactNode;
@@ -17,10 +20,13 @@ const AppLayout = ({ children }: Props) => {
   const setUser = useStore((state) => state.setUser);
   const router = useRouter();
 
-  const { isLoading, data, isError } = useQuery(["user"], {
-    onError: (error) => {
-      console.log("user error", error);
+  const { isLoading, data, isError } = useQuery({
+    queryKey: [QueryKey.USER],
+    queryFn: getUserData,
+    onSuccess: (data) => {
+      setUser(data);
     },
+    staleTime: 0,
   });
 
   useEffect(() => {
@@ -39,13 +45,16 @@ const AppLayout = ({ children }: Props) => {
   }
 
   return (
-    <Container>
-      <Navbar />
-      <div className="flex flex-col w-full">
-        <Header />
-        <main>{children}</main>
-      </div>
-    </Container>
+    <>
+      <Container>
+        <AppNav />
+        <div className="flex flex-col w-full">
+          <Header />
+          <main>{children}</main>
+        </div>
+      </Container>
+      <TransferBalanceDialog />
+    </>
   );
 };
 
