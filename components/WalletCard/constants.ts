@@ -29,3 +29,14 @@ export const indicatorColor = {
   gray: "bg-gray-500",
   cyan: "bg-cyan-500",
 };
+
+export const walletLabelColor = {
+  blue: "bg-blue-200 text-blue-700",
+  orange: "bg-orange-200 text-orange-700",
+  green: "bg-green-200 text-green-700",
+  red: "bg-red-200 text-red-700",
+  purple: "bg-purple-200 text-purple-700",
+  yellow: "bg-yellow-200 text-yellow-700",
+  gray: "bg-gray-200 text-gray-700",
+  cyan: "bg-cyan-200 text-cyan-700",
+};

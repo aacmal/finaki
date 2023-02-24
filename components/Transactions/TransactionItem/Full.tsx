@@ -15,6 +15,10 @@ import { TransactionInput } from "@/api/types/TransactionAPI";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowIcon from "@/icons/ArrowIcon";
 import { toast } from "react-hot-toast";
+import { WalletData } from "@/types/Wallet";
+import Link from "next/link";
+import { Routes } from "@/types/Routes";
+import { walletLabelColor } from "@/components/WalletCard/constants";
 
 type Props = {
   transaction: Transaction;
@@ -38,10 +42,15 @@ const FullTransactionItem = ({ transaction }: Props) => {
 
   const queryClient = useQueryClient();
 
+  const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
+
+  const currentWallet = wallets?.find(
+    (wallet: any) => wallet._id === transaction.walletId
+  );
+
   const deleteMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: (data) => {
-      console.log("data", data);
       // refetch total transactions
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
@@ -103,7 +112,6 @@ const FullTransactionItem = ({ transaction }: Props) => {
     mutationFn: editTransaction,
     onSuccess: (data) => {
       setIsOnEdit(false);
-      console.log(data);
       // refetch total transactions
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
@@ -126,7 +134,6 @@ const FullTransactionItem = ({ transaction }: Props) => {
           };
           return newTransactionData;
         });
-        console.log(newData);
         return newData;
       });
 
@@ -230,110 +237,127 @@ const FullTransactionItem = ({ transaction }: Props) => {
   };
 
   return (
-    <div
-      className={classNames(
-        "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl px-4 group",
-        { "bg-blue-100 dark:bg-blue-900/50": isOnEdit },
-        { "z-50 relative": isOnEdit }
+    <>
+      {isOnEdit && (
+        <div className="w-screen h-screen bg-transparent absolute top-0 right-0 z-40"></div>
       )}
-    >
-      {!isOnEdit ? (
-        <>
-          <div className="w-[14%] hidden lg:block text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
-            {transaction.time}
-          </div>
-          <div className="w-[40%] lg:w-[30%] flex flex-col">
-            <div className="font-bold lg:font-medium text-slate-800 dark:text-slate-200">
-              {transaction.description}
-            </div>
-            <div
-              className={classNames(
-                "lg:hidden text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900"
-              )}
-            >
+      <div
+        className={classNames(
+          "flex gap-2 items-center w-full py-3 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-xl px-4 lg:pr-4 pr-0 group",
+          { "bg-blue-100 dark:bg-blue-900/50": isOnEdit },
+          { "z-50 relative": isOnEdit }
+        )}
+      >
+        {!isOnEdit ? (
+          <>
+            <div className="w-[14%] hidden lg:block text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
               {transaction.time}
             </div>
-          </div>
-          <div className="w-[10%] text-center">
-            <span className="px-3 text-orange-700 bg-orange-200 text-sm rounded-3xl">
-              {"null"}
-            </span>
-          </div>
-          <div
-            className={classNames(
-              "w-[35%] lg:w-[15%] text-right font-medium",
-              { "text-blue-500": transaction.type === "in" },
-              { "text-orange-500": transaction.type === "out" }
-            )}
-          >
-            <span>
-              {transaction.type === "out" ? "-" : "+"}
-              {currencyFormat(transaction.amount, {})}
-            </span>
-          </div>
-        </>
-      ) : (
-        <form
-          className="flex gap-3 items-center"
-          id="edit-transaction-form"
-          onSubmit={handleSubmit(onSaveHandler)}
-        >
-          <TextArea
-            required
-            spellCheck={false}
-            placeholder="Deskripsi"
-            transparent
-            defaultValue={transaction.description}
-            className="border border-blue-200 h-12"
-            {...register("description")}
-          />
-          <div className="flex gap-3 dark:text-slate-200">
-            <Controller
-              name="type"
-              control={control}
-              defaultValue={transaction.type}
-              render={({ field }) => (
-                <Select required className="!p-3" {...field}>
-                  <Option selected={transaction.type === "in"} value="in">
-                    <div className="flex gap-2 items-center">
-                      <IconWrapper className="!w-4 text-blue-500">
-                        <ArrowIcon direction="up" />
-                      </IconWrapper>
-                      Masuk
-                    </div>
-                  </Option>
-                  <Option selected={transaction.type === "out"} value="out">
-                    <div className="flex gap-2 items-center">
-                      <IconWrapper className="!w-4 text-orange-500">
-                        <ArrowIcon direction="down" />
-                      </IconWrapper>
-                      Keluar
-                    </div>
-                  </Option>
-                </Select>
+            <div className="w-[40%] lg:w-[30%] flex flex-col">
+              <div className="font-bold lg:font-medium text-slate-800 dark:text-slate-200">
+                {transaction.description}
+              </div>
+              <div
+                className={classNames(
+                  "lg:hidden text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900"
+                )}
+              >
+                {transaction.time}
+              </div>
+            </div>
+            <Link
+              href={
+                currentWallet
+                  ? `${Routes.Wallet}/${currentWallet._id}`
+                  : Routes.Transactions
+              }
+              className={classNames(
+                "px-3 py-1 w-fit lg:w-[10%] block text-center text-sm rounded-xl font-medium",
+                `${
+                  currentWallet &&
+                  (walletLabelColor as any)[currentWallet.color]
+                }`,
+                { "bg-gray-200 text-gray-600": !currentWallet }
               )}
-            />
-            <Input
+            >
+              {currentWallet ? currentWallet.name.split(" ")[0] : " - "}
+            </Link>
+            <div
+              className={classNames(
+                "w-[35%] lg:w-[15%] text-right font-medium",
+                { "text-blue-500": transaction.type === "in" },
+                { "text-orange-500": transaction.type === "out" }
+              )}
+            >
+              <span>
+                {transaction.type === "out" ? "-" : "+"}
+                {currencyFormat(transaction.amount, {})}
+              </span>
+            </div>
+          </>
+        ) : (
+          <form
+            className="flex gap-3 items-center w-full"
+            id="edit-transaction-form"
+            onSubmit={handleSubmit(onSaveHandler)}
+          >
+            <TextArea
               required
-              type="number"
-              placeholder="amount"
-              defaultValue={transaction.amount}
+              spellCheck={false}
+              placeholder="Deskripsi"
               transparent
-              className="border border-blue-200 text-right"
-              {...register("amount")}
-              error={errors.amount}
+              defaultValue={transaction.description}
+              className="border border-blue-200 h-12 w-[50%]"
+              {...register("description")}
             />
-          </div>
-        </form>
-      )}
-      <TransactionOption
-        isLoading={deleteMutation.isLoading || editMutation.isLoading}
-        onCancel={() => setIsOnEdit(false)}
-        isOnEdit={isOnEdit}
-        onEdit={() => setIsOnEdit(true)}
-        onDelete={() => onDeleteHandler(transaction._id)}
-      />
-    </div>
+            <div className="flex gap-3 dark:text-slate-200">
+              <Controller
+                name="type"
+                control={control}
+                defaultValue={transaction.type}
+                render={({ field }) => (
+                  <Select required className="!p-3" {...field}>
+                    <Option selected={transaction.type === "in"} value="in">
+                      <div className="flex gap-2 items-center">
+                        <IconWrapper className="!w-4 text-blue-500">
+                          <ArrowIcon direction="up" />
+                        </IconWrapper>
+                        Masuk
+                      </div>
+                    </Option>
+                    <Option selected={transaction.type === "out"} value="out">
+                      <div className="flex gap-2 items-center">
+                        <IconWrapper className="!w-4 text-orange-500">
+                          <ArrowIcon direction="down" />
+                        </IconWrapper>
+                        Keluar
+                      </div>
+                    </Option>
+                  </Select>
+                )}
+              />
+              <Input
+                required
+                type="number"
+                placeholder="amount"
+                defaultValue={transaction.amount}
+                transparent
+                className="border border-blue-200 text-right"
+                {...register("amount")}
+                error={errors.amount}
+              />
+            </div>
+          </form>
+        )}
+        <TransactionOption
+          isLoading={deleteMutation.isLoading || editMutation.isLoading}
+          onCancel={() => setIsOnEdit(false)}
+          isOnEdit={isOnEdit}
+          onEdit={() => setIsOnEdit(true)}
+          onDelete={() => onDeleteHandler(transaction._id)}
+        />
+      </div>
+    </>
   );
 };
 
