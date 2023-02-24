@@ -101,6 +101,7 @@ const TransactionOption = ({
           <IconButton
             type="submit"
             className="text-green-600 hover:bg-green-600/10"
+            form="edit-transaction-form"
           >
             <CheckIcon strokeWidth={2} fill="none" stroke="currentColor" />
           </IconButton>

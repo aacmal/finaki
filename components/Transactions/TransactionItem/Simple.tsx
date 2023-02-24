@@ -1,26 +1,39 @@
-import IconWrapper from "@/dls/IconWrapper";
-import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
-import { currencyFormat } from "@/utils/currencyFormat";
-import classNames from "classnames";
-import React from "react";
+import IconWrapper from '@/dls/IconWrapper';
+import ArrowCircleIcon from '@/icons/ArrowCircleIcon';
+import { currencyFormat } from '@/utils/currencyFormat';
+import classNames from 'classnames';
+import React from 'react'
 
-type ListProps = {
+type Props = {
   isLastItem: boolean;
   type: string;
   description: string;
   createdAt: string;
   amount: number;
   theme?: "default" | "light";
-};
+}
 
-const RecentItem = ({
+/**
+ * This is a simple transaction item component, it will show the simple transaction item and it can't be editable
+ * @param props
+ * @returns
+ * @example
+ * <SimpleTransactionItem
+ *  isLastItem={false}  // if it's the last item in the list, it will not show the border bottom
+ *  type="in"
+ *  description="Transfer from BCA"
+ *  createdAt="2021-08-01T00:00:00.000Z"
+ *  amount={100000}
+ * />
+*/
+const SimpleTransactionItem = ({
   isLastItem,
   type,
   description,
   createdAt,
   amount,
   theme = "default",
-}: ListProps) => {
+}: Props) => {
   const date = new Date(createdAt).toLocaleDateString("id-ID", {
     day: "numeric",
     month: "short",
@@ -81,7 +94,7 @@ const RecentItem = ({
         {currencyFormat(amount)}
       </span>
     </li>
-  );
-};
+  )
+}
 
-export default RecentItem;
+export default SimpleTransactionItem

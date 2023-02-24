@@ -10,7 +10,7 @@ import Option from "./Option";
 
 interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
   children: React.ReactNode;
-  placeholder: string;
+  placeholder?: string;
   name: string;
   minWidth?: string;
   optional?: boolean;
@@ -92,7 +92,7 @@ const Select = forwardRef(function Select(
     if (props.value === undefined) {
       setSelectedValue({
         value: null,
-        label: placeholder,
+        label: placeholder || "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

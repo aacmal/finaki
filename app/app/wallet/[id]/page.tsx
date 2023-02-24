@@ -1,7 +1,7 @@
 "use client";
 
 import AreaChart from "@/components/Charts/AreaChart/AreaChart";
-import RecentItem from "@/components/Transactions/RecentTransactions/RecentItem";
+import { SimpleTransactionItem } from "@/components/Transactions/TransactionItem";
 import { indicatorColor } from "@/components/WalletCard/constants";
 import WalletOption from "@/components/WalletCard/WalletOption";
 import Heading from "@/dls/Heading";
@@ -73,7 +73,7 @@ const WalletPage = (props: Props) => {
         <div className="py-1 px-3 bg-white/20 flex flex-col rounded-xl mt-2 text-white">
           {walletTransactionsQuery.data?.map((transaction, index) => {
             return (
-              <RecentItem
+              <SimpleTransactionItem
                 key={transaction._id}
                 isLastItem={index === walletTransactionsQuery.data?.length - 1}
                 description={transaction.description}
