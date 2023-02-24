@@ -64,7 +64,7 @@ async function updateTransaction(req, res) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
-        const id = req.query.id;
+        const id = req.params.id;
         const { description, amount, type } = req.body;
         const updatedTransaction = await TransactionService.update(id, { description, amount, type });
         if (!updatedTransaction)

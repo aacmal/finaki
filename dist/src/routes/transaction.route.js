@@ -28,7 +28,7 @@ const TransactionController = __importStar(require("../controllers/transaction.c
 const validator_1 = require("../middlewares/validator");
 const route = (0, express_1.Router)();
 route.post("/", validator_1.transactionValidator, TransactionController.createTransaction);
-route.put("/", validator_1.transactionValidator, TransactionController.updateTransaction);
+route.put("/:id", validator_1.transactionValidator, TransactionController.updateTransaction);
 route.get("/", TransactionController.getAllTransactions);
 route.delete("/:id", TransactionController.deleteTransaction);
 route.get("/by-date", TransactionController.getAllTransactionsByDate);

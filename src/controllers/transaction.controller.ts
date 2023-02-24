@@ -40,7 +40,7 @@ export async function updateTransaction(req: Request, res: Response) {
     return res.status(400).json({ errors: error.array() });
   }
   try {
-    const id = req.query.id as string;
+    const id = req.params.id as string;
     const { description, amount, type } = req.body;
     const updatedTransaction = await TransactionService.update(id, { description, amount, type });
 
