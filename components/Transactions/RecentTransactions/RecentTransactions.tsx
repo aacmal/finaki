@@ -3,7 +3,7 @@
 import { Transaction } from "@/types/Transaction";
 import ChartContainer from "../../Charts/ChartContainer";
 import ChartHeader from "../../Charts/ChartHeader";
-import RecentItem from "./RecentItem";
+import { SimpleTransactionItem } from "../TransactionItem";
 
 type RecentTransactionsProps = {
   data: Transaction[] | undefined;
@@ -20,7 +20,7 @@ const RecentTransactions = ({ data }: RecentTransactionsProps) => {
         <ul>
           {slicedData.map((transaction, index) => {
             return (
-              <RecentItem
+              <SimpleTransactionItem
                 key={transaction._id}
                 isLastItem={index === lengthData - 1}
                 description={transaction.description}

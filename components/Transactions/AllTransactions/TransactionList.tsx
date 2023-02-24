@@ -3,7 +3,7 @@
 import { Transaction, TransactionData } from "@/types/Transaction";
 import classNames from "classnames";
 import React from "react";
-import TransactionItem from "./TransactionItem";
+import { FullTransactionItem } from "../TransactionItem";
 
 type Props = {
   data: TransactionData[];
@@ -30,7 +30,7 @@ const TransactionList = ({ data }: Props) => {
             </div>
             {transactionData.transactions.map(
               (transaction: Transaction, index: number) => (
-                <TransactionItem
+                <FullTransactionItem
                   key={transaction._id}
                   transaction={transaction}
                 />
