@@ -84,6 +84,7 @@ export async function getTransactionByDate(userId: Types.ObjectId, timezone = "A
               amount: "$amount",
               type: "$type",
               category: "$category",
+              walletId: "$walletId",
               time: {
                 $dateToString: {
                   format: "%H:%M",

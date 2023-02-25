@@ -108,6 +108,7 @@ async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
                             amount: "$amount",
                             type: "$type",
                             category: "$category",
+                            walletId: "$walletId",
                             time: {
                                 $dateToString: {
                                     format: "%H:%M",
