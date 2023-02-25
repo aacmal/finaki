@@ -41,6 +41,7 @@ const Page = (props: Props) => {
   }));
 
   const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
+
   const pieChartData = wallets?.map((wallets: any) => ({
     name: wallets.name,
     value: wallets.balance,

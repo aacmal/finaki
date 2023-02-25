@@ -3,7 +3,7 @@ const renderPieLabel = (props: any) => {
   return (
     <ul>
       {payload.map((entry: any, index: number) => {
-        const percent = (entry.payload.percent * 100).toFixed(1);
+        const percent = ((entry.payload.percent || 0) * 100).toFixed(1);
         return (
           <li key={`item-${index}`} className="flex items-center gap-2">
             <span style={{ color: entry.color }} className="font-semibold">

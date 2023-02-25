@@ -8,6 +8,7 @@ import ChartWrapper from "../ChartWrapper";
 import renderPieLabel from "./PieLabel";
 import renderPieTooltip from "./PieTooltip";
 import { PIE_CHART } from "../constant";
+import NoData from "../NoData";
 
 type Props = {
   data: {
@@ -17,6 +18,7 @@ type Props = {
   }[];
   width?: number;
   height?: number;
+  loading?: boolean;
 };
 
 const COLORS = ["#FA7070", "#8CC0DE", "#B1BCE6", "#DEB6AB", "#525E75"];
@@ -29,37 +31,45 @@ const dummyData = [
   { name: "BCA", value: 20000 },
 ];
 
-const PieChart = ({ data }: Props) => {
+const PieChart = ({ data, loading }: Props) => {
+  if (loading) return <div>Loading...</div>;
+
+  console.log(data);
+
   return (
     <ChartContainer className="w-full lg:w-[27rem] overflow-hidden">
       <ChartHeader title="Alokasi" />
       <ChartWrapper className="h-52 lg:h-72 w-full">
-        <PiChart>
-          <Pie
-            dataKey="value"
-            data={data}
-            isAnimationActive={true}
-            cx="50%"
-            cy="50%"
-            outerRadius={80}
-            innerRadius={50}
-            blendStroke={true}
-          >
-            {data?.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={(PIE_CHART as any)[entry.color]}
-              />
-            ))}
-          </Pie>
-          <Legend
-            content={renderPieLabel}
-            layout="vertical"
-            verticalAlign="middle"
-            align="right"
-          />
-          <Tooltip content={renderPieTooltip} />
-        </PiChart>
+        {data?.length > 0 ? (
+          <PiChart>
+            <Pie
+              dataKey="value"
+              data={data}
+              isAnimationActive={true}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              innerRadius={50}
+              blendStroke={true}
+            >
+              {data?.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={(PIE_CHART as any)[entry.color]}
+                />
+              ))}
+            </Pie>
+            <Legend
+              content={renderPieLabel}
+              layout="vertical"
+              verticalAlign="middle"
+              align="right"
+            />
+            <Tooltip content={renderPieTooltip} />
+          </PiChart>
+        ) : (
+          <NoData />
+        )}
       </ChartWrapper>
     </ChartContainer>
   );
