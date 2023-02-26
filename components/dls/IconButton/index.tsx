@@ -24,7 +24,7 @@ const IconButton = ({
       className={classNames(
         "rounded p-1",
         {
-          "rounded-full": shape === "circle",
+          "!rounded-full": shape === "circle",
         },
         className
       )}

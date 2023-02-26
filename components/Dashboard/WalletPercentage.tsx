@@ -1,0 +1,33 @@
+import React from "react";
+import DashboardContentWrapper from "./DashboardContentWrapper";
+import DashboardHeader from "./DashboardHeader";
+import PieChart, { PieChartData } from "../Charts/PieChart/PieChart";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { QueryKey } from "@/types/QueryKey";
+import { WalletData } from "@/types/Wallet";
+
+type Props = {};
+
+const WalletPercentage = (props: Props) => {
+  const queryClient = useQueryClient();
+
+  const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
+  const isLoading = queryClient.isFetching({
+    queryKey: [QueryKey.WALLETS],
+  });
+
+  const pieChartData = wallets?.map((wallets: any) => ({
+    name: wallets.name,
+    value: wallets.balance,
+    color: wallets.color,
+  }));
+
+  return (
+    <DashboardContentWrapper className="w-full lg:w-[27rem] overflow-hidden">
+      <DashboardHeader title="Dompet" />
+      <PieChart loading={isLoading === 0} data={pieChartData} />
+    </DashboardContentWrapper>
+  );
+};
+
+export default WalletPercentage;

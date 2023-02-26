@@ -56,9 +56,9 @@ const WalletPage = (props: Props) => {
       </div>
       <AreaChart
         size="medium"
-        theme="transparent"
         xAxis={false}
         horizonalLines={false}
+        theme="transparent"
         data={walletDataQuery.data.balanceHistory}
       />
       <div className="text-center text-xl font-bold text-slate-50">

@@ -8,25 +8,25 @@ import {
   Tooltip,
   XAxis,
 } from "recharts";
-import ChartContainer from "../ChartContainer";
-import ChartHeader from "../ChartHeader";
+import { ChartError, ChartLoading } from "../ChartPlaceholder";
 import ChartWrapper from "../ChartWrapper";
 import renderAreaTooltip from "./AreaTooltip";
 import { stopColor } from "./constants";
 
+export type AreaChartData = {
+  day?: string;
+  timestamp: string;
+  value: number;
+};
+
 type Props = {
   chartName?: string;
-  data:
-    | {
-        day?: string;
-        timestamp: string;
-        value: number;
-      }[]
-    | undefined;
+  data: AreaChartData[];
   size?: "medium" | "large";
   theme?: "default" | "transparent";
   xAxis?: boolean;
   horizonalLines?: boolean;
+  loading?: boolean;
 };
 
 const AreaChart = ({
@@ -35,22 +35,18 @@ const AreaChart = ({
   theme = "default",
   xAxis = true,
   horizonalLines = true,
-  chartName,
+  loading,
 }: Props) => {
-  if (!data) return <></>;
   return (
-    <ChartContainer theme={theme}>
-      {chartName && (
-        <ChartHeader title="Aktivitas">
-          <span className="text-sm">7 Hari</span>
-        </ChartHeader>
-      )}
-      <ChartWrapper
-        className={classNames("w-full", {
-          "h-44 md:h-52": size === "large",
-          "h-40 md:h-44": size === "medium",
-        })}
-      >
+    <ChartWrapper
+      className={classNames("w-full", {
+        "h-44 md:h-52 lg:h-72": size === "large",
+        "h-40 md:h-44": size === "medium",
+      })}
+    >
+      {loading ? (
+        <ChartLoading />
+      ) : data ? (
         <ArChart data={data}>
           <defs>
             <linearGradient id="colorBl" x1="0" y1="0" x2="0" y2="1">
@@ -93,8 +89,10 @@ const AreaChart = ({
             fill="url(#colorBl)"
           />
         </ArChart>
-      </ChartWrapper>
-    </ChartContainer>
+      ) : (
+        <ChartError />
+      )}
+    </ChartWrapper>
   );
 };
 
