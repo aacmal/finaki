@@ -18,9 +18,8 @@ type Props = {
 
 const Ratio = ({ data, loading }: Props) => {
   const COLOR = ["#3b82f6", "#f97316"];
-  if (!data) return <></>;
-  const totalIncome = data.reduce((acc, curr) => acc + curr.in, 0);
-  const totalOutcome = data.reduce((acc, curr) => acc + curr.out, 0);
+  const totalIncome = data ? data.reduce((acc, curr) => acc + curr.in, 0) : 0;
+  const totalOutcome = data ? data.reduce((acc, curr) => acc + curr.out, 0) : 0;
   const total = totalIncome - totalOutcome;
 
   return (
@@ -47,7 +46,7 @@ const Ratio = ({ data, loading }: Props) => {
         <div className="flex-1">
           <BarChart
             color={COLOR}
-            data={data}
+            data={data!}
             className="h-48 lg:h-72"
             loading={loading}
           />

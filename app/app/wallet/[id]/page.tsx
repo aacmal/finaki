@@ -35,6 +35,14 @@ const WalletPage = (props: Props) => {
     queryFn: () => getWalletTransactions(id),
   });
 
+  if (walletDataQuery.isLoading) {
+    return (
+      <Heading className="text-center mt-10 animate-pulse" level={3}>
+        Memuat...
+      </Heading>
+    );
+  }
+
   if (!walletDataQuery.data) {
     return <Heading level={3}>Terjadi Kesalahan</Heading>;
   }

@@ -26,7 +26,7 @@ const RecentTransactions = (props: Props) => {
     return (
       <DashboardContentWrapper className="flex-1">
         <DashboardHeader title="Transaksi terbaru" />
-        <div className="h-[20rem]">
+        <div className="h-[20rem] space-y-4">
           {isLoading &&
             Array(4)
               .fill("")

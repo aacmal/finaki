@@ -6,7 +6,7 @@ type Props = {
 };
 
 const SimpleTSkeleton = (props: Props) => {
-  return <Placeholder animationDelay={props.delay} className="h-14" />;
+  return <Placeholder animationDelay={props.delay} className="h-16" />;
 };
 
 export default SimpleTSkeleton;
