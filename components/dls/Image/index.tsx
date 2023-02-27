@@ -6,7 +6,7 @@ type Props = {
   alt: string;
   className: string;
   priority?: boolean;
-  sizes: string;
+  sizes?: string;
 };
 
 const Image = ({ src, alt, className, priority, sizes }: Props) => {
