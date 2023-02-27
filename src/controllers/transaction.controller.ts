@@ -64,9 +64,7 @@ export async function deleteTransaction(req: Request, res: Response) {
 
     res.json({
       message: "Transaction has been deleted successfully",
-      data: {
-        _id: deletedTransaction._id,
-      },
+      data: deletedTransaction
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -88,9 +88,7 @@ async function deleteTransaction(req, res) {
             return res.status(404).json({ message: "Transaction not found" });
         res.json({
             message: "Transaction has been deleted successfully",
-            data: {
-                _id: deletedTransaction._id,
-            },
+            data: deletedTransaction
         });
     }
     catch (error) {
