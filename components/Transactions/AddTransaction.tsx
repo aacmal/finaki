@@ -158,15 +158,21 @@ const AddTransaction = (props: Props) => {
                 {...register("transaction-type")}
               />
             </ul>
-            <CurrencyInput
-              id="amount"
-              placeholder="Rp. 12000"
-              label="Jumlah"
-              className="flex-1"
-              minLength={2}
-              required
-              {...register("amount")}
-              error={errors.amount as any}
+            <Controller
+              name="amount"
+              control={control}
+              render={({ field }) => (
+                <CurrencyInput
+                  id="amount"
+                  placeholder="Rp. 12000"
+                  label="Jumlah"
+                  className="flex-1"
+                  minLength={2}
+                  required
+                  {...field}
+                  error={errors.amount as any}
+                />
+              )}
             />
           </div>
           <Controller

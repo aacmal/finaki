@@ -24,7 +24,7 @@ type Props = {};
 const AddNewWallet = (props: Props) => {
   const queryClient = useQueryClient();
 
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, reset } = useForm();
   const { mutate, isLoading, isSuccess } = useMutation({
     mutationFn: createNewWallet,
     onSuccess: (data) => {
@@ -36,6 +36,7 @@ const AddNewWallet = (props: Props) => {
         queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
         queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
       }
+      reset();
     },
   });
 
@@ -98,12 +99,18 @@ const AddNewWallet = (props: Props) => {
                   </Select>
                 )}
               />
-              <CurrencyInput
-                label="Saldo Awal (opsional)"
-                id="wallet-balance"
-                placeholder="Rp. 12000 (opsional)"
-                className="w-full"
-                {...register("balance")}
+              <Controller
+                name="balance"
+                control={control}
+                render={({ field }) => (
+                  <CurrencyInput
+                    label="Saldo Awal (opsional)"
+                    id="wallet-balance"
+                    placeholder="Rp. 12000 (opsional)"
+                    className="w-full"
+                    {...field}
+                  />
+                )}
               />
             </div>
             <LoadingButton

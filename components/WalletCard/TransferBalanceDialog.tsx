@@ -18,6 +18,8 @@ import { toast } from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
 import { transferBalance } from "@/api/wallet";
 import useStore from "../../stores/store";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
 
 type Props = {};
 
@@ -26,7 +28,7 @@ const TransferBalanceDialog = ({}: Props) => {
     (state) => state.transferBalanceState
   );
 
-  const { control, handleSubmit, register, unregister } = useForm();
+  const { control, handleSubmit, register, unregister, reset } = useForm();
   const queryClient = useQueryClient();
   const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
 
@@ -46,6 +48,10 @@ const TransferBalanceDialog = ({}: Props) => {
       toast.error("Dompet asal dan tujuan tidak boleh sama");
       return;
     }
+    data.amount = removeCurrencyFormat(data.amount);
+    reset({
+      sourceWallet: sourceWalletId,
+    });
     mutate(data);
   };
 
@@ -127,15 +133,20 @@ const TransferBalanceDialog = ({}: Props) => {
               )}
             />
           </div>
-          <InputWithLabel
-            required
-            min={1}
-            className="!w-full"
-            placeholder="5.000"
-            label="Jumlah"
-            id="amount"
-            type="number"
-            {...register("amount")}
+          <Controller
+            name="amount"
+            control={control}
+            render={({ field }) => (
+              <CurrencyInput
+                required
+                min={1}
+                className="!w-full"
+                placeholder="5.000"
+                label="Jumlah"
+                id="amount"
+                {...field}
+              />
+            )}
           />
           <LoadingButton
             className="mt-6"

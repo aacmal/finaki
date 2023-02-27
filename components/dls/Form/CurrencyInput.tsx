@@ -13,7 +13,9 @@ type Props = {
   minLength?: number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  value?: string | number;
+  value?: string;
+  onReset?: () => void;
+  min?: number;
 };
 
 const CurrencyInput = forwardRef(function CurrencyInput(
@@ -23,17 +25,25 @@ const CurrencyInput = forwardRef(function CurrencyInput(
   const [value, setValue] = useState<number>();
   return (
     <InputWithLabel
+      min={props.min}
       {...props}
       type="text"
       ref={ref}
-      onChange={(e) =>
+      onChange={(e) => {
         setValue(() => {
           const newValue = parseInt(e.target.value.replace(/[^0-9]/g, ""));
           if (isNaN(newValue)) return 0;
           return newValue;
-        })
+        });
+        props.onChange && props.onChange(e);
+      }}
+      value={
+        props.value
+          ? value
+            ? `${prefixSymbol} ${currencyFormat(value, {})}`
+            : ""
+          : ""
       }
-      value={value ? `${prefixSymbol} ${currencyFormat(value, {})}` : ""}
       id={props.label}
     />
   );
