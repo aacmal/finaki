@@ -12,10 +12,6 @@ const WalletPercentage = (props: Props) => {
   const queryClient = useQueryClient();
 
   const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
-  const isLoading = queryClient.isFetching({
-    queryKey: [QueryKey.WALLETS],
-  });
-
   const pieChartData = wallets?.map((wallets: any) => ({
     name: wallets.name,
     value: wallets.balance,
@@ -26,7 +22,7 @@ const WalletPercentage = (props: Props) => {
     <DashboardContentWrapper className="w-full lg:w-[27rem] overflow-hidden">
       <DashboardHeader title="Dompet" />
       <PieChart
-        loading={pieChartData as unknown as boolean}
+        loading={!pieChartData as unknown as boolean}
         data={pieChartData}
       />
     </DashboardContentWrapper>

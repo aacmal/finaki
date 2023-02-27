@@ -29,13 +29,13 @@ const Header = (props: Props) => {
       case LayoutSegment.DASHBOARD:
         return "Dashboard";
       case LayoutSegment.WALLET:
-        return "My Wallet";
+        return "Dompet";
       case LayoutSegment.TRANSACTIONS:
-        return "Transactions";
+        return "Transaksi";
       case LayoutSegment.SETTINGS:
-        return "Settings";
+        return "Pengaturan";
       case LayoutSegment.PROFILE:
-        return "Profile";
+        return "Profil";
       default:
         return "";
     }

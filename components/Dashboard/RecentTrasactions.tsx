@@ -44,7 +44,7 @@ const RecentTransactions = (props: Props) => {
   const lengthData = slicedData.length;
 
   return (
-    <DashboardContentWrapper className="flex-1">
+    <DashboardContentWrapper className="flex-1 min-h-[20rem]">
       <DashboardHeader title="Transaksi terbaru" />
       {slicedData?.length > 0 ? (
         <ul>

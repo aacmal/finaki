@@ -23,7 +23,7 @@ type Props = {
 const PieChart = ({ data, legend = true, loading }: Props) => {
   return (
     <ChartWrapper className="h-52 lg:h-72 w-full">
-      {!loading ? (
+      {loading ? (
         <ChartLoading />
       ) : data ? (
         <PiChart>

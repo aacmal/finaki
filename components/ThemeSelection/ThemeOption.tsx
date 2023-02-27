@@ -25,6 +25,7 @@ const ThemeOption = ({ active, src, alt, onClick }: ThemeOptionProps) => {
         alt={alt}
         className="w-[10rem] md:w-[18rem] lg:w-[24rem] aspect-[4/3] rounded-2xl overflow-hidden"
         priority
+        sizes="(max-width: 640px) 100px, (max-width: 768px) 50vw, 3"
       />
     </div>
   );

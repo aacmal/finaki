@@ -53,7 +53,6 @@ const FullTransactionItem = ({ transaction }: Props) => {
     onSuccess: (data) => {
       // refetch total transactions
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
-
       // update transactions data
       queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
         const newData = oldData.map((transactionData: TransactionData) => {
@@ -277,7 +276,13 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   currentWallet &&
                   (walletLabelColor as any)[currentWallet.color]
                 }`,
-                { "bg-gray-200 text-gray-600": !currentWallet }
+                {
+                  "cursor-pointer": currentWallet,
+                },
+                {
+                  "text-slate-600 dark:text-slate-200 !cursor-default":
+                    !currentWallet,
+                }
               )}
             >
               {currentWallet ? currentWallet.name.split(" ")[0] : " - "}
