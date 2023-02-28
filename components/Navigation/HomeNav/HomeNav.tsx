@@ -13,7 +13,6 @@ type Props = {};
 
 const HomeNav = (props: Props) => {
   const pathname = usePathname();
-  const user = useStore((state) => state.user);
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
   const isInAuthPage = pathname?.includes("auth");
 
@@ -48,32 +47,17 @@ const HomeNav = (props: Props) => {
           </HomeNavLink>
         )}
         <div>
-          {user ? (
-            <HomeNavLink
-              type="secondary"
-              isActive={pathname === Routes.Dashboard}
-              href={Routes.Dashboard}
-            >
-              Dashboard
-            </HomeNavLink>
-          ) : (
-            <>
-              <HomeNavLink
-                isActive={pathname === Routes.Login}
-                href={Routes.Login}
-              >
-                Login
-              </HomeNavLink>
-              <HomeNavLink
-                isActive={pathname === Routes.Register}
-                href={Routes.Register}
-                type={isInAuthPage ? "primary" : "secondary"}
-                className="ml-3"
-              >
-                Register
-              </HomeNavLink>
-            </>
-          )}
+          <HomeNavLink isActive={pathname === Routes.Login} href={Routes.Login}>
+            Login
+          </HomeNavLink>
+          <HomeNavLink
+            isActive={pathname === Routes.Register}
+            href={Routes.Register}
+            type={isInAuthPage ? "primary" : "secondary"}
+            className="ml-3"
+          >
+            Register
+          </HomeNavLink>
         </div>
         {isInHomePage && <ThemeToggleIcon />}
       </nav>

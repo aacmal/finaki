@@ -37,6 +37,9 @@ const TransferBalanceDialog = ({}: Props) => {
     onSuccess: () => {
       queryClient.invalidateQueries([QueryKey.WALLETS]);
       toast.success("Berhasil memindahkan saldo");
+      reset({
+        sourceWallet: sourceWalletId,
+      });
     },
     onError: (data) => {
       toast.error((data as any).response.data.message);
@@ -49,9 +52,6 @@ const TransferBalanceDialog = ({}: Props) => {
       return;
     }
     data.amount = removeCurrencyFormat(data.amount);
-    reset({
-      sourceWallet: sourceWalletId,
-    });
     mutate(data);
   };
 
