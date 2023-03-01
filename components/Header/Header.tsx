@@ -32,10 +32,8 @@ const Header = (props: Props) => {
         return "Dompet";
       case LayoutSegment.TRANSACTIONS:
         return "Transaksi";
-      case LayoutSegment.SETTINGS:
-        return "Pengaturan";
-      case LayoutSegment.PROFILE:
-        return "Profil";
+      case LayoutSegment.ACCOUNT:
+        return "Akun saya";
       default:
         return "";
     }

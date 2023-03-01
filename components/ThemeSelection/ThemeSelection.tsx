@@ -5,6 +5,7 @@ import { Theme, ThemeState } from "@/types/Theme";
 import React, { useState } from "react";
 import useHydration from "../../hooks/useHydration";
 import useTheme from "../../hooks/useTheme";
+import ContentWrapper from "../Container/ContentWrapper";
 import ThemeOption from "./ThemeOption";
 
 const ThemeSelection = (props: any) => {
@@ -28,7 +29,7 @@ const ThemeSelection = (props: any) => {
       <Heading level={2} fontWeight="medium" className="mb-3">
         Tema
       </Heading>
-      <div className="flex gap-3 p-3 lg:p-5 rounded-2xl bg-white/70 dark:bg-slate-700 shadow-xl shadow-zinc-200/60 dark:shadow-slate-800">
+      <ContentWrapper className="flex gap-3 p-3 lg:p-5">
         <ThemeOption
           {...themeList[0]}
           onClick={() => setColorTheme(Theme.Light)}
@@ -39,7 +40,7 @@ const ThemeSelection = (props: any) => {
           onClick={() => setColorTheme(Theme.Dark)}
           active={colorTheme === Theme.Dark}
         />
-      </div>
+      </ContentWrapper>
     </div>
   );
 };

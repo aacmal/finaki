@@ -9,6 +9,7 @@ import WalletIcon from "@/icons/WalletIcon";
 import { defaultIconProps } from "@/types/IconProps";
 import { Routes } from "@/types/Routes";
 import AppNavLink from "./AppNavLink";
+import UserIcon from "@/icons/UserIcon";
 
 type Props = {};
 
@@ -39,11 +40,11 @@ const AppNav = (props: Props) => {
         Transactions
       </AppNavLink>
       <AppNavLink
-        icon={<GearIcon {...defaultIconProps} />}
-        href={Routes.Settings}
-        active={pathname === Routes.Settings}
+        icon={<UserIcon {...defaultIconProps} />}
+        href={Routes.Account}
+        active={pathname === Routes.Account}
       >
-        Settings
+        Akun Saya
       </AppNavLink>
     </nav>
   );

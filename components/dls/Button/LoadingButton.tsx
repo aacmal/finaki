@@ -4,8 +4,8 @@ import Button from "./Button";
 
 type Props = {
   isLoading: boolean;
-  isSuccess: boolean;
-  onSuccessText: string;
+  isSuccess?: boolean;
+  onSuccessText?: string;
   isError?: boolean;
   onErrorText?: string;
   onLoadingText: string;
