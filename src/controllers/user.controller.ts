@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import * as UserService from "../services/user.service";
+import UserModel from "../models/user.model";
+import { InferSchemaType } from "mongoose";
+import TokenModel from "../models/token.model";
 
 export async function getUser(req: Request, res: Response) {
   try {
@@ -15,6 +18,70 @@ export async function getUser(req: Request, res: Response) {
         email: user.email,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getLoggedDevices(req: Request, res: Response){
+  try {
+    const userId = req.user;
+    const cookie = req.cookies.refresh_token;
+    const user = await UserModel.findById(userId as string).populate({
+      path: "refreshTokens",
+      select: {
+        userAgent: 1,
+        createdAt: 1,
+        token:1,
+        _id: 1,
+      },
+    });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const refreshToken = user.refreshTokens.map((token: any) => ({
+      _id: token._id,
+      userAgent: token.userAgent,
+      createdAt: token.createdAt,
+      isCurrent: token.token === cookie,
+    }))
+    res.json({
+      message: "Devices has been fetched successfully",
+      data: refreshToken,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function logoutDevices(req: Request, res: Response){
+  try {
+    const userId = req.user;
+    const cookie = req.cookies.refresh_token;
+    const currentToken = await TokenModel.findOne({ token: cookie });
+    if (!currentToken) return res.status(401).json({ message: "Refresh Token not valid" });
+
+    const deviceIds = req.body.deviceIds as string[];
+    await UserModel.updateOne(
+      {
+        _id: userId,
+      },
+      {
+        $pull: {
+          transactions: {
+            $in: deviceIds,
+          },
+        },
+      },
+    );
+    await TokenModel.deleteMany({
+      _id: {
+        $in: deviceIds,
+      },
+    });
+    res.json({
+      message: "Devices has been logged out successfully",
+    });
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

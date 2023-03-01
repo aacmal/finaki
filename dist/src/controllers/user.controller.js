@@ -22,9 +22,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = void 0;
+exports.logoutDevices = exports.getLoggedDevices = exports.getUser = void 0;
 const UserService = __importStar(require("../services/user.service"));
+const user_model_1 = __importDefault(require("../models/user.model"));
+const token_model_1 = __importDefault(require("../models/token.model"));
 async function getUser(req, res) {
     try {
         const userId = req.user;
@@ -46,3 +51,66 @@ async function getUser(req, res) {
     }
 }
 exports.getUser = getUser;
+async function getLoggedDevices(req, res) {
+    try {
+        const userId = req.user;
+        const cookie = req.cookies.refresh_token;
+        const user = await user_model_1.default.findById(userId).populate({
+            path: "refreshTokens",
+            select: {
+                userAgent: 1,
+                createdAt: 1,
+                token: 1,
+                _id: 1,
+            },
+        });
+        if (!user)
+            return res.status(404).json({ message: "User not found" });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const refreshToken = user.refreshTokens.map((token) => ({
+            _id: token._id,
+            userAgent: token.userAgent,
+            createdAt: token.createdAt,
+            isCurrent: token.token === cookie,
+        }));
+        res.json({
+            message: "Devices has been fetched successfully",
+            data: refreshToken,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.getLoggedDevices = getLoggedDevices;
+async function logoutDevices(req, res) {
+    try {
+        const userId = req.user;
+        const cookie = req.cookies.refresh_token;
+        const currentToken = await token_model_1.default.findOne({ token: cookie });
+        if (!currentToken)
+            return res.status(401).json({ message: "Refresh Token not valid" });
+        const deviceIds = req.body.deviceIds;
+        await user_model_1.default.updateOne({
+            _id: userId,
+        }, {
+            $pull: {
+                transactions: {
+                    $in: deviceIds,
+                },
+            },
+        });
+        await token_model_1.default.deleteMany({
+            _id: {
+                $in: deviceIds,
+            },
+        });
+        res.json({
+            message: "Devices has been logged out successfully",
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.logoutDevices = logoutDevices;

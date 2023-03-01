@@ -27,5 +27,7 @@ const express_1 = require("express");
 const UserController = __importStar(require("../controllers/user.controller"));
 const route = (0, express_1.Router)();
 route.get("/", UserController.getUser);
+route.get("/devices", UserController.getLoggedDevices);
+route.post("/devices", UserController.logoutDevices);
 const UserRoute = route;
 exports.default = UserRoute;
