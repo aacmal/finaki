@@ -35,6 +35,7 @@ const bcrypt_1 = require("bcrypt");
 const token_model_1 = __importDefault(require("../models/token.model"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const __1 = require("../..");
+const crypto_1 = __importDefault(require("crypto"));
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -88,7 +89,8 @@ async function register(req, res) {
                 ],
             });
         }
-        const newUser = await UserService.create({ email, name, password });
+        const telegramToken = crypto_1.default.randomBytes(10).toString("hex");
+        const newUser = await UserService.create({ email, name, password, token: telegramToken });
         // generate access token and refresh token
         const accessToken = await generateAuthCredential(req, res, newUser);
         res.status(200).json({

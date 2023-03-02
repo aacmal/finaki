@@ -6,6 +6,7 @@ import cookieParse from "cookie-parser";
 import AppRoutes from "./src/routes/index.route";
 import { corsConfig } from "./src/configs/cors.config";
 import database from "./src/configs/database.config";
+import bot from "./src/services/bot.service";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET_KEY;
 const app = express();
 
 const port = process.env.PORT || 3000;
+
 
 app.get("/", (req, res) => {
   res.json({
@@ -46,5 +48,6 @@ database().catch((error) => {
 });
 app.listen(port, () => {
   // eslint-disable-next-line no-console
+  bot.launch();
   console.log(`Server is running at http://localhost:${port}`);
 });

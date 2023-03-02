@@ -16,6 +16,11 @@ export async function getUser(req: Request, res: Response) {
         id: user._id,
         name: user.name,
         email: user.email,
+        telegramToken: user.token,
+        telegramAccount: {
+          username: user.telegramAccount?.username,
+          firstName: user.telegramAccount?.first_name,
+        },
       },
     });
   } catch (error) {

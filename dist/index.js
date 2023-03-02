@@ -12,6 +12,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const index_route_1 = __importDefault(require("./src/routes/index.route"));
 const cors_config_1 = require("./src/configs/cors.config");
 const database_config_1 = __importDefault(require("./src/configs/database.config"));
+const bot_service_1 = __importDefault(require("./src/services/bot.service"));
 dotenv_1.default.config();
 exports.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET_KEY;
 exports.REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET_KEY;
@@ -42,5 +43,6 @@ app.use("/api", index_route_1.default);
 });
 app.listen(port, () => {
     // eslint-disable-next-line no-console
+    bot_service_1.default.launch();
     console.log(`Server is running at http://localhost:${port}`);
 });

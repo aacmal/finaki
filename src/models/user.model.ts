@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-const UserSchema = new mongoose.Schema(
+export const UserSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -16,9 +16,30 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    defaultWallet: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Wallet",
+    token: {
+      type: String,
+      required: true,
+    },
+    telegramAccount: {
+      // type: String,
+      // index: true,
+      // unique: true,
+      // sparse: true
+      id: {
+        type: String,
+        required: false,
+        unique: true,
+        index: true,
+        sparse: true,
+      },
+      username: {
+        type: String,
+        required: false,
+      },
+      first_name: {
+        type: String,
+        required: false,
+      },
     },
     refreshTokens: [
       {

@@ -31,6 +31,7 @@ const UserService = __importStar(require("../services/user.service"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const token_model_1 = __importDefault(require("../models/token.model"));
 async function getUser(req, res) {
+    var _a, _b;
     try {
         const userId = req.user;
         const user = await UserService.getById(userId);
@@ -43,6 +44,11 @@ async function getUser(req, res) {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                telegramToken: user.token,
+                telegramAccount: {
+                    username: (_a = user.telegramAccount) === null || _a === void 0 ? void 0 : _a.username,
+                    firstName: (_b = user.telegramAccount) === null || _b === void 0 ? void 0 : _b.first_name,
+                },
             },
         });
     }

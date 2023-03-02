@@ -8,6 +8,7 @@ import TokenModel from "../models/token.model";
 import jwt from "jsonwebtoken";
 import { IUser } from "../interfaces/User";
 import { REFRESH_TOKEN_SECRET } from "../..";
+import crypto from "crypto";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
@@ -67,7 +68,8 @@ async function register(req: Request, res: Response) {
         ],
       });
     }
-    const newUser = await UserService.create({ email, name, password });
+    const telegramToken = crypto.randomBytes(10).toString("hex");
+    const newUser = await UserService.create({ email, name, password, token: telegramToken });
 
     // generate access token and refresh token
     const accessToken = await generateAuthCredential(req, res, newUser);
