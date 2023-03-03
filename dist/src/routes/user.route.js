@@ -29,5 +29,6 @@ const route = (0, express_1.Router)();
 route.get("/", UserController.getUser);
 route.get("/devices", UserController.getLoggedDevices);
 route.post("/devices", UserController.logoutDevices);
+route.delete("/telegram", UserController.detachTelegramAccount);
 const UserRoute = route;
 exports.default = UserRoute;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import * as UserService from "../services/user.service";
 import UserModel from "../models/user.model";
-import { InferSchemaType } from "mongoose";
 import TokenModel from "../models/token.model";
 
 export async function getUser(req: Request, res: Response) {
@@ -16,7 +15,7 @@ export async function getUser(req: Request, res: Response) {
         id: user._id,
         name: user.name,
         email: user.email,
-        telegramToken: user.token,
+        token: user.token,
         telegramAccount: {
           username: user.telegramAccount?.username,
           firstName: user.telegramAccount?.first_name,
@@ -28,7 +27,7 @@ export async function getUser(req: Request, res: Response) {
   }
 }
 
-export async function getLoggedDevices(req: Request, res: Response){
+export async function getLoggedDevices(req: Request, res: Response) {
   try {
     const userId = req.user;
     const cookie = req.cookies.refresh_token;
@@ -37,7 +36,7 @@ export async function getLoggedDevices(req: Request, res: Response){
       select: {
         userAgent: 1,
         createdAt: 1,
-        token:1,
+        token: 1,
         _id: 1,
       },
     });
@@ -48,7 +47,7 @@ export async function getLoggedDevices(req: Request, res: Response){
       userAgent: token.userAgent,
       createdAt: token.createdAt,
       isCurrent: token.token === cookie,
-    }))
+    }));
     res.json({
       message: "Devices has been fetched successfully",
       data: refreshToken,
@@ -58,7 +57,7 @@ export async function getLoggedDevices(req: Request, res: Response){
   }
 }
 
-export async function logoutDevices(req: Request, res: Response){
+export async function logoutDevices(req: Request, res: Response) {
   try {
     const userId = req.user;
     const cookie = req.cookies.refresh_token;
@@ -86,7 +85,33 @@ export async function logoutDevices(req: Request, res: Response){
     res.json({
       message: "Devices has been logged out successfully",
     });
-    
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function detachTelegramAccount(req: Request, res: Response) {
+  try {
+    const userId = req.user;
+    const user = await UserModel.findByIdAndUpdate(
+      userId as string,
+      {
+        telegramAccount: {
+          id: null,
+        },
+      },
+      {
+        new: true,
+      },
+    ).select({
+      name: 1,
+      email: 1,
+      telegramAccount: 1,
+    });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({
+      message: "Telegram account has been detached successfully",
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

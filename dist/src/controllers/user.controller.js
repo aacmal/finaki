@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutDevices = exports.getLoggedDevices = exports.getUser = void 0;
+exports.detachTelegramAccount = exports.logoutDevices = exports.getLoggedDevices = exports.getUser = void 0;
 const UserService = __importStar(require("../services/user.service"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const token_model_1 = __importDefault(require("../models/token.model"));
@@ -44,7 +44,7 @@ async function getUser(req, res) {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                telegramToken: user.token,
+                token: user.token,
                 telegramAccount: {
                     username: (_a = user.telegramAccount) === null || _a === void 0 ? void 0 : _a.username,
                     firstName: (_b = user.telegramAccount) === null || _b === void 0 ? void 0 : _b.first_name,
@@ -120,3 +120,28 @@ async function logoutDevices(req, res) {
     }
 }
 exports.logoutDevices = logoutDevices;
+async function detachTelegramAccount(req, res) {
+    try {
+        const userId = req.user;
+        const user = await user_model_1.default.findByIdAndUpdate(userId, {
+            telegramAccount: {
+                id: null,
+            },
+        }, {
+            new: true,
+        }).select({
+            name: 1,
+            email: 1,
+            telegramAccount: 1,
+        });
+        if (!user)
+            return res.status(404).json({ message: "User not found" });
+        res.json({
+            message: "Telegram account has been detached successfully",
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.detachTelegramAccount = detachTelegramAccount;
