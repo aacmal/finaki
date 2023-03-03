@@ -13,6 +13,8 @@ type Props = {
   title: string;
   loadingOnSuccess?: boolean;
   styleButton?: "primary" | "secondary" | "danger";
+  background?: boolean;
+  stroke?: string;
   onClick?: () => void;
   className?: string;
 };
@@ -29,6 +31,7 @@ const LoadingButton = ({
   loadingOnSuccess,
   styleButton,
   className,
+  background,
   onClick,
 }: Props) => {
   return (
@@ -39,11 +42,13 @@ const LoadingButton = ({
       width={width}
       type="submit"
       className={className}
+      background={background}
     >
       <div className="flex items-center justify-center">
         <LoadingSpinner
           className={classNames(
-            "transition-all duration-500 stroke-white",
+            "transition-all duration-500 stroke-current",
+
             {
               "max-w-0 mr-0": !isLoading,
               "max-w-xs mr-3": isLoading,

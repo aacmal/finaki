@@ -85,11 +85,15 @@ const Device = ({
         <LoadingButton
           onClick={() => handleDeleteDevice(_id)}
           styleButton="danger"
-          className="lg:!font-medium !font-normal !px-3 !py-2 lg:invisible lg:group-hover:visible"
+          className={classNames(
+            "!font-bold !px-3 !py-2 lg:invisible lg:group-hover:visible",
+            { "lg:!visible": isLoading }
+          )}
           width="fit"
           title="Hapus"
           isLoading={isLoading}
           onLoadingText="Menghapus"
+          background={false}
         />
       )}
     </div>

@@ -4,6 +4,8 @@ import React from "react";
 import ThemeSelection from "@/components/ThemeSelection/ThemeSelection";
 import Profile from "@/components/Account/Profile";
 import DevicesLists from "@/components/Account/DeviceLists";
+import LoadingButton from "@/dls/Button/LoadingButton";
+import DangerZone from "@/components/Account/DangerZone";
 
 type Props = {};
 
@@ -13,6 +15,7 @@ const Page = (props: Props) => {
       <Profile />
       <ThemeSelection />
       <DevicesLists />
+      <DangerZone />
     </div>
   );
 };

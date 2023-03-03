@@ -19,3 +19,8 @@ export const logoutDevices = async (deviceIds: string[]) => {
   });
   return response.data.data;
 }
+
+export const detachTelegramAccount = async () => {
+  const response = await instance.delete("/user/telegram");
+  return response.data.data;
+}

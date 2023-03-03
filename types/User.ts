@@ -2,5 +2,9 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  tokenTelegram?: string | null;
+  token?: string | null;
+  telegramAccount?: {
+    username: string;
+    firstName: string;
+  } | null;
 }
