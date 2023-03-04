@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useStore from "../../stores/store";
 import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
+import TransactionDetail from "@/components/Transactions/TransactionDetail";
 
 type Props = {
   children: React.ReactNode;
@@ -54,6 +55,7 @@ const AppLayout = ({ children }: Props) => {
         </div>
       </Container>
       <TransferBalanceDialog />
+      <TransactionDetail />
     </>
   );
 };

@@ -8,6 +8,10 @@ interface Store {
   colorTheme: ThemeState;
   accessToken: string | null;
   deleteWalletId: string | null;
+  transactionDetailState:{
+    transactionId: string | null;
+    setTransactionId: (id: string | null) => void;
+  },
   transferBalanceState: {
     sourceWalletId: string | null;
     setSourceWalletId: (id: string | null) => void;
@@ -29,6 +33,10 @@ const useStore = create<Store>()(
       colorTheme: Theme.Light,
       accessToken: null,
       deleteWalletId: null,
+      transactionDetailState: {
+        transactionId: null,
+        setTransactionId: (id: string | null) => set({ transactionDetailState: { ...get().transactionDetailState, transactionId: id } }),
+      },
       transferBalanceState: {
         sourceWalletId: null,
         setSourceWalletId: (id: string | null) => set({ transferBalanceState: { ...get().transferBalanceState, sourceWalletId: id } }),

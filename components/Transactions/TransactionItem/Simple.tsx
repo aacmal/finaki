@@ -1,8 +1,9 @@
-import IconWrapper from '@/dls/IconWrapper';
-import ArrowCircleIcon from '@/icons/ArrowCircleIcon';
-import { currencyFormat } from '@/utils/currencyFormat';
-import classNames from 'classnames';
-import React from 'react'
+import IconWrapper from "@/dls/IconWrapper";
+import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
+import { currencyFormat } from "@/utils/currencyFormat";
+import classNames from "classnames";
+import React from "react";
+import useStore from "../../../stores/store";
 
 type Props = {
   isLastItem: boolean;
@@ -10,8 +11,9 @@ type Props = {
   description: string;
   createdAt: string;
   amount: number;
+  id: string;
   theme?: "default" | "light";
-}
+};
 
 /**
  * This is a simple transaction item component, it will show the simple transaction item and it can't be editable
@@ -25,8 +27,9 @@ type Props = {
  *  createdAt="2021-08-01T00:00:00.000Z"
  *  amount={100000}
  * />
-*/
+ */
 const SimpleTransactionItem = ({
+  id,
   isLastItem,
   type,
   description,
@@ -34,6 +37,10 @@ const SimpleTransactionItem = ({
   amount,
   theme = "default",
 }: Props) => {
+  const setTransactionId = useStore(
+    (state) => state.transactionDetailState.setTransactionId
+  );
+
   const date = new Date(createdAt).toLocaleDateString("id-ID", {
     day: "numeric",
     month: "short",
@@ -65,7 +72,12 @@ const SimpleTransactionItem = ({
         </IconWrapper>
       </span>
       <span>
-        <span className={classNames("font-medium")}>{description}</span>
+        <span
+          onClick={() => setTransactionId(id)}
+          className={classNames("font-medium cursor-pointer")}
+        >
+          {description}
+        </span>
         <span className="flex items-center text-sm">
           <span className="font-medium mr-1">{date}</span>
           <span
@@ -94,7 +106,7 @@ const SimpleTransactionItem = ({
         {currencyFormat(amount)}
       </span>
     </li>
-  )
-}
+  );
+};
 
-export default SimpleTransactionItem
+export default SimpleTransactionItem;

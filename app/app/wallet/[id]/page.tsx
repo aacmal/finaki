@@ -83,6 +83,7 @@ const WalletPage = (props: Props) => {
             return (
               <SimpleTransactionItem
                 key={transaction._id}
+                id={transaction._id}
                 isLastItem={index === walletTransactionsQuery.data?.length - 1}
                 description={transaction.description}
                 amount={transaction.amount}
