@@ -47,13 +47,14 @@ input[type=number] {
     @apply text-slate-500 dark:text-slate-300;
     position: absolute;
     left: 10px;
-    top: 50%;
+    top: 27px;
     transform: translateY(-50%);
     padding: 0 5px;
     transition: all 0.2s ease-in-out;
   }
+  
 
-  input{
+  input, textarea{
     @apply bg-gray-100 text-slate-800 dark:text-slate-100 dark:bg-slate-500 ;
     transition: all 0.2s ease-in-out;
     &:focus + label {
@@ -79,13 +80,13 @@ input[type=number] {
     }
 
     &:not(:placeholder-shown){
-      @apply bg-white dark:bg-slate-600;
+      @apply bg-transparent;
       @apply ring-1 ring-gray-300 invalid:ring-pink-400;
     }
 
 
     &:focus{
-      @apply bg-white ring-2 ring-blue-400 dark:bg-slate-600;
+      @apply bg-transparent ring-2 ring-blue-400;
     }
 
     &:focus:not(:placeholder-shown){

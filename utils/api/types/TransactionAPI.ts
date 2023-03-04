@@ -18,6 +18,7 @@ export interface TransactionInput {
   description: string;
   amount: number;
   type: string;
+  note: string;
 }
 
 export interface EditTransactionInput {

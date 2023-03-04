@@ -1,16 +1,17 @@
 import { currencyFormat } from "@/utils/currencyFormat";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import InputWithLabel from "./InputWithLabel";
 
 type Props = {
   placeholder: string;
-  label: string;
-  id?: string;
+  label?: string;
+  id: string;
   prefixSymbol?: string;
   error?: any;
   className?: string;
   required?: boolean;
   minLength?: number;
+  defaultValue?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   value?: string;
@@ -19,15 +20,21 @@ type Props = {
 };
 
 const CurrencyInput = forwardRef(function CurrencyInput(
-  { prefixSymbol = "Rp", ...props }: Props,
+  { prefixSymbol = "Rp", className, ...props }: Props,
   ref: React.Ref<HTMLInputElement>
 ) {
-  const [value, setValue] = useState<number>();
+  const [value, setValue] = useState<number>(
+    props.value ? parseInt(props.value) : 0
+  );
+
   return (
     <InputWithLabel
+      inputStyle={className}
       min={props.min}
       {...props}
+      defaultValue={undefined}
       type="text"
+      inputMode="numeric"
       ref={ref}
       onChange={(e) => {
         setValue(() => {
@@ -44,7 +51,7 @@ const CurrencyInput = forwardRef(function CurrencyInput(
             : ""
           : ""
       }
-      id={props.label}
+      id={props.id}
     />
   );
 });

@@ -12,12 +12,13 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   type: "text" | "number" | "password" | "email";
   placeholder: string;
   value?: string | number;
-  label: string;
+  label?: string;
   id: string;
   defaultValue?: string;
   required?: boolean;
   minLength?: number;
   className?: string;
+  inputStyle?: string;
   error?: {
     message: string;
   };
@@ -26,7 +27,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 // eslint-disable-next-line react/display-name
 const InputWithLabel = forwardRef(
   (
-    { id, type, label, className, error, ...props }: Props,
+    { id, type, label, className, inputStyle, error, ...props }: Props,
     ref: React.Ref<HTMLInputElement>
   ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -39,7 +40,7 @@ const InputWithLabel = forwardRef(
         )}
       >
         <input
-          className={classNames("w-full px-4 py-4 rounded-xl")}
+          className={classNames("w-full px-4 py-4 rounded-xl", inputStyle)}
           // Show password if type is password and isPasswordVisible is true, otherwise show the type
           type={
             type === "password"

@@ -19,6 +19,9 @@ import { WalletData } from "@/types/Wallet";
 import Link from "next/link";
 import { Routes } from "@/types/Routes";
 import { walletLabelColor } from "@/components/WalletCard/constants";
+import InputWithLabel from "@/dls/Form/InputWithLabel";
+import Control from "react-select/dist/declarations/src/components/Control";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 
 type Props = {
   transaction: Transaction;
@@ -307,12 +310,14 @@ const FullTransactionItem = ({ transaction }: Props) => {
             onSubmit={handleSubmit(onSaveHandler)}
           >
             <TextArea
+              id="Deskripsi"
               required
               spellCheck={false}
               placeholder="Deskripsi"
               transparent
               defaultValue={transaction.description}
-              className="border border-blue-200 h-12 w-[50%]"
+              className="w-[50%]"
+              padding="p-2 h-12"
               {...register("description")}
             />
             <div className="flex gap-3 dark:text-slate-200">
@@ -341,7 +346,21 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   </Select>
                 )}
               />
-              <Input
+              <Controller
+                name="amount"
+                control={control}
+                defaultValue={String(transaction.amount)}
+                render={({ field }) => (
+                  <CurrencyInput
+                    prefixSymbol=""
+                    className="!p-2 h-12"
+                    placeholder="Jumlah"
+                    id="amount"
+                    {...field}
+                  />
+                )}
+              />
+              {/* <InputWithLabel
                 required
                 type="number"
                 placeholder="amount"
@@ -350,7 +369,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                 className="border border-blue-200 text-right"
                 {...register("amount")}
                 error={errors.amount}
-              />
+              /> */}
             </div>
           </form>
         )}

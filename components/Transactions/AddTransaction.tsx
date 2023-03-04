@@ -25,6 +25,7 @@ import Option from "@/dls/Select/Option";
 import { indicatorColor } from "../WalletCard/constants";
 import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
+import TextArea from "@/dls/Form/TextArea";
 
 type Props = {};
 
@@ -77,6 +78,7 @@ const AddTransaction = (props: Props) => {
       description: values.description,
       amount: removeCurrencyFormat(values.amount),
       type: values["transaction-type"],
+      note: values.note,
       walletId: values.wallet ?? null,
     };
     const walletBalance = walletQuery.data?.find(
@@ -200,6 +202,13 @@ const AddTransaction = (props: Props) => {
                 ))}
               </Select>
             )}
+          />
+          <TextArea
+            id="note"
+            placeholder="Topup diamond untuk beli skin Legend"
+            label="Catatan (Opsional)"
+            className="w-full"
+            {...register("note")}
           />
           <LoadingButton
             isLoading={isLoading}

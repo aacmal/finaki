@@ -102,6 +102,7 @@ const AddNewWallet = (props: Props) => {
               <Controller
                 name="balance"
                 control={control}
+                defaultValue="0"
                 render={({ field }) => (
                   <CurrencyInput
                     label="Saldo Awal (opsional)"

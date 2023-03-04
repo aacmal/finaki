@@ -20,6 +20,7 @@ import { transferBalance } from "@/api/wallet";
 import useStore from "../../stores/store";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import { removeCurrencyFormat } from "@/utils/currencyFormat";
+import TextArea from "@/dls/Form/TextArea";
 
 type Props = {};
 
@@ -140,13 +141,20 @@ const TransferBalanceDialog = ({}: Props) => {
               <CurrencyInput
                 required
                 min={1}
-                className="!w-full"
+                className="!w-full mb-6"
                 placeholder="5.000"
                 label="Jumlah"
                 id="amount"
                 {...field}
               />
             )}
+          />
+          <TextArea
+            placeholder="Convert dari tunai ke saldo"
+            label="Catatan"
+            id="note"
+            spellCheck={false}
+            {...register("note")}
           />
           <LoadingButton
             className="mt-6"
