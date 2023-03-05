@@ -188,6 +188,21 @@ export async function getOneWallet(req: Request, res: Response) {
   }
 }
 
+export async function getBalanceHistory(req: Request, res: Response){
+  try {
+    const id = req.params.id as unknown;
+    const period = (req.query.period as unknown as string) || "week";
+    const result = await WalletService.balanceHistory(id as Types.ObjectId, period as "week" | "month");
+    
+    res.json({
+      message: "Wallet balance history has been fetched successfully",
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export async function transferWalletBalance(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {

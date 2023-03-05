@@ -33,6 +33,7 @@ route.post("/transfer-balance", validator_1.transferWalletBalanceValidator, Wall
 route.put("/:id", validator_1.walletValidator, WalletController.updateWallet);
 route.delete("/:id", validator_1.updateWalletValidator, WalletController.deleteWallet);
 route.get("/:id", WalletController.getOneWallet);
+route.get("/:id/balance-history", WalletController.getBalanceHistory);
 route.get("/:id/transactions", WalletController.walletTransactions);
 route.patch("/:id/color", validator_1.walletColorValidator, WalletController.updateWalletColor);
 const WalletRoute = route;
