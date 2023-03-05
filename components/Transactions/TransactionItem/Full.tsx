@@ -4,8 +4,8 @@ import TextArea from "@/dls/Form/TextArea";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
 import { QueryKey } from "@/types/QueryKey";
-import { Transaction, TransactionData } from "@/types/Transaction";
-import { currencyFormat } from "@/utils/currencyFormat";
+import { Transaction } from "@/types/Transaction";
+import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import React, { useState } from "react";
@@ -54,21 +54,16 @@ const FullTransactionItem = ({ transaction }: Props) => {
   const deleteMutation = useMutation({
     mutationFn: deleteTransaction,
     onSuccess: (data) => {
-      // refetch total transactions
+      // refetch dashboard data
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
+
       // update transactions data
-      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
-        const newData = oldData.map((transactionData: TransactionData) => {
-          const newTransactionData: TransactionData = {
-            _id: transactionData._id,
-            transactions: transactionData.transactions.filter(
-              (transaction: Transaction) => transaction._id !== data._id
-            ),
-          };
-          return newTransactionData;
-        });
-        return newData;
-      });
+      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) =>
+        oldData.filter(
+          (transaction: Transaction) => transaction._id !== data._id
+        )
+      );
+
       // update recent transactions data
       queryClient.setQueryData(
         [QueryKey.RECENT_TRANSACTIONS],
@@ -96,7 +91,6 @@ const FullTransactionItem = ({ transaction }: Props) => {
             }
             return wallet;
           });
-
           return newData;
         });
       }
@@ -119,24 +113,14 @@ const FullTransactionItem = ({ transaction }: Props) => {
 
       // update transactions data
       queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
-        const newData = oldData.map((transactionData: TransactionData) => {
-          const newTransactionData = {
-            _id: transactionData._id,
-            transactions: transactionData.transactions.map(
-              (oldTransaction: Transaction) => {
-                if (oldTransaction._id === data._id) {
-                  return {
-                    ...data,
-                    time: oldTransaction.time,
-                  };
-                }
-                return oldTransaction;
-              }
-            ),
-          };
-          return newTransactionData;
+        return oldData.map((transaction: Transaction) => {
+          if (transaction._id === data._id) {
+            return {
+              ...data,
+            };
+          }
+          return transaction;
         });
-        return newData;
       });
 
       // update recent transaction data
@@ -161,8 +145,8 @@ const FullTransactionItem = ({ transaction }: Props) => {
         }
       );
 
-      // if edited transaction has wallet id, invalidate wallet query
-      if (data.walletId) {
+      // if edited transaction has wallet id and transaction amount is changed, invalidate wallet query
+      if (data.walletId && data.amount !== transaction.amount) {
         queryClient.invalidateQueries([QueryKey.WALLETS]);
       }
 
@@ -189,10 +173,13 @@ const FullTransactionItem = ({ transaction }: Props) => {
     },
   });
 
-  const onSaveHandler: SubmitHandler<any> = (values: TransactionInput) => {
+  const onSaveHandler: SubmitHandler<any> = (values: any) => {
     const editedTransactionData = {
       id: transaction._id,
-      transactionInput: values,
+      transactionInput: {
+        ...values,
+        amount: removeCurrencyFormat(values.amount),
+      },
     };
 
     if (values.amount < 0) {
@@ -238,6 +225,8 @@ const FullTransactionItem = ({ transaction }: Props) => {
     deleteMutation.mutate(transactionId);
   };
 
+  const date = new Date(transaction.createdAt).toTimeString().slice(0, 5);
+
   return (
     <>
       {isOnEdit && (
@@ -253,7 +242,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
         {!isOnEdit ? (
           <>
             <div className="w-[14%] hidden lg:block text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
-              {transaction.time}
+              {date}
             </div>
             <div className="w-[40%] lg:w-[30%] flex flex-col">
               <div className="font-bold lg:font-medium text-slate-800 dark:text-slate-200">
@@ -264,7 +253,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   "lg:hidden text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900"
                 )}
               >
-                {transaction.time}
+                {date}
               </div>
             </div>
             <Link

@@ -1,4 +1,4 @@
-import { Transaction, TransactionData } from "@/types/Transaction";
+import { Transaction, TransactionByDate } from "@/types/Transaction";
 import { instance } from "./api";
 import { makeUrl } from "./config";
 import {
@@ -18,7 +18,7 @@ export const insertNewTransaction = async (data: TransactionInput) => {
 };
 
 export const getTransactionsByDate = async () => {
-  const response = await instance.get<TransactionData[]>(
+  const response = await instance.get<Transaction[]>(
     "/transactions/by-date"
   );
   return response.data;
