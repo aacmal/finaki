@@ -1,24 +1,26 @@
 "use client";
 
-import { Transaction, TransactionData } from "@/types/Transaction";
+import { Transaction } from "@/types/Transaction";
 import classNames from "classnames";
 import React from "react";
 import { FullTransactionItem } from "../TransactionItem";
 
 type Props = {
-  data: TransactionData[];
+  data: {
+    date: string;
+    data: Transaction[];
+  }[];
 };
 
 const TransactionList = ({ data }: Props) => {
   return (
     <>
-      {data.map((transactionData: TransactionData, index: number) => {
-        if (transactionData.transactions.length === 0) return;
+      {data.map((transactionData, index) => {
         return (
-          <div key={transactionData._id}>
+          <div key={transactionData.date}>
             <div className="flex items-center">
               <h3 className="pl-4 font-bold text-gray-400">
-                {transactionData._id}
+                {transactionData.date}
               </h3>
               <div
                 className={classNames(
@@ -28,7 +30,7 @@ const TransactionList = ({ data }: Props) => {
                 )}
               ></div>
             </div>
-            {transactionData.transactions.map(
+            {transactionData.data?.map(
               (transaction: Transaction, index: number) => (
                 <FullTransactionItem
                   key={transaction._id}

@@ -1,24 +1,34 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getTransactionsByDate } from "@/api/transaction";
+import { getAllTransactions, getTransactionsByDate } from "@/api/transaction";
 import { QueryKey } from "@/types/QueryKey";
 import TransactionHeader from "@/components/Transactions/AllTransactions/TransactionHeader";
 import TransactionList from "@/components/Transactions/AllTransactions/TransactionList";
 import Heading from "@/dls/Heading";
+import { useEffect, useState } from "react";
+import { groupByDay } from "@/utils/array";
 
 type Props = {};
 
 const TransactionsPage = (props: Props) => {
+  const [transaction, setTransaction] = useState<any[]>();
+
   const { data, error, isLoading } = useQuery({
     queryKey: [QueryKey.TRANSACTIONS],
-    queryFn: getTransactionsByDate,
+    queryFn: () => getAllTransactions(1000),
     onError: (error) => {
       console.log(error);
     },
   });
 
-  if (isLoading) {
+  useEffect(() => {
+    if (data) {
+      setTransaction(groupByDay(data));
+    }
+  }, [data]);
+
+  if (isLoading || !transaction) {
     return (
       <Heading className="text-center mt-10 animate-pulse" level={3}>
         Memuat...
@@ -26,7 +36,7 @@ const TransactionsPage = (props: Props) => {
     );
   }
 
-  if (!data || error) {
+  if (!transaction || error) {
     return (
       <Heading className="text-center mt-10" level={3}>
         Terjadi Kesalahan
@@ -34,7 +44,7 @@ const TransactionsPage = (props: Props) => {
     );
   }
 
-  if (data.length < 1) {
+  if (transaction.length < 1) {
     return (
       <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
         <span>Tidak ada transaksi</span>
@@ -49,7 +59,7 @@ const TransactionsPage = (props: Props) => {
   return (
     <div className="flex flex-col w-full">
       <TransactionHeader />
-      <TransactionList data={data} />
+      <TransactionList data={transaction} />
     </div>
   );
 };

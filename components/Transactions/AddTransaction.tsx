@@ -51,7 +51,7 @@ const AddTransaction = (props: Props) => {
   const { isLoading, mutate, isSuccess, isError } = useMutation({
     mutationFn: insertNewTransaction,
     onSuccess: (data) => {
-      reset();
+      // push new transaction to recent transaction query cache
       queryClient.setQueryData(
         [QueryKey.RECENT_TRANSACTIONS],
         (oldData: any) => {
@@ -59,14 +59,21 @@ const AddTransaction = (props: Props) => {
           return [data, ...oldData];
         }
       );
-      queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
-      queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
+
+      // push new transaction to query cache
+      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
+        if (!oldData) return;
+        return [data, ...oldData];
+      });
+
+      // refetch dashboard data
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
       if (data.walletId) {
         queryClient.refetchQueries([QueryKey.WALLETS]);
         queryClient.invalidateQueries([QueryKey.WALLETS, data.walletId]);
       }
+      reset();
     },
     onError: (error) => {
       console.log("error", error);

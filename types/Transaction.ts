@@ -3,14 +3,15 @@ export interface Transaction {
   walletId?: string;
   amount: number;
   description: string;
-  // category?: string;
+  note: string;
   type: string;
-  time: string;
   createdAt: string;
+  updatedAt: string;
+  // category?: string;
 }
 
-export interface TransactionData {
-  _id: string;
+export interface TransactionByDate {
+  date: string;
   transactions: Transaction[];
 }
 
