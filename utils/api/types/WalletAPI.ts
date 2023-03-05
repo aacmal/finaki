@@ -11,6 +11,11 @@ export interface CreatedWalletResponse extends GenericResponse {
   data: WalletData;
 }
 
+export interface UpdateWalletRequest {
+  id: string;
+  data: WalletInput;
+}
+
 export interface UpdatedWalletResponse extends GenericResponse {
   data: WalletData;
 }

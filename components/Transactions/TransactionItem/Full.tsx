@@ -350,23 +350,13 @@ const FullTransactionItem = ({ transaction }: Props) => {
                 render={({ field }) => (
                   <CurrencyInput
                     prefixSymbol=""
-                    className="!p-2 h-12"
+                    inputStyle="!p-2 h-12"
                     placeholder="Jumlah"
                     id="amount"
                     {...field}
                   />
                 )}
               />
-              {/* <InputWithLabel
-                required
-                type="number"
-                placeholder="amount"
-                defaultValue={transaction.amount}
-                transparent
-                className="border border-blue-200 text-right"
-                {...register("amount")}
-                error={errors.amount}
-              /> */}
             </div>
           </form>
         )}

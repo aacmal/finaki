@@ -10,6 +10,7 @@ import {
   DeleteWalletRequest,
   WalletBalanceActivityResponse,
   TransferBalance,
+  UpdateWalletRequest,
 } from "./types/WalletAPI";
 
 import { TransactionsResponse } from "./types/TransactionAPI";
@@ -25,7 +26,7 @@ export const getAllWallets = async () => {
   return response.data.data;
 };
 
-export const updateWallet = async (id: string, data: WalletInput) => {
+export const updateWallet = async ({id, data}: UpdateWalletRequest) => {
   const response = await instance.put<UpdatedWalletResponse>(
     `/wallets/${id}`,
     data

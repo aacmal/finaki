@@ -5,12 +5,16 @@ interface Props {
   children: React.ReactNode;
   align?: "start" | "center" | "end";
   onOpenChange?: (open: boolean) => void;
+  sideOffset?: number;
+  alignOffset?: number;
 }
 
 const DropdownMenu = ({
   trigger,
   children,
   align = "end",
+  sideOffset = -5,
+  alignOffset = -15,
   onOpenChange,
 }: Props) => {
   return (
@@ -21,8 +25,8 @@ const DropdownMenu = ({
       <RadixDropdown.Portal>
         <RadixDropdown.Content
           align={align}
-          sideOffset={-5}
-          alignOffset={-15}
+          sideOffset={sideOffset}
+          alignOffset={alignOffset}
           className="py-1 px-1 bg-white shadow-xl rounded-lg text-sm"
         >
           {children}

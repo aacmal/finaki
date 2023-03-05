@@ -17,10 +17,11 @@ type Props = {
   value?: string;
   onReset?: () => void;
   min?: number;
+  inputStyle?: string;
 };
 
 const CurrencyInput = forwardRef(function CurrencyInput(
-  { prefixSymbol = "Rp", className, ...props }: Props,
+  { prefixSymbol = "Rp", className, inputStyle, ...props }: Props,
   ref: React.Ref<HTMLInputElement>
 ) {
   const [value, setValue] = useState<number>(
@@ -29,7 +30,8 @@ const CurrencyInput = forwardRef(function CurrencyInput(
 
   return (
     <InputWithLabel
-      inputStyle={className}
+      inputStyle={inputStyle}
+      className={className}
       min={props.min}
       {...props}
       defaultValue={undefined}

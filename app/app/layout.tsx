@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import useStore from "../../stores/store";
 import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
 import TransactionDetail from "@/components/Transactions/TransactionDetail";
+import DeleteWalletDialog from "@/components/WalletCard/DeleteWalletDialog";
+import { getAllTransactions } from "@/api/transaction";
 
 type Props = {
   children: React.ReactNode;
@@ -28,6 +30,14 @@ const AppLayout = ({ children }: Props) => {
       setUser(data);
     },
     staleTime: 0,
+  });
+
+  useQuery({
+    queryKey: [QueryKey.TRANSACTIONS],
+    queryFn: () => getAllTransactions(1000),
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   useEffect(() => {
@@ -54,6 +64,7 @@ const AppLayout = ({ children }: Props) => {
           <main>{children}</main>
         </div>
       </Container>
+      <DeleteWalletDialog />
       <TransferBalanceDialog />
       <TransactionDetail />
     </>
