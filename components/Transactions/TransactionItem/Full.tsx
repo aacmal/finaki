@@ -22,6 +22,7 @@ import { walletLabelColor } from "@/components/WalletCard/constants";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Control from "react-select/dist/declarations/src/components/Control";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
+import useStore from "../../../stores/store";
 
 type Props = {
   transaction: Transaction;
@@ -34,6 +35,10 @@ type Props = {
  * @returns
  */
 const FullTransactionItem = ({ transaction }: Props) => {
+  const setTransactionId = useStore(
+    (state) => state.transactionDetailState.setTransactionId
+  );
+
   const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -245,7 +250,10 @@ const FullTransactionItem = ({ transaction }: Props) => {
               {date}
             </div>
             <div className="w-[40%] lg:w-[30%] flex flex-col">
-              <div className="font-bold lg:font-medium text-slate-800 dark:text-slate-200">
+              <div
+                onClick={() => setTransactionId(transaction._id)}
+                className="font-bold lg:font-medium text-slate-800 dark:text-slate-200 cursor-pointer truncate"
+              >
                 {transaction.description}
               </div>
               <div
