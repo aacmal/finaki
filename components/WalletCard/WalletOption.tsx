@@ -18,13 +18,13 @@ type Props = {
 };
 
 const WalletOption = ({ walletData, state }: Props) => {
-  const { setSourceWalletId, setOpen, setDeleteWalletId } = useStore(
-    (state) => ({
+  const { setSourceWalletId, setOpen, setDeleteWalletId, setWalletId } =
+    useStore((state) => ({
       setSourceWalletId: state.transferBalanceState.setSourceWalletId,
       setOpen: state.transferBalanceState.setOpen,
       setDeleteWalletId: state.setDeleteWalletId,
-    })
-  );
+      setWalletId: state.addTransactionState.setWalletId,
+    }));
 
   const handleTransferBalance = useCallback(() => {
     setOpen(true);
@@ -56,7 +56,11 @@ const WalletOption = ({ walletData, state }: Props) => {
 
   return (
     <div className="flex justify-center gap-4 mt-3">
-      <IconButton shape="circle" className="bg-white/40 text-slate-50 !p-2">
+      <IconButton
+        onClick={() => setWalletId(walletData._id)}
+        shape="circle"
+        className="bg-white/40 text-slate-50 !p-2"
+      >
         <PlusIcon strokeWidth={2} />
       </IconButton>
       <IconButton

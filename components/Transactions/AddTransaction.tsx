@@ -1,21 +1,14 @@
-import Button from "@/dls/Button/Button";
 import LoadingButton from "@/dls/Button/LoadingButton";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import RadioButton from "@/dls/Form/Radio/RadioButton";
 import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
-import { Modal, ModalCloseTringger, ModalContent } from "@/dls/Modal";
-import ModalTrigger from "@/dls/Modal/ModalTrigger";
-
+import { Modal, ModalContent } from "@/dls/Modal";
 import ArrowIcon from "@/icons/ArrowIcon";
-import PlusIcon from "@/icons/PlusIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
-import { Transaction } from "@/types/Transaction";
 import { insertNewTransaction } from "@/api/transaction";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { TransactionInput } from "@/api/types/TransactionAPI";
 import { QueryKey } from "@/types/QueryKey";
@@ -23,13 +16,18 @@ import { getAllWallets } from "@/api/wallet";
 import Select from "@/dls/Select/Select";
 import Option from "@/dls/Select/Option";
 import { indicatorColor } from "../WalletCard/constants";
-import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import TextArea from "@/dls/Form/TextArea";
+import useStore from "../../stores/store";
 
 type Props = {};
 
 const AddTransaction = (props: Props) => {
+  const { isOpen, setOpen, walletId } = useStore(
+    (state) => state.addTransactionState
+  );
+
   const {
     handleSubmit,
     register,
@@ -107,24 +105,17 @@ const AddTransaction = (props: Props) => {
   };
 
   return (
-    <Modal>
-      <ModalTrigger className="border border-blue-500 text-blue-500 rounded-2xl lg:bg-transparent dark:lg:bg-transparent dark:bg-slate-700 bg-white lg:shadow-none shadow-xl z-20 overflow-hidden lg:p-0 p-3 lg:rounded-lg font-semibold lg:static fixed bottom-28 right-10">
-        <div>
-          <span className="lg:block hidden px-3 py-1">Tambah Transaksi</span>
-          <div className="w-8 lg:hidden">
-            <PlusIcon strokeWidth={2} />
-          </div>
-        </div>
-      </ModalTrigger>
+    <Modal stateOpen={isOpen || walletId !== null}>
       <form action="" onSubmit={handleSubmit(onSubmitHandler)}>
         <ModalContent className="space-y-6">
           <div className="flex items-center justify-between">
             <Heading level={3}>Tambah Transaksi</Heading>
-            <ModalCloseTringger>
-              <IconWrapper className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20">
-                <XmarkIcon />
-              </IconWrapper>
-            </ModalCloseTringger>
+            <IconWrapper
+              onClick={() => setOpen(false)}
+              className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20"
+            >
+              <XmarkIcon />
+            </IconWrapper>
           </div>
           <InputWithLabel
             id="description"
@@ -197,6 +188,7 @@ const AddTransaction = (props: Props) => {
               >
                 {walletQuery.data?.map((wallet) => (
                   <Option
+                    selected={wallet._id === walletId}
                     className={classNames(
                       "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
                       (indicatorColor as any)[wallet.color]

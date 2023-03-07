@@ -12,6 +12,12 @@ interface Store {
     transactionId: string | null;
     setTransactionId: (id: string | null) => void;
   },
+  addTransactionState: {
+    walletId: string | null;
+    setWalletId: (id: string | null) => void;
+    isOpen: boolean;
+    setOpen: (isOpen: boolean) => void;
+  },
   transferBalanceState: {
     sourceWalletId: string | null;
     setSourceWalletId: (id: string | null) => void;
@@ -36,6 +42,12 @@ const useStore = create<Store>()(
       transactionDetailState: {
         transactionId: null,
         setTransactionId: (id: string | null) => set({ transactionDetailState: { ...get().transactionDetailState, transactionId: id } }),
+      },
+      addTransactionState: {
+        walletId: null,
+        setWalletId: (id: string | null) => set({ addTransactionState: { ...get().addTransactionState, walletId: id } }),
+        isOpen: false,
+        setOpen: (isOpen: boolean) => set({ addTransactionState: { ...get().addTransactionState, isOpen: isOpen, walletId: isOpen ? get().addTransactionState.walletId : null } }),
       },
       transferBalanceState: {
         sourceWalletId: null,

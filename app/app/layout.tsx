@@ -14,6 +14,7 @@ import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog
 import TransactionDetail from "@/components/Transactions/TransactionDetail";
 import DeleteWalletDialog from "@/components/WalletCard/DeleteWalletDialog";
 import { getAllTransactions } from "@/api/transaction";
+import AddTransaction from "@/components/Transactions/AddTransaction";
 
 type Props = {
   children: React.ReactNode;
@@ -67,6 +68,7 @@ const AppLayout = ({ children }: Props) => {
       <DeleteWalletDialog />
       <TransferBalanceDialog />
       <TransactionDetail />
+      <AddTransaction />
     </>
   );
 };
