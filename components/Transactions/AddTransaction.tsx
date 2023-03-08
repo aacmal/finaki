@@ -216,7 +216,7 @@ const AddTransaction = (props: Props) => {
             onSuccessText="Tambah lagi"
             isError={isError}
             onErrorText="Gagal, coba lagi"
-            title="Tambah"
+            title="Tambahkan"
           />
         </ModalContent>
       </form>

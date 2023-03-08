@@ -55,8 +55,6 @@ const WalletDetailPage = (props: Props) => {
   const updateWalletMutation = useMutation({
     mutationFn: updateWallet,
     onSuccess: (data) => {
-      console.log(data);
-
       // update current wallet
       queryClient.setQueryData([QueryKey.WALLETS, id], {
         ...walletDataQuery.data,
@@ -162,7 +160,7 @@ const WalletDetailPage = (props: Props) => {
             control={control}
             render={({ field }) => (
               <Select
-                className="!p-2"
+                className="!p-2 !text-slate-50"
                 minWidth="min-w-[4.5rem]"
                 required
                 placeholder="Warna"

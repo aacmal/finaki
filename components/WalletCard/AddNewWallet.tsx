@@ -115,7 +115,7 @@ const AddNewWallet = (props: Props) => {
               />
             </div>
             <LoadingButton
-              title="Tambah Dompet"
+              title="Tambahkan"
               isLoading={isLoading}
               onLoadingText="Menambahkan dompet"
               isSuccess={isSuccess}

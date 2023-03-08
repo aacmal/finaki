@@ -30,14 +30,14 @@ const AppNav = (props: Props) => {
         href={Routes.Wallet}
         active={pathname?.includes(Routes.Wallet)}
       >
-        Wallet
+        Dompet
       </AppNavLink>
       <AppNavLink
         icon={<ArrowsIcon {...defaultIconProps} />}
         href={Routes.Transactions}
         active={pathname === Routes.Transactions}
       >
-        Transactions
+        Transaksi
       </AppNavLink>
       <AppNavLink
         icon={<UserIcon {...defaultIconProps} />}

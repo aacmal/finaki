@@ -5,6 +5,7 @@ import { Routes } from "@/types/Routes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import GetUserData from "../GetUserData";
 
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 };
 
 const AuthLayout = ({ children }: Props) => {
-  const { isSuccess } = useQuery([QueryKey.USER]);
+  const { isSuccess, isLoading } = useQuery({ queryKey: [QueryKey.USER] });
   const router = useRouter();
 
   useEffect(() => {
