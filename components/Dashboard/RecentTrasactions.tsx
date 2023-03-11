@@ -5,11 +5,12 @@ import {
   SimpleTransactionItem,
   SimpleTSkeleton,
 } from "../Transactions/TransactionItem";
-import { Transaction } from "@/types/Transaction";
 import { useQuery } from "@tanstack/react-query";
 import { QueryKey } from "@/types/QueryKey";
 import { getAllTransactions } from "@/api/transaction";
 import { ChartError } from "../Charts/ChartPlaceholder";
+import Link from "next/link";
+import { Routes } from "@/types/Routes";
 
 type Props = {};
 
@@ -45,7 +46,16 @@ const RecentTransactions = (props: Props) => {
 
   return (
     <DashboardContentWrapper className="flex-1 min-h-[20rem]">
-      <DashboardHeader title="Transaksi terbaru" />
+      <DashboardHeader title="Transaksi terbaru">
+        {slicedData?.length > 0 && (
+          <Link
+            href={Routes.Transactions}
+            className="text-sm font-medium text-slate-500 dark:text-slate-200 hover:text-slate-600 dark:hover:text-slate-100"
+          >
+            Lihat semua
+          </Link>
+        )}
+      </DashboardHeader>
       {slicedData?.length > 0 ? (
         <ul>
           {slicedData.map((transaction, index) => {

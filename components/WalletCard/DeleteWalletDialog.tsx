@@ -15,6 +15,8 @@ import LoadingButton from "@/dls/Button/LoadingButton";
 import { deleteWallet } from "@/utils/api/wallet";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Routes } from "@/types/Routes";
 
 type Props = {};
 
@@ -23,6 +25,8 @@ const DeleteWalletDialog = (props: Props) => {
     deleteId: state.deleteWalletId,
     setDeleteId: state.setDeleteWalletId,
   }));
+
+  const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [walletData, setWalletData] = useState<WalletData | null>(null);
@@ -50,6 +54,7 @@ const DeleteWalletDialog = (props: Props) => {
         icon: "🗑️",
         duration: 3000,
       });
+      router.push(Routes.Wallet);
       setDeleteId(null);
     },
   });
