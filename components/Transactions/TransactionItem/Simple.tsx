@@ -71,13 +71,13 @@ const SimpleTransactionItem = ({
           />
         </IconWrapper>
       </span>
-      <span>
-        <span
+      <div className="w-[70%] inline-block">
+        <div
           onClick={() => setTransactionId(id)}
-          className={classNames("font-medium cursor-pointer")}
+          className={classNames("font-medium cursor-pointer truncate")}
         >
           {description}
-        </span>
+        </div>
         <span className="flex items-center text-sm">
           <span className="font-medium mr-1">{date}</span>
           <span
@@ -93,7 +93,7 @@ const SimpleTransactionItem = ({
             {hour}
           </span>
         </span>
-      </span>
+      </div>
       <span
         className={classNames(
           "font-medium  ml-auto whitespace-nowrap",

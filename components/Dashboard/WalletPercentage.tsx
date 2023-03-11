@@ -19,7 +19,7 @@ const WalletPercentage = (props: Props) => {
   }));
 
   return (
-    <DashboardContentWrapper className="w-full lg:w-[27rem] overflow-hidden">
+    <DashboardContentWrapper className="w-full flex-1 overflow-hidden">
       <DashboardHeader title="Dompet" />
       <PieChart
         loading={!pieChartData as unknown as boolean}
