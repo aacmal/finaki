@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 mongoose_1.default.set("strictQuery", false);
 const database = async () => mongoose_1.default
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    .connect(process.env.MONGO_URL)
+    .connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/money-tracker")
     .then(() => {
     console.log("Database connected");
 })
