@@ -275,6 +275,11 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
                     },
                 },
             },
+            {
+                $sort: {
+                    timestamp: -1,
+                },
+            },
             { $limit: intervals },
             {
                 $sort: {

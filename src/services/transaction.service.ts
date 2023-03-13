@@ -273,6 +273,11 @@ export async function getTotalTransactionByPeriods(
           },
         },
       },
+      {
+        $sort: {
+          timestamp: -1,
+        },
+      },
       { $limit: intervals },
       {
         $sort: {
