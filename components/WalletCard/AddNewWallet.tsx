@@ -36,7 +36,10 @@ const AddNewWallet = (props: Props) => {
         queryClient.invalidateQueries([QueryKey.RECENT_TRANSACTIONS]);
         queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
       }
-      reset();
+      reset({
+        balance: 0,
+        name: "",
+      });
     },
   });
 
