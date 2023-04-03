@@ -1,8 +1,24 @@
 const renderPieLabel = (props: any) => {
   const { payload } = props;
-  const orderedPayload = payload.sort(
+  let orderedPayload = payload.sort(
     (a: any, b: any) => b.payload.percent - a.payload.percent
   );
+
+  if (orderedPayload.length > 6) {
+    orderedPayload = orderedPayload.slice(0, 5);
+    const other = orderedPayload.reduce((acc: any, curr: any) => {
+      return acc + curr.payload.percent;
+    }, 0);
+
+    orderedPayload.push({
+      value: "Lainnya",
+      color: "#57C5B6",
+      payload: {
+        percent: 1 - other,
+      },
+    });
+  }
+
   return (
     <ul>
       {orderedPayload.map((entry: any, index: number) => {
