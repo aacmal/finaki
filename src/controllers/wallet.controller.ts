@@ -174,29 +174,9 @@ export async function getOneWallet(req: Request, res: Response) {
 
     if (!wallet) return res.status(404).json({ message: "Wallet not found" });
 
-    const balanceHistory = await WalletService.balanceHistory(wallet._id as Types.ObjectId, "week");
-
     res.json({
       message: "Wallet has been fetched successfully",
-      data: {
-        ...wallet.toJSON(),
-        balanceHistory,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-export async function getBalanceHistory(req: Request, res: Response){
-  try {
-    const id = req.params.id as unknown;
-    const period = (req.query.period as unknown as string) || "week";
-    const result = await WalletService.balanceHistory(id as Types.ObjectId, period as "week" | "month");
-    
-    res.json({
-      message: "Wallet balance history has been fetched successfully",
-      data: result,
+      data: wallet,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

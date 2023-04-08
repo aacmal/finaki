@@ -15,7 +15,6 @@ route.post("/transfer-balance", transferWalletBalanceValidator, WalletController
 route.put("/:id", walletValidator, WalletController.updateWallet);
 route.delete("/:id", updateWalletValidator, WalletController.deleteWallet);
 route.get("/:id", WalletController.getOneWallet);
-route.get("/:id/balance-history", WalletController.getBalanceHistory);
 route.get("/:id/transactions", WalletController.walletTransactions);
 route.patch("/:id/color", walletColorValidator, WalletController.updateWalletColor);
 

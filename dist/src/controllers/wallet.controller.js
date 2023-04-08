@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.walletTransactions = exports.transferWalletBalance = exports.getBalanceHistory = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
+exports.walletTransactions = exports.transferWalletBalance = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
 const WalletService = __importStar(require("../services/wallet.service"));
 const TransactionService = __importStar(require("../services/transaction.service"));
 const express_validator_1 = require("express-validator");
@@ -188,13 +188,9 @@ async function getOneWallet(req, res) {
         });
         if (!wallet)
             return res.status(404).json({ message: "Wallet not found" });
-        const balanceHistory = await WalletService.balanceHistory(wallet._id, "week");
         res.json({
             message: "Wallet has been fetched successfully",
-            data: {
-                ...wallet.toJSON(),
-                balanceHistory,
-            },
+            data: wallet,
         });
     }
     catch (error) {
@@ -202,21 +198,6 @@ async function getOneWallet(req, res) {
     }
 }
 exports.getOneWallet = getOneWallet;
-async function getBalanceHistory(req, res) {
-    try {
-        const id = req.params.id;
-        const period = req.query.period || "week";
-        const result = await WalletService.balanceHistory(id, period);
-        res.json({
-            message: "Wallet balance history has been fetched successfully",
-            data: result,
-        });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
-exports.getBalanceHistory = getBalanceHistory;
 async function transferWalletBalance(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
