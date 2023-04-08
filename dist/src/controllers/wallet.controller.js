@@ -227,10 +227,16 @@ async function transferWalletBalance(req, res) {
         if (sourceWallet === destinationWallet) {
             return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
         }
+        const sourceWalletData = await wallet_model_1.default.findById(sourceWallet);
+        if (!sourceWalletData)
+            return res.status(404).json({ message: "Source wallet not found" });
+        const destinationWalletData = await wallet_model_1.default.findById(destinationWallet);
+        if (!destinationWalletData)
+            return res.status(404).json({ message: "Destination wallet not found" });
         const origin = await TransactionService.create({
             userId: req.user,
             walletId: sourceWallet,
-            description: "Transfer saldo ke dompet lain",
+            description: `Transfer saldo ke dompet ${destinationWalletData.name}`,
             amount,
             note,
             type: Transaction_1.TransactionType.OUT,
@@ -239,7 +245,7 @@ async function transferWalletBalance(req, res) {
         const destination = await TransactionService.create({
             userId: req.user,
             walletId: destinationWallet,
-            description: "Terima saldo dari dompet lain",
+            description: `Terima saldo dari dompet ${sourceWalletData.name}`,
             amount,
             note,
             type: Transaction_1.TransactionType.IN,
