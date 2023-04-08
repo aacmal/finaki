@@ -126,15 +126,15 @@ const WalletDetailPage = (props: Props) => {
           {edit ? "Edit Dompet" : "Rincian Dompet"}
         </Heading>
       </div>
-      <AreaChart
+      {/* <AreaChart
         size="medium"
         xAxis={false}
         horizonalLines={false}
         theme="transparent"
         data={walletDataQuery.data.balanceHistory}
-      />
+      /> */}
       {!edit ? (
-        <div className="text-center text-xl font-bold text-slate-50">
+        <div className="text-center text-2xl font-semibold text-slate-50">
           {walletDataQuery.data.name} <br />
           {currencyFormat(walletDataQuery.data.balance as number)}
         </div>
