@@ -254,6 +254,12 @@ export async function getTotalTransactionByPeriods(
                 timezone: timezone,
               },
             },
+            month: {
+              $month: {
+                date: "$createdAt",
+                timezone: timezone,
+              },
+            }
           },
           timestamp: {
             $first: "$createdAt",
@@ -302,7 +308,7 @@ export async function getTotalTransactionByPeriods(
       date.setDate(date.getDate() + i);
 
       const transaction = totalTranscation.find(
-        (transaction: ITotalTransaction) => transaction._id.day === date.getDate(),
+        (transaction: ITotalTransaction) => transaction._id.day === date.getDate() && transaction._id.month === date.getMonth() + 1, // because month start from 0
       );
 
       totalTransactionByPeriods.push({

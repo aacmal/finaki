@@ -20,6 +20,7 @@ export type IUpdateTransactionInput = Pick<ITransactionData, "description" | "no
 export interface ITotalTransaction {
   _id: {
     day: number;
+    month?: number;
   };
   timestamp: Date;
   in: number;

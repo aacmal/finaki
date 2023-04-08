@@ -95,7 +95,6 @@ export async function getTotalTransaction(req: Request, res: Response) {
       interval,
       timezone,
     );
-
     if (!totalTranscation) return res.status(404).json({ message: "No data found" });
     res.json({
       message: "Total transaction has been fetched successfully",
