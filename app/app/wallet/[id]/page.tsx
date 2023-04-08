@@ -134,7 +134,7 @@ const WalletDetailPage = (props: Props) => {
         data={walletDataQuery.data.balanceHistory}
       /> */}
       {!edit ? (
-        <div className="text-center text-2xl font-semibold text-slate-50">
+        <div className="text-center text-2xl font-semibold text-slate-50 py-10">
           {walletDataQuery.data.name} <br />
           {currencyFormat(walletDataQuery.data.balance as number)}
         </div>

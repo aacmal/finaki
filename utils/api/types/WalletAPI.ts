@@ -49,9 +49,7 @@ export interface WalletBalanceActivityResponse extends GenericResponse {
 }
 
 export interface WalletDetailsResponse extends GenericResponse {
-  data: WalletData & {
-    balanceHistory: BalanceHistory[];
-  };
+  data: WalletData;
 }
 
 export interface TransferBalance {
