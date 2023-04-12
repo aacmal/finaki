@@ -8,6 +8,7 @@ import TransactionList from "@/components/Transactions/AllTransactions/Transacti
 import Heading from "@/dls/Heading";
 import { useEffect, useState } from "react";
 import { groupByDay } from "@/utils/array";
+import Head from "next/head";
 
 type Props = {};
 
@@ -57,10 +58,15 @@ const TransactionsPage = (props: Props) => {
   }
 
   return (
-    <div className="flex flex-col w-full">
-      <TransactionHeader />
-      <TransactionList data={transaction} />
-    </div>
+    <>
+      <Head>
+        <title>Transaksi</title>
+      </Head>
+      <div className="flex flex-col w-full">
+        <TransactionHeader />
+        <TransactionList data={transaction} />
+      </div>
+    </>
   );
 };
 
