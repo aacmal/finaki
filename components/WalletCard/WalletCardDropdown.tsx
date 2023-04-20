@@ -55,10 +55,10 @@ const WalletCardDropdown = ({
 
   return (
     <DropdownMenu onOpenChange={updateWhenClose} trigger={<ButtonTrigger />}>
-      {/* <DropdownItem icon={<PencilIcon />}>Ubah nama dompet</DropdownItem> */}
+      {/* <DropdownItem icon={<PencilIcon />}>Ubah nama dompet</DropdownItem>
       <DropdownCheckboxItem shouldCloseAfterClick checked={false}>
         Jadikan dompet utama
-      </DropdownCheckboxItem>
+      </DropdownCheckboxItem> */}
       <DropdownSubMenu
         trigger={<SubMenuTrigger />}
         iconTrigger={<ColorCircle dataColor={indicatorColor[colorKey]} />}
