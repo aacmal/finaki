@@ -109,3 +109,23 @@ input[type=number] {
   }
 
 }
+
+.hero-image{
+  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg) rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg) skewY(0deg);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.hero-image:nth-child(2){
+  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg) rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg) skewY(0deg);
+  border-radius: 10px;
+  overflow: hidden;
+  position: absolute;
+  top: 100px;
+  left: 80px;
+
+  @media screen and (max-width: 768px) {
+    top: 50px;
+    left: 20px;
+  }
+}
