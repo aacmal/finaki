@@ -20,7 +20,7 @@ const HomeNav = (props: Props) => {
   return (
     <header
       className={classNames(
-        " transition-all duration-300 ease-out fixed",
+        " transition-all duration-300 ease-out fixed z-50",
         {
           "left-1/2 top-10 lg:top-20 w-72 -translate-x-1/2 max-w-xl":
             isInAuthPage,
