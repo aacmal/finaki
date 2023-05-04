@@ -1,3 +1,5 @@
+"use client";
+
 import Heading from "@/dls/Heading";
 import IconButton from "@/dls/IconButton";
 import IconWrapper from "@/dls/IconWrapper";
