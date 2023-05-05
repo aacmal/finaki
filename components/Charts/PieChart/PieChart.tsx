@@ -25,7 +25,7 @@ const PieChart = ({ data, legend = true, loading }: Props) => {
     <ChartWrapper className="h-52 lg:h-72 w-full">
       {loading ? (
         <ChartLoading />
-      ) : data ? (
+      ) : data.length > 0 ? (
         <PiChart>
           <Pie
             dataKey="value"
@@ -54,7 +54,9 @@ const PieChart = ({ data, legend = true, loading }: Props) => {
           <Tooltip content={renderPieTooltip} />
         </PiChart>
       ) : (
-        <ChartError />
+        <div className="min-h-[20rem] w-full grid place-items-center dark:text-slate-200">
+          Belum ada Dompet yang ditambahkan
+        </div>
       )}
     </ChartWrapper>
   );

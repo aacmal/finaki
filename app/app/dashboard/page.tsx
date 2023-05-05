@@ -15,6 +15,7 @@ import TransactionActivity from "@/components/Dashboard/TransactionActivity";
 import WalletPercentage from "@/components/Dashboard/WalletPercentage";
 import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
 import Ratio from "@/components/Dashboard/Ratio";
+import { getAllWallets } from "@/api/wallet";
 
 type Props = {};
 
@@ -27,25 +28,42 @@ const Page = (props: Props) => {
     },
   });
 
-  const areaChartData = totalTransactionQuery.data?.map((item) => ({
-    day: item._id.day as unknown as string,
-    timestamp: item.timestamp,
-    value: item.totalAmount,
-  }));
+  const recentTransactionsQuery = useQuery({
+    queryKey: [QueryKey.RECENT_TRANSACTIONS],
+    queryFn: () => getAllTransactions(4),
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const walletQuery = useQuery({
+    queryKey: [QueryKey.WALLETS],
+    queryFn: getAllWallets,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 
   return (
     <div className="flex flex-col gap-4">
       <TransactionActivity
         loading={totalTransactionQuery.isLoading}
-        data={areaChartData}
+        data={totalTransactionQuery.data}
       />
       <Ratio
         loading={totalTransactionQuery.isLoading}
         data={totalTransactionQuery.data}
       />
       <div className="flex gap-4 h-fit flex-col lg:flex-row">
-        <WalletPercentage />
-        <RecentTransactions />
+        <WalletPercentage
+          data={walletQuery.data}
+          loading={walletQuery.isLoading}
+        />
+        <RecentTransactions
+          data={recentTransactionsQuery.data}
+          isLoading={recentTransactionsQuery.isLoading}
+          isError={recentTransactionsQuery.isError}
+        />
       </div>
     </div>
   );

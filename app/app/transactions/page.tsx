@@ -9,6 +9,7 @@ import Heading from "@/dls/Heading";
 import { useEffect, useState } from "react";
 import { groupByDay } from "@/utils/array";
 import Head from "next/head";
+import Image from "next/image";
 
 type Props = {};
 
@@ -48,7 +49,13 @@ const TransactionsPage = (props: Props) => {
   if (transaction.length < 1) {
     return (
       <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
-        <span>Tidak ada transaksi</span>
+        <Image
+          src="/images/transaction.png"
+          alt="Transaction is empty"
+          width={200}
+          height={200}
+        />
+        <Heading level={3}>Belum ada transaksi</Heading>
         <br />
         <strong className="text-lg font-normal">
           Untuk menambahkan transaksi, klik icon + atau tambah transaksi
