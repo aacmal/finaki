@@ -1,21 +1,49 @@
-import { getUserData } from "@/api/user";
+"use client";
+
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
-import AppNav from "@/components/Navigation/AppNav/AppNav";
 import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
 import TransactionDetail from "@/components/Transactions/TransactionDetail";
 import DeleteWalletDialog from "@/components/WalletCard/DeleteWalletDialog";
 import AddTransaction from "@/components/Transactions/AddTransaction";
+import DemoNav from "@/components/Navigation/AppNav/DemoNav";
+import Link from "next/link";
+import { Routes } from "@/types/Routes";
+import { useQuery } from "@tanstack/react-query";
+import { QueryKey } from "@/types/QueryKey";
+import { getUserData } from "@/api/user";
+import { useRouter } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AppLayout = ({ children }: Props) => {
+  const router = useRouter();
+
+  useQuery({
+    queryKey: [QueryKey.USER],
+    queryFn: getUserData,
+    onSuccess: () => {
+      router.push(Routes.App);
+    },
+    staleTime: 0,
+  });
+
   return (
     <>
-      <Container>
-        <AppNav />
+      <div className="fixed top-0 left-0 w-full p-3 text-center bg-gradient-to-r from-blue-600 to-violet-700 text-white z-[9] lg:text-base text-sm">
+        Sekarang ini anda sedang dalam akun Demo
+        <Link
+          className="mx-2 font-semibold text-white underline"
+          href={Routes.Register}
+        >
+          Daftar Sekarang
+        </Link>
+        Untuk menggunakan seluruh fitur
+      </div>
+      <Container className="pt-14 lg:pt-10">
+        <DemoNav />
         <div className="flex flex-col w-full">
           <Header />
           <main>{children}</main>

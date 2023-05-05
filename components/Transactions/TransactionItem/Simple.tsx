@@ -74,7 +74,9 @@ const SimpleTransactionItem = ({
       <div className="w-[70%] inline-block">
         <div
           onClick={() => setTransactionId(id)}
-          className={classNames("font-medium cursor-pointer truncate")}
+          className={classNames(
+            "font-medium cursor-pointer w-44 md:w-60 lg:w-72 truncate"
+          )}
         >
           {description}
         </div>

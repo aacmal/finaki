@@ -8,4 +8,10 @@ export enum Routes {
   Login = "/auth/login",
   Register = "/auth/register",
   Home = "/",
+  Demo = "/demo",
+  DashboardDemo = "/demo/dashboard",
+  WalletDemo = "/demo/wallet",
+  TransactionsDemo = "/demo/transactions",
+  AccountDemo = "/demo/account",
+  
 }

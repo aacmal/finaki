@@ -16,7 +16,7 @@ const HomeNav = (props: Props) => {
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
   const isInAuthPage = pathname?.includes("auth");
 
-  if (pathname?.includes("app")) return <></>;
+  if (pathname?.includes("app") || pathname?.includes("demo")) return <></>;
   return (
     <header
       className={classNames(
@@ -47,6 +47,16 @@ const HomeNav = (props: Props) => {
           </HomeNavLink>
         )}
         <div>
+          <HomeNavLink
+            isActive={pathname === Routes.Demo}
+            href={Routes.Demo}
+            className={classNames(
+              "ml-3 font-medium bg-gradient-to-r from-sky-500 to-blue-500 !text-white mr-10",
+              { hidden: isInAuthPage }
+            )}
+          >
+            Demo
+          </HomeNavLink>
           <HomeNavLink isActive={pathname === Routes.Login} href={Routes.Login}>
             Login
           </HomeNavLink>

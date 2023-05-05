@@ -1,0 +1,16 @@
+{
+  "data": [
+    {
+      "_id": "64545d70a1a609cfd0c254b6",
+      "name": "Gopay",
+      "balance": 35834,
+      "color": "cyan"
+    },
+    {
+      "_id": "64545d1ccc0796bc8e2656ed",
+      "name": "OVO",
+      "balance": 9701,
+      "color": "purple"
+    }
+  ]
+}

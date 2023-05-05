@@ -21,6 +21,7 @@
       "@/dls/*": ["./components/dls/*"],
       "@/components/*": ["./components/*"],
       "@/utils/*": ["./utils/*"],
+      "@/data/*": ["./data/*"],
     },
     "plugins": [
       {
