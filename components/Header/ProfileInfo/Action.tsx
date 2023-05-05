@@ -25,7 +25,7 @@ const Action = (props: Props) => {
         localStorage.removeItem("access-token");
         router.push(Routes.Home);
         queryClient.invalidateQueries();
-        queryClient.removeQueries([QueryKey.USER]);
+        queryClient.removeQueries();
       })
       .catch((err) => {
         console.log(err);

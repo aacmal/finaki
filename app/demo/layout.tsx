@@ -9,10 +9,11 @@ import AddTransaction from "@/components/Transactions/AddTransaction";
 import DemoNav from "@/components/Navigation/AppNav/DemoNav";
 import Link from "next/link";
 import { Routes } from "@/types/Routes";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "@/types/QueryKey";
 import { getUserData } from "@/api/user";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ type Props = {
 const AppLayout = ({ children }: Props) => {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
   useQuery({
     queryKey: [QueryKey.USER],
     queryFn: getUserData,
@@ -29,6 +31,12 @@ const AppLayout = ({ children }: Props) => {
     },
     staleTime: 0,
   });
+
+  useEffect(() => {
+    return () => {
+      queryClient.removeQueries();
+    };
+  }, []);
 
   return (
     <>
