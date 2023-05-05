@@ -5,19 +5,26 @@ import AreaChart, { AreaChartData } from "../Charts/AreaChart/AreaChart";
 import ChartWrapper from "../Charts/ChartWrapper";
 import classNames from "classnames";
 import ChartPlaceholder from "../Charts/ChartPlaceholder";
+import { TotalTransactionByDay } from "@/types/Transaction";
 
 type Props = {
-  data: AreaChartData[] | undefined;
+  data: TotalTransactionByDay[] | undefined;
   loading?: boolean;
 };
 
 const TransactionActivity = ({ data, loading }: Props) => {
+  const areaChartData = data?.map((item) => ({
+    day: item._id.day as unknown as string,
+    timestamp: item.timestamp,
+    value: item.totalAmount,
+  }));
+
   return (
     <DashboardContentWrapper>
       <DashboardHeader title="Aktivitas">
         <span className="text-sm">7 Hari</span>
       </DashboardHeader>
-      <AreaChart loading={loading} size="large" data={data!} />
+      <AreaChart loading={loading} size="large" data={areaChartData!} />
     </DashboardContentWrapper>
   );
 };

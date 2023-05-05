@@ -2,7 +2,7 @@
 
 import { Transaction } from "@/types/Transaction";
 import classNames from "classnames";
-import React from "react";
+import React, { Fragment } from "react";
 import { FullTransactionItem } from "../TransactionItem";
 
 type Props = {
@@ -14,22 +14,24 @@ type Props = {
 
 const TransactionList = ({ data }: Props) => {
   return (
-    <>
+    <tbody>
       {data.map((transactionData, index) => {
         return (
-          <div key={transactionData.date}>
-            <div className="flex items-center">
-              <h3 className="pl-4 font-bold text-gray-400">
-                {transactionData.date}
-              </h3>
-              <div
-                className={classNames(
-                  "divider flex-1 ml-2 h-px bg-slate-300 dark:bg-slate-500",
-                  { hidden: index === 0 },
-                  { block: index > 0 }
-                )}
-              ></div>
-            </div>
+          <Fragment key={index}>
+            <tr>
+              <td align="left" colSpan={5}>
+                <h3 className="font-bold text-gray-400 mt-3 pb-1">
+                  {transactionData.date}
+                </h3>
+                <div
+                  className={classNames(
+                    "w-full h-px bg-slate-400 dark:bg-slate-500 mb-1",
+                    { hidden: index === 0 },
+                    { block: index > 0 }
+                  )}
+                ></div>
+              </td>
+            </tr>
             {transactionData.data?.map(
               (transaction: Transaction, index: number) => (
                 <FullTransactionItem
@@ -38,10 +40,10 @@ const TransactionList = ({ data }: Props) => {
                 />
               )
             )}
-          </div>
+          </Fragment>
         );
       })}
-    </>
+    </tbody>
   );
 };
 

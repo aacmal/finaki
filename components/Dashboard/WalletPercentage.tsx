@@ -1,18 +1,16 @@
 import React from "react";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
-import PieChart, { PieChartData } from "../Charts/PieChart/PieChart";
-import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { QueryKey } from "@/types/QueryKey";
+import PieChart from "../Charts/PieChart/PieChart";
 import { WalletData } from "@/types/Wallet";
 
-type Props = {};
+type Props = {
+  data: WalletData[] | undefined;
+  loading?: boolean;
+};
 
-const WalletPercentage = (props: Props) => {
-  const queryClient = useQueryClient();
-
-  const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
-  const pieChartData = wallets?.map((wallets: any) => ({
+const WalletPercentage = ({ data, loading }: Props) => {
+  const pieChartData = data?.map((wallets: WalletData) => ({
     name: wallets.name,
     value: wallets.balance,
     color: wallets.color,
@@ -21,10 +19,7 @@ const WalletPercentage = (props: Props) => {
   return (
     <DashboardContentWrapper className="w-full flex-1 overflow-hidden">
       <DashboardHeader title="Dompet" />
-      <PieChart
-        loading={!pieChartData as unknown as boolean}
-        data={pieChartData}
-      />
+      <PieChart loading={loading} data={pieChartData!} />
     </DashboardContentWrapper>
   );
 };

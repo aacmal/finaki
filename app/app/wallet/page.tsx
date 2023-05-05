@@ -5,10 +5,12 @@ import AddNewWallet from "@/components/WalletCard/AddNewWallet";
 import WalletCard from "@/components/WalletCard/WalletCard";
 import WalletCardSkeleton from "@/components/WalletCard/WalletCardSkeleton";
 import Heading from "@/dls/Heading";
+import WalletIcon from "@/icons/WalletIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { getAllWallets } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 type Props = {};
 
@@ -63,9 +65,9 @@ const AllWalletsPage = (props: Props) => {
         </div>
         <AddNewWallet />
       </div>
-      <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
-        {data.length > 0 ? (
-          data.map((wallet: any) => (
+      {data.length > 0 ? (
+        <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
+          {data.map((wallet: any) => (
             <WalletCard
               key={wallet._id}
               id={wallet._id}
@@ -73,11 +75,22 @@ const AllWalletsPage = (props: Props) => {
               initColorKey={wallet.color}
               balance={wallet.balance}
             />
-          ))
-        ) : (
-          <div className="text-center dark:text-slate-50">Tidak ada dompet</div>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-6">
+          <Image
+            className="mx-auto"
+            src="/images/wallet.png"
+            width={200}
+            height={200}
+            alt="empty-wallet"
+          />
+          <Heading className="text-center mt-2" level={3}>
+            Belum ada Dompet yang ditambahkan
+          </Heading>
+        </div>
+      )}
     </div>
   );
 };

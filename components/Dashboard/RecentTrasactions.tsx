@@ -11,18 +11,15 @@ import { getAllTransactions } from "@/api/transaction";
 import { ChartError } from "../Charts/ChartPlaceholder";
 import Link from "next/link";
 import { Routes } from "@/types/Routes";
+import { Transaction } from "@/types/Transaction";
 
-type Props = {};
+type Props = {
+  data: Transaction[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+};
 
-const RecentTransactions = (props: Props) => {
-  const { isLoading, data, isError } = useQuery({
-    queryKey: [QueryKey.RECENT_TRANSACTIONS],
-    queryFn: () => getAllTransactions(4),
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
+const RecentTransactions = ({ data, isLoading, isError }: Props) => {
   if (isLoading || isError) {
     return (
       <DashboardContentWrapper className="flex-1">
