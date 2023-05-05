@@ -69,10 +69,10 @@ const TransactionsPage = (props: Props) => {
       <Head>
         <title>Transaksi</title>
       </Head>
-      <div className="flex flex-col w-full">
+      <table className="w-full" border={0}>
         <TransactionHeader />
         <TransactionList data={transaction} />
-      </div>
+      </table>
     </>
   );
 };
