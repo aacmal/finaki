@@ -20,7 +20,7 @@ const HomeNavLink = ({
   return (
     <Link
       className={classNames(
-        "px-4 py-2 rounded-md",
+        "px-4 py-2 rounded-md block text-center",
         {
           "text-blue-500 border-blue-500 dark:border-blue-400 dark:text-blue-400 font-medium dark:border-2 border":
             type === "secondary",

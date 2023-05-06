@@ -1,17 +1,18 @@
 "use client";
 
+import Hamburger from "@/dls/Hamburger";
 import Heading from "@/dls/Heading";
 import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import useStore from "../../../stores/store";
 import ThemeToggleIcon from "../../ThemeSelection/ThemeToggleIcon";
 import HomeNavLink from "./HomeNavLink";
 
 type Props = {};
 
 const HomeNav = (props: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
   const isInAuthPage = pathname?.includes("auth");
@@ -32,7 +33,7 @@ const HomeNav = (props: Props) => {
     >
       <nav
         className={classNames(
-          "items-center flex gap-3 bg-white shadow-lg shadow-neutral-200/60 rounded-b-lg dark:bg-slate-600 dark:shadow-slate-800",
+          "items-center flex gap-3 bg-white shadow-lg shadow-neutral-600/10 rounded-b-lg dark:bg-slate-600 dark:shadow-slate-800/50",
           { "px-2 py-2 rounded-lg": isInAuthPage },
           { "px-5 py-5 md:px-10 ": isInHomePage }
         )}
@@ -46,30 +47,59 @@ const HomeNav = (props: Props) => {
             Home
           </HomeNavLink>
         )}
-        <div>
+
+        <div
+          className={classNames(
+            {
+              "md:flex items-center absolute md:static w-full md:w-fit left-0 top-14 py-2 px-3 md:py-0 md:px-0 transition-all bg-white md:bg-none shadow-lg shadow-neutral-600/10 rounded-b-lg dark:bg-slate-600 dark:shadow-slate-800/50 md:shadow-none md:visible overflow-hidden gap-8":
+                isInHomePage,
+              "flex gap-3": isInAuthPage,
+            },
+
+            { "visible max-h-44": isOpen },
+            {
+              "invisible md:visible md:max-h-16 max-h-0":
+                !isOpen && isInHomePage,
+            }
+          )}
+        >
           <HomeNavLink
             isActive={pathname === Routes.Demo}
             href={Routes.Demo}
             className={classNames(
-              "ml-3 font-medium bg-gradient-to-r from-sky-500 to-blue-500 !text-white mr-10",
+              "w-full font-medium bg-gradient-to-r from-sky-500 to-blue-500 !text-white md:mb-0 mb-5",
               { hidden: isInAuthPage }
             )}
           >
             Demo
           </HomeNavLink>
-          <HomeNavLink isActive={pathname === Routes.Login} href={Routes.Login}>
+          <HomeNavLink
+            isActive={pathname === Routes.Login}
+            href={Routes.Login}
+            className=""
+          >
             Login
           </HomeNavLink>
           <HomeNavLink
             isActive={pathname === Routes.Register}
             href={Routes.Register}
             type={isInAuthPage ? "primary" : "secondary"}
-            className="ml-3"
+            className=""
           >
             Register
           </HomeNavLink>
         </div>
-        {isInHomePage && <ThemeToggleIcon />}
+        {isInHomePage && (
+          <>
+            <ThemeToggleIcon />
+            <div
+              onClick={() => setIsOpen(!isOpen)}
+              className={classNames("md:hidden", { hidden: isInAuthPage })}
+            >
+              <Hamburger isOpen={isOpen} />
+            </div>
+          </>
+        )}
       </nav>
     </header>
   );

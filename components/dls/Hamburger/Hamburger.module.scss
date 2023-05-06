@@ -1,0 +1,40 @@
+label.hamburgerMenu {
+  display: flex;
+  flex-direction: column;
+  width: 30px;
+  cursor: pointer;
+}
+label.hamburgerMenu span {
+  border-radius: 10px;
+  height: 3px;
+  margin: 3px 0;
+  transition: 0.4s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.hamburgerMenu span:nth-child(1) {
+  width: 50%;
+}
+
+.hamburgerMenu span:nth-child(2) {
+  width: 100%;
+}
+
+.hamburgerMenu span:nth-child(3) {
+  width: 75%;
+}
+
+span.st {
+  transform-origin: bottom;
+  transform: rotatez(45deg) translate(3px, 0.2px);
+}
+
+span.nd {
+  transform-origin: top;
+  transform: rotatez(-45deg);
+}
+
+span.rd {
+  transform-origin: bottom;
+  width: 50%;
+  transform: translate(7px, -7px) rotatez(45deg);
+}

@@ -6,44 +6,46 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mt-32 2xl:px-32 px-4 ">
-      <p className="text-base xl:text-xl text-slate-500 dark:text-slate-300">
-        Selamat datang di Finaki
-      </p>
-      <section className="flex justify-between items-center gap-10 lg:gap-8 flex-col lg:flex-row">
-        <div className="lg:w-1/2 space-y-8 xl:space-y-14">
-          <h1 className=" 2xl:text-8xl text-5xl font-bold text-transparent bg-gradient-to-r tracking-tight from-violet-600 to-red-500 bg-clip-text">
-            Atur Keuangan Anda Dengan Mudah, Cepat, dan Efektif
-          </h1>
-          <p className="xl:text-xl text-lg text-slate-600 dark:text-slate-300">
-            Aplikasi Manajemen Keuangan All-in-One yang Membantu Anda Mengatur
-            Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
-          </p>
-          <Link
-            href={Routes.Register}
-            className="px-10 py-3 w-full lg:w-44 lg:py-5 text-center rounded-lg text-white bg-blue-500 font-medium"
-            type="button"
-          >
-            Daftar
-          </Link>
-        </div>
-        <div className="relative w-full lg:w-1/2 z-0">
-          <Image
-            className="rounded-xl overflow-hidden  hero-image z-0"
-            src="/images/preview-dark.jpg"
-            width={1104}
-            height={849}
-            alt="Preview Dark"
-          />
-          <Image
-            className="rounded-xl overflow-hidden hero-image z-0"
-            src="/images/preview-white.jpg"
-            alt="Preview White"
-            width={1104}
-            height={849}
-          />
-        </div>
-      </section>
+    <div className="mt-32 2xl:px-32 px-1 md:px-4">
+      <div className="px-3 md:px-1">
+        <p className="text-base xl:text-xl text-violet-600 font-medium dark:text-violet-300">
+          Selamat datang di Finaki
+        </p>
+        <section className="flex justify-between items-center gap-10 lg:gap-8 flex-col lg:flex-row">
+          <div className="lg:w-1/2 space-y-8 xl:space-y-14">
+            <h1 className=" 2xl:text-8xl text-5xl font-bold text-transparent bg-gradient-to-r tracking-tight from-violet-600 to-red-500 bg-clip-text">
+              Atur Keuangan Anda Dengan Mudah, Cepat, dan Efektif
+            </h1>
+            <p className="xl:text-xl text-lg text-slate-600 dark:text-slate-300">
+              Aplikasi Manajemen Keuangan All-in-One yang Membantu Anda Mengatur
+              Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
+            </p>
+            <Link
+              href={Routes.Register}
+              className="px-10 py-3 w-full lg:w-44 lg:py-5 text-center rounded-lg text-white bg-blue-500 font-medium"
+              type="button"
+            >
+              Daftar
+            </Link>
+          </div>
+          <div className="relative w-full lg:w-1/2 z-0">
+            <Image
+              className="rounded-xl overflow-hidden  hero-image z-0"
+              src="/images/preview-dark.jpg"
+              width={1104}
+              height={849}
+              alt="Preview Dark"
+            />
+            <Image
+              className="rounded-xl overflow-hidden hero-image z-0"
+              src="/images/preview-white.jpg"
+              alt="Preview White"
+              width={1104}
+              height={849}
+            />
+          </div>
+        </section>
+      </div>
       <section className="overflow-hidden bg-white rounded-lg lg:rounded-3xl py-24 mt-32 lg:mt-44">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
