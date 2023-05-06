@@ -17,7 +17,9 @@ const HomeNav = (props: Props) => {
   const isInHomePage = pathname === "/" && !pathname?.includes("auth");
   const isInAuthPage = pathname?.includes("auth");
 
+  if (!isInAuthPage && !isInHomePage) return <></>;
   if (pathname?.includes("app") || pathname?.includes("demo")) return <></>;
+
   return (
     <header
       className={classNames(
