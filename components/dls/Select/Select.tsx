@@ -145,7 +145,7 @@ const Select = forwardRef(function Select(
           role="list"
           className={classNames(
             "absolute overflow-auto p-1 bg-white shadow-xl text-slate-800 dark:text-slate-100 dark:bg-slate-500 top-16 left-0 w-full rounded-lg transition-[max-height] z-50",
-            { "max-h-0 max-w-0 p-0": !isOpen },
+            { "!max-h-0 !max-w-0 !p-0": !isOpen },
             { "max-h-96 max-w-96 p-1": isOpen }
           )}
         >

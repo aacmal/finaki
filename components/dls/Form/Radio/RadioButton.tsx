@@ -28,7 +28,7 @@ const RadioButton = forwardRef(
           {...props}
         />
         <label
-          className="flex cursor-pointer dark:text-slate-200 items-center justify-center gap-1 font-medium pl-3 pr-4 h-full py-4 w-full text-sm rounded-lg border-slate-200 dark:border-slate-500 border-transparent border  peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-500/20"
+          className="flex cursor-pointer dark:text-slate-200 items-center justify-center gap-1 font-medium pl-3 pr-4 h-full py-4 w-full text-sm rounded-lg border-slate-200 dark:border-slate-500 border peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-500/20"
           htmlFor={id}
         >
           {icon && <IconWrapper className="!w-4 mr-1">{icon}</IconWrapper>}
