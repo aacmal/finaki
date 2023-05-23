@@ -40,7 +40,7 @@ const AppLayout = ({ children }: Props) => {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full p-3 text-center bg-gradient-to-r from-blue-600 to-violet-700 text-white z-[9] lg:text-base text-sm">
+      <div className="fixed top-0 left-0 w-full p-1 text-center bg-gradient-to-r from-blue-600 to-violet-700 text-white z-[9] lg:text-base text-sm">
         Sekarang ini anda sedang dalam akun Demo
         <Link
           className="mx-2 font-semibold text-white underline"

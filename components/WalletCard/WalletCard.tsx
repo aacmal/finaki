@@ -18,6 +18,7 @@ type Props = {
   name: string;
   balance: number;
   link?: string;
+  isDemo?: boolean;
 };
 
 const WalletCard = ({
@@ -27,6 +28,7 @@ const WalletCard = ({
   name,
   balance,
   link,
+  isDemo = false,
 }: Props) => {
   const [colorKey, setColorKey] = useState<WalletColor>(initColorKey);
 
@@ -72,7 +74,7 @@ const WalletCard = ({
     >
       <div className="flex items-center justify-between">
         <Link
-          href={`/app/wallet/${id}`}
+          href={isDemo ? `/app/wallet/${id}` : `/demo/wallet/${id}`}
           className={classNames(
             "px-3 py-1  w-fit rounded-lg font-semibold text-white cursor-pointer",
             { "bg-slate-200/30": isDefault }
