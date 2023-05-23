@@ -21,7 +21,7 @@
     "eslint": "8.29.0",
     "eslint-config-next": "^13.2.0",
     "jwt-decode": "^3.1.2",
-    "next": "^13.2.0",
+    "next": "^13.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.42.1",

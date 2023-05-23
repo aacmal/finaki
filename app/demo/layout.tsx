@@ -33,8 +33,10 @@ const AppLayout = ({ children }: Props) => {
   });
 
   useEffect(() => {
+    document.title = "Demo";
     return () => {
       queryClient.removeQueries();
+      document.title = "Finaki";
     };
   }, []);
 
