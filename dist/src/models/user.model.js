@@ -24,6 +24,11 @@ exports.UserSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    resetPasswordToken: {
+        type: String,
+        required: false,
+        default: null,
+    },
     telegramAccount: {
         // type: String,
         // index: true,

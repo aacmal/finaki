@@ -12,3 +12,9 @@ export function generateRefreshToken(user: IUser) {
 
   return jwt.sign({ _id: user._id, name: user.name }, REFRESH_TOKEN_SECRET!, { expiresIn: "90d" });
 }
+
+export function generateForgotPasswordToken(user: IUser) {
+  return jwt.sign({ email: user.email }, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!, {
+    expiresIn: "30m",
+  });
+}

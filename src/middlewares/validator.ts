@@ -48,3 +48,12 @@ export const transferWalletBalanceValidator = [
     .isInt({ min: 0 })
     .withMessage("Amount must be greater than 0"),
 ];
+
+export const forgotPasswordValidator = [
+  body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
+];
+
+export const resetPasswordValidator = [
+  body("password").notEmpty().withMessage("Password is required"),
+  body("token").notEmpty().withMessage("Token is required"),
+];

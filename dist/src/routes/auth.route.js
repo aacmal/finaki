@@ -31,5 +31,8 @@ router.post("/register", validator_1.registerValidator, AuthController.register)
 router.post("/sign", validator_1.signValidator, AuthController.sign);
 router.get("/refresh-token", AuthController.refreshToken);
 router.delete("/logout", AuthController.logout);
+router.post("/forgot-password", validator_1.forgotPasswordValidator, AuthController.forgotPassword);
+router.get("/reset-password", AuthController.verifyResetPasswordToken);
+router.post("/reset-password", validator_1.resetPasswordValidator, AuthController.resetPassword);
 const AuthRouter = router;
 exports.default = AuthRouter;

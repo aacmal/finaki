@@ -20,6 +20,11 @@ export const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+      default: null,
+    },
     telegramAccount: {
       // type: String,
       // index: true,

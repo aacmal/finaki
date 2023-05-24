@@ -65,8 +65,8 @@ async function updateTransaction(req, res) {
     }
     try {
         const id = req.params.id;
-        const { description, amount, type } = req.body;
-        const updatedTransaction = await TransactionService.update(id, { description, amount, type });
+        const { description, amount, type, note } = req.body;
+        const updatedTransaction = await TransactionService.update(id, { description, amount, type, note });
         if (!updatedTransaction)
             return res.status(404).json({ message: "Transaction not found" });
         res.json({
@@ -88,7 +88,7 @@ async function deleteTransaction(req, res) {
             return res.status(404).json({ message: "Transaction not found" });
         res.json({
             message: "Transaction has been deleted successfully",
-            data: deletedTransaction
+            data: deletedTransaction,
         });
     }
     catch (error) {

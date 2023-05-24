@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.refreshToken = exports.sign = exports.register = void 0;
+exports.resetPassword = exports.verifyResetPasswordToken = exports.forgotPassword = exports.logout = exports.refreshToken = exports.sign = exports.register = exports.generateAuthCredential = void 0;
 const express_validator_1 = require("express-validator");
 const generateToken_1 = require("../utils/generateToken");
 const user_model_1 = __importDefault(require("../models/user.model"));
@@ -36,6 +36,7 @@ const token_model_1 = __importDefault(require("../models/token.model"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const __1 = require("../..");
 const crypto_1 = __importDefault(require("crypto"));
+const mailService = __importStar(require("../services/mail.service"));
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -72,6 +73,7 @@ async function generateAuthCredential(req, res, user) {
         throw error;
     }
 }
+exports.generateAuthCredential = generateAuthCredential;
 async function register(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
     if (!error.isEmpty()) {
@@ -217,3 +219,102 @@ async function logout(req, res) {
     }
 }
 exports.logout = logout;
+async function forgotPassword(req, res) {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+    try {
+        const { email } = req.body;
+        const user = await user_model_1.default.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                message: "Email belum terdaftar",
+            });
+        }
+        const token = (0, generateToken_1.generateForgotPasswordToken)(user);
+        await mailService.sendForgotPasswordToken(email, token);
+        user.resetPasswordToken = token;
+        await user.save();
+        res.status(200).json({
+            message: "Forgot password token has been sent to your email",
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+}
+exports.forgotPassword = forgotPassword;
+async function verifyResetPasswordToken(req, res) {
+    try {
+        const token = req.query.token;
+        if (!token) {
+            return res.status(400).json({
+                message: "Token is required",
+            });
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
+        jsonwebtoken_1.default.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY, async (error, decoded) => {
+            if (error) {
+                return res.status(403).json({
+                    message: "Forbidden",
+                });
+            }
+            const decodedToken = decoded;
+            const user = await user_model_1.default.findOne({ email: decodedToken.email, resetPasswordToken: token });
+            if (!user) {
+                return res.status(403).json({
+                    message: "Forbidden",
+                    data: false,
+                });
+            }
+            res.status(200).json({
+                message: "Token is valid",
+                data: true,
+            });
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+}
+exports.verifyResetPasswordToken = verifyResetPasswordToken;
+async function resetPassword(req, res) {
+    const error = (0, express_validator_1.validationResult)(req);
+    if (!error.isEmpty()) {
+        return res.status(400).json({ errors: error.array() });
+    }
+    try {
+        const { token, password } = req.body;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY);
+        const user = await user_model_1.default.findOne({ email: decoded.email });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+        const isPasswordMatch = await (0, bcrypt_1.compare)(password, user.password);
+        if (isPasswordMatch) {
+            return res.status(400).json({
+                message: "Password baru tidak boleh sama dengan password lama",
+            });
+        }
+        user.password = password;
+        user.resetPasswordToken = "";
+        await user.save();
+        res.status(200).json({
+            message: "Password berhasil diubah",
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+}
+exports.resetPassword = resetPassword;

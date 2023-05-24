@@ -10,4 +10,4 @@ import { InferSchemaType, Document } from "mongoose";
 
 export type IUserModel = InferSchemaType<typeof UserSchema> & Document;
 
-export type IUser = Pick<IUserModel, "_id" | "email" | "password" | "token"| "name" | "telegramAccount">;
+export type IUser = Pick<IUserModel, "_id" | "email" | "password" | "token" | "name" | "telegramAccount">;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { generateAccessToken, generateRefreshToken } from "../utils/generateToken";
+import { generateAccessToken, generateForgotPasswordToken, generateRefreshToken } from "../utils/generateToken";
 import UserModel from "../models/user.model";
 import * as UserService from "../services/user.service";
 import { compare } from "bcrypt";
@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import { IUser } from "../interfaces/User";
 import { REFRESH_TOKEN_SECRET } from "../..";
 import crypto from "crypto";
+import * as mailService from "../services/mail.service";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
@@ -22,7 +23,7 @@ const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
  *
  * @returns {string} access token string
  **/
-async function generateAuthCredential(req: Request, res: Response, user: IUser): Promise<string> {
+export async function generateAuthCredential(req: Request, res: Response, user: IUser): Promise<string> {
   try {
     // generate access token and refresh token
     const accessToken = generateAccessToken(user);
@@ -50,7 +51,7 @@ async function generateAuthCredential(req: Request, res: Response, user: IUser):
   }
 }
 
-async function register(req: Request, res: Response) {
+export async function register(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res.status(400).json({ errors: error.array() });
@@ -87,7 +88,7 @@ async function register(req: Request, res: Response) {
   }
 }
 
-async function sign(req: Request, res: Response) {
+export async function sign(req: Request, res: Response) {
   const error = validationResult(req);
   if (!error.isEmpty()) {
     return res.status(400).json({ errors: error.array() });
@@ -136,7 +137,7 @@ async function sign(req: Request, res: Response) {
   }
 }
 
-async function refreshToken(req: Request, res: Response) {
+export async function refreshToken(req: Request, res: Response) {
   try {
     const refreshToken = req.cookies.refresh_token;
     if (!refreshToken) {
@@ -174,7 +175,7 @@ async function refreshToken(req: Request, res: Response) {
   }
 }
 
-async function logout(req: Request, res: Response) {
+export async function logout(req: Request, res: Response) {
   try {
     const refreshToken = req.cookies.refresh_token;
     const user = await UserService.findByRefreshToken(refreshToken);
@@ -203,4 +204,109 @@ async function logout(req: Request, res: Response) {
   }
 }
 
-export { register, sign, refreshToken, logout };
+export async function forgotPassword(req: Request, res: Response) {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+
+  try {
+    const { email } = req.body;
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        message: "Email belum terdaftar",
+      });
+    }
+
+    const token = generateForgotPasswordToken(user);
+    await mailService.sendForgotPasswordToken(email, token);
+    user.resetPasswordToken = token;
+    await user.save();
+
+    res.status(200).json({
+      message: "Forgot password token has been sent to your email",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
+export async function verifyResetPasswordToken(req: Request, res: Response) {
+  try {
+    const token = req.query.token as unknown as string;
+    if (!token) {
+      return res.status(400).json({
+        message: "Token is required",
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
+    jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!, async (error: unknown, decoded: unknown) => {
+      if (error) {
+        return res.status(403).json({
+          message: "Forbidden",
+        });
+      }
+
+      const decodedToken = decoded as { email: string };
+      const user = await UserModel.findOne({ email: decodedToken.email, resetPasswordToken: token });
+
+      if (!user) {
+        return res.status(403).json({
+          message: "Forbidden",
+          data: false,
+        });
+      }
+
+      res.status(200).json({
+        message: "Token is valid",
+        data: true,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
+export async function resetPassword(req: Request, res: Response) {
+  const error = validationResult(req);
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+  try {
+    const { token, password } = req.body;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const decoded = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!) as { email: string };
+
+    const user = await UserModel.findOne({ email: decoded.email });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    const isPasswordMatch = await compare(password, user.password);
+    if (isPasswordMatch) {
+      return res.status(400).json({
+        message: "Password baru tidak boleh sama dengan password lama",
+      });
+    }
+
+    user.password = password;
+    user.resetPasswordToken = "";
+    await user.save();
+
+    res.status(200).json({
+      message: "Password berhasil diubah",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
