@@ -1,11 +1,7 @@
 import { Router } from "express";
 import * as WalletController from "../controllers/wallet.controller";
-import {
-  transferWalletBalanceValidator,
-  updateWalletValidator,
-  walletColorValidator,
-  walletValidator,
-} from "../middlewares/validator";
+import { transferWalletBalanceValidator, updateWalletValidator, walletColorValidator } from "../middlewares/validator";
+import { walletValidator } from "../middlewares/validator/wallet.validator";
 
 const route = Router();
 

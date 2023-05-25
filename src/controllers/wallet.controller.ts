@@ -189,7 +189,7 @@ export async function transferWalletBalance(req: Request, res: Response) {
     return res.status(400).json({ errors: error.array() });
   }
   try {
-    const { sourceWallet, destinationWallet, amount, note } = req.body;
+    const { sourceWallet, destinationWallet, amount, note, description } = req.body;
 
     if (sourceWallet === destinationWallet) {
       return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
@@ -201,10 +201,16 @@ export async function transferWalletBalance(req: Request, res: Response) {
     const destinationWalletData = await WalletModel.findById(destinationWallet);
     if (!destinationWalletData) return res.status(404).json({ message: "Destination wallet not found" });
 
+    const originDescription =
+      description.length > 0 ? description : `Transfer saldo ke dompet ${destinationWalletData.name}`;
+
+    const destinationDescription =
+      description.length > 0 ? description : `Terima saldo dari dompet ${sourceWalletData.name}`;
+
     const origin = await TransactionService.create({
       userId: req.user as Types.ObjectId,
       walletId: sourceWallet,
-      description: `Transfer saldo ke dompet ${destinationWalletData.name}`,
+      description: originDescription,
       amount,
       note,
       type: TransactionType.OUT,
@@ -214,7 +220,7 @@ export async function transferWalletBalance(req: Request, res: Response) {
     const destination = await TransactionService.create({
       userId: req.user as Types.ObjectId,
       walletId: destinationWallet,
-      description: `Terima saldo dari dompet ${sourceWalletData.name}`,
+      description: destinationDescription,
       amount,
       note,
       type: TransactionType.IN,
@@ -233,7 +239,7 @@ export async function transferWalletBalance(req: Request, res: Response) {
   }
 }
 
-export async function walletTransactions(req: Request, res: Response){
+export async function walletTransactions(req: Request, res: Response) {
   try {
     const id = req.params.id as unknown;
     const transactions = await WalletModel.findById(id).populate({
@@ -241,15 +247,14 @@ export async function walletTransactions(req: Request, res: Response){
       select: {
         includeInCalculation: 0,
         userId: 0,
-        walletId: 0,
-        __v: 0
+        __v: 0,
       },
-      options: { sort: { createdAt: -1 } }
+      options: { sort: { createdAt: -1 } },
     });
     res.json({
       message: "Wallet transactions has been fetched successfully",
-      data: transactions?.transactions
-    })
+      data: transactions?.transactions,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

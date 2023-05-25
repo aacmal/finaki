@@ -204,7 +204,7 @@ async function transferWalletBalance(req, res) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
-        const { sourceWallet, destinationWallet, amount, note } = req.body;
+        const { sourceWallet, destinationWallet, amount, note, description } = req.body;
         if (sourceWallet === destinationWallet) {
             return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
         }
@@ -214,10 +214,12 @@ async function transferWalletBalance(req, res) {
         const destinationWalletData = await wallet_model_1.default.findById(destinationWallet);
         if (!destinationWalletData)
             return res.status(404).json({ message: "Destination wallet not found" });
+        const originDescription = description.length > 0 ? description : `Transfer saldo ke dompet ${destinationWalletData.name}`;
+        const destinationDescription = description.length > 0 ? description : `Terima saldo dari dompet ${sourceWalletData.name}`;
         const origin = await TransactionService.create({
             userId: req.user,
             walletId: sourceWallet,
-            description: `Transfer saldo ke dompet ${destinationWalletData.name}`,
+            description: originDescription,
             amount,
             note,
             type: Transaction_1.TransactionType.OUT,
@@ -226,7 +228,7 @@ async function transferWalletBalance(req, res) {
         const destination = await TransactionService.create({
             userId: req.user,
             walletId: destinationWallet,
-            description: `Terima saldo dari dompet ${sourceWalletData.name}`,
+            description: destinationDescription,
             amount,
             note,
             type: Transaction_1.TransactionType.IN,
@@ -253,14 +255,13 @@ async function walletTransactions(req, res) {
             select: {
                 includeInCalculation: 0,
                 userId: 0,
-                walletId: 0,
-                __v: 0
+                __v: 0,
             },
-            options: { sort: { createdAt: -1 } }
+            options: { sort: { createdAt: -1 } },
         });
         res.json({
             message: "Wallet transactions has been fetched successfully",
-            data: transactions === null || transactions === void 0 ? void 0 : transactions.transactions
+            data: transactions === null || transactions === void 0 ? void 0 : transactions.transactions,
         });
     }
     catch (error) {
