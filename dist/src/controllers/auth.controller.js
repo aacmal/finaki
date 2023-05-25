@@ -37,6 +37,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const __1 = require("../..");
 const crypto_1 = __importDefault(require("crypto"));
 const mailService = __importStar(require("../services/mail.service"));
+const errorHander_1 = require("../utils/errorHander");
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -241,9 +242,7 @@ async function forgotPassword(req, res) {
         });
     }
     catch (error) {
-        res.status(500).json({
-            message: error.message,
-        });
+        res.status(500).json((0, errorHander_1.errorResponse)("root", error.message));
     }
 }
 exports.forgotPassword = forgotPassword;

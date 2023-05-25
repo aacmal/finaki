@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordValidator = exports.forgotPasswordValidator = exports.transferWalletBalanceValidator = exports.walletColorValidator = exports.updateWalletValidator = exports.walletValidator = exports.signValidator = exports.registerValidator = exports.transactionValidator = void 0;
+exports.resetPasswordValidator = exports.transferWalletBalanceValidator = exports.walletColorValidator = exports.updateWalletValidator = exports.walletValidator = exports.signValidator = exports.registerValidator = exports.transactionValidator = void 0;
 const express_validator_1 = require("express-validator");
 exports.transactionValidator = [
     (0, express_validator_1.body)("description").notEmpty().withMessage("Description is required"),
@@ -44,9 +44,9 @@ exports.transferWalletBalanceValidator = [
         .isInt({ min: 0 })
         .withMessage("Amount must be greater than 0"),
 ];
-exports.forgotPasswordValidator = [
-    (0, express_validator_1.body)("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
-];
+// export const forgotPasswordValidator = [
+//   body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
+// ];
 exports.resetPasswordValidator = [
     (0, express_validator_1.body)("password").notEmpty().withMessage("Password is required"),
     (0, express_validator_1.body)("token").notEmpty().withMessage("Token is required"),

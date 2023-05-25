@@ -10,6 +10,7 @@ import { IUser } from "../interfaces/User";
 import { REFRESH_TOKEN_SECRET } from "../..";
 import crypto from "crypto";
 import * as mailService from "../services/mail.service";
+import { errorResponse } from "../utils/errorHander";
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
@@ -228,9 +229,7 @@ export async function forgotPassword(req: Request, res: Response) {
       message: "Forgot password token has been sent to your email",
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    res.status(500).json(errorResponse("root", error.message));
   }
 }
 
