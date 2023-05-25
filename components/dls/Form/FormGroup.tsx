@@ -3,11 +3,12 @@ import React from "react";
 type Props = {
   children: React.ReactNode;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  className?: string;
 };
 
-const FormGroup = ({ children, onSubmit }: Props) => {
+const FormGroup = ({ children, onSubmit, className }: Props) => {
   return (
-    <form onSubmit={onSubmit} action="">
+    <form className={className} onSubmit={onSubmit} action="">
       <div className="space-y-8">{children}</div>
     </form>
   );

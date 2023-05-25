@@ -74,16 +74,21 @@ const LoginPage = (props: Props) => {
             error={errors.email as any}
             {...register("email")}
           />
-          <InputWithLabel
-            label="Password"
-            id="password"
-            type="password"
-            placeholder="masukan password anda"
-            minLength={5}
-            required
-            error={errors.password as any}
-            {...register("password")}
-          />
+          <div>
+            <InputWithLabel
+              label="Password"
+              id="password"
+              type="password"
+              placeholder="masukan password anda"
+              minLength={5}
+              required
+              error={errors.password as any}
+              {...register("password")}
+            />
+            <Link href={Routes.ForgotPassword} className="text-blue-500 block w-full mt-1 text-right font-medium">
+              Lupa password?
+            </Link>
+          </div>
           <LoadingButton
             loadingOnSuccess
             isLoading={isLoading}

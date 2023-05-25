@@ -26,3 +26,8 @@ export interface LoginResponse extends GenericResponse {
 export interface LogoutResponse extends GenericResponse {
   data: null;
 }
+
+export interface ResetPasswordInput {
+  token: string;
+  password: string;
+}

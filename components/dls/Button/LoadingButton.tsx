@@ -17,6 +17,7 @@ type Props = {
   stroke?: string;
   onClick?: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
 const LoadingButton = ({
@@ -32,13 +33,14 @@ const LoadingButton = ({
   styleButton,
   className,
   background,
+  disabled,
   onClick,
 }: Props) => {
   return (
     <Button
       onClick={onClick}
       buttonStyle={styleButton}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       width={width}
       type="submit"
       className={className}

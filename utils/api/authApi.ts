@@ -7,6 +7,7 @@ import {
   LogoutResponse,
   RefreshTokenResponse,
   RegisterInput,
+  ResetPasswordInput,
 } from "./types/AuthAPI";
 
 export const authApi = axios.create({
@@ -37,4 +38,23 @@ export const logoutUser = async () => {
 export const getUser = async () => {
   const response = await authApi.get<GenericResponse>("/user");
   return response.data.data;
+};
+
+export const forgotPassword = async (email: string) => {
+  const response = await authApi.post<GenericResponse>("/forgot-password", {
+    email,
+  });
+  return response.data;
+};
+
+export const verifyResetPasswordToken = async (token: string) => {
+  const response = await authApi.get<GenericResponse>(
+    `/reset-password?token=${token}`
+  );
+  return response.data.data;
+};
+
+export const resetPassword = async (data: ResetPasswordInput) => {
+  const response = await authApi.post<GenericResponse>("/reset-password", data);
+  return response.data.message;
 };

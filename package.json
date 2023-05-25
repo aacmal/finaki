@@ -26,6 +26,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.42.1",
     "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.8.0",
     "react-select": "^5.7.0",
     "recharts": "^2.2.0",
     "sass": "^1.56.2",
