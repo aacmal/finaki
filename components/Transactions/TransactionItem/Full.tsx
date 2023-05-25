@@ -23,6 +23,7 @@ import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Control from "react-select/dist/declarations/src/components/Control";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import useStore from "../../../stores/store";
+import transactionStore from "../../../stores/transactionStore";
 
 type Props = {
   transaction: Transaction;
@@ -35,10 +36,11 @@ type Props = {
  * @returns
  */
 const FullTransactionItem = ({ transaction }: Props) => {
-  const setTransactionId = useStore(
-    (state) => state.transactionDetailState.setTransactionId
+  const { setTransactionDetailState } = transactionStore(
+    (state) => ({
+      setTransactionDetailState: state.setTransactionDetailState,
+    })
   );
-
   const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -249,7 +251,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
             </td>
             <td className="rounded-l-xl lg:rounded-none group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 py-3 lg:pl-0 pl-2">
               <div
-                onClick={() => setTransactionId(transaction._id)}
+                onClick={() => setTransactionDetailState({ isOpen: true, transaction: transaction })}
                 className="font-semibold lg:font-medium text-slate-800  dark:text-slate-200 cursor-pointer block w-36 md:w-72 lg:w-96 truncate"
               >
                 {transaction.description}

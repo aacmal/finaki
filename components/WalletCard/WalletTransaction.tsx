@@ -21,12 +21,8 @@ const WalletTransaction = (props: Props) => {
             return (
               <SimpleTransactionItem
                 key={transaction._id}
-                id={transaction._id}
                 isLastItem={index === props.transactions?.length! - 1}
-                description={transaction.description}
-                amount={transaction.amount}
-                type={transaction.type}
-                createdAt={transaction.createdAt}
+                transaction={transaction}
                 theme="light"
               />
             );

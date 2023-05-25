@@ -59,12 +59,8 @@ const RecentTransactions = ({ data, isLoading, isError }: Props) => {
             return (
               <SimpleTransactionItem
                 key={transaction._id}
-                id={transaction._id}
                 isLastItem={index === lengthData - 1}
-                description={transaction.description}
-                type={transaction.type}
-                createdAt={transaction.createdAt}
-                amount={transaction.amount}
+                transaction={transaction}
               />
             );
           })}

@@ -1,17 +1,15 @@
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
+import { Transaction } from "@/types/Transaction";
 import { currencyFormat } from "@/utils/currencyFormat";
 import classNames from "classnames";
 import React from "react";
 import useStore from "../../../stores/store";
+import transactionStore from "../../../stores/transactionStore";
 
 type Props = {
   isLastItem: boolean;
-  type: string;
-  description: string;
-  createdAt: string;
-  amount: number;
-  id: string;
+  transaction: Transaction;
   theme?: "default" | "light";
 };
 
@@ -29,23 +27,21 @@ type Props = {
  * />
  */
 const SimpleTransactionItem = ({
-  id,
   isLastItem,
-  type,
-  description,
-  createdAt,
-  amount,
+  transaction,
   theme = "default",
 }: Props) => {
-  const setTransactionId = useStore(
-    (state) => state.transactionDetailState.setTransactionId
+  const { setTransactionDetailState } = transactionStore(
+    (state) => ({
+      setTransactionDetailState: state.setTransactionDetailState,
+    })
   );
 
-  const date = new Date(createdAt).toLocaleDateString("id-ID", {
+  const date = new Date(transaction.createdAt).toLocaleDateString("id-ID", {
     day: "numeric",
     month: "short",
   });
-  const hour = new Date(createdAt).toLocaleTimeString("id-ID", {
+  const hour = new Date(transaction.createdAt).toLocaleTimeString("id-ID", {
     hour: "numeric",
     minute: "numeric",
   });
@@ -62,10 +58,10 @@ const SimpleTransactionItem = ({
       <span>
         <IconWrapper className="w-7">
           <ArrowCircleIcon
-            direction={type === "in" ? "up" : "down"}
+            direction={transaction.type === "in" ? "up" : "down"}
             className={classNames(
-              { "text-blue-500": type === "in" && theme === "default" },
-              { "text-orange-500": type === "out" && theme === "default" },
+              { "text-blue-500": transaction.type === "in" && theme === "default" },
+              { "text-orange-500": transaction.type === "out" && theme === "default" },
               { "text-white": theme === "light" }
             )}
           />
@@ -73,12 +69,15 @@ const SimpleTransactionItem = ({
       </span>
       <div className="w-[70%] inline-block">
         <div
-          onClick={() => setTransactionId(id)}
+          onClick={() => setTransactionDetailState({
+            transaction: transaction,
+            isOpen: true,
+          })}
           className={classNames(
             "font-medium cursor-pointer w-44 md:w-60 lg:w-72 truncate"
           )}
         >
-          {description}
+          {transaction.description}
         </div>
         <span className="flex items-center text-sm">
           <span className="font-medium mr-1">{date}</span>
@@ -99,13 +98,13 @@ const SimpleTransactionItem = ({
       <span
         className={classNames(
           "font-medium  ml-auto whitespace-nowrap",
-          { "text-blue-500": type === "in" && theme === "default" },
-          { "text-orange-500": type === "out" && theme === "default" },
+          { "text-blue-500": transaction.type === "in" && theme === "default" },
+          { "text-orange-500": transaction.type === "out" && theme === "default" },
           { "text-white": theme === "light" }
         )}
       >
-        {type === "in" ? "+" : "-"}
-        {currencyFormat(amount)}
+        {transaction.type === "in" ? "+" : "-"}
+        {currencyFormat(transaction.amount)}
       </span>
     </li>
   );

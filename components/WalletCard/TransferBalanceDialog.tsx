@@ -134,6 +134,14 @@ const TransferBalanceDialog = ({}: Props) => {
               )}
             />
           </div>
+          <InputWithLabel
+            type="text"
+            placeholder="Convert dari tunai ke saldo"
+            label="Deskripsi (opsional)"
+            id="description"
+            className="mb-6"
+            {...register("description")}
+          />
           <Controller
             name="amount"
             control={control}
@@ -150,8 +158,8 @@ const TransferBalanceDialog = ({}: Props) => {
             )}
           />
           <TextArea
-            placeholder="Convert dari tunai ke saldo"
-            label="Catatan"
+            placeholder="Tulis catatan disini"
+            label="Catatan (opsional)"
             id="note"
             spellCheck={false}
             {...register("note")}
