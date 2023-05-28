@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useState } from "react";
-import { WalletColor, walletColors } from "./constants";
+import { indicatorColor, WalletColor, walletColors } from "./constants";
 import WalletCardDropdown from "./WalletCardDropdown";
 
 type Props = {
@@ -30,7 +30,7 @@ const WalletCard = ({
   link,
   demoMode = false,
 }: Props) => {
-  const [colorKey, setColorKey] = useState<WalletColor>(initColorKey);
+  const [colorKey, setColorKey] = useState<string>(initColorKey);
 
   const queryClient = useQueryClient();
   const colorMutation = useMutation({
@@ -64,13 +64,16 @@ const WalletCard = ({
     if (colorKey === initColorKey) return;
     colorMutation.mutate({ id, color: colorKey });
   };
-
+  
   return (
     <div
       className={classNames(
-        "rounded-xl p-5 bg-gradient-to-br group flex flex-col gap-10 transition-all",
-        walletColors[colorKey]
+        "rounded-xl p-5 bg-gradient-to-br group flex flex-col gap-10 transition-all ",
+        !colorKey.includes("#") && walletColors[colorKey as WalletColor]
       )}
+      style={{
+        backgroundColor: colorKey.includes("#") ? colorKey : undefined,
+      }}
     >
       <div className="flex items-center justify-between">
         <Link

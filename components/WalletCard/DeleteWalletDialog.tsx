@@ -96,9 +96,13 @@ const DeleteWalletDialog = (props: Props) => {
           Apakah anda yakin untuk menghapus dompet{" "}
           <span
             className={classNames(
-              "px-2 py-1 rounded-md mx-1 text-slate-50",
-              (indicatorColor as any)[walletData?.color as WalletColor]
+              "px-2 py-1 rounded-md mx-1 text-slate-50"
             )}
+            style={{
+              backgroundColor: walletData?.color?.includes("#")
+                ? walletData?.color
+                : indicatorColor[walletData?.color as WalletColor],
+            }}
           >
             {walletData?.name}
           </span>

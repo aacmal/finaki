@@ -5,11 +5,10 @@ import { SelectContext, SelectContextType } from "./Select";
 type Props = {
   children: React.ReactNode;
   value: string | null;
-  className?: string;
   selected?: boolean;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
-const Option = ({ children, value, className, selected }: Props) => {
+const Option = ({ children, value, selected, ...props }: Props) => {
   const { setSelected } = useContext(SelectContext) as SelectContextType;
 
   useEffect(() => {
@@ -26,11 +25,9 @@ const Option = ({ children, value, className, selected }: Props) => {
 
   return (
     <div
-      className={classNames({
-        "p-1 dark:hover:bg-slate-400/30 rounded-md hover:bg-slate-200/50":
-          !className,
-        [className as string]: className,
-      })}
+      className={classNames(
+        "p-1 dark:hover:bg-slate-400/30 rounded-md hover:bg-slate-200/50"
+      )}
       onClick={() =>
         setSelected({
           value,
@@ -38,6 +35,7 @@ const Option = ({ children, value, className, selected }: Props) => {
         })
       }
       role="listitem"
+      {...props}
     >
       {children}
     </div>

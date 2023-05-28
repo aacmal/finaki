@@ -9,15 +9,17 @@ import IconWrapper from "@/dls/IconWrapper";
 import ChevronIcon from "@/icons/ChevronIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import PencilIcon from "@/icons/PencilIcon";
+import { IoIosColorPalette } from "react-icons/io";
 import TrashIcon from "@/icons/TrashIcon";
+import { useRef } from "react";
 import useStore from "../../stores/store";
-import { indicatorColor, WalletColor } from "./constants";
+import { hashCodeColor, indicatorColor, WalletColor } from "./constants";
 
 type Props = {
   id: string;
-  colorKey: WalletColor;
+  colorKey: string;
   handleUpdateColor: () => void;
-  setColorKey: (color: WalletColor) => void;
+  setColorKey: (color: string) => void;
 };
 
 const ButtonTrigger = () => (
@@ -26,14 +28,14 @@ const ButtonTrigger = () => (
   </button>
 );
 
-export const ColorCircle = ({ dataColor }: { dataColor: string }) => (
-  <div className={`w-3 h-3 rounded-full ${dataColor}`}></div>
+export const ColorCircle = ({ style }: { style?: React.CSSProperties }) => (
+  <div style={style} className={"w-3 h-3 rounded-full"}></div>
 );
 
 const SubMenuTrigger = () => (
   <div className="flex items-center justify-between">
     Ganti warna
-    <IconWrapper className="w-4 transform -rotate-90">
+    <IconWrapper className="!w-4 transform -rotate-90">
       <ChevronIcon />
     </IconWrapper>
   </div>
@@ -46,12 +48,14 @@ const WalletCardDropdown = ({
   setColorKey,
 }: Props) => {
   const setDeleteWalletId = useStore((state) => state.setDeleteWalletId);
+  const colorRef = useRef<HTMLInputElement>(null);
 
   const updateWhenClose = (isOpen: boolean) => {
     if (!isOpen) {
       handleUpdateColor();
     }
   };
+  const isCustomColor = colorKey.includes("#");
 
   return (
     <DropdownMenu onOpenChange={updateWhenClose} trigger={<ButtonTrigger />}>
@@ -61,18 +65,47 @@ const WalletCardDropdown = ({
       </DropdownCheckboxItem> */}
       <DropdownSubMenu
         trigger={<SubMenuTrigger />}
-        iconTrigger={<ColorCircle dataColor={indicatorColor[colorKey]} />}
+        iconTrigger={
+          <ColorCircle
+            style={{
+              backgroundColor: isCustomColor
+                ? colorKey
+                : indicatorColor[colorKey as WalletColor],
+            }}
+          />
+        }
       >
         {Object.keys(indicatorColor).map((key: string) => (
           <DropdownItem
             onClick={() => setColorKey(key as WalletColor)}
             key={key}
-            icon={<ColorCircle dataColor={(indicatorColor as any)[key]} />}
+            icon={
+              <ColorCircle
+                style={{
+                  backgroundColor: indicatorColor[key as WalletColor],
+                }}
+              />
+            }
           >
             {key}
           </DropdownItem>
         ))}
+        <DropdownItem
+          icon={<IoIosColorPalette />}
+          onClick={() => colorRef.current?.click()}
+        >
+          Custom color
+        </DropdownItem>
       </DropdownSubMenu>
+      <input
+        value={
+          isCustomColor ? colorKey : hashCodeColor[colorKey as WalletColor]
+        }
+        ref={colorRef}
+        onChange={(e) => setColorKey(e.currentTarget.value)}
+        className="sr-only"
+        type="color"
+      />
       <DropdownItem
         shouldCloseAfterClick
         className="hover:!bg-red-400 hover:!text-white"

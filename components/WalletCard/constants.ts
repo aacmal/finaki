@@ -20,14 +20,25 @@ export const walletColors = {
 };
 
 export const indicatorColor = {
-  blue: "bg-blue-500",
-  orange: "bg-orange-500",
-  green: "bg-green-500",
-  red: "bg-red-500",
-  purple: "bg-purple-500",
-  yellow: "bg-yellow-500",
-  gray: "bg-gray-500",
-  cyan: "bg-cyan-500",
+  blue: "#3b82f6",
+  orange: "#f97316",
+  green: "#22c55e",
+  red: "#ef4444",
+  purple: "#a855f7",
+  yellow: "#eab308",
+  gray: "#6b7280",
+  cyan: "#06b6d4",
+};
+
+export const hashCodeColor = {
+  blue: "#3b82f6",
+  orange: "#f97316",
+  green: "#22c55e",
+  red: "#ef4444",
+  purple: "#a855f7",
+  yellow: "#eab308",
+  gray: "#6b7280",
+  cyan: "#06b6d4",
 };
 
 export const walletLabelColor = {

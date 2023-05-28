@@ -14,7 +14,7 @@ import { QueryKey } from "@/types/QueryKey";
 import { createNewWallet } from "@/utils/api/wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
-import { indicatorColor } from "./constants";
+import { indicatorColor, WalletColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import { removeCurrencyFormat } from "@/utils/currencyFormat";
@@ -93,7 +93,9 @@ const AddNewWallet = (props: Props) => {
                       <Option key={key} value={key}>
                         <div className="flex items-center gap-3 capitalize">
                           <ColorCircle
-                            dataColor={(indicatorColor as any)[key]}
+                            style={{
+                              backgroundColor: indicatorColor[key as WalletColor],
+                            }}
                           />
                           {key}
                         </div>

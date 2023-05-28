@@ -15,11 +15,12 @@ import { QueryKey } from "@/types/QueryKey";
 import { getAllWallets } from "@/api/wallet";
 import Select from "@/dls/Select/Select";
 import Option from "@/dls/Select/Option";
-import { indicatorColor } from "../WalletCard/constants";
+import { indicatorColor, WalletColor } from "../WalletCard/constants";
 import { removeCurrencyFormat } from "@/utils/currencyFormat";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import TextArea from "@/dls/Form/TextArea";
 import useStore from "../../stores/store";
+import { WalletData } from "@/types/Wallet";
 
 type Props = {};
 
@@ -186,15 +187,19 @@ const AddTransaction = (props: Props) => {
                 placeholder="Pilih Dompet (Opsional)"
                 {...field}
               >
-                {walletQuery.data?.map((wallet) => (
+                {walletQuery.data?.map((wallet: WalletData) => (
                   <Option
                     selected={wallet._id === walletId}
                     className={classNames(
-                      "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
-                      (indicatorColor as any)[wallet.color]
+                      "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
                     )}
                     key={wallet._id}
                     value={wallet._id}
+                    style={{
+                      backgroundColor: wallet.color.includes("#")
+                        ? wallet.color
+                        : (indicatorColor as any)[wallet.color],
+                    }}
                   >
                     {wallet.name}
                   </Option>

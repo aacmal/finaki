@@ -1,7 +1,7 @@
 "use client";
 
 import AreaChart from "@/components/Charts/AreaChart/AreaChart";
-import { indicatorColor } from "@/components/WalletCard/constants";
+import { indicatorColor, WalletColor } from "@/components/WalletCard/constants";
 import { ColorCircle } from "@/components/WalletCard/WalletCardDropdown";
 import WalletOption from "@/components/WalletCard/WalletOption";
 import WalletTransaction from "@/components/WalletCard/WalletTransaction";
@@ -25,7 +25,7 @@ import { currencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
@@ -36,8 +36,11 @@ const WalletDetailPage = (props: Props) => {
   const router = useRouter();
   const id = urlPath!.split("/")[3];
   const queryClient = useQueryClient();
+  const customColorRef = useRef<HTMLInputElement | null>(null);
 
   const { register, handleSubmit, control, watch } = useForm();
+  
+  const { ref, ...rest } = register("color");
 
   const [edit, setEdit] = useState<boolean>(false);
 
@@ -120,14 +123,23 @@ const WalletDetailPage = (props: Props) => {
     });
   };
 
+  const walletColor = walletDataQuery.data.color;
+
+
   return (
     <div
       className={classNames(
-        "p-3 lg:p-5 rounded-2xl w-full absolute min-h-screen lg:min-h-fit lg:h-auto lg:static left-0 lg:pb-5 pb-32",
-        (indicatorColor as any)[
-          !edit ? walletDataQuery.data.color : watch("color")
-        ]
+        "p-3 lg:p-5 rounded-2xl w-full absolute min-h-screen lg:min-h-fit lg:h-auto lg:static left-0 lg:pb-5 pb-32"
       )}
+      style={{
+        backgroundColor: edit
+          ? watch("color")?.includes("#")
+            ? watch("color")
+            : indicatorColor[watch("color") as WalletColor]
+          : walletColor.includes("#")
+            ? walletColor
+            : indicatorColor[walletColor as WalletColor],
+      }}
     >
       <div className="flex gap-3 items-center mb-5">
         {!edit ? (
@@ -178,7 +190,7 @@ const WalletDetailPage = (props: Props) => {
             render={({ field }) => (
               <Select
                 className="!p-2 !text-slate-50"
-                minWidth="min-w-[4.5rem]"
+                minWidth="min-w-[7rem]"
                 required
                 placeholder="Warna"
                 {...field}
@@ -192,8 +204,25 @@ const WalletDetailPage = (props: Props) => {
                     {key}
                   </Option>
                 ))}
+                <Option
+                  selected={walletColor.includes("#")}
+                  value={walletColor}
+                  onClick={() => customColorRef.current?.click()}
+                >
+                  custom color
+                </Option>
               </Select>
             )}
+          />
+          <input
+            value={walletColor}
+            {...rest}
+            ref={(e) => {
+              customColorRef.current = e;
+              ref(e);
+            }}
+            type="color"
+            className="sr-only"
           />
         </form>
       )}

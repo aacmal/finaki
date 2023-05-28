@@ -36,11 +36,9 @@ type Props = {
  * @returns
  */
 const FullTransactionItem = ({ transaction }: Props) => {
-  const { setTransactionDetailState } = transactionStore(
-    (state) => ({
-      setTransactionDetailState: state.setTransactionDetailState,
-    })
-  );
+  const { setTransactionDetailState } = transactionStore((state) => ({
+    setTransactionDetailState: state.setTransactionDetailState,
+  }));
   const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -251,7 +249,12 @@ const FullTransactionItem = ({ transaction }: Props) => {
             </td>
             <td className="rounded-l-xl lg:rounded-none group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 py-3 lg:pl-0 pl-2">
               <div
-                onClick={() => setTransactionDetailState({ isOpen: true, transaction: transaction })}
+                onClick={() =>
+                  setTransactionDetailState({
+                    isOpen: true,
+                    transaction: transaction,
+                  })
+                }
                 className="font-semibold lg:font-medium text-slate-800  dark:text-slate-200 cursor-pointer block w-36 md:w-72 lg:w-96 truncate"
               >
                 {transaction.description}
@@ -278,6 +281,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   "px-3 py-1 w-fit block text-center text-sm rounded-xl font-medium",
                   `${
                     currentWallet &&
+                    !currentWallet.color.includes("#") &&
                     (walletLabelColor as any)[currentWallet.color]
                   }`,
                   {
@@ -286,8 +290,16 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   {
                     "text-slate-600 dark:text-slate-200 !cursor-default":
                       !currentWallet,
+                  },
+                  {
+                    "text-white": currentWallet?.color.includes("#"),
                   }
                 )}
+                style={{
+                  backgroundColor: currentWallet?.color.includes("#")
+                    ? currentWallet?.color
+                    : undefined,
+                }}
               >
                 {currentWallet ? currentWallet.name.split(" ")[0] : " - "}
               </Link>

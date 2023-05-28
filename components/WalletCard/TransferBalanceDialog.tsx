@@ -88,11 +88,15 @@ const TransferBalanceDialog = ({}: Props) => {
                     <Option
                       selected={wallet._id === sourceWalletId}
                       className={classNames(
-                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
-                        (indicatorColor as any)[wallet.color]
+                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
                       )}
                       key={wallet._id}
                       value={wallet._id}
+                      style={{
+                        backgroundColor: wallet.color.includes("#")
+                          ? wallet.color
+                          : (indicatorColor as any)[wallet.color],
+                      }}
                     >
                       {wallet.name}
                     </Option>
@@ -121,11 +125,15 @@ const TransferBalanceDialog = ({}: Props) => {
                     <Option
                       selected={wallet._id === destinationWalletId}
                       className={classNames(
-                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center",
-                        (indicatorColor as any)[wallet.color]
+                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
                       )}
                       key={wallet._id}
                       value={wallet._id}
+                      style={{
+                        backgroundColor: wallet.color.includes("#")
+                          ? wallet.color
+                          : (indicatorColor as any)[wallet.color],
+                      }}
                     >
                       {wallet.name}
                     </Option>
