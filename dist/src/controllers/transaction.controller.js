@@ -47,7 +47,15 @@ async function createTransaction(req, res) {
     try {
         const userId = req.user;
         const { description, note, amount, type, walletId } = req.body;
-        const newTransaction = await TransactionService.create({ userId, description, note, amount, type, walletId });
+        const newTransaction = await TransactionService.create({
+            userId,
+            description,
+            note,
+            amount,
+            type,
+            walletId,
+            includeInCalculation: true,
+        });
         res.status(201).json({
             message: "Transaction has been created successfully",
             data: newTransaction,
@@ -130,14 +138,17 @@ async function getTotalTransaction(req, res) {
 }
 exports.getTotalTransaction = getTotalTransaction;
 async function getAllTransactions(req, res) {
-    var _a;
     try {
         const userId = req.user;
-        const limit = (_a = parseInt(req.query.limit)) !== null && _a !== void 0 ? _a : 0;
-        const transactions = await TransactionService.getTransactions(userId, limit);
+        const query = req.query;
+        const result = await TransactionService.getTransactions(userId, query);
         res.json({
             message: "Transactions has been fetched successfully",
-            data: transactions,
+            data: {
+                transactions: result.transactions,
+                total: result.total,
+                currentPage: query === null || query === void 0 ? void 0 : query.page,
+            },
         });
     }
     catch (error) {

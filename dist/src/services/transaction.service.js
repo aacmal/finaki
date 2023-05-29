@@ -63,12 +63,20 @@ async function create(transactionData) {
     }
 }
 exports.create = create;
-async function getTransactions(userId, limit) {
+async function getTransactions(userId, query) {
+    var _a;
     try {
-        return await transaction_model_1.default.find({ userId: userId, includeInCalculation: true })
+        const { page, limit, startDate, endDate, type, walletId, description } = query;
+        const transactions = await transaction_model_1.default.find({ userId: userId, includeInCalculation: true })
+            .limit((_a = parseInt(limit)) !== null && _a !== void 0 ? _a : 0)
+            .skip((parseInt(page) - 1) * parseInt(limit))
             .sort({ createdAt: -1 })
-            .select({ userId: 0, __v: 0, includeInCalculation: 0 })
-            .limit(limit !== null && limit !== void 0 ? limit : 0);
+            .select({ userId: 0, __v: 0, includeInCalculation: 0 });
+        const total = await transaction_model_1.default.countDocuments({ userId: userId, includeInCalculation: true });
+        return {
+            transactions,
+            total,
+        };
     }
     catch (error) {
         throw error;
@@ -261,7 +269,7 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
                                 date: "$createdAt",
                                 timezone: timezone,
                             },
-                        }
+                        },
                     },
                     timestamp: {
                         $first: "$createdAt",

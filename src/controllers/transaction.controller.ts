@@ -3,6 +3,7 @@ import { validationResult } from "express-validator";
 import * as TransactionService from "../services/transaction.service";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
+import { ITransactionRequestQuery } from "interfaces/Transaction";
 
 export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
@@ -24,7 +25,15 @@ export async function createTransaction(req: Request, res: Response) {
   try {
     const userId = req.user as Types.ObjectId;
     const { description, note, amount, type, walletId } = req.body;
-    const newTransaction = await TransactionService.create({ userId, description, note, amount, type, walletId });
+    const newTransaction = await TransactionService.create({
+      userId,
+      description,
+      note,
+      amount,
+      type,
+      walletId,
+      includeInCalculation: true,
+    });
     res.status(201).json({
       message: "Transaction has been created successfully",
       data: newTransaction,
@@ -108,11 +117,16 @@ export async function getTotalTransaction(req: Request, res: Response) {
 export async function getAllTransactions(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const limit = parseInt(req.query.limit as string) ?? 0;
-    const transactions = await TransactionService.getTransactions(userId as Types.ObjectId, limit);
+    const query = req.query as unknown as ITransactionRequestQuery;
+
+    const result = await TransactionService.getTransactions(userId as Types.ObjectId, query);
     res.json({
       message: "Transactions has been fetched successfully",
-      data: transactions,
+      data: {
+        transactions: result.transactions,
+        total: result.total,
+        currentPage: query?.page,
+      },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

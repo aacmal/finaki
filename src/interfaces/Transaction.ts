@@ -27,3 +27,13 @@ export interface ITotalTransaction {
   out: number;
   totalAmount: number;
 }
+
+export interface ITransactionRequestQuery {
+  page: string;
+  limit: string;
+  startDate: string;
+  endDate: string;
+  type: string;
+  walletId: string;
+  description: string;
+}

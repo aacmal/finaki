@@ -5,6 +5,7 @@ import {
   ICreateTransactionInput,
   TransactionType,
   IUpdateTransactionInput,
+  ITransactionRequestQuery,
 } from "../interfaces/Transaction";
 import * as UserService from "./user.service";
 import * as WalletService from "./wallet.service";
@@ -40,12 +41,22 @@ export async function create(transactionData: ICreateTransactionInput) {
   }
 }
 
-export async function getTransactions(userId: Types.ObjectId, limit?: number) {
+export async function getTransactions(userId: Types.ObjectId, query: ITransactionRequestQuery) {
   try {
-    return await TransactionModel.find({ userId: userId, includeInCalculation: true })
+    const { page, limit, startDate, endDate, type, walletId, description } = query;
+
+    const transactions = await TransactionModel.find({ userId: userId, includeInCalculation: true })
+      .limit(parseInt(limit) ?? 0)
+      .skip((parseInt(page) - 1) * parseInt(limit))
       .sort({ createdAt: -1 })
-      .select({ userId: 0, __v: 0, includeInCalculation: 0 })
-      .limit(limit ?? 0);
+      .select({ userId: 0, __v: 0, includeInCalculation: 0 });
+
+    const total = await TransactionModel.countDocuments({ userId: userId, includeInCalculation: true });
+
+    return {
+      transactions,
+      total,
+    };
   } catch (error) {
     throw error;
   }
@@ -259,7 +270,7 @@ export async function getTotalTransactionByPeriods(
                 date: "$createdAt",
                 timezone: timezone,
               },
-            }
+            },
           },
           timestamp: {
             $first: "$createdAt",
@@ -308,7 +319,8 @@ export async function getTotalTransactionByPeriods(
       date.setDate(date.getDate() + i);
 
       const transaction = totalTranscation.find(
-        (transaction: ITotalTransaction) => transaction._id.day === date.getDate() && transaction._id.month === date.getMonth() + 1, // because month start from 0
+        (transaction: ITotalTransaction) =>
+          transaction._id.day === date.getDate() && transaction._id.month === date.getMonth() + 1, // because month start from 0
       );
 
       totalTransactionByPeriods.push({
