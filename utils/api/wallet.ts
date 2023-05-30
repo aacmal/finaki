@@ -14,6 +14,7 @@ import {
 } from "./types/WalletAPI";
 
 import { TransactionsResponse } from "./types/TransactionAPI";
+import { Transaction } from "@/types/Transaction";
 
 export const createNewWallet = async (data: WalletInput) => {
   const response = await instance.post<CreatedWalletResponse>("/wallets", data);
@@ -26,7 +27,7 @@ export const getAllWallets = async () => {
   return response.data.data;
 };
 
-export const updateWallet = async ({id, data}: UpdateWalletRequest) => {
+export const updateWallet = async ({ id, data }: UpdateWalletRequest) => {
   const response = await instance.put<UpdatedWalletResponse>(
     `/wallets/${id}`,
     data
@@ -57,12 +58,16 @@ export const updateWalletColor = async ({ id, color }: any) => {
 export const transferBalance = async (data: TransferBalance) => {
   const response = await instance.post(`/wallets/transfer-balance`, data);
   return response.data.data;
-}
+};
 
-export const getWalletTransactions = async (id: string) => {
-  const response = await instance.get<TransactionsResponse>(`/wallets/${id}/transactions`);
+export const getWalletTransactions = async (
+  id: string
+): Promise<Transaction[]> => {
+  const response = await instance.get<TransactionsResponse>(
+    `/wallets/${id}/transactions`
+  );
   return response.data.data;
-}
+};
 
 // export const getWalletBalanceActivity = async (walletId: string) => {
 //   const response = await instance.get<WalletBalanceActivityResponse>(

@@ -6,6 +6,10 @@ export interface TransactionResponse extends GenericResponse {
 }
 
 export interface TransactionsResponse extends GenericResponse {
+  data: Transaction[];
+}
+
+export interface InfiniteTransactionResponse extends GenericResponse {
   data: {
     transactions: Transaction[];
     totalPages: number;

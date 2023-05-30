@@ -3,6 +3,7 @@ import { instance } from "./api";
 import { makeUrl } from "./config";
 import {
   EditTransactionInput,
+  InfiniteTransactionResponse,
   TotalTransactionByDayResponse,
   TransactionInput,
   TransactionResponse,
@@ -52,7 +53,7 @@ export const getAllTransactions = async (query: {
   limit: number;
   page?: number;
 }) => {
-  const response = await instance.get<TransactionsResponse>(
+  const response = await instance.get<InfiniteTransactionResponse>(
     makeUrl("/transactions", query)
   );
 
