@@ -124,7 +124,7 @@ export async function getAllTransactions(req: Request, res: Response) {
       message: "Transactions has been fetched successfully",
       data: {
         transactions: result.transactions,
-        total: result.total,
+        totalPages: Math.ceil(result.count / Number(query?.limit)),
         currentPage: query?.page,
       },
     });

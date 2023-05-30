@@ -51,11 +51,11 @@ export async function getTransactions(userId: Types.ObjectId, query: ITransactio
       .sort({ createdAt: -1 })
       .select({ userId: 0, __v: 0, includeInCalculation: 0 });
 
-    const total = await TransactionModel.countDocuments({ userId: userId, includeInCalculation: true });
+    const count = await TransactionModel.countDocuments({ userId: userId, includeInCalculation: true });
 
     return {
       transactions,
-      total,
+      count,
     };
   } catch (error) {
     throw error;
