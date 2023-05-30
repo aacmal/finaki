@@ -18,9 +18,7 @@ export const insertNewTransaction = async (data: TransactionInput) => {
 };
 
 export const getTransactionsByDate = async () => {
-  const response = await instance.get<Transaction[]>(
-    "/transactions/by-date"
-  );
+  const response = await instance.get<Transaction[]>("/transactions/by-date");
   return response.data;
 };
 
@@ -50,9 +48,12 @@ export const getTotalTransactionByPeriod = async (
   return response.data.data;
 };
 
-export const getAllTransactions = async (limit: number) => {
+export const getAllTransactions = async (query: {
+  limit: number;
+  page?: number;
+}) => {
   const response = await instance.get<TransactionsResponse>(
-    makeUrl("/transactions", { limit })
+    makeUrl("/transactions", query)
   );
 
   return response.data.data;

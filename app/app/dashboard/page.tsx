@@ -30,7 +30,12 @@ const Page = (props: Props) => {
 
   const recentTransactionsQuery = useQuery({
     queryKey: [QueryKey.RECENT_TRANSACTIONS],
-    queryFn: () => getAllTransactions(4),
+    queryFn: () => getAllTransactions({
+      limit: 5,
+    }),
+    onSuccess: (data) => {
+      console.log(data.transactions);
+    },
     onError: (error) => {
       console.log(error);
     },
@@ -60,7 +65,7 @@ const Page = (props: Props) => {
           loading={walletQuery.isLoading}
         />
         <RecentTransactions
-          data={recentTransactionsQuery.data}
+          data={recentTransactionsQuery.data?.transactions}
           isLoading={recentTransactionsQuery.isLoading}
           isError={recentTransactionsQuery.isError}
         />

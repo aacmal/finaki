@@ -6,7 +6,11 @@ export interface TransactionResponse extends GenericResponse {
 }
 
 export interface TransactionsResponse extends GenericResponse {
-  data: Transaction[];
+  data: {
+    transactions: Transaction[];
+    totalPages: number;
+    currentPage: number;
+  };
 }
 
 export interface TotalTransactionByDayResponse extends GenericResponse {

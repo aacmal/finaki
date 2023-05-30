@@ -1,36 +1,78 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { getAllTransactions, getTransactionsByDate } from "@/api/transaction";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getAllTransactions } from "@/api/transaction";
 import { QueryKey } from "@/types/QueryKey";
 import TransactionHeader from "@/components/Transactions/AllTransactions/TransactionHeader";
 import TransactionList from "@/components/Transactions/AllTransactions/TransactionList";
 import Heading from "@/dls/Heading";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { groupByDay } from "@/utils/array";
 import Head from "next/head";
 import Image from "next/image";
+import { useInView } from "react-intersection-observer";
+import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
+import classNames from "classnames";
+import { shallow } from "zustand/shallow";
+import useTransaction from "../../../stores/transactionStore";
+import { toast } from "react-hot-toast";
 
 type Props = {};
 
+const LIMIT = 20;
 const TransactionsPage = (props: Props) => {
-  const [transaction, setTransaction] = useState<any[]>();
+  const { transactions, setTransactions, pushTransactions } = useTransaction(
+    (state) => ({
+      transactions: state.transactions,
+      setTransactions: state.setTransactions,
+      pushTransactions: state.pushTransactions,
+    }),
+    shallow
+  );
+  const { ref, inView } = useInView();
 
-  const { data, error, isLoading } = useQuery({
+  const {
+    error,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
     queryKey: [QueryKey.TRANSACTIONS],
-    queryFn: () => getAllTransactions(1000),
+    queryFn: ({ pageParam = 1 }) =>
+      getAllTransactions({
+        limit: LIMIT,
+        page: pageParam,
+      }),
+    onSuccess: (data) => {
+      const params = data.pageParams.length - 1;
+      pushTransactions(data.pages[params].transactions);
+    },
     onError: (error) => {
-      console.log(error);
+      toast.error("Terjadi kesalahan");
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.totalPages == lastPage.currentPage) {
+        return undefined;
+      }
+      const nextPage = parseInt(lastPage.currentPage as unknown as string) + 1;
+      return nextPage;
     },
   });
 
-  useEffect(() => {
-    if (data) {
-      setTransaction(groupByDay(data));
-    }
-  }, [data]);
+  const byDateTransactions = useMemo(() => {
+    if (!transactions) return;
+    return groupByDay(transactions);
+  }, [transactions]);
 
-  if (isLoading || !transaction) {
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
+
+  if (isLoading) {
     return (
       <Heading className="text-center mt-10 animate-pulse" level={3}>
         Memuat...
@@ -38,7 +80,7 @@ const TransactionsPage = (props: Props) => {
     );
   }
 
-  if (!transaction || error) {
+  if (!byDateTransactions || error) {
     return (
       <Heading className="text-center mt-10" level={3}>
         Terjadi Kesalahan
@@ -46,7 +88,7 @@ const TransactionsPage = (props: Props) => {
     );
   }
 
-  if (transaction.length < 1) {
+  if (byDateTransactions.length < 1) {
     return (
       <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
         <Image
@@ -71,8 +113,27 @@ const TransactionsPage = (props: Props) => {
       </Head>
       <table className="w-full" border={0}>
         <TransactionHeader />
-        <TransactionList data={transaction} />
+        <TransactionList data={byDateTransactions} />
       </table>
+      <button
+        ref={ref}
+        disabled={!hasNextPage || isFetchingNextPage}
+        className={classNames(
+          "px-5 py-2 font-medium mx-auto mt-5 rounded-lg bg-blue-200 text-blue-500 flex gap-2 items-center",
+          { hidden: !hasNextPage }
+        )}
+        onClick={() => fetchNextPage()}
+      >
+        {isFetchingNextPage ? (
+          <>
+            <LoadingSpinner className=" stroke-blue-500" /> Loading
+          </>
+        ) : hasNextPage ? (
+          "Load More"
+        ) : (
+          "No more data"
+        )}
+      </button>
     </>
   );
 };

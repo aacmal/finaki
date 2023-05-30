@@ -33,14 +33,6 @@ const AppLayout = ({ children }: Props) => {
     staleTime: 0,
   });
 
-  useQuery({
-    queryKey: [QueryKey.TRANSACTIONS],
-    queryFn: () => getAllTransactions(1000),
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-
   useEffect(() => {
     if (isError) {
       router.push(Routes.Login);

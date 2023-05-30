@@ -19,11 +19,8 @@ import { WalletData } from "@/types/Wallet";
 import Link from "next/link";
 import { Routes } from "@/types/Routes";
 import { walletLabelColor } from "@/components/WalletCard/constants";
-import InputWithLabel from "@/dls/Form/InputWithLabel";
-import Control from "react-select/dist/declarations/src/components/Control";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
-import useStore from "../../../stores/store";
-import transactionStore from "../../../stores/transactionStore";
+import useTransaction from "../../../stores/transactionStore";
 
 type Props = {
   transaction: Transaction;
@@ -36,9 +33,12 @@ type Props = {
  * @returns
  */
 const FullTransactionItem = ({ transaction }: Props) => {
-  const { setTransactionDetailState } = transactionStore((state) => ({
-    setTransactionDetailState: state.setTransactionDetailState,
-  }));
+  const { setTransactionDetailState, dispatchUpdateTransaction, dispatchDeleteTransaction } =
+    useTransaction((state) => ({
+      setTransactionDetailState: state.setTransactionDetailState,
+      dispatchUpdateTransaction: state.dispatchUpdateTransaction,
+      dispatchDeleteTransaction: state.dispatchDeleteTransaction,
+    }));
   const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
   const {
     handleSubmit,
@@ -62,12 +62,8 @@ const FullTransactionItem = ({ transaction }: Props) => {
       // refetch dashboard data
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
-      // update transactions data
-      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) =>
-        oldData.filter(
-          (transaction: Transaction) => transaction._id !== data._id
-        )
-      );
+      // delete transactions from transactions store
+      dispatchDeleteTransaction(data._id);
 
       // update recent transactions data
       queryClient.setQueryData(
@@ -116,17 +112,8 @@ const FullTransactionItem = ({ transaction }: Props) => {
       // refetch total transactions
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);
 
-      // update transactions data
-      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
-        return oldData.map((transaction: Transaction) => {
-          if (transaction._id === data._id) {
-            return {
-              ...data,
-            };
-          }
-          return transaction;
-        });
-      });
+      // update transactions data from transactions store
+      dispatchUpdateTransaction(data._id, data);
 
       // update recent transaction data
       queryClient.setQueryData(
