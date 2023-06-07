@@ -26,9 +26,9 @@ import useTransaction from "../../stores/transactionStore";
 type Props = {};
 
 const AddTransaction = (props: Props) => {
-  const { dispatchAddTransaction }  = useTransaction((state) => ({
+  const { dispatchAddTransaction } = useTransaction((state) => ({
     dispatchAddTransaction: state.dispatchAddTransaction,
-  }))
+  }));
 
   const { isOpen, setOpen, walletId } = useStore(
     (state) => state.addTransactionState
@@ -60,12 +60,18 @@ const AddTransaction = (props: Props) => {
         [QueryKey.RECENT_TRANSACTIONS],
         (oldData: any) => {
           if (!oldData) return;
-          return [data, ...oldData];
+          const transactions = oldData.transactions;
+          return {
+            transactions: [data, ...transactions],
+          };
         }
       );
 
       // add new transaction to transaction store
-      dispatchAddTransaction(data);
+      queryClient.setQueryData([QueryKey.TRANSACTIONS], (oldData: any) => {
+        if (!oldData) return;
+        dispatchAddTransaction(data);
+      });
 
       // refetch dashboard data
       queryClient.refetchQueries([QueryKey.TOTAL_TRANSACTIONS]);

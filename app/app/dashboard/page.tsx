@@ -30,12 +30,11 @@ const Page = (props: Props) => {
 
   const recentTransactionsQuery = useQuery({
     queryKey: [QueryKey.RECENT_TRANSACTIONS],
-    queryFn: () => getAllTransactions({
-      limit: 5,
-    }),
-    onSuccess: (data) => {
-      console.log(data.transactions);
-    },
+    queryFn: () =>
+      getAllTransactions({
+        limit: 4,
+      }),
+    onSuccess: (data) => {},
     onError: (error) => {
       console.log(error);
     },
