@@ -7,5 +7,4 @@ exports.corsConfig = {
         "http://localhost:3000", // development
     ],
     credentials: true,
-    sameSite: "none",
 };

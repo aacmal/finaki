@@ -59,6 +59,7 @@ async function generateAuthCredential(req, res, user) {
             httpOnly: true,
             maxAge: MAX_AGE_REFRESH_TOKEN,
             secure: process.env.NODE_ENV === "production",
+            sameSite: "none",
         });
         const userAgent = req.get("user-agent");
         // save refresh token to database

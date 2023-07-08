@@ -35,6 +35,7 @@ export async function generateAuthCredential(req: Request, res: Response, user: 
       httpOnly: true,
       maxAge: MAX_AGE_REFRESH_TOKEN,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
     });
 
     const userAgent = req.get("user-agent");
