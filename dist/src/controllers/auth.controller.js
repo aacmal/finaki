@@ -58,7 +58,7 @@ async function generateAuthCredential(req, res, user) {
         res.cookie("refresh_token", refreshToken, {
             httpOnly: true,
             maxAge: MAX_AGE_REFRESH_TOKEN,
-            secure: false,
+            secure: process.env.NODE_ENV === "production",
         });
         const userAgent = req.get("user-agent");
         // save refresh token to database
@@ -161,7 +161,7 @@ async function refreshToken(req, res) {
         const refreshToken = req.cookies.refresh_token;
         if (!refreshToken) {
             return res.status(401).json({
-                message: "Unauthorizedsadsd",
+                message: "Unauthorized",
             });
         }
         const user = await UserService.findByRefreshToken(refreshToken);
