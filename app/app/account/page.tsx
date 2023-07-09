@@ -1,23 +1,13 @@
-"use client";
+import MyAccount from "./MyAccount";
 
-import React from "react";
-import ThemeSelection from "@/components/ThemeSelection/ThemeSelection";
-import Profile from "@/components/Account/Profile";
-import DevicesLists from "@/components/Account/DeviceLists";
-import LoadingButton from "@/dls/Button/LoadingButton";
-import DangerZone from "@/components/Account/DangerZone";
+export const metadata = {
+  title: "Akun Saya",
+  description: "Akun Saya",
+};
 
 type Props = {};
-
 const Page = (props: Props) => {
-  return (
-    <div className="space-y-10 mt-6">
-      <Profile />
-      <ThemeSelection />
-      <DevicesLists />
-      <DangerZone />
-    </div>
-  );
+  return <MyAccount />;
 };
 
 export default Page;
