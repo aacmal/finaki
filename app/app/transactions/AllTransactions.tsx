@@ -16,6 +16,7 @@ import classNames from "classnames";
 import { shallow } from "zustand/shallow";
 import useTransaction from "../../../stores/transactionStore";
 import { toast } from "react-hot-toast";
+import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
 
 type Props = {};
 
@@ -70,9 +71,13 @@ const AllTransactions = (props: Props) => {
 
   if (isLoading) {
     return (
-      <Heading className="text-center mt-10 animate-pulse" level={3}>
-        Memuat...
-      </Heading>
+      <div className="space-y-4 mt-7">
+        {Array(6)
+          .fill("")
+          .map((_, index) => (
+            <SimpleTSkeleton key={index} delay={index * 300} />
+          ))}
+      </div>
     );
   }
 

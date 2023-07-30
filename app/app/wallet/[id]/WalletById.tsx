@@ -1,6 +1,7 @@
 "use client";
 
 import AreaChart from "@/components/Charts/AreaChart/AreaChart";
+import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
 import { indicatorColor, WalletColor } from "@/components/WalletCard/constants";
 import WalletOption from "@/components/WalletCard/WalletOption";
 import WalletTransaction from "@/components/WalletCard/WalletTransaction";
@@ -91,9 +92,22 @@ const WalletById = (props: Props) => {
 
   if (walletDataQuery.isLoading) {
     return (
-      <Heading className="text-center mt-10 animate-pulse" level={3}>
-        Memuat...
-      </Heading>
+      <div
+        className={classNames(
+          "p-3 lg:p-5 rounded-2xl dark:bg-slate-500/50 bg-slate-200 w-full absolute min-h-screen lg:min-h-fit lg:h-auto lg:static left-0 lg:pb-5 pb-32"
+        )}
+      >
+        <Heading className="text-center mt-10 animate-pulse" level={3}>
+          Memuat...
+        </Heading>
+        <div className="space-y-4 mt-7">
+          {Array(4)
+            .fill("")
+            .map((_, index) => (
+              <SimpleTSkeleton key={index} delay={index * 300} />
+            ))}
+        </div>
+      </div>
     );
   }
 
