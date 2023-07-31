@@ -6,19 +6,63 @@ import WalletCard from "@/components/WalletCard/WalletCard";
 import WalletCardSkeleton from "@/components/WalletCard/WalletCardSkeleton";
 import Heading from "@/dls/Heading";
 import { QueryKey } from "@/types/QueryKey";
-import { getAllWallets } from "@/utils/api/wallet";
+import { getAllWallets, reoderWallets } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import {
+  DndContext,
+  closestCenter,
+  MouseSensor,
+  TouchSensor,
+  DragOverlay,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+
+import {
+  arrayMove,
+  SortableContext,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import { SortableWalletCard } from "./SortableItem";
+import { useEffect, useState } from "react";
 
 type Props = {};
 
 const MyWallets = (props: Props) => {
-  const { data, isLoading, error } = useQuery({
+  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+  const [items, setItems] = useState<any[]>([]);
+
+  const {
+    data: wallets,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: [QueryKey.WALLETS],
     queryFn: getAllWallets,
-    onSuccess: (data) => {},
   });
+
+  const { mutate: reoderMutation } = useMutation({
+    mutationFn: reoderWallets,
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  useEffect(() => {
+    if (wallets) {
+      setItems(
+        wallets.map((wallet) => ({
+          id: wallet._id,
+          name: wallet.name,
+          color: wallet.color,
+          balance: wallet.balance,
+        }))
+      );
+    }
+  }, [wallets]);
 
   if (isLoading) {
     return (
@@ -39,7 +83,7 @@ const MyWallets = (props: Props) => {
       </div>
     );
   }
-  if (!data) {
+  if (!wallets) {
     return (
       <Heading className="text-center mt-10" level={3}>
         Terjadi Kesalahan
@@ -48,10 +92,27 @@ const MyWallets = (props: Props) => {
     );
   }
 
-  const totalBalance = data.reduce(
+  const totalBalance = wallets.reduce(
     (acc: number, curr: any) => acc + curr.balance,
     0
   );
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    // return if there is no over or over is the same as active
+    if (!over) return;
+
+    if (active.id !== over.id) {
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+      const result = arrayMove(items, oldIndex, newIndex);
+      setItems(result);
+      reoderMutation({
+        walletIds: result.map((item) => item.id),
+      });
+    }
+  }
 
   return (
     <div className="mt-6">
@@ -64,18 +125,26 @@ const MyWallets = (props: Props) => {
         </div>
         <AddNewWallet />
       </div>
-      {data.length > 0 ? (
-        <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
-          {data.map((wallet: any) => (
-            <WalletCard
-              key={wallet._id}
-              id={wallet._id}
-              name={wallet.name}
-              initColorKey={wallet.color}
-              balance={wallet.balance}
-            />
-          ))}
-        </div>
+      {wallets.length > 0 || items?.length > 0 ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={items} strategy={rectSortingStrategy}>
+            <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
+              {items.map((wallet: any) => (
+                <SortableWalletCard
+                  key={wallet.id}
+                  id={wallet.id}
+                  name={wallet.name}
+                  initColorKey={wallet.color}
+                  balance={wallet.balance}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       ) : (
         <div className="mt-6">
           <Image

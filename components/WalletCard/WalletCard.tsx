@@ -27,7 +27,6 @@ const WalletCard = ({
   initColorKey,
   name,
   balance,
-  link,
   demoMode = false,
 }: Props) => {
   const [colorKey, setColorKey] = useState<string>(initColorKey);
@@ -64,7 +63,7 @@ const WalletCard = ({
     if (colorKey === initColorKey) return;
     colorMutation.mutate({ id, color: colorKey });
   };
-  
+
   return (
     <div
       className={classNames(
@@ -75,7 +74,7 @@ const WalletCard = ({
         backgroundColor: colorKey.includes("#") ? colorKey : undefined,
       }}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-5">
         <Link
           href={demoMode ? `/demo/wallet/${id}` : `/app/wallet/${id}`}
           className={classNames(

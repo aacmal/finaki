@@ -69,6 +69,14 @@ export const getWalletTransactions = async (
   return response.data.data;
 };
 
+export const reoderWallets = async (params: { walletIds: string[] }) => {
+  const data = {
+    walletIds: JSON.stringify(params.walletIds),
+  };
+  const response = await instance.post(`/wallets/reorder`, data);
+  return response.data;
+};
+
 // export const getWalletBalanceActivity = async (walletId: string) => {
 //   const response = await instance.get<WalletBalanceActivityResponse>(
 //     `/wallets/${walletId}/balance-activity`
