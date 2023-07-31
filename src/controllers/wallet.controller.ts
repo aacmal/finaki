@@ -6,6 +6,7 @@ import { Types } from "mongoose";
 import { TransactionType } from "../interfaces/Transaction";
 import TransactionModel from "../models/transaction.model";
 import WalletModel from "../models/wallet.model";
+import UserModel from "../models/user.model";
 
 export async function createWallet(req: Request, res: Response) {
   const error = validationResult(req);
@@ -53,17 +54,18 @@ export async function createWallet(req: Request, res: Response) {
 export async function getAllWallets(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const wallets = await WalletModel.find({ userId: userId })
-      .select({
+    const wallets = await UserModel.findById(userId).populate({
+      path: "wallets",
+      select: {
         _id: 1,
         name: 1,
-        balance: 1,
         color: 1,
-      })
-      .sort({ createdAt: -1 });
+        balance: 1,
+      },
+    });
     return res.status(200).json({
       message: "Wallets has been fetched successfully",
-      data: wallets,
+      data: wallets?.wallets,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -255,6 +257,29 @@ export async function walletTransactions(req: Request, res: Response) {
       message: "Wallet transactions has been fetched successfully",
       data: transactions?.transactions,
     });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function reorderWallets(req: Request, res: Response) {
+  try {
+    const userId = req.user as Types.ObjectId;
+    const { walletIds } = req.body;
+    const userWallets = await UserModel.findById(userId).select({ wallets: 1 });
+    const arrayWalletIds = JSON.parse(walletIds);
+
+    if (!userWallets) return res.status(404).json({ message: "User not defined" });
+
+    const oldOrder = JSON.stringify(userWallets.wallets.sort());
+    const newOrder = JSON.stringify([...arrayWalletIds].sort()); // prevent mutation of original array
+    if (oldOrder !== newOrder) {
+      return res.status(400).json({ message: "Wallets order is not valid" });
+    }
+
+    userWallets.wallets = arrayWalletIds;
+    await userWallets.save();
+    return res.status(200).json({ message: "Wallets order has been updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

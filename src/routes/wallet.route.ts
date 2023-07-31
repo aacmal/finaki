@@ -8,6 +8,7 @@ const route = Router();
 route.post("/", walletValidator, WalletController.createWallet);
 route.get("/", WalletController.getAllWallets);
 route.post("/transfer-balance", transferWalletBalanceValidator, WalletController.transferWalletBalance);
+route.post("/reorder", WalletController.reorderWallets);
 route.put("/:id", walletValidator, WalletController.updateWallet);
 route.delete("/:id", updateWalletValidator, WalletController.deleteWallet);
 route.get("/:id", WalletController.getOneWallet);

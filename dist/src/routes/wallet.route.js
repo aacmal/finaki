@@ -31,6 +31,7 @@ const route = (0, express_1.Router)();
 route.post("/", wallet_validator_1.walletValidator, WalletController.createWallet);
 route.get("/", WalletController.getAllWallets);
 route.post("/transfer-balance", validator_1.transferWalletBalanceValidator, WalletController.transferWalletBalance);
+route.post("/reorder", WalletController.reorderWallets);
 route.put("/:id", wallet_validator_1.walletValidator, WalletController.updateWallet);
 route.delete("/:id", validator_1.updateWalletValidator, WalletController.deleteWallet);
 route.get("/:id", WalletController.getOneWallet);
