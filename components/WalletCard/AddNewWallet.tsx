@@ -37,7 +37,7 @@ const AddNewWallet = (props: Props) => {
         queryClient.invalidateQueries([QueryKey.TRANSACTIONS]);
       }
       reset({
-        balance: 0,
+        balance: "0",
         name: "",
       });
     },
@@ -94,7 +94,8 @@ const AddNewWallet = (props: Props) => {
                         <div className="flex items-center gap-3 capitalize">
                           <ColorCircle
                             style={{
-                              backgroundColor: indicatorColor[key as WalletColor],
+                              backgroundColor:
+                                indicatorColor[key as WalletColor],
                             }}
                           />
                           {key}
