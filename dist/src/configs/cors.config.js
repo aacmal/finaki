@@ -4,7 +4,8 @@ exports.corsConfig = void 0;
 exports.corsConfig = {
     origin: [
         "https://finaki.vercel.app",
-        "http://localhost:3000", // development
+        "http://localhost:3000",
+        "https://backend.finaki.acml.me", // production
     ],
     credentials: true,
 };
