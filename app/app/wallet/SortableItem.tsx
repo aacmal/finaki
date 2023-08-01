@@ -33,7 +33,7 @@ export const SortableWalletCard = ({ ...props }: Props) => {
       <button
         {...attributes}
         {...listeners}
-        className="absolute top-4 right-4 text-white"
+        className="absolute top-4 right-4 text-white cursor-grab active:cursor-grabbing"
       >
         <RxDragHandleDots2 size={25} color="currentColor" />
       </button>

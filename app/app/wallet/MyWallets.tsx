@@ -28,6 +28,7 @@ import {
 } from "@dnd-kit/sortable";
 import { SortableWalletCard } from "./SortableItem";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 type Props = {};
 
@@ -46,8 +47,17 @@ const MyWallets = (props: Props) => {
 
   const { mutate: reoderMutation } = useMutation({
     mutationFn: reoderWallets,
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
+      toast.error("Terjadi kesalahan");
+      if (!wallets) return;
+      setItems(
+        wallets.map((wallet) => ({
+          id: wallet._id,
+          name: wallet.name,
+          color: wallet.color,
+          balance: wallet.balance,
+        }))
+      );
     },
   });
 
