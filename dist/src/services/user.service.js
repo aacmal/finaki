@@ -97,7 +97,10 @@ async function pushWallet(userId, walletId) {
             _id: userId,
         }, {
             $push: {
-                wallets: walletId,
+                wallets: {
+                    $each: [walletId],
+                    $position: 0,
+                },
             },
         }, {
             new: true,

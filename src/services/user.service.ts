@@ -98,7 +98,10 @@ export async function pushWallet(userId: Types.ObjectId, walletId: Types.ObjectI
       },
       {
         $push: {
-          wallets: walletId,
+          wallets: {
+            $each: [walletId],
+            $position: 0,
+          },
         },
       },
       {
