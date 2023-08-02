@@ -6,55 +6,58 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mt-32 2xl:px-32 px-1 md:px-4">
-      <div className="px-3 md:px-1">
-        <p className="text-base xl:text-xl text-violet-600 font-medium dark:text-violet-300">
-          Selamat datang di Finaki
-        </p>
-        <section className="flex justify-between items-center gap-10 lg:gap-8 flex-col lg:flex-row">
-          <div className="lg:w-1/2 space-y-8 xl:space-y-14">
-            <h1 className=" 2xl:text-8xl text-5xl font-bold text-transparent bg-gradient-to-r tracking-tight from-violet-600 to-red-500 bg-clip-text">
-              Atur Keuangan Anda Dengan Mudah, Cepat, dan Efektif
-            </h1>
-            <p className="xl:text-xl text-lg text-slate-600 dark:text-slate-300">
-              Aplikasi Manajemen Keuangan All-in-One yang Membantu Anda Mengatur
-              Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
-            </p>
-            <Link
-              href={Routes.Register}
-              className="px-10 py-3 w-full lg:w-44 lg:py-5 text-center rounded-lg text-white bg-blue-500 font-medium"
-              type="button"
-            >
-              Daftar
-            </Link>
-          </div>
-          <div className="relative w-full lg:w-1/2 z-0">
-            <Image
-              className="rounded-xl overflow-hidden  hero-image z-0"
-              src="/images/preview-dark.jpg"
-              width={1104}
-              height={849}
-              alt="Preview Dark"
-            />
-            <Image
-              className="rounded-xl overflow-hidden hero-image z-0"
-              src="/images/preview-white.jpg"
-              alt="Preview White"
-              width={1104}
-              height={849}
-            />
-          </div>
-        </section>
-      </div>
-      <section className="overflow-hidden bg-white rounded-lg lg:rounded-3xl py-24 mt-32 lg:mt-44">
+    <div className="mt-32 lg:pt-16 2xl:px-32 px-1 md:px-4 overflow-x-hidden">
+      <section className="px-3 md:px-1 flex flex-col items-center text-center">
+        <div className="space-y-8 xl:space-y-14 max-w-screen-xl">
+          <p className="text-base xl:text-xl text-slate-800 font-medium dark:text-slate-200">
+            Selamat datang di Finaki
+          </p>
+          <h1 className=" 2xl:text-8xl text-5xl font-bold text-transparent bg-gradient-to-r tracking-tight from-cyan-400 to-blue-500 bg-clip-text">
+            Atur Keuangan Anda Dengan Mudah, Cepat, dan Efektif
+          </h1>
+          <p className="xl:text-xl text-lg text-slate-600 dark:text-slate-300">
+            Aplikasi Manajemen Keuangan All-in-One yang Membantu Anda Mengatur
+            Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
+          </p>
+        </div>
+        <Link
+          className="block my-5 rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
+          href={Routes.Register}
+        >
+          Daftar Sekarang
+        </Link>
+        <div className="flex items-center">
+          <Image
+            src="/images/desktop-preview.jpg"
+            alt="Product screenshot"
+            width={1440}
+            height={1024}
+            style={{
+              objectFit: "cover",
+            }}
+            className="rounded-xl shadow-xl ring-1 ring-gray-400/10 mt-10"
+          />
+          <Image
+            src="/images/mobile-preview.jpg"
+            alt="Product screenshot"
+            width={768}
+            height={1024}
+            style={{
+              objectFit: "cover",
+            }}
+            className="rounded-xl shadow-xl w-1/5 max-w-xs h-3/4 -ml-20 ring-1 ring-gray-400/10 mt-10"
+          />
+        </div>
+      </section>
+      <section className="overflow-hidden bg-white dark:bg-slate-700 rounded-lg lg:rounded-3xl py-24 mt-32 lg:mt-44">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
             <div className="lg:pr-8 lg:pt-4">
               <div className="lg:max-w-lg">
-                <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-600 to-emerald-600">
+                <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-500 to-emerald-500">
                   Dilengkapi dengan Grafik Visual yang mudah dipahami
                 </h2>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
+                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-slate-200">
                   Finaki menawarkan grafik visual yang mudah dipahami, yang
                   memungkinkan Anda untuk melacak perkembangan keuangan Anda
                   secara efisien dan efektif. Grafik ini dirancang untuk
@@ -90,8 +93,8 @@ export default function Home() {
             />
             <defs>
               <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
-                <stop stopColor="#7775D6" />
-                <stop offset={1} stopColor="#E935C1" />
+                <stop stopColor="#3b82f6" />
+                <stop offset={1} stopColor="#06b6d4" />
               </radialGradient>
             </defs>
           </svg>
@@ -100,7 +103,7 @@ export default function Home() {
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
             <div className="lg:pr-8 lg:pt-4 z-20">
               <div className="lg:max-w-lg">
-                <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-violet-300 to-blue-500">
+                <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-500 to-cyan-500">
                   Dark Mode
                 </h2>
                 <p className="mt-6 text-lg leading-8 text-slate-100">
@@ -123,7 +126,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="p-px rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 relative w-fit">
+            <div className="p-px rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 relative w-fit">
               <Image
                 src="/images/wallet-dark.jpg"
                 alt="Dark Mode Wallet"
@@ -138,7 +141,7 @@ export default function Home() {
       <section className="my-10 p-3 rounded-lg text-center bg-white dark:bg-slate-700 dark:text-white font-medium">
         <h2>
           Dibuat dengan <span className="text-red-500">❤</span> oleh{" "}
-          <a className="text-blue-500" target="_blank" href="https://acmal.me">
+          <a className="text-blue-500" target="_blank" href="https://acml.me">
             Acmal
           </a>
         </h2>

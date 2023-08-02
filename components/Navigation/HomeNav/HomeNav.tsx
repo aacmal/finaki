@@ -35,9 +35,12 @@ const HomeNav = (props: Props) => {
     >
       <nav
         className={classNames(
-          "items-center flex gap-3 bg-white shadow-lg shadow-neutral-600/10 rounded-b-lg dark:bg-slate-600 dark:shadow-slate-800/50",
-          { "px-2 py-2 rounded-lg": isInAuthPage },
-          { "px-5 py-5 md:px-10 ": isInHomePage }
+          "items-center flex gap-3",
+          { "px-2 py-2 rounded-lg bg-white dark:bg-slate-700": isInAuthPage },
+          {
+            "px-5 py-5 md:px-10 bg-stone-100 border-b dark:bg-slate-800 dark:border-slate-700":
+              isInHomePage,
+          }
         )}
       >
         {isInHomePage ? (
@@ -53,12 +56,14 @@ const HomeNav = (props: Props) => {
         <div
           className={classNames(
             {
-              "md:flex items-center absolute md:static w-full md:w-fit left-0 top-14 py-2 px-3 md:py-0 md:px-0 transition-all bg-white md:bg-none shadow-lg shadow-neutral-600/10 rounded-b-lg dark:bg-slate-600 dark:shadow-slate-800/50 md:shadow-none md:visible overflow-hidden gap-8":
+              "md:flex items-center absolute md:static w-full md:w-fit left-0 top-14 py-2 px-3 md:py-0 md:px-0 transition-all md:bg-none shadow-lg shadow-neutral-600/10  dark:bg-slate-8 00 dark:shadow-slate-800/50 md:shadow-none md:visible overflow-hidden gap-8":
                 isInHomePage,
               "flex gap-3": isInAuthPage,
             },
 
-            { "visible max-h-44": isOpen },
+            {
+              "visible max-h-44 bg-inherit md:space-y-0 space-y-4": isOpen,
+            },
             {
               "invisible md:visible md:max-h-16 max-h-0":
                 !isOpen && isInHomePage,
