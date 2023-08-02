@@ -36,6 +36,9 @@ const AppLayout = ({ children }: Props) => {
   useEffect(() => {
     if (isError) {
       router.push(Routes.Login);
+
+      // remove access token if error
+      window.localStorage.removeItem("access-token");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isError]);

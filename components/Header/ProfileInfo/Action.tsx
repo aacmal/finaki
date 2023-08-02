@@ -3,12 +3,12 @@
 import OnHoverWrapper from "@/dls/ActionWrapper/OnHoverWrapper";
 import IconWrapper from "@/dls/IconWrapper";
 import ArrowRectangleIcon from "@/icons/ArrowRectangleIcon";
-import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { logoutUser } from "@/utils/api/authApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "react-hot-toast";
 import useStore from "../../../stores/store";
 
 type Props = {};
@@ -21,14 +21,17 @@ const Action = (props: Props) => {
   const handleLogout = () => {
     logoutUser()
       .then((res) => {
-        setUser(null);
-        localStorage.removeItem("access-token");
-        router.push(Routes.Home);
-        queryClient.invalidateQueries();
-        queryClient.removeQueries();
+        toast.success("Logout berhasil");
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        queryClient.invalidateQueries();
+        queryClient.removeQueries();
+        router.push(Routes.Home);
+        setUser(null);
+        localStorage.removeItem("access-token");
       });
   };
 

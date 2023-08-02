@@ -1,33 +1,33 @@
 "use client";
 
-import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "react-hot-toast";
-import GetUserData from "../GetUserData";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const AuthLayout = ({ children }: Props) => {
-  const { isSuccess, isLoading } = useQuery({ queryKey: [QueryKey.USER] });
   const router = useRouter();
+  const pathname = usePathname();
 
+  const registerPage = pathname.includes(Routes.Register);
+  const loginPage = pathname.includes(Routes.Login);
+
+  // redirect to app if already logged in or has access token
   useEffect(() => {
-    if (isSuccess) {
+    const accessToken = window.localStorage.getItem("access-token");
+
+    // redirect if on register or login page, otherwise do nothing
+    if (accessToken && (registerPage || loginPage)) {
       router.push(Routes.App);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccess]);
+  }, []);
 
   return (
-    <div className="grid place-items-center w-screen h-screen">
-      <GetUserData />
-      {children}
-    </div>
+    <div className="grid place-items-center w-screen h-screen">{children}</div>
   );
 };
 
