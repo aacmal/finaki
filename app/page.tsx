@@ -1,8 +1,22 @@
-import Button from "@/dls/Button/Button";
-// import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import Image from "next/image";
 import Link from "next/link";
+import * as Seo from "./seo";
+
+export const metadata = {
+  metadataBase: new URL("https://finaki.acml.me/"),
+  title: Seo.title,
+  keywords: Seo.keywords,
+  description: Seo.desciprtion,
+  openGraph: {
+    title: Seo.title,
+    description: Seo.desciprtion,
+  },
+  twitter: {
+    title: Seo.title,
+    description: Seo.desciprtion,
+  },
+};
 
 export default function Home() {
   return (
