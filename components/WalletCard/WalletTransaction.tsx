@@ -8,7 +8,27 @@ type Props = {
 };
 
 const WalletTransaction = (props: Props) => {
-  if (!props.transactions) return <></>;
+  if (!props.transactions)
+    return (
+      <div className="mt-5">
+        <Heading level={3} fontWeight="medium" defaultColor="bright">
+          Riwayat Transaksi
+        </Heading>
+        <div className="p-3 space-y-4 bg-white/20 flex flex-col rounded-xl mt-2 text-white">
+          {Array(3)
+            .fill("")
+            .map((_, index) => (
+              <div
+                style={{
+                  animationDelay: `${index * 300}ms`,
+                }}
+                key={index}
+                className="w-full h-16 bg-white/30 rounded-lg animate-pulse"
+              ></div>
+            ))}
+        </div>
+      </div>
+    );
 
   return (
     <div className="mt-5">
@@ -28,7 +48,9 @@ const WalletTransaction = (props: Props) => {
             );
           })
         ) : (
-          <div className="text-center text-slate-50">Tidak ada transaksi</div>
+          <div className="text-center text-slate-50 py-3">
+            Tidak ada transaksi
+          </div>
         )}
       </div>
     </div>
