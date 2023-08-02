@@ -8,6 +8,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import HomeNav from "@/components/Navigation/HomeNav/HomeNav";
 import { Toaster } from "react-hot-toast";
+import GoogleAnalytics from "@/components/Analytics/ga";
 
 // font set up
 const font = Inter({
@@ -47,6 +48,7 @@ export default function RootLayout({
           <main>{children}</main>
           <ReactQueryDevtools />
         </QueryClientProvider>
+        <GoogleAnalytics />
       </body>
     </html>
   );
