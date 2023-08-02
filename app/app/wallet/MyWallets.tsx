@@ -97,7 +97,6 @@ const MyWallets = (props: Props) => {
     return (
       <Heading className="text-center mt-10" level={3}>
         Terjadi Kesalahan
-        <span>{(error as any).response.data.message}</span>
       </Heading>
     );
   }
