@@ -1,4 +1,4 @@
-import { WalletSchema } from "models/wallet.model";
+import { WalletSchema } from "../models/wallet.model";
 import { InferSchemaType, Document } from "mongoose";
 
 export interface IWalletModel extends InferSchemaType<typeof WalletSchema>, Document {}

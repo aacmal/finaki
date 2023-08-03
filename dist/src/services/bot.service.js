@@ -32,9 +32,18 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const TransactionService = __importStar(require("./transaction.service"));
 const Transaction_1 = require("../interfaces/Transaction");
+const transaction_scene_1 = require("./bot/transaction.scene");
+const filters_1 = require("telegraf/filters");
 dotenv_1.default.config();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const bot = new telegraf_1.Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const currentUser = async (messageId) => {
+    const user = await user_model_1.default.findOne({ "telegramAccount.id": messageId });
+    if (!user) {
+        throw new Error("Akun telegram ini belum terhubung, paste token kamu untuk menghubungkan");
+    }
+    return user;
+};
 bot.start((ctx) => {
     ctx.reply("Selamat datang di bot Finaki - Money Manager \nBot ini akan membantu kamu dalam mengelola keuangan kamu");
     ctx.reply("Silahkan ketik /help untuk melihat daftar perintah");
@@ -50,11 +59,13 @@ bot.command("/token", async (ctx) => {
             ctx.reply("Token tidak boleh kosong");
             return;
         }
-        const user = await user_model_1.default.findOneAndUpdate({ token: token }, { telegramAccount: {
+        const user = await user_model_1.default.findOneAndUpdate({ token: token }, {
+            telegramAccount: {
                 id: ctx.message.from.id,
                 username: ctx.message.from.username,
                 first_name: ctx.message.from.first_name,
-            } });
+            },
+        });
         if (!user) {
             ctx.reply("Token tidak ditemukan");
             return;
@@ -107,7 +118,9 @@ bot.command("/in", async (ctx) => {
             userId: user._id,
             description,
             amount,
+            note: "Created in Telegram Bot",
             type: Transaction_1.TransactionType.IN,
+            includeInCalculation: true,
             walletId: walletName ? wallet._id : undefined,
         };
         const createdTransaction = await TransactionService.create(transaction);
@@ -149,6 +162,8 @@ bot.command("/out", async (ctx) => {
             description,
             amount,
             type: Transaction_1.TransactionType.OUT,
+            note: "",
+            includeInCalculation: true,
             walletId: walletName ? wallet._id : undefined,
         };
         const createdTransaction = await TransactionService.create(transaction);
@@ -183,5 +198,77 @@ bot.command("/balance", async (ctx) => {
     catch (error) {
         ctx.reply("Ada Yang salah ", error.message);
     }
+});
+bot.command("pyramid", (ctx) => {
+    return ctx.reply("Keyboard wrap", telegraf_1.Markup.keyboard(["one", "two", "three", "four", "five", "six"], {
+        wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2,
+    }));
+});
+bot.command("simple", (ctx) => {
+    return ctx.replyWithHTML("<b>Coke</b> or <i>Pepsi?</i>", telegraf_1.Markup.keyboard(["Coke", "Pepsi"]));
+});
+bot.command("caption", (ctx) => {
+    return ctx.replyWithPhoto({ url: "https://picsum.photos/200/300/?random" }, {
+        caption: "Caption",
+        parse_mode: "Markdown",
+        ...telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.callback("Plain", "plain"), telegraf_1.Markup.button.callback("Italic", "italic")]),
+    });
+});
+bot.action("plain", async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.editMessageCaption("Caption", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.callback("Plain", "plain")]));
+});
+bot.action("italic", async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.editMessageCaption("_Caption_", {
+        parse_mode: "Markdown",
+        ...telegraf_1.Markup.inlineKeyboard([
+            telegraf_1.Markup.button.callback("Plain", "plain"),
+            telegraf_1.Markup.button.callback("* Italic *", "italic"),
+        ]),
+    });
+});
+// middleware: authenticate user
+bot.use(async (ctx, next) => {
+    if (!ctx.message) {
+        return;
+    }
+    try {
+        ctx.state.user = await currentUser(ctx.message.from.id);
+        return next();
+    }
+    catch (error) {
+        ctx.reply(error.message);
+    }
+});
+bot.use((0, telegraf_1.session)());
+bot.use(transaction_scene_1.transactionStage.middleware());
+bot.command("id", (ctx) => {
+    ctx.scene.enter("super-wizard");
+});
+bot.command("add", (ctx) => {
+    ctx.scene.enter("new-transaction");
+});
+bot.on((0, filters_1.message)("text"), async (ctx) => {
+    const message = ctx.message.text;
+    if (message.length !== 20) {
+        ctx.reply("Harap masukan sesuai format periintah");
+        return;
+    }
+    const user = await user_model_1.default.findOneAndUpdate({ token: message }, {
+        telegramAccount: {
+            id: ctx.message.from.id,
+            username: ctx.message.from.username,
+            first_name: ctx.message.from.first_name,
+        },
+    });
+    if (!user) {
+        ctx.reply("Token belum terdaftar");
+        return;
+    }
+    ctx.reply("Akun telegram berhasil terhubung, ketik /menu untuk melihat daftar perintah");
+});
+bot.catch((err) => {
+    console.log("Ooops", err);
 });
 exports.default = bot;

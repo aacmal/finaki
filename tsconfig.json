@@ -17,7 +17,6 @@
     "noImplicitAny": true,                           
     "useUnknownInCatchVariables": false,               
     "skipLibCheck": true,
-    "baseUrl": "src",                                 /* Base directory to resolve non-relative module names. */
   },
   "exclude": ["node_modules"]
 }

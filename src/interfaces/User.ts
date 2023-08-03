@@ -1,4 +1,4 @@
-import { UserSchema } from "models/user.model";
+import { UserSchema } from "../models/user.model";
 import { InferSchemaType, Document } from "mongoose";
 
 // export interface IUser {

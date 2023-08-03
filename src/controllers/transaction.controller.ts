@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import * as TransactionService from "../services/transaction.service";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { ITransactionRequestQuery } from "interfaces/Transaction";
+import { ITransactionRequestQuery } from "../interfaces/Transaction";
 
 export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {

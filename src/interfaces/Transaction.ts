@@ -1,4 +1,4 @@
-import { TransactionSchema } from "models/transaction.model";
+import { TransactionSchema } from "../models/transaction.model";
 import { InferSchemaType, Document } from "mongoose";
 
 export enum TransactionType {
