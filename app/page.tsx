@@ -35,7 +35,7 @@ export default function Home() {
           </p>
         </div>
         <Link
-          className="block my-5 rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
+          className="block my-5 whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
           href={Routes.Register}
         >
           Daftar Sekarang
@@ -49,7 +49,7 @@ export default function Home() {
             style={{
               objectFit: "cover",
             }}
-            className="rounded-xl shadow-xl ring-1 ring-gray-400/10 mt-10"
+            className="rounded-xl shadow-xl dark:shadow-stone-100/30 ring-1 ring-gray-400/10 mt-10"
           />
           <Image
             src="/images/mobile-preview.jpg"
@@ -127,13 +127,13 @@ export default function Home() {
               </div>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
                 <a
-                  href="#"
+                  href={Routes.Register}
                   className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   Coba Sekarang
                 </a>
                 <a
-                  href="#"
+                  href={Routes.Demo}
                   className="text-sm font-semibold leading-6 text-white"
                 >
                   Demo <span aria-hidden="true">→</span>
