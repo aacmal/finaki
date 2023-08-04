@@ -30,36 +30,6 @@ bot.help((ctx) => {
   ctx.reply("Daftar perintah yang tersedia: \n /help \n /start \n /token \n /in \n /out \n /balance");
 });
 
-bot.command("/token", async (ctx) => {
-  try {
-    const token = ctx.message.text.split(" ")[1];
-    if (!token) {
-      ctx.reply("Token tidak boleh kosong");
-      return;
-    }
-    const user = await UserModel.findOneAndUpdate(
-      { token: token },
-      {
-        telegramAccount: {
-          id: ctx.message.from.id,
-          username: ctx.message.from.username,
-          first_name: ctx.message.from.first_name,
-        },
-      },
-    );
-    if (!user) {
-      ctx.reply("Token tidak ditemukan");
-      return;
-    }
-
-    ctx.reply("Akun telegram berhasil terhubung, ketik /help untuk melihat daftar perintah");
-  } catch (error) {
-    ctx.reply(
-      "Gagal menghubungkan \nAkun telegram ini sudah terhubung dengan token lain, putuskan terlebih dahulu di akun web kamu",
-    );
-  }
-});
-
 bot.command("/user", async (ctx) => {
   try {
     const user = await UserModel.findOne({
@@ -219,38 +189,45 @@ bot.use(async (ctx, next) => {
 
 bot.use(session());
 bot.use(transactionStage.middleware());
-bot.command("id", (ctx: any) => {
-  ctx.scene.enter("super-wizard");
+bot.action("adds", (ctx) => {
+  ctx.reply("Pilih jenis transaksi");
 });
 bot.command("add", (ctx: any) => {
   ctx.scene.enter("new-transaction");
 });
 
+// connect telegram account to user
 bot.on(message("text"), async (ctx) => {
   const message = ctx.message.text;
   if (message.length !== 20) {
     ctx.reply("Harap masukan sesuai format periintah");
     return;
   }
-  const user = await UserModel.findOneAndUpdate(
-    { token: message },
-    {
-      telegramAccount: {
-        id: ctx.message.from.id,
-        username: ctx.message.from.username,
-        first_name: ctx.message.from.first_name,
+  try {
+    const user = await UserModel.findOneAndUpdate(
+      { token: message },
+      {
+        telegramAccount: {
+          id: ctx.message.from.id,
+          username: ctx.message.from.username,
+          first_name: ctx.message.from.first_name,
+        },
       },
-    },
-  );
-  if (!user) {
-    ctx.reply("Token belum terdaftar");
-    return;
+    );
+    if (!user) {
+      ctx.reply("Token belum terdaftar");
+      return;
+    }
+    ctx.reply("Akun telegram berhasil terhubung, ketik /menu untuk melihat daftar perintah");
+  } catch (error) {
+    ctx.reply(
+      "Gagal menghubungkan \nAkun telegram ini sudah terhubung dengan token lain, putuskan terlebih dahulu di akun web kamu",
+    );
   }
-  ctx.reply("Akun telegram berhasil terhubung, ketik /menu untuk melihat daftar perintah");
 });
 
-bot.catch((err) => {
-  console.log("Ooops", err);
+bot.catch((err, ctx) => {
+  ctx.reply("Ooops, terjadi kesalahan");
 });
 
 export default bot;

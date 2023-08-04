@@ -33,6 +33,19 @@ const wallet_model_1 = __importDefault(require("../../models/wallet.model"));
 const Transaction_1 = require("../../interfaces/Transaction");
 const TransactionService = __importStar(require("../../services/transaction.service"));
 const { WizardScene, Stage } = telegraf_1.Scenes;
+const createTransaction = async (ctx, data) => {
+    try {
+        await TransactionService.create(data);
+        ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
+        await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([[telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]]));
+    }
+    catch (error) {
+        ctx.reply("Ada yang salah, silahkan ulangi kembali", telegraf_1.Markup.removeKeyboard());
+    }
+    finally {
+        return ctx.scene.leave();
+    }
+};
 const addTransactionWizard = new WizardScene("new-transaction", 
 // step 0: ask for name
 (ctx) => {
@@ -131,17 +144,7 @@ async (ctx) => {
             note: "Dibuat melalui bot",
             includeInCalculation: true,
         };
-        try {
-            await TransactionService.create(data);
-            await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]));
-        }
-        catch (error) {
-            ctx.reply("Ada yang salah");
-        }
-        finally {
-            ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
-            return ctx.scene.leave();
-        }
+        await createTransaction(ctx, data);
     }
 }, 
 // step 5: validate wallet and create transaction
@@ -166,16 +169,6 @@ async (ctx) => {
         note: "Dibuat melalui telegram bot",
         includeInCalculation: true,
     };
-    try {
-        await TransactionService.create(data);
-        await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]));
-    }
-    catch (error) {
-        ctx.reply("Ada yang salah");
-    }
-    finally {
-        ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
-        return ctx.scene.leave();
-    }
+    await createTransaction(ctx, data);
 });
 exports.transactionStage = new Stage([addTransactionWizard]);

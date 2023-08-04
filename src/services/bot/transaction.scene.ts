@@ -6,6 +6,21 @@ import * as TransactionService from "../../services/transaction.service";
 
 const { WizardScene, Stage } = Scenes;
 
+const createTransaction = async (ctx: any, data: ICreateTransactionInput) => {
+  try {
+    await TransactionService.create(data);
+    ctx.reply("Sesi selesai", Markup.removeKeyboard());
+    await ctx.reply(
+      "Transaksi berhasil dibuat",
+      Markup.inlineKeyboard([[Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]]),
+    );
+  } catch (error) {
+    ctx.reply("Ada yang salah, silahkan ulangi kembali", Markup.removeKeyboard());
+  } finally {
+    return ctx.scene.leave();
+  }
+};
+
 const addTransactionWizard = new WizardScene(
   "new-transaction",
   // step 0: ask for name
@@ -127,18 +142,7 @@ const addTransactionWizard = new WizardScene(
         includeInCalculation: true,
       };
 
-      try {
-        await TransactionService.create(data);
-        await ctx.reply(
-          "Transaksi berhasil dibuat",
-          Markup.inlineKeyboard([Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]),
-        );
-      } catch (error) {
-        ctx.reply("Ada yang salah");
-      } finally {
-        ctx.reply("Sesi selesai", Markup.removeKeyboard());
-        return ctx.scene.leave();
-      }
+      await createTransaction(ctx, data);
     }
   },
 
@@ -170,18 +174,7 @@ const addTransactionWizard = new WizardScene(
       includeInCalculation: true,
     };
 
-    try {
-      await TransactionService.create(data);
-      await ctx.reply(
-        "Transaksi berhasil dibuat",
-        Markup.inlineKeyboard([Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]),
-      );
-    } catch (error) {
-      ctx.reply("Ada yang salah");
-    } finally {
-      ctx.reply("Sesi selesai", Markup.removeKeyboard());
-      return ctx.scene.leave();
-    }
+    await createTransaction(ctx, data);
   },
 );
 
