@@ -139,8 +139,7 @@ async (ctx) => {
             ctx.reply("Ada yang salah");
         }
         finally {
-            await ctx.editMessageReplyMarkup({ reply_markup: { remove_keyboard: true } });
-            telegraf_1.Markup.removeKeyboard();
+            ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
             return ctx.scene.leave();
         }
     }
@@ -175,7 +174,7 @@ async (ctx) => {
         ctx.reply("Ada yang salah");
     }
     finally {
-        telegraf_1.Markup.removeKeyboard();
+        ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
         return ctx.scene.leave();
     }
 });

@@ -136,8 +136,7 @@ const addTransactionWizard = new WizardScene(
       } catch (error) {
         ctx.reply("Ada yang salah");
       } finally {
-        await ctx.editMessageReplyMarkup({ reply_markup: { remove_keyboard: true } });
-        Markup.removeKeyboard();
+        ctx.reply("Sesi selesai", Markup.removeKeyboard());
         return ctx.scene.leave();
       }
     }
@@ -180,7 +179,7 @@ const addTransactionWizard = new WizardScene(
     } catch (error) {
       ctx.reply("Ada yang salah");
     } finally {
-      Markup.removeKeyboard();
+      ctx.reply("Sesi selesai", Markup.removeKeyboard());
       return ctx.scene.leave();
     }
   },
