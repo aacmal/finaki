@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Markup, Telegraf, session } from "telegraf";
+import { Telegraf, session } from "telegraf";
 import dotenv from "dotenv";
 import UserModel from "../models/user.model";
 import * as TransactionService from "./transaction.service";
@@ -202,46 +202,6 @@ bot.command("/balance", async (ctx) => {
   } catch (error) {
     ctx.reply("Ada Yang salah ", error.message);
   }
-});
-
-bot.command("pyramid", (ctx) => {
-  return ctx.reply(
-    "Keyboard wrap",
-    Markup.keyboard(["one", "two", "three", "four", "five", "six"], {
-      wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2,
-    }),
-  );
-});
-
-bot.command("simple", (ctx) => {
-  return ctx.replyWithHTML("<b>Coke</b> or <i>Pepsi?</i>", Markup.keyboard(["Coke", "Pepsi"]));
-});
-
-bot.command("caption", (ctx) => {
-  return ctx.replyWithPhoto(
-    { url: "https://picsum.photos/200/300/?random" },
-    {
-      caption: "Caption",
-      parse_mode: "Markdown",
-      ...Markup.inlineKeyboard([Markup.button.callback("Plain", "plain"), Markup.button.callback("Italic", "italic")]),
-    },
-  );
-});
-
-bot.action("plain", async (ctx) => {
-  await ctx.answerCbQuery();
-  await ctx.editMessageCaption("Caption", Markup.inlineKeyboard([Markup.button.callback("Plain", "plain")]));
-});
-
-bot.action("italic", async (ctx) => {
-  await ctx.answerCbQuery();
-  await ctx.editMessageCaption("_Caption_", {
-    parse_mode: "Markdown",
-    ...Markup.inlineKeyboard([
-      Markup.button.callback("Plain", "plain"),
-      Markup.button.callback("* Italic *", "italic"),
-    ]),
-  });
 });
 
 // middleware: authenticate user

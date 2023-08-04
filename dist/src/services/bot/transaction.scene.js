@@ -29,54 +29,38 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.transactionStage = void 0;
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const telegraf_1 = require("telegraf");
-const dotenv_1 = __importDefault(require("dotenv"));
 const wallet_model_1 = __importDefault(require("../../models/wallet.model"));
 const Transaction_1 = require("../../interfaces/Transaction");
 const TransactionService = __importStar(require("../../services/transaction.service"));
-dotenv_1.default.config();
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const { WizardScene, Stage } = telegraf_1.Scenes;
-const superWizard = new WizardScene("super-wizard", (ctx) => {
-    ctx.reply(ctx.user);
+const addTransactionWizard = new WizardScene("new-transaction", 
+// step 0: ask for name
+(ctx) => {
+    ctx.session.__scenes.state = {};
+    ctx.reply("Ketikan nama transaksi", telegraf_1.Markup.removeKeyboard());
     return ctx.wizard.next();
-}, (ctx) => {
+}, 
+// step 1: ask for amount
+(ctx) => {
     ctx.session.__scenes.state.name = ctx.message.text;
-    ctx.reply("Enter your phone number");
+    ctx.reply("Ketikan nominal transaksi");
     return ctx.wizard.next();
-}, (ctx) => {
-    ctx.session.__scenes.state.phone = ctx.message.text;
-    const { name, phone } = ctx.session.__scenes.state;
-    ctx.reply(`Your name is ${name}`);
-    ctx.reply(`Your phone is ${phone}`);
-    ctx.reply("Is this correct?", telegraf_1.Markup.keyboard(["Yes", "No"]).resize().oneTime());
-    return ctx.scene.leave();
-});
-const addTransactionWizard = new WizardScene("new-transaction", (ctx) => {
-    // step 1: ask for name
-    ctx.reply("Ketikan nama transaksi");
-    return ctx.wizard.next();
-}, (ctx) => {
-    // step 2: ask for amount
-    ctx.session.__scenes.state.name = ctx.message.text;
-    ctx.reply("Ketikan jumlah transaksi");
-    return ctx.wizard.next();
-}, (ctx) => {
-    // step 3: validate amount and ask for type
+}, 
+// step 2: validate amount and ask for type
+(ctx) => {
     const amount = ctx.message.text;
     if (isNaN(amount)) {
         ctx.reply("Jumlah transaksi harus angka, silahkan ulangi");
-        console.log(ctx.wizard.cursor);
         return ctx.wizard.selectStep(2);
     }
     ctx.session.__scenes.state.amount = ctx.message.text;
-    ctx.reply("Pilih Jenis Transaksi", telegraf_1.Markup.keyboard([
-        ["⬆️ Masuk", "⬇️ Keluar"], // Row1 with 2 buttons
-    ])
+    ctx.reply("Pilih Jenis Transaksi", telegraf_1.Markup.keyboard([["⬆️ Masuk", "⬇️ Keluar"]])
         .oneTime()
         .resize());
     return ctx.wizard.next();
-}, (ctx) => {
-    // step 4: validate type and ask for wallet
+}, 
+// step 3: validate type and ask for wallet
+(ctx) => {
     const response = ctx.message.text;
     let type;
     if (response !== "⬆️ Masuk" && response !== "⬇️ Keluar") {
@@ -96,13 +80,17 @@ const addTransactionWizard = new WizardScene("new-transaction", (ctx) => {
     ctx.session.__scenes.state.type = type;
     ctx.reply("Apakah anda ingin memilih dompet?", telegraf_1.Markup.keyboard(["Ya", "Tidak"]).resize().oneTime());
     return ctx.wizard.next();
-}, async (ctx) => {
+}, 
+//  step 4: validate confirmation and choose wallet or save without wallet
+async (ctx) => {
     const response = ctx.message.text;
     const userId = ctx.state.user._id;
+    const { type: transactionType, amount } = ctx.session.__scenes.state;
     if (response !== "Ya" && response !== "Tidak") {
         ctx.reply("Pilih salah satu", telegraf_1.Markup.keyboard(["Ya", "Tidak"]).resize().oneTime());
         return ctx.wizard.selectStep(4);
     }
+    // if user choose yes, show wallets
     if (response === "Ya") {
         const wallets = await wallet_model_1.default.find({ userId: userId })
             .sort({
@@ -112,15 +100,28 @@ const addTransactionWizard = new WizardScene("new-transaction", (ctx) => {
             .select({
             name: 1,
             _id: 1,
+            balance: 1,
         });
+        // filter wallets that have enough balance
+        const filteredWallets = wallets.filter((wallet) => {
+            if (transactionType === Transaction_1.TransactionType.OUT) {
+                return wallet.balance >= Number(amount);
+            }
+            return true;
+        });
+        if (filteredWallets.length === 0) {
+            ctx.reply("Tidak ada dompet yang memiliki saldo cukup, silahkan buat dompet baru, \nAksi dibatalkan");
+            return ctx.scene.leave();
+        }
         // set wallet to session
-        ctx.session.__scenes.state.wallets = wallets;
-        ctx.reply("Pilih dompet (Hanya menampilkan 5 dompet yang memiliki aktivitas terbaru)", telegraf_1.Markup.keyboard(wallets.map((e) => e.name))
+        ctx.session.__scenes.state.wallets = filteredWallets;
+        ctx.reply(`Pilih dompet (Hanya menampilkan 5 dompet yang memiliki aktivitas terbaru ${transactionType === Transaction_1.TransactionType.OUT && "dan saldo yang cukup"})`, telegraf_1.Markup.keyboard(filteredWallets.map((e) => e.name))
             .resize()
             .oneTime());
         return ctx.wizard.next();
     }
     else {
+        // else create transaction without wallet
         const { name, amount, type } = ctx.session.__scenes.state;
         const data = {
             userId,
@@ -131,23 +132,25 @@ const addTransactionWizard = new WizardScene("new-transaction", (ctx) => {
             includeInCalculation: true,
         };
         try {
-            const transaction = await TransactionService.create(data);
-            ctx.reply("Transaksi berhasil dibuat");
+            await TransactionService.create(data);
+            await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]));
         }
         catch (error) {
             ctx.reply("Ada yang salah");
         }
         finally {
+            await ctx.editMessageReplyMarkup({ reply_markup: { remove_keyboard: true } });
+            telegraf_1.Markup.removeKeyboard();
             return ctx.scene.leave();
         }
     }
-}, async (ctx) => {
+}, 
+// step 5: validate wallet and create transaction
+async (ctx) => {
     const walletName = ctx.message.text;
     const userId = ctx.state.user._id;
     const wallets = ctx.session.__scenes.state.wallets;
     const walletId = wallets.find((wallet) => wallet.name === walletName);
-    console.log(walletId);
-    console.log(wallets);
     if (!walletId) {
         ctx.reply("Dompet tidak ditemukan, silahkan pilih dompet yang tersedia", telegraf_1.Markup.keyboard(wallets.map((e) => e.name))
             .resize()
@@ -161,19 +164,18 @@ const addTransactionWizard = new WizardScene("new-transaction", (ctx) => {
         description: name,
         amount,
         type,
-        note: "Dibuat melalui bot",
+        note: "Dibuat melalui telegram bot",
         includeInCalculation: true,
     };
     try {
-        const transaction = await TransactionService.create(data);
-        console.log(transaction);
-        ctx.reply("Transaksi berhasil dibuat");
+        await TransactionService.create(data);
+        await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]));
     }
     catch (error) {
         ctx.reply("Ada yang salah");
-        console.log(error);
     }
     finally {
+        telegraf_1.Markup.removeKeyboard();
         return ctx.scene.leave();
     }
 });

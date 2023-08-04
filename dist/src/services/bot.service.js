@@ -199,35 +199,6 @@ bot.command("/balance", async (ctx) => {
         ctx.reply("Ada Yang salah ", error.message);
     }
 });
-bot.command("pyramid", (ctx) => {
-    return ctx.reply("Keyboard wrap", telegraf_1.Markup.keyboard(["one", "two", "three", "four", "five", "six"], {
-        wrap: (btn, index, currentRow) => currentRow.length >= (index + 1) / 2,
-    }));
-});
-bot.command("simple", (ctx) => {
-    return ctx.replyWithHTML("<b>Coke</b> or <i>Pepsi?</i>", telegraf_1.Markup.keyboard(["Coke", "Pepsi"]));
-});
-bot.command("caption", (ctx) => {
-    return ctx.replyWithPhoto({ url: "https://picsum.photos/200/300/?random" }, {
-        caption: "Caption",
-        parse_mode: "Markdown",
-        ...telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.callback("Plain", "plain"), telegraf_1.Markup.button.callback("Italic", "italic")]),
-    });
-});
-bot.action("plain", async (ctx) => {
-    await ctx.answerCbQuery();
-    await ctx.editMessageCaption("Caption", telegraf_1.Markup.inlineKeyboard([telegraf_1.Markup.button.callback("Plain", "plain")]));
-});
-bot.action("italic", async (ctx) => {
-    await ctx.answerCbQuery();
-    await ctx.editMessageCaption("_Caption_", {
-        parse_mode: "Markdown",
-        ...telegraf_1.Markup.inlineKeyboard([
-            telegraf_1.Markup.button.callback("Plain", "plain"),
-            telegraf_1.Markup.button.callback("* Italic *", "italic"),
-        ]),
-    });
-});
 // middleware: authenticate user
 bot.use(async (ctx, next) => {
     if (!ctx.message) {
