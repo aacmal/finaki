@@ -126,18 +126,18 @@ export default function Home() {
                 </p>
               </div>
               <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-                <a
+                <Link
                   href={Routes.Register}
                   className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 >
                   Coba Sekarang
-                </a>
-                <a
+                </Link>
+                <Link
                   href={Routes.Demo}
                   className="text-sm font-semibold leading-6 text-white"
                 >
                   Demo <span aria-hidden="true">→</span>
-                </a>
+                </Link>
               </div>
             </div>
             <div className="p-px rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 relative w-fit">
@@ -155,9 +155,13 @@ export default function Home() {
       <section className="my-10 p-3 rounded-lg text-center bg-white dark:bg-slate-700 dark:text-white font-medium">
         <h2>
           Dibuat dengan <span className="text-red-500">❤</span> oleh{" "}
-          <a className="text-blue-500" target="_blank" href="https://acml.me">
+          <Link
+            className="text-blue-500"
+            target="_blank"
+            href="https://acml.me"
+          >
             Acmal
-          </a>
+          </Link>
         </h2>
       </section>
     </div>
