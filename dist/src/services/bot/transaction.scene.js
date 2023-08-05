@@ -37,7 +37,10 @@ const createTransaction = async (ctx, data) => {
     try {
         await TransactionService.create(data);
         ctx.reply("Sesi selesai", telegraf_1.Markup.removeKeyboard());
-        await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([[telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]]));
+        await ctx.reply("Transaksi berhasil dibuat", telegraf_1.Markup.inlineKeyboard([
+            [telegraf_1.Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")],
+            [telegraf_1.Markup.button.callback("Tambah lagi", "add")],
+        ]));
     }
     catch (error) {
         ctx.reply("Ada yang salah, silahkan ulangi kembali", telegraf_1.Markup.removeKeyboard());

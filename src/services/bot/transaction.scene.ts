@@ -12,7 +12,10 @@ const createTransaction = async (ctx: any, data: ICreateTransactionInput) => {
     ctx.reply("Sesi selesai", Markup.removeKeyboard());
     await ctx.reply(
       "Transaksi berhasil dibuat",
-      Markup.inlineKeyboard([[Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")]]),
+      Markup.inlineKeyboard([
+        [Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")],
+        [Markup.button.callback("Tambah lagi", "add")],
+      ]),
     );
   } catch (error) {
     ctx.reply("Ada yang salah, silahkan ulangi kembali", Markup.removeKeyboard());

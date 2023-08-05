@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Telegraf, session } from "telegraf";
+import { Markup, Telegraf, session } from "telegraf";
 import dotenv from "dotenv";
 import UserModel from "../models/user.model";
 import * as TransactionService from "./transaction.service";
@@ -12,6 +12,7 @@ dotenv.config();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
 
+bot.use(Telegraf.log());
 const currentUser = async (messageId: number) => {
   const user = await UserModel.findOne({ "telegramAccount.id": messageId });
   if (!user) {
@@ -175,6 +176,7 @@ bot.command("/balance", async (ctx) => {
 });
 
 // middleware: authenticate user
+
 bot.use(async (ctx, next) => {
   if (!ctx.message) {
     return;
@@ -189,9 +191,6 @@ bot.use(async (ctx, next) => {
 
 bot.use(session());
 bot.use(transactionStage.middleware());
-bot.action("adds", (ctx) => {
-  ctx.reply("Pilih jenis transaksi");
-});
 bot.command("add", (ctx: any) => {
   ctx.scene.enter("new-transaction");
 });
@@ -228,6 +227,7 @@ bot.on(message("text"), async (ctx) => {
 
 bot.catch((err, ctx) => {
   ctx.reply("Ooops, terjadi kesalahan");
+  console.log(err);
 });
 
 export default bot;

@@ -37,6 +37,7 @@ const filters_1 = require("telegraf/filters");
 dotenv_1.default.config();
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const bot = new telegraf_1.Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+bot.use(telegraf_1.Telegraf.log());
 const currentUser = async (messageId) => {
     const user = await user_model_1.default.findOne({ "telegramAccount.id": messageId });
     if (!user) {
@@ -190,9 +191,6 @@ bot.use(async (ctx, next) => {
 });
 bot.use((0, telegraf_1.session)());
 bot.use(transaction_scene_1.transactionStage.middleware());
-bot.action("adds", (ctx) => {
-    ctx.reply("Pilih jenis transaksi");
-});
 bot.command("add", (ctx) => {
     ctx.scene.enter("new-transaction");
 });
@@ -223,5 +221,6 @@ bot.on((0, filters_1.message)("text"), async (ctx) => {
 });
 bot.catch((err, ctx) => {
     ctx.reply("Ooops, terjadi kesalahan");
+    console.log(err);
 });
 exports.default = bot;
