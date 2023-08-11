@@ -69,10 +69,11 @@ const HomeNav = (props: Props) => {
             },
 
             {
-              "visible max-h-44 bg-inherit md:space-y-0": isOpen,
+              "visible max-h-44 bg-inherit": isOpen,
             },
             {
-              "space-y-4": isInHomePage,
+              "space-y-4 md:space-y-0 border-b dark:border-slate-700":
+                isInHomePage && isOpen,
             },
             {
               "invisible md:visible md:max-h-16 max-h-0":
