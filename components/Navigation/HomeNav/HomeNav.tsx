@@ -69,7 +69,10 @@ const HomeNav = (props: Props) => {
             },
 
             {
-              "visible max-h-44 bg-inherit md:space-y-0 space-y-4": isOpen,
+              "visible max-h-44 bg-inherit md:space-y-0": isOpen,
+            },
+            {
+              "space-y-4": isInHomePage,
             },
             {
               "invisible md:visible md:max-h-16 max-h-0":
@@ -87,18 +90,13 @@ const HomeNav = (props: Props) => {
           >
             Demo
           </HomeNavLink>
-          <HomeNavLink
-            isActive={pathname === Routes.Login}
-            href={Routes.Login}
-            className=""
-          >
+          <HomeNavLink isActive={pathname === Routes.Login} href={Routes.Login}>
             Login
           </HomeNavLink>
           <HomeNavLink
             isActive={pathname === Routes.Register}
             href={Routes.Register}
             type={isInAuthPage ? "primary" : "secondary"}
-            className=""
           >
             Register
           </HomeNavLink>
