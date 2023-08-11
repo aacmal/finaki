@@ -34,12 +34,20 @@ export default function Home() {
             Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
           </p>
         </div>
-        <Link
-          className="block my-5 whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
-          href={Routes.Register}
-        >
-          Daftar Sekarang
-        </Link>
+        <div className="flex gap-4 flex-wrap justify-center my-6">
+          <Link
+            className="block whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
+            href={Routes.Register}
+          >
+            Daftar Sekarang
+          </Link>
+          <Link
+            className="block whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold border border-blue-500 text-blue-500 shadow-xl shadow-blue-600/20"
+            href={Routes.About}
+          >
+            Tentang Finaki
+          </Link>
+        </div>
         <div className="flex items-center">
           <Image
             src="/images/desktop-preview.jpg"

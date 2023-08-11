@@ -19,5 +19,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${domain}/demo/transactions`,
       lastModified: new Date(),
     },
+    {
+      url: `${domain}/about`,
+      lastModified: new Date(),
+    },
   ];
 }

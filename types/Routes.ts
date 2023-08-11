@@ -14,4 +14,5 @@ export enum Routes {
   TransactionsDemo = "/demo/transactions",
   AccountDemo = "/demo/account",
   ForgotPassword = "/auth/forgot-password",
+  About = "/about",
 }

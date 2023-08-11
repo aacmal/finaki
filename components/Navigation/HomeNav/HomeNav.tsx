@@ -4,6 +4,7 @@ import Hamburger from "@/dls/Hamburger";
 import Heading from "@/dls/Heading";
 import { Routes } from "@/types/Routes";
 import classNames from "classnames";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import ThemeToggleIcon from "../../ThemeSelection/ThemeToggleIcon";
@@ -14,10 +15,13 @@ type Props = {};
 const HomeNav = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const isInHomePage = pathname === "/" && !pathname?.includes("auth");
+  const isInHomePage =
+    !pathname?.includes("auth") &&
+    (pathname?.includes("about") || pathname === "/");
+
   const isInAuthPage = pathname?.includes("auth");
 
-  if (!isInAuthPage && !isInHomePage) return <></>;
+  // hide nav in app and demo pages
   if (pathname?.includes("app") || pathname?.includes("demo")) return <></>;
 
   return (
@@ -44,9 +48,12 @@ const HomeNav = (props: Props) => {
         )}
       >
         {isInHomePage ? (
-          <Heading level={1} className="mr-3 flex-1">
+          <Link
+            href={Routes.Home}
+            className="mr-3 flex-1 lg:text-xl text-lg text-stone-700 dark:text-slate-200 font-bold"
+          >
             Finaki
-          </Heading>
+          </Link>
         ) : (
           <HomeNavLink isActive={pathname === Routes.Home} href={Routes.Home}>
             Home
