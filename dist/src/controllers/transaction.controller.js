@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTransactions = exports.getTotalTransaction = exports.getTransactionById = exports.deleteTransaction = exports.updateTransaction = exports.createTransaction = exports.getAllTransactionsByDate = void 0;
+exports.getAllTransactionsByMonth = exports.getAllTransactions = exports.getTotalTransaction = exports.getTransactionById = exports.deleteTransaction = exports.updateTransaction = exports.createTransaction = exports.getAllTransactionsByDate = void 0;
 // import Transaction from "../models/Transaction";
 const express_validator_1 = require("express-validator");
 const TransactionService = __importStar(require("../services/transaction.service"));
@@ -156,3 +156,20 @@ async function getAllTransactions(req, res) {
     }
 }
 exports.getAllTransactions = getAllTransactions;
+async function getAllTransactionsByMonth(req, res) {
+    try {
+        const { month, year } = req.params;
+        const userId = req.user;
+        const transactions = await TransactionService.getTransactionByMonth(userId, { month, year });
+        if (!transactions || transactions.length === 0)
+            return res.status(404).json({ message: "No data found" });
+        res.json({
+            message: "Transactions has been fetched successfully",
+            data: transactions,
+        });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+exports.getAllTransactionsByMonth = getAllTransactionsByMonth;

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTotalTransactionByPeriods = exports.remove = exports.update = exports.getById = exports.getTransactionByDate = exports.getTransactions = exports.create = void 0;
+exports.getTransactionByMonth = exports.getTotalTransactionByPeriods = exports.remove = exports.update = exports.getById = exports.getTransactionByDate = exports.getTransactions = exports.create = void 0;
 // create services from Transaction
 const mongoose_1 = require("mongoose");
 const Transaction_1 = require("../interfaces/Transaction");
@@ -332,3 +332,78 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
     }
 }
 exports.getTotalTransactionByPeriods = getTotalTransactionByPeriods;
+async function getTransactionByMonth(userId, date) {
+    try {
+        const { month, year } = date;
+        const transactions = await transaction_model_1.default.aggregate([
+            {
+                $project: {
+                    month: {
+                        $month: {
+                            date: "$createdAt",
+                        },
+                    },
+                    year: {
+                        $year: {
+                            date: "$createdAt",
+                        },
+                    },
+                    _id: 1,
+                    userId: 1,
+                    createdAt: 1,
+                    description: 1,
+                    amount: 1,
+                    type: 1,
+                    walletId: 1,
+                },
+            },
+            {
+                $match: {
+                    month: parseInt(month),
+                    year: parseInt(year),
+                    userId: userId,
+                },
+            },
+            {
+                $lookup: {
+                    from: "wallets",
+                    localField: "walletId",
+                    foreignField: "_id",
+                    as: "wallet",
+                },
+            },
+            {
+                $group: {
+                    _id: {
+                        month: {
+                            $month: {
+                                date: "$createdAt",
+                            },
+                        },
+                    },
+                    timestamp: {
+                        $first: "$createdAt",
+                    },
+                    transactions: {
+                        $push: {
+                            _id: "$_id",
+                            createdAt: "$createdAt",
+                            description: "$description",
+                            amount: "$amount",
+                            type: "$type",
+                            category: "$category",
+                            wallet: {
+                                $arrayElemAt: ["$wallet", 0],
+                            },
+                        },
+                    },
+                },
+            },
+        ]);
+        return transactions;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+exports.getTransactionByMonth = getTransactionByMonth;

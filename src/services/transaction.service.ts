@@ -339,3 +339,84 @@ export async function getTotalTransactionByPeriods(
     throw error;
   }
 }
+
+export async function getTransactionByMonth(
+  userId: Types.ObjectId,
+  date: {
+    month: string;
+    year: string;
+  },
+) {
+  try {
+    const { month, year } = date;
+    const transactions = await TransactionModel.aggregate([
+      {
+        $project: {
+          month: {
+            $month: {
+              date: "$createdAt",
+            },
+          },
+          year: {
+            $year: {
+              date: "$createdAt",
+            },
+          },
+          _id: 1,
+          userId: 1,
+          createdAt: 1,
+          description: 1,
+          amount: 1,
+          type: 1,
+          walletId: 1,
+        },
+      },
+      {
+        $match: {
+          month: parseInt(month),
+          year: parseInt(year),
+          userId: userId,
+        },
+      },
+      {
+        $lookup: {
+          from: "wallets",
+          localField: "walletId",
+          foreignField: "_id",
+          as: "wallet",
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: {
+                date: "$createdAt",
+              },
+            },
+          },
+          timestamp: {
+            $first: "$createdAt",
+          },
+          transactions: {
+            $push: {
+              _id: "$_id",
+              createdAt: "$createdAt",
+              description: "$description",
+              amount: "$amount",
+              type: "$type",
+              category: "$category",
+              wallet: {
+                $arrayElemAt: ["$wallet", 0],
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    return transactions;
+  } catch (error) {
+    throw error;
+  }
+}

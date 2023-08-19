@@ -132,3 +132,20 @@ export async function getAllTransactions(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+export async function getAllTransactionsByMonth(req: Request, res: Response) {
+  try {
+    const { month, year } = req.params;
+    const userId = req.user;
+    const transactions = await TransactionService.getTransactionByMonth(userId as Types.ObjectId, { month, year });
+
+    if (!transactions || transactions.length === 0) return res.status(404).json({ message: "No data found" });
+
+    res.json({
+      message: "Transactions has been fetched successfully",
+      data: transactions,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
