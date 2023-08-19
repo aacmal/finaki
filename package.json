@@ -23,9 +23,12 @@
     "classnames": "^2.3.2",
     "eslint": "8.29.0",
     "eslint-config-next": "^13.2.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.31",
     "jwt-decode": "^3.1.2",
     "next": "^13.4.9",
     "react": "^18.2.0",
+    "react-datepicker": "^4.16.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.42.1",
     "react-hot-toast": "^2.4.0",
@@ -39,6 +42,7 @@
     "zustand": "^4.3.9"
   },
   "devDependencies": {
+    "@types/react-datepicker": "^4.15.0",
     "@types/ua-parser-js": "^0.7.36",
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.19",

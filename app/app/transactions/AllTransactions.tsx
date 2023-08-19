@@ -17,6 +17,10 @@ import { shallow } from "zustand/shallow";
 import useTransaction from "../../../stores/transactionStore";
 import { toast } from "react-hot-toast";
 import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
+import Button from "@/dls/Button/Button";
+import Input from "@/dls/Form/Input";
+import InputWithLabel from "@/dls/Form/InputWithLabel";
+import ExportPDF from "./ExportPDF";
 
 type Props = {};
 
@@ -112,6 +116,14 @@ const AllTransactions = (props: Props) => {
       <Head>
         <title>Transaksi</title>
       </Head>
+      <div className="flex justify-end">
+        {/* <Input
+          className="max-w-md dark:!bg-slate-700 !bg-gray-200 font-semibold"
+          type="text"
+          placeholder="Cari Transaksi"
+        /> */}
+        <ExportPDF />
+      </div>
       <table className="w-full" border={0}>
         <TransactionHeader />
         <TransactionList data={byDateTransactions} />

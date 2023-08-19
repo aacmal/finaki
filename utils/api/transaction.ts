@@ -59,3 +59,13 @@ export const getAllTransactions = async (query: {
 
   return response.data.data;
 };
+
+export const getAllTransactionByMonth = async (date: Date) => {
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const response = await instance.get<TransactionsResponse>(
+    makeUrl(`/transactions/by-month/${month}/${year}`)
+  );
+
+  return response.data.data;
+};

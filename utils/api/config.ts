@@ -11,7 +11,7 @@ export const BASE_URL =
  * @returns url with parameters
  * @example makeUrl("/transactions", { limit: 10 }) => "/transactions?limit=10"
  */
-export const makeUrl = (path: string, parameters: any): string => {
+export const makeUrl = (path: string, parameters?: any): string => {
   if (!parameters) return path;
 
   const params = Object.keys(parameters)

@@ -13,7 +13,7 @@ const Input = forwardRef(
     return (
       <input
         className={classNames(
-          "w-full py-1 px-2 rounded-md dark:text-slate-200",
+          "w-full py-2 px-3 rounded-md bg-gray-100 text-slate-800 dark:text-slate-100 dark:bg-slate-500",
           {
             "bg-transparent": transparent,
           },
