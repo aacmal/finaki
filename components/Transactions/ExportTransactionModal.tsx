@@ -20,9 +20,9 @@ type Props = {
 
 const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
   const [date, setDate] = useState<Date | null>(new Date());
-  const [error, setError] = useState<string | null>("Ada yang salah");
+  const [error, setError] = useState<string | null>(null);
 
-  const { mutate } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: getAllTransactionByMonth,
     onSuccess: (data) => {
       generatePDF(data[0]);
@@ -150,9 +150,8 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
         />
         <LoadingButton
           onClick={handleDownload}
-          className=""
-          disabled={!date}
-          isLoading={false}
+          disabled={!date || isLoading}
+          isLoading={isLoading}
           title="Download"
           onLoadingText="Sedang diproses"
         />
