@@ -12,7 +12,7 @@ const ExportPDF = () => {
         width="fit"
         onClick={() => setIsOpen(true)}
       >
-        Download ke PDF
+        Export PDF
       </Button>
       <ExportTransactionModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>

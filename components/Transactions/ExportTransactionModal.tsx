@@ -6,7 +6,6 @@ import { Modal, ModalContent } from "@/dls/Modal";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -19,7 +18,6 @@ type Props = {
 };
 
 const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
-  const [date, setDate] = useState<Date | null>(new Date());
   const [error, setError] = useState<string | null>(null);
 
   const { mutate, isLoading } = useMutation({
@@ -37,6 +35,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
   const generatePDF = (data: any) => {
     let doc = new jsPDF("p", "pt");
 
+    const date = new Date(data.timestamp);
     const transactions = data.transactions.map(
       (
         transaction: Transaction & {
@@ -109,7 +108,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
         doc.setFontSize(16);
         doc.setTextColor(40);
         doc.text(
-          `Transaksi Bulan ${new Date(date!).toLocaleDateString("id-ID", {
+          `Transaksi Bulan ${date.toLocaleDateString("id-ID", {
             month: "long",
             year: "numeric",
           })}`,
@@ -118,13 +117,26 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
         );
       },
     });
-    doc.save("table.pdf");
+    doc.save(
+      `data transaksi ${date.toLocaleDateString("id-ID", {
+        month: "long",
+        year: "numeric",
+      })}.pdf`
+    );
   };
 
-  const handleDownload = () => {
-    if (!date) return;
-    mutate(date);
+  const fetchTransaction = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const value = e.currentTarget.month.value;
+    if (!value) {
+      setError("Bulan tidak boleh kosong");
+      return;
+    }
+    setError(null);
+    console.log(value);
+    mutate(new Date(value));
   };
+
   return (
     <Modal stateOpen={isOpen}>
       <ModalContent onClickOverlay={() => setIsOpen(false)}>
@@ -141,20 +153,20 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
           Pilih Bulan
         </span>
         {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
-        <DatePicker
-          selected={date}
-          onChange={(date) => setDate(date)}
-          showMonthYearPicker
-          dateFormat="MM/yyyy"
-          className="w-full mt-1 mb-5 p-3 bg-slate-100 dark:bg-slate-500 dark:text-slate-200 rounded-lg"
-        />
-        <LoadingButton
-          onClick={handleDownload}
-          disabled={!date || isLoading}
-          isLoading={isLoading}
-          title="Download"
-          onLoadingText="Sedang diproses"
-        />
+        <form onSubmit={fetchTransaction}>
+          <input
+            type="month"
+            placeholder="Pilih Bulan"
+            className="w-full mt-1 mb-5 p-3 bg-slate-100 dark:bg-slate-500 dark:text-slate-200 rounded-lg"
+            name="month"
+          />
+          <LoadingButton
+            disabled={isLoading}
+            isLoading={isLoading}
+            title="Download"
+            onLoadingText="Sedang diproses"
+          />
+        </form>
       </ModalContent>
     </Modal>
   );
