@@ -38,7 +38,10 @@ export default function RootLayout({
         <head /> will contain the components returned by the nearest parent
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
-      <head />
+      <head>
+        {/* theme color */}
+        <meta name="theme-color" content="#e7e5e4" />
+      </head>
       <body
         className={classNames("bg-stone-100 dark:bg-slate-800", font.className)}
       >
