@@ -40,7 +40,11 @@ const PieChart = ({ data, legend = true, loading }: Props) => {
             {data?.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={(PIE_CHART as any)[entry.color]}
+                fill={
+                  entry.color.includes("#")
+                    ? entry.color
+                    : (PIE_CHART as any)[entry.color]
+                }
               />
             ))}
           </Pie>
