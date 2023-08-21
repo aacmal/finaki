@@ -6,7 +6,6 @@ import { Modal, ModalContent } from "@/dls/Modal";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Transaction } from "@/types/Transaction";
