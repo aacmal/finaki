@@ -6,10 +6,10 @@ import { Modal, ModalContent } from "@/dls/Modal";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
-import jsPDF from "jspdf";
+import JsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Transaction } from "@/types/Transaction";
-import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
+import { currencyFormat } from "@/utils/currencyFormat";
 
 type Props = {
   isOpen: boolean;
@@ -28,11 +28,12 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       setError(
         "Terjadi kesalahan atau tidak ada transaksi pada bulan yang dipilih"
       );
+      console.log(error);
     },
   });
 
   const generatePDF = (data: any) => {
-    let doc = new jsPDF("p", "pt");
+    let doc = new JsPDF("p", "pt");
 
     const date = new Date(data.timestamp);
     const transactions = data.transactions.map(
@@ -64,20 +65,6 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       }
     );
 
-    const totalIn = transactions.reduce((acc: any, curr: any) => {
-      if (curr.tipe === "Masuk") {
-        return acc + removeCurrencyFormat(curr.nominal);
-      }
-      return acc;
-    }, 0);
-
-    const totalOut = transactions.reduce((acc: any, curr: any) => {
-      if (curr.tipe === "Keluar") {
-        return acc + removeCurrencyFormat(curr.nominal);
-      }
-      return acc;
-    }, 0);
-
     autoTable(doc, {
       columnStyles: {
         no: { halign: "center" },
@@ -95,7 +82,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
         { header: "Tanggal", dataKey: "tanggal" },
       ],
       willDrawCell: (data) => {
-        if ((data.row.section === "body", data.column.dataKey === "tipe")) {
+        if ((data.row.section === "body" && data.column.dataKey === "tipe")) {
           if (data.cell.raw === "Masuk") {
             doc.setTextColor("#10B981");
           } else if (data.cell.raw === "Keluar") {
@@ -116,6 +103,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
         );
       },
     });
+
     doc.save(
       `data transaksi ${date.toLocaleDateString("id-ID", {
         month: "long",
@@ -136,13 +124,18 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
     mutate(new Date(value));
   };
 
+  const closeModal = () => {
+    setIsOpen(false);
+    setError(null);
+  }
+
   return (
     <Modal stateOpen={isOpen}>
-      <ModalContent onClickOverlay={() => setIsOpen(false)}>
+      <ModalContent onClickOverlay={closeModal}>
         <div className="flex items-center justify-between">
           <Heading level={3}>Export Ke PDF</Heading>
           <IconWrapper
-            onClick={() => setIsOpen(false)}
+            onClick={closeModal}
             className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20"
           >
             <XmarkIcon />
