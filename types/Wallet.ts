@@ -4,6 +4,7 @@ export interface WalletData {
   balance: number;
   color: string;
   creadtedAt?: string;
+  updatedAt?: Date;
 }
 
 export interface BalanceHistory {

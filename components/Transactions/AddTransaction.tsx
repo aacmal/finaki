@@ -95,10 +95,13 @@ const AddTransaction = (props: Props) => {
       note: values.note,
       walletId: values.wallet ?? null,
     };
+
+    // get balance of selected wallet
     const walletBalance = walletQuery.data?.find(
       (wallet) => wallet._id === values.wallet
     )?.balance;
 
+    // check if transaction type is out and wallet balance is less than amount
     if (values["transaction-type"] === "out" && walletBalance! < data.amount) {
       setError(
         "amount",
@@ -112,6 +115,14 @@ const AddTransaction = (props: Props) => {
     }
     mutate(data);
   };
+
+  const sortedWallet =
+    walletQuery.data
+      ?.sort(
+        (a, b) =>
+          new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime()
+      )
+      .reverse() ?? [];
 
   return (
     <Modal stateOpen={isOpen || walletId !== null}>
@@ -195,7 +206,7 @@ const AddTransaction = (props: Props) => {
                 placeholder="Pilih Dompet (Opsional)"
                 {...field}
               >
-                {walletQuery.data?.map((wallet: WalletData) => (
+                {sortedWallet.map((wallet: WalletData) => (
                   <Option
                     selected={wallet._id === walletId}
                     className={classNames(
