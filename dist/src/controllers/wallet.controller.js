@@ -84,6 +84,7 @@ async function getAllWallets(req, res) {
                 name: 1,
                 color: 1,
                 balance: 1,
+                updatedAt: 1,
             },
         });
         return res.status(200).json({
