@@ -120,11 +120,11 @@ const AddTransaction = (props: Props) => {
   const sortedWallet = useMemo(
     () =>
       [...(walletQuery.data ?? [])]
-        ?.sort(
+        .sort(
           (a, b) =>
             new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime()
         )
-        .reverse() ?? [],
+        .reverse(),
     [walletQuery.data]
   );
 
