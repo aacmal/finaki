@@ -22,6 +22,7 @@ import TextArea from "@/dls/Form/TextArea";
 import useStore from "../../stores/store";
 import { WalletData } from "@/types/Wallet";
 import useTransaction from "../../stores/transactionStore";
+import { useMemo } from "react";
 
 type Props = {};
 
@@ -116,13 +117,16 @@ const AddTransaction = (props: Props) => {
     mutate(data);
   };
 
-  const sortedWallet =
-    walletQuery.data
-      ?.sort(
-        (a, b) =>
-          new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime()
-      )
-      .reverse() ?? [];
+  const sortedWallet = useMemo(
+    () =>
+      [...(walletQuery.data ?? [])]
+        ?.sort(
+          (a, b) =>
+            new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime()
+        )
+        .reverse() ?? [],
+    [walletQuery.data]
+  );
 
   return (
     <Modal stateOpen={isOpen || walletId !== null}>
