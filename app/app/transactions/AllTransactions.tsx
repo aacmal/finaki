@@ -26,45 +26,52 @@ type Props = {};
 
 const LIMIT = 20;
 const AllTransactions = (props: Props) => {
-  const { transactions, setTransactions, pushTransactions } = useTransaction(
+  const { setTransactions, transactions } = useTransaction(
     (state) => ({
       transactions: state.transactions,
       setTransactions: state.setTransactions,
-      pushTransactions: state.pushTransactions,
     }),
     shallow
   );
   const { ref, inView } = useInView();
 
-  const { error, isLoading, fetchNextPage, isFetchingNextPage, hasNextPage } =
-    useInfiniteQuery({
-      queryKey: [QueryKey.TRANSACTIONS],
-      queryFn: ({ pageParam = 1 }) =>
-        getAllTransactions({
-          limit: LIMIT,
-          page: pageParam,
-        }),
-      onSuccess: (data) => {
-        const params = data.pageParams.length - 1;
-        pushTransactions(data.pages[params].transactions);
-      },
-      onError: (error) => {
-        toast.error("Terjadi kesalahan");
-      },
-      getNextPageParam: (lastPage) => {
-        if (lastPage.totalPages == lastPage.currentPage) {
-          return undefined;
-        }
-        const nextPage =
-          parseInt(lastPage.currentPage as unknown as string) + 1;
-        return nextPage;
-      },
-    });
+  const {
+    error,
+    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    data,
+  } = useInfiniteQuery({
+    queryKey: [QueryKey.TRANSACTIONS],
+    queryFn: ({ pageParam = 1 }) =>
+      getAllTransactions({
+        limit: LIMIT,
+        page: pageParam,
+      }),
+    onSuccess: (data) => {
+      if (!data.pages) return;
+      const transactions = data.pages.flatMap((page) => page.transactions);
+      setTransactions(transactions);
+    },
+    onError: (error) => {
+      toast.error("Terjadi kesalahan");
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.totalPages == lastPage.currentPage) {
+        return undefined;
+      }
+      const nextPage = parseInt(lastPage.currentPage as unknown as string) + 1;
+      return nextPage;
+    },
+  });
+
+  console.log(transactions);
 
   const byDateTransactions = useMemo(() => {
-    if (!transactions) return;
+    if (!data) return [];
     return groupByDay(transactions);
-  }, [transactions]);
+  }, [data, transactions]);
 
   useEffect(() => {
     if (inView) {
@@ -116,12 +123,12 @@ const AllTransactions = (props: Props) => {
       <Head>
         <title>Transaksi</title>
       </Head>
-      <div className="flex justify-end">
-        {/* <Input
+      <div className="flex justify-between gap-4">
+        <Input
           className="max-w-md dark:!bg-slate-700 !bg-gray-200 font-semibold"
           type="text"
           placeholder="Cari Transaksi"
-        /> */}
+        />
         <ExportPDF />
       </div>
       <table className="w-full" border={0}>

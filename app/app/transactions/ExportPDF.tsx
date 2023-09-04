@@ -8,7 +8,7 @@ const ExportPDF = () => {
     <>
       <Button
         type="button"
-        className="!py-2 !text-sm font-semibold !rounded-md"
+        className="!py-2 !text-sm whitespace-nowrap font-semibold !rounded-md"
         width="fit"
         onClick={() => setIsOpen(true)}
       >
