@@ -49,7 +49,7 @@ export async function getTransactions(userId: Types.ObjectId, query: ITransactio
       userId: userId,
       includeInCalculation: true,
       ...(query.search && {
-        description: { $regex: query.search },
+        description: { $regex: query.search, $options: "i" },
       }),
     })
       .limit(parseInt(limit) ?? 0)
@@ -61,7 +61,7 @@ export async function getTransactions(userId: Types.ObjectId, query: ITransactio
       userId: userId,
       includeInCalculation: true,
       ...(query.search && {
-        description: { $regex: query.search },
+        description: { $regex: query.search, $options: "i" },
       }),
     });
 

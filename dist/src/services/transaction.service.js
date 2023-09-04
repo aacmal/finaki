@@ -71,7 +71,7 @@ async function getTransactions(userId, query) {
             userId: userId,
             includeInCalculation: true,
             ...(query.search && {
-                description: { $regex: query.search },
+                description: { $regex: query.search, $options: "i" },
             }),
         })
             .limit((_a = parseInt(limit)) !== null && _a !== void 0 ? _a : 0)
@@ -82,7 +82,7 @@ async function getTransactions(userId, query) {
             userId: userId,
             includeInCalculation: true,
             ...(query.search && {
-                description: { $regex: query.search },
+                description: { $regex: query.search, $options: "i" },
             }),
         });
         return {
