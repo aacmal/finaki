@@ -9,7 +9,7 @@ const TransactionHeader = (props: Props) => {
         <th align="left" className="hidden lg:table-cell font-medium text-sm">
           Waktu
         </th>
-        <th className="font-medium text-sm py-3 mb-3 w-32 md:w-60 lg:w-96">
+        <th className="font-medium text-sm py-3 mb-3 w-32 md:w-60 text-left lg:text-center lg:w-96">
           Deskripsi
         </th>
         <th className="font-medium text-sm">Dompet</th>
