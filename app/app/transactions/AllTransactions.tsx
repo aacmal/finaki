@@ -72,9 +72,6 @@ const AllTransactions = (props: Props) => {
   const searchQuery = useInfiniteQuery({
     queryKey: [QueryKey.TRANSACTIONS, debounceSearch],
     queryFn: () => getAllTransactions({ search: debounceSearch, limit: LIMIT }),
-    onSuccess: (data) => {
-      console.log(data);
-    },
     getNextPageParam: (lastPage) => {
       if (lastPage.totalPages == lastPage.currentPage) {
         return undefined;
