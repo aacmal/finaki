@@ -1,12 +1,12 @@
 "use client";
 
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getAllTransactions } from "@/api/transaction";
 import { QueryKey } from "@/types/QueryKey";
 import TransactionHeader from "@/components/Transactions/AllTransactions/TransactionHeader";
 import TransactionList from "@/components/Transactions/AllTransactions/TransactionList";
 import Heading from "@/dls/Heading";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { groupByDay } from "@/utils/array";
 import Head from "next/head";
 import Image from "next/image";
@@ -21,6 +21,7 @@ import Button from "@/dls/Button/Button";
 import Input from "@/dls/Form/Input";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import ExportPDF from "./ExportPDF";
+import { useDebounce } from "../../../hooks/useDebounce";
 
 type Props = {};
 
@@ -34,6 +35,7 @@ const AllTransactions = (props: Props) => {
     shallow
   );
   const { ref, inView } = useInView();
+  const [search, setSearch] = useState("");
 
   const {
     error,
@@ -66,12 +68,33 @@ const AllTransactions = (props: Props) => {
     },
   });
 
-  console.log(transactions);
+  const debounceSearch = useDebounce(search, 800);
+  const searchQuery = useInfiniteQuery({
+    queryKey: [QueryKey.TRANSACTIONS, debounceSearch],
+    queryFn: () => getAllTransactions({ search: debounceSearch, limit: LIMIT }),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.totalPages == lastPage.currentPage) {
+        return undefined;
+      }
+      const nextPage = parseInt(lastPage.currentPage as unknown as string) + 1;
+      return nextPage;
+    },
+    enabled: Boolean(debounceSearch),
+  });
 
-  const byDateTransactions = useMemo(() => {
+  const transactionLists = useMemo(() => {
     if (!data) return [];
     return groupByDay(transactions);
   }, [data, transactions]);
+
+  const filteredTransactionLists = useMemo(() => {
+    if (!searchQuery.data) return [];
+    const data = searchQuery.data.pages.flatMap((page) => page.transactions);
+    return groupByDay(data);
+  }, [searchQuery.data]);
 
   useEffect(() => {
     if (inView) {
@@ -92,7 +115,7 @@ const AllTransactions = (props: Props) => {
     );
   }
 
-  if (!byDateTransactions || error) {
+  if (!transactionLists || error) {
     return (
       <Heading className="text-center mt-10" level={3}>
         Terjadi Kesalahan
@@ -100,7 +123,7 @@ const AllTransactions = (props: Props) => {
     );
   }
 
-  if (byDateTransactions.length < 1) {
+  if (transactionLists.length < 1) {
     return (
       <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
         <Image
@@ -118,6 +141,30 @@ const AllTransactions = (props: Props) => {
     );
   }
 
+  const notFound = () => {
+    if (
+      filteredTransactionLists.length < 1 &&
+      search.length > 0 &&
+      !searchQuery.isLoading
+    ) {
+      return (
+        <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
+          <Image
+            src="/images/transaction.png"
+            alt="Transaction is empty"
+            width={200}
+            height={200}
+          />
+          <Heading level={3}>Transaksi tidak ditemukan</Heading>
+          <br />
+          <strong className="text-lg font-normal">
+            Silahkan coba kata kunci lain
+          </strong>
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       <Head>
@@ -125,16 +172,29 @@ const AllTransactions = (props: Props) => {
       </Head>
       <div className="flex justify-between gap-4">
         <Input
-          className="max-w-md dark:!bg-slate-700 !bg-gray-200 font-semibold"
+          className="max-w-md ring-0 focus:ring-2 dark:ring-slate-500 ring-slate-300 transition-all focus:!bg-gray-100 dark:!bg-slate-700 !bg-gray-200 font-semibold"
           type="text"
           placeholder="Cari Transaksi"
+          onChange={(e) => setSearch(e.target.value)}
         />
         <ExportPDF />
       </div>
       <table className="w-full" border={0}>
         <TransactionHeader />
-        <TransactionList data={byDateTransactions} />
+        <TransactionList
+          data={search.length > 0 ? filteredTransactionLists : transactionLists}
+        />
       </table>
+      {notFound()}
+      {searchQuery.isLoading && search.length > 0 && (
+        <div className="space-y-4 mt-7">
+          {Array(6)
+            .fill("")
+            .map((_, index) => (
+              <SimpleTSkeleton key={index} delay={index * 300} />
+            ))}
+        </div>
+      )}
       <button
         ref={ref}
         disabled={!hasNextPage || isFetchingNextPage}

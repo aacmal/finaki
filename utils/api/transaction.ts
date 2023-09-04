@@ -52,6 +52,7 @@ export const getTotalTransactionByPeriod = async (
 export const getAllTransactions = async (query: {
   limit: number;
   page?: number;
+  search?: string;
 }) => {
   const response = await instance.get<InfiniteTransactionResponse>(
     makeUrl("/transactions", query)
