@@ -43,15 +43,27 @@ export async function create(transactionData: ICreateTransactionInput) {
 
 export async function getTransactions(userId: Types.ObjectId, query: ITransactionRequestQuery) {
   try {
-    const { page, limit, startDate, endDate, type, walletId, description } = query;
+    const { page, limit } = query;
 
-    const transactions = await TransactionModel.find({ userId: userId, includeInCalculation: true })
+    const transactions = await TransactionModel.find({
+      userId: userId,
+      includeInCalculation: true,
+      ...(query.search && {
+        description: { $regex: query.search },
+      }),
+    })
       .limit(parseInt(limit) ?? 0)
       .skip((parseInt(page) - 1) * parseInt(limit))
       .sort({ createdAt: -1 })
       .select({ userId: 0, __v: 0, includeInCalculation: 0 });
 
-    const count = await TransactionModel.countDocuments({ userId: userId, includeInCalculation: true });
+    const count = await TransactionModel.countDocuments({
+      userId: userId,
+      includeInCalculation: true,
+      ...(query.search && {
+        description: { $regex: query.search },
+      }),
+    });
 
     return {
       transactions,

@@ -36,4 +36,5 @@ export interface ITransactionRequestQuery {
   type: string;
   walletId: string;
   description: string;
+  search: string;
 }

@@ -66,13 +66,25 @@ exports.create = create;
 async function getTransactions(userId, query) {
     var _a;
     try {
-        const { page, limit, startDate, endDate, type, walletId, description } = query;
-        const transactions = await transaction_model_1.default.find({ userId: userId, includeInCalculation: true })
+        const { page, limit } = query;
+        const transactions = await transaction_model_1.default.find({
+            userId: userId,
+            includeInCalculation: true,
+            ...(query.search && {
+                description: { $regex: query.search },
+            }),
+        })
             .limit((_a = parseInt(limit)) !== null && _a !== void 0 ? _a : 0)
             .skip((parseInt(page) - 1) * parseInt(limit))
             .sort({ createdAt: -1 })
             .select({ userId: 0, __v: 0, includeInCalculation: 0 });
-        const count = await transaction_model_1.default.countDocuments({ userId: userId, includeInCalculation: true });
+        const count = await transaction_model_1.default.countDocuments({
+            userId: userId,
+            includeInCalculation: true,
+            ...(query.search && {
+                description: { $regex: query.search },
+            }),
+        });
         return {
             transactions,
             count,
