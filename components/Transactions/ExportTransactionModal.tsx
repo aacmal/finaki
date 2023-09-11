@@ -47,10 +47,6 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       ) => {
         return {
           no: (index + 1).toString(),
-          desription: transaction.description,
-          tipe: transaction.type === "in" ? "Masuk" : "Keluar",
-          nominal: currencyFormat(transaction.amount),
-          dompet: transaction.wallet ? transaction.wallet.name : "-",
           tanggal: new Date(transaction.createdAt)
             .toLocaleDateString("id-ID", {
               weekday: "long",
@@ -61,6 +57,10 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
               minute: "numeric",
             })
             .replace("pukul", "-"),
+          desription: transaction.description,
+          tipe: transaction.type === "in" ? "Masuk" : "Keluar",
+          nominal: currencyFormat(transaction.amount),
+          dompet: transaction.wallet ? transaction.wallet.name : "-",
         };
       }
     );
@@ -75,14 +75,14 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       body: transactions,
       columns: [
         { header: "No", dataKey: "no" },
+        { header: "Tanggal", dataKey: "tanggal" },
         { header: "Deskripsi", dataKey: "desription" },
         { header: "Tipe", dataKey: "tipe" },
         { header: "Nominal", dataKey: "nominal" },
         { header: "Dompet", dataKey: "dompet" },
-        { header: "Tanggal", dataKey: "tanggal" },
       ],
       willDrawCell: (data) => {
-        if ((data.row.section === "body" && data.column.dataKey === "tipe")) {
+        if (data.row.section === "body" && data.column.dataKey === "tipe") {
           if (data.cell.raw === "Masuk") {
             doc.setTextColor("#10B981");
           } else if (data.cell.raw === "Keluar") {
@@ -127,7 +127,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
   const closeModal = () => {
     setIsOpen(false);
     setError(null);
-  }
+  };
 
   return (
     <Modal stateOpen={isOpen}>
