@@ -17,7 +17,7 @@ export const metadata = {
   title: "Finkai",
   keywords: Seo.keywords,
   description: Seo.desciprtion,
-  manifest: "/manifest.json",
+  manifest: "/app.webmanifest",
   openGraph: {
     title: Seo.title,
     description: Seo.desciprtion,
