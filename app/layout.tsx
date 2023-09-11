@@ -1,37 +1,38 @@
-"use client";
-
 import { Inter } from "@next/font/google";
 import classNames from "classnames";
 import "./globals.scss";
-import useTheme from "../hooks/useTheme";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import HomeNav from "@/components/Navigation/HomeNav/HomeNav";
 import { Toaster } from "react-hot-toast";
 import GoogleAnalytics from "@/components/Analytics/ga";
+import RQProvider from "./provider";
+import * as Seo from "./seo";
 
 // font set up
 const font = Inter({
   subsets: ["latin"],
 });
 
-// react query set up
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    },
+export const metadata = {
+  metadataBase: new URL("https://finaki.acml.me/"),
+  title: "Finkai",
+  keywords: Seo.keywords,
+  description: Seo.desciprtion,
+  manifest: "/manifest.json",
+  openGraph: {
+    title: Seo.title,
+    description: Seo.desciprtion,
   },
-});
+  twitter: {
+    title: Seo.title,
+    description: Seo.desciprtion,
+  },
+};
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useTheme();
   return (
     <html lang="en">
       {/*
@@ -45,12 +46,11 @@ export default function RootLayout({
       <body
         className={classNames("bg-stone-100 dark:bg-slate-800", font.className)}
       >
-        <QueryClientProvider client={queryClient}>
+        <RQProvider>
           <Toaster />
           <HomeNav />
           <main>{children}</main>
-          <ReactQueryDevtools />
-        </QueryClientProvider>
+        </RQProvider>
         <GoogleAnalytics />
       </body>
     </html>
