@@ -4,12 +4,12 @@ import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
 import { Modal, ModalContent } from "@/dls/Modal";
 import XmarkIcon from "@/icons/XmarkIcon";
-import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
-import JsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { Transaction } from "@/types/Transaction";
 import { currencyFormat } from "@/utils/currencyFormat";
+import { useMutation } from "@tanstack/react-query";
+import JsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import React, { useState } from "react";
 
 type Props = {
   isOpen: boolean;
@@ -33,7 +33,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
   });
 
   const generatePDF = (data: any) => {
-    let doc = new JsPDF("p", "pt");
+    const doc = new JsPDF("p", "pt");
 
     const date = new Date(data.timestamp);
     const transactions = data.transactions.map(

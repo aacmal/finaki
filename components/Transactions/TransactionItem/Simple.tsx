@@ -3,8 +3,6 @@ import ArrowCircleIcon from "@/icons/ArrowCircleIcon";
 import { Transaction } from "@/types/Transaction";
 import { currencyFormat } from "@/utils/currencyFormat";
 import classNames from "classnames";
-import React from "react";
-import useStore from "../../../stores/store";
 import transactionStore from "../../../stores/transactionStore";
 
 type Props = {
@@ -31,11 +29,9 @@ const SimpleTransactionItem = ({
   transaction,
   theme = "default",
 }: Props) => {
-  const { setTransactionDetailState } = transactionStore(
-    (state) => ({
-      setTransactionDetailState: state.setTransactionDetailState,
-    })
-  );
+  const { setTransactionDetailState } = transactionStore((state) => ({
+    setTransactionDetailState: state.setTransactionDetailState,
+  }));
 
   const date = new Date(transaction.createdAt).toLocaleDateString("id-ID", {
     day: "numeric",
@@ -60,8 +56,14 @@ const SimpleTransactionItem = ({
           <ArrowCircleIcon
             direction={transaction.type === "in" ? "up" : "down"}
             className={classNames(
-              { "text-blue-500": transaction.type === "in" && theme === "default" },
-              { "text-orange-500": transaction.type === "out" && theme === "default" },
+              {
+                "text-blue-500":
+                  transaction.type === "in" && theme === "default",
+              },
+              {
+                "text-orange-500":
+                  transaction.type === "out" && theme === "default",
+              },
               { "text-white": theme === "light" }
             )}
           />
@@ -69,10 +71,12 @@ const SimpleTransactionItem = ({
       </span>
       <div className="w-[70%] inline-block">
         <div
-          onClick={() => setTransactionDetailState({
-            transaction: transaction,
-            isOpen: true,
-          })}
+          onClick={() =>
+            setTransactionDetailState({
+              transaction: transaction,
+              isOpen: true,
+            })
+          }
           className={classNames(
             "font-medium cursor-pointer w-44 md:w-60 lg:w-72 truncate"
           )}
@@ -99,7 +103,10 @@ const SimpleTransactionItem = ({
         className={classNames(
           "font-medium  ml-auto whitespace-nowrap",
           { "text-blue-500": transaction.type === "in" && theme === "default" },
-          { "text-orange-500": transaction.type === "out" && theme === "default" },
+          {
+            "text-orange-500":
+              transaction.type === "out" && theme === "default",
+          },
           { "text-white": theme === "light" }
         )}
       >

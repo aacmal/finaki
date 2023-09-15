@@ -1,14 +1,13 @@
 "use client";
 
 import Heading from "@/dls/Heading";
-import { Theme, ThemeState } from "@/types/Theme";
-import React, { useState } from "react";
+import { Theme } from "@/types/Theme";
 import useHydration from "../../hooks/useHydration";
 import useTheme from "../../hooks/useTheme";
 import ContentWrapper from "../Container/ContentWrapper";
 import ThemeOption from "./ThemeOption";
 
-const ThemeSelection = (props: any) => {
+const ThemeSelection = () => {
   const { colorTheme, setColorTheme } = useTheme();
   const hydrated = useHydration();
 

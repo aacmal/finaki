@@ -1,31 +1,28 @@
 import { getUserDevices, logoutDevices } from "@/api/user";
-import Heading from "@/dls/Heading";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import React from "react";
 import ContentWrapper from "@/components/Container/ContentWrapper";
-import useStore from "../../../stores/store";
-import { useRouter } from "next/navigation";
-import { Routes } from "@/types/Routes";
-import { QueryKey } from "@/types/QueryKey";
-import { toast } from "react-hot-toast";
-import Device from "./Device";
 import LoadingButton from "@/dls/Button/LoadingButton";
+import Heading from "@/dls/Heading";
+import { QueryKey } from "@/types/QueryKey";
+import { Routes } from "@/types/Routes";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import useStore from "../../../stores/store";
+import Device from "./Device";
 
-type Props = {};
-
-const DevicesLists = (props: Props) => {
+const DevicesLists = () => {
   const setUser = useStore((state) => state.setUser);
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["devices"],
     queryFn: getUserDevices,
   });
 
   const deleteDeviceMutation = useMutation({
     mutationFn: logoutDevices,
-    onSuccess: (data) => {
+    onSuccess: () => {
       setUser(null);
       router.push(Routes.Home);
       localStorage.removeItem("access-token");

@@ -1,5 +1,3 @@
-import IconWrapper from "@/dls/IconWrapper";
-import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { WalletData } from "@/types/Wallet";
 import { updateWalletColor } from "@/utils/api/wallet";
@@ -8,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
 import Link from "next/link";
 import { useState } from "react";
-import { indicatorColor, WalletColor, walletColors } from "./constants";
+import { WalletColor, walletColors } from "./constants";
 import WalletCardDropdown from "./WalletCardDropdown";
 
 type Props = {

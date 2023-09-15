@@ -15,15 +15,14 @@ import classNames from "classnames";
 import transactionStore from "../../stores/transactionStore";
 import { walletLabelColor } from "../WalletCard/constants";
 
-type Props = {};
-
-const TransactionDetail = (props: Props) => {
-  const { setTransactionDetailState, transactionDetailState: {transaction, isOpen} } = transactionStore(
-    (state) => ({
-      setTransactionDetailState: state.setTransactionDetailState,
-      transactionDetailState: state.transactionDetailState,
-    })
-  );
+const TransactionDetail = () => {
+  const {
+    setTransactionDetailState,
+    transactionDetailState: { transaction, isOpen },
+  } = transactionStore((state) => ({
+    setTransactionDetailState: state.setTransactionDetailState,
+    transactionDetailState: state.transactionDetailState,
+  }));
   const queryClient = useQueryClient();
   const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
 
@@ -32,9 +31,11 @@ const TransactionDetail = (props: Props) => {
   const wallet = wallets.find((wallet) => wallet._id === transaction?.walletId);
 
   return (
-    <Modal stateOpen={isOpen || (transaction !== null)}>
+    <Modal stateOpen={isOpen || transaction !== null}>
       <ModalContent
-        onClickOverlay={() => setTransactionDetailState({transaction: undefined, isOpen: false})}
+        onClickOverlay={() =>
+          setTransactionDetailState({ transaction: undefined, isOpen: false })
+        }
         className="!max-w-2xl lg:!-mt-96"
       >
         <div className="flex justify-between items-center mb-5">
@@ -42,7 +43,10 @@ const TransactionDetail = (props: Props) => {
           <IconButton
             className="dark:text-slate-100"
             onClick={() => {
-              setTransactionDetailState({transaction: undefined, isOpen: false});
+              setTransactionDetailState({
+                transaction: undefined,
+                isOpen: false,
+              });
             }}
           >
             <XmarkIcon />
@@ -103,17 +107,14 @@ const TransactionDetail = (props: Props) => {
             <tr>
               <td className="font-medium dark:text-slate-300">Catatan</td>
               <td>:</td>
-              <td>
-                {transaction!.note?.length > 0
-                  ? transaction!.note
-                  : "-"}
-              </td>
+              <td>{transaction!.note?.length > 0 ? transaction!.note : "-"}</td>
             </tr>
             <tr>
               <td className="font-medium dark:text-slate-300">Tanggal</td>
               <td>:</td>
               <td>
-                {dateFormat(transaction!.createdAt)} - {timeFormat(transaction!.createdAt)}
+                {dateFormat(transaction!.createdAt)} -{" "}
+                {timeFormat(transaction!.createdAt)}
               </td>
             </tr>
           </tbody>

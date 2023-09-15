@@ -1,26 +1,24 @@
 "use client";
 
-import Checkbox from "@/dls/Form/Checkbox/Checkbox";
-import { Modal, ModalContent } from "@/dls/Modal";
-import useStore from "../../stores/store";
-import { useEffect, useState } from "react";
-import Heading from "@/dls/Heading";
-import { WalletData } from "@/types/Wallet";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { QueryKey } from "@/types/QueryKey";
-import classNames from "classnames";
-import { indicatorColor, WalletColor } from "./constants";
 import Button from "@/dls/Button/Button";
 import LoadingButton from "@/dls/Button/LoadingButton";
-import { deleteWallet } from "@/utils/api/wallet";
-import toast from "react-hot-toast";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import Checkbox from "@/dls/Form/Checkbox/Checkbox";
+import Heading from "@/dls/Heading";
+import { Modal, ModalContent } from "@/dls/Modal";
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
+import { WalletData } from "@/types/Wallet";
+import { deleteWallet } from "@/utils/api/wallet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import useStore from "../../stores/store";
+import { indicatorColor, WalletColor } from "./constants";
 
-type Props = {};
-
-const DeleteWalletDialog = (props: Props) => {
+const DeleteWalletDialog = () => {
   const { deleteId, setDeleteId } = useStore((state) => ({
     deleteId: state.deleteWalletId,
     setDeleteId: state.setDeleteWalletId,
@@ -36,7 +34,7 @@ const DeleteWalletDialog = (props: Props) => {
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: deleteWallet,
-    onSuccess: (data) => {
+    onSuccess: () => {
       // remove deleted wallet from cache
       queryClient.removeQueries([QueryKey.WALLETS, deleteId]);
       queryClient.setQueryData([QueryKey.WALLETS], (oldData: any) => {
@@ -95,9 +93,7 @@ const DeleteWalletDialog = (props: Props) => {
         <Heading className="mb-4" level={3}>
           Apakah anda yakin untuk menghapus dompet{" "}
           <span
-            className={classNames(
-              "px-2 py-1 rounded-md mx-1 text-slate-50"
-            )}
+            className={classNames("px-2 py-1 rounded-md mx-1 text-slate-50")}
             style={{
               backgroundColor: walletData?.color?.includes("#")
                 ? walletData?.color

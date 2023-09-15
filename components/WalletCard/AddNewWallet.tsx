@@ -1,7 +1,7 @@
 "use cleint";
 
-import { WalletInput } from "@/api/types/WalletAPI";
 import LoadingButton from "@/dls/Button/LoadingButton";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
@@ -12,16 +12,13 @@ import Select from "@/dls/Select/Select";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { createNewWallet } from "@/utils/api/wallet";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { indicatorColor, WalletColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
-import CurrencyInput from "@/dls/Form/CurrencyInput";
-import { removeCurrencyFormat } from "@/utils/currencyFormat";
 
-type Props = {};
-
-const AddNewWallet = (props: Props) => {
+const AddNewWallet = () => {
   const queryClient = useQueryClient();
 
   const { register, handleSubmit, control, reset } = useForm();

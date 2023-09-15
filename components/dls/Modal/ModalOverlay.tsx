@@ -1,6 +1,4 @@
 import classNames from "classnames";
-import React, { useContext } from "react";
-import { ModalContext } from "./Modal";
 
 type Props = {
   onClick?: () => void;

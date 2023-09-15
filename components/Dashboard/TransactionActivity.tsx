@@ -1,11 +1,7 @@
-import React from "react";
+import { TotalTransactionByDay } from "@/types/Transaction";
+import AreaChart from "../Charts/AreaChart/AreaChart";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
-import AreaChart, { AreaChartData } from "../Charts/AreaChart/AreaChart";
-import ChartWrapper from "../Charts/ChartWrapper";
-import classNames from "classnames";
-import ChartPlaceholder from "../Charts/ChartPlaceholder";
-import { TotalTransactionByDay } from "@/types/Transaction";
 
 type Props = {
   data: TotalTransactionByDay[] | undefined;

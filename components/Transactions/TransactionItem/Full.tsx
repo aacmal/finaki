@@ -1,26 +1,24 @@
 import { deleteTransaction, editTransaction } from "@/api/transaction";
-import Input from "@/dls/Form/Input";
+import { walletLabelColor } from "@/components/WalletCard/constants";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 import TextArea from "@/dls/Form/TextArea";
+import IconWrapper from "@/dls/IconWrapper";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
+import ArrowIcon from "@/icons/ArrowIcon";
 import { QueryKey } from "@/types/QueryKey";
+import { Routes } from "@/types/Routes";
 import { Transaction } from "@/types/Transaction";
+import { WalletData } from "@/types/Wallet";
 import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import React, { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import TransactionOption from "../AllTransactions/TransactionOption";
-import { TransactionInput } from "@/api/types/TransactionAPI";
-import IconWrapper from "@/dls/IconWrapper";
-import ArrowIcon from "@/icons/ArrowIcon";
-import { toast } from "react-hot-toast";
-import { WalletData } from "@/types/Wallet";
 import Link from "next/link";
-import { Routes } from "@/types/Routes";
-import { walletLabelColor } from "@/components/WalletCard/constants";
-import CurrencyInput from "@/dls/Form/CurrencyInput";
+import { useState } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import useTransaction from "../../../stores/transactionStore";
+import TransactionOption from "../AllTransactions/TransactionOption";
 
 type Props = {
   transaction: Transaction;
@@ -33,20 +31,17 @@ type Props = {
  * @returns
  */
 const FullTransactionItem = ({ transaction }: Props) => {
-  const { setTransactionDetailState, dispatchUpdateTransaction, dispatchDeleteTransaction } =
-    useTransaction((state) => ({
-      setTransactionDetailState: state.setTransactionDetailState,
-      dispatchUpdateTransaction: state.dispatchUpdateTransaction,
-      dispatchDeleteTransaction: state.dispatchDeleteTransaction,
-    }));
-  const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
   const {
-    handleSubmit,
-    control,
-    register,
-    formState: { errors },
-    setError,
-  } = useForm();
+    setTransactionDetailState,
+    dispatchUpdateTransaction,
+    dispatchDeleteTransaction,
+  } = useTransaction((state) => ({
+    setTransactionDetailState: state.setTransactionDetailState,
+    dispatchUpdateTransaction: state.dispatchUpdateTransaction,
+    dispatchDeleteTransaction: state.dispatchDeleteTransaction,
+  }));
+  const [isOnEdit, setIsOnEdit] = useState<boolean>(false);
+  const { handleSubmit, control, register, setError } = useForm();
 
   const queryClient = useQueryClient();
 

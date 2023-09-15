@@ -3,15 +3,11 @@
 import IconButton from "@/dls/IconButton";
 import MoonIcon from "@/icons/MoonIcon";
 import SunIcon from "@/icons/SunIcon";
-import { Theme, ThemeState } from "@/types/Theme";
-import React, { useState } from "react";
+import { Theme } from "@/types/Theme";
 import useHydration from "../../hooks/useHydration";
 import useTheme from "../../hooks/useTheme";
-import useStore from "../../stores/store";
 
-type Props = {};
-
-const ThemeToggleIcon = (props: Props) => {
+const ThemeToggleIcon = () => {
   const { colorTheme, setColorTheme } = useTheme();
   const hydrated = useHydration();
 

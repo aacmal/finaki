@@ -1,17 +1,14 @@
+/* eslint-disable no-unused-vars */
 "use client";
-import {
-  DropdownCheckboxItem,
-  DropdownItem,
-} from "@/dls/Dropdown/DropdownItem";
+import { DropdownItem } from "@/dls/Dropdown/DropdownItem";
 import DropdownMenu from "@/dls/Dropdown/DropdownMenu";
 import DropdownSubMenu from "@/dls/Dropdown/DropdownSubMenu";
 import IconWrapper from "@/dls/IconWrapper";
 import ChevronIcon from "@/icons/ChevronIcon";
 import ElipsisVerticalIcon from "@/icons/ElipsisVerticalIcon";
-import PencilIcon from "@/icons/PencilIcon";
-import { IoIosColorPalette } from "react-icons/io";
 import TrashIcon from "@/icons/TrashIcon";
 import { useRef } from "react";
+import { IoIosColorPalette } from "react-icons/io";
 import useStore from "../../stores/store";
 import { hashCodeColor, indicatorColor, WalletColor } from "./constants";
 

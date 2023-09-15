@@ -1,30 +1,27 @@
+import { transferBalance } from "@/api/wallet";
+import LoadingButton from "@/dls/Button/LoadingButton";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
+import InputWithLabel from "@/dls/Form/InputWithLabel";
+import TextArea from "@/dls/Form/TextArea";
 import Heading from "@/dls/Heading";
 import IconButton from "@/dls/IconButton";
+import IconWrapper from "@/dls/IconWrapper";
 import { Modal, ModalContent } from "@/dls/Modal";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
+import ArrowIcon from "@/icons/ArrowIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
-import { Controller, useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
 import { QueryKey } from "@/types/QueryKey";
 import { WalletData } from "@/types/Wallet";
-import classNames from "classnames";
-import { indicatorColor } from "./constants";
-import IconWrapper from "@/dls/IconWrapper";
-import ArrowIcon from "@/icons/ArrowIcon";
-import LoadingButton from "@/dls/Button/LoadingButton";
-import InputWithLabel from "@/dls/Form/InputWithLabel";
-import { toast } from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
-import { transferBalance } from "@/api/wallet";
-import useStore from "../../stores/store";
-import CurrencyInput from "@/dls/Form/CurrencyInput";
 import { removeCurrencyFormat } from "@/utils/currencyFormat";
-import TextArea from "@/dls/Form/TextArea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import useStore from "../../stores/store";
+import { indicatorColor } from "./constants";
 
-type Props = {};
-
-const TransferBalanceDialog = ({}: Props) => {
+const TransferBalanceDialog = () => {
   const { sourceWalletId, destinationWalletId, isOpen, setOpen } = useStore(
     (state) => state.transferBalanceState
   );

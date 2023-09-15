@@ -2,18 +2,15 @@
 
 import Divider from "@/dls/Divider";
 import Heading from "@/dls/Heading";
-import { useSelectedLayoutSegment } from "next/navigation";
-import { useState } from "react";
-import ProfileInfo from "./ProfileInfo";
-import { LayoutSegment } from "@/types/LayoutSegment";
-import useStore from "../../stores/store";
 import PlusIcon from "@/icons/PlusIcon";
+import { LayoutSegment } from "@/types/LayoutSegment";
+import { useSelectedLayoutSegment } from "next/navigation";
+import useStore from "../../stores/store";
+import ProfileInfo from "./ProfileInfo";
 
-type Props = {};
-
-const Header = (props: Props) => {
+const Header = () => {
   const selectedLayout = useSelectedLayoutSegment();
-  const { setOpen, isOpen } = useStore((state) => state.addTransactionState);
+  const { setOpen } = useStore((state) => state.addTransactionState);
 
   const getHeaderTitle = (selectedLayout: string | null) => {
     switch (selectedLayout) {

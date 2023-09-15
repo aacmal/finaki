@@ -13,12 +13,10 @@ import { loginUser } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-type Props = {};
-
-const LoginComponent = (props: Props) => {
+const LoginComponent = () => {
   const router = useRouter();
 
   const {
@@ -28,7 +26,7 @@ const LoginComponent = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+  const { mutate, isLoading, isSuccess, data } = useMutation({
     mutationFn: loginUser,
     onError: (error) => {
       console.log((error as any).response.data.errors);

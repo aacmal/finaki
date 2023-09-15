@@ -2,11 +2,8 @@ import Heading from "@/dls/Heading";
 import { Routes } from "@/types/Routes";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
-type Props = {};
-
-const NotFound = (props: Props) => {
+const NotFound = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <Image

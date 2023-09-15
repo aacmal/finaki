@@ -2,6 +2,7 @@ import React from "react";
 
 type Props = {
   children: React.ReactNode;
+  // eslint-disable-next-line no-unused-vars
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   className?: string;
 };

@@ -5,9 +5,7 @@ export const metadata = {
   description: "Dashboard",
 };
 
-type Props = {};
-
-const Page = (props: Props) => {
+const Page = () => {
   return <DashboardComponent />;
 };
 

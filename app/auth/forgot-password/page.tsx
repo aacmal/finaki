@@ -7,14 +7,12 @@ import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import { useMutation } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { BsCheckCircle } from "react-icons/bs";
 
-type Props = {};
-
-const ForgotPasswordPage = (props: Props) => {
+const ForgotPasswordPage = () => {
   const {
     register,
     handleSubmit,
@@ -28,7 +26,7 @@ const ForgotPasswordPage = (props: Props) => {
     },
     onError: (error) => {
       const errors = (error as any).response.data.errors as [];
-      console.log(errors)
+      console.log(errors);
       errors.forEach(({ msg, param }: any) => {
         setError(param, { message: msg }, { shouldFocus: true });
       });
@@ -70,7 +68,11 @@ const ForgotPasswordPage = (props: Props) => {
             <p className="text-center block w-full">
               Masukan email akun anda untuk mendapatkan link reset password
             </p>
-            {errors.root && <p className="text-center text-red-500 font-medium">{errors.root.message}</p>}
+            {errors.root && (
+              <p className="text-center text-red-500 font-medium">
+                {errors.root.message}
+              </p>
+            )}
             <InputWithLabel
               label="Email"
               placeholder="Masukan Email akun anda"

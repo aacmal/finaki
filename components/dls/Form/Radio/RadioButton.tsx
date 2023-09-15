@@ -1,7 +1,6 @@
 import IconWrapper from "@/dls/IconWrapper";
 import classNames from "classnames";
 import { forwardRef, InputHTMLAttributes, Ref } from "react";
-import style from "./RadioButton.module.scss";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -15,7 +14,7 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 // eslint-disable-next-line react/display-name
 const RadioButton = forwardRef(
   (
-    { id, label, className, icon, checked, ...props }: Props,
+    { id, label, className, icon, ...props }: Props,
     ref: Ref<HTMLInputElement>
   ) => {
     return (

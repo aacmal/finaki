@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
-import { Pie, Tooltip, PieChart as PiChart, Cell, Legend } from "recharts";
+import { Cell, Legend, Pie, PieChart as PiChart, Tooltip } from "recharts";
+import { ChartLoading } from "../ChartPlaceholder";
 import ChartWrapper from "../ChartWrapper";
+import { PIE_CHART } from "../constant";
 import renderPieLabel from "./PieLabel";
 import renderPieTooltip from "./PieTooltip";
-import { PIE_CHART } from "../constant";
-import { ChartError, ChartLoading } from "../ChartPlaceholder";
 
 export type PieChartData = {
   name: string;

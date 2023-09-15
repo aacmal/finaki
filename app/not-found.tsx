@@ -2,16 +2,13 @@ import Heading from "@/dls/Heading";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-
-type Props = {};
 
 export const metadata: Metadata = {
   title: "Not Found",
   description: "Halaman tidak ditemukan",
 };
 
-const NotFound = (props: Props) => {
+const NotFound = () => {
   return (
     <div className="w-full flex flex-col items-center h-screen justify-center">
       <Image

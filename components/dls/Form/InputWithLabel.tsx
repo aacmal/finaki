@@ -2,11 +2,8 @@
 
 import EyeIcon from "@/icons/EyeIcon";
 import classNames from "classnames";
-import { useState } from "react";
+import { forwardRef, useState } from "react";
 import IconWrapper from "../IconWrapper";
-import { forwardRef } from "react";
-
-import styles from "./InputWithLabel.module.scss";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   type: "text" | "number" | "password" | "email";

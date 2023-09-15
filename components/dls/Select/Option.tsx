@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useContext, useEffect, use } from "react";
+import React, { useContext, useEffect } from "react";
 import { SelectContext, SelectContextType } from "./Select";
 
 type Props = {

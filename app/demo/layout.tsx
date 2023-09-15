@@ -1,17 +1,17 @@
 "use client";
 
+import { getUserData } from "@/api/user";
 import Container from "@/components/Container/Container";
 import Header from "@/components/Header/Header";
-import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
+import DemoNav from "@/components/Navigation/AppNav/DemoNav";
+import AddTransaction from "@/components/Transactions/AddTransaction";
 import TransactionDetail from "@/components/Transactions/TransactionDetail";
 import DeleteWalletDialog from "@/components/WalletCard/DeleteWalletDialog";
-import AddTransaction from "@/components/Transactions/AddTransaction";
-import DemoNav from "@/components/Navigation/AppNav/DemoNav";
-import Link from "next/link";
+import TransferBalanceDialog from "@/components/WalletCard/TransferBalanceDialog";
+import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { QueryKey } from "@/types/QueryKey";
-import { getUserData } from "@/api/user";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -38,6 +38,7 @@ const AppLayout = ({ children }: Props) => {
       queryClient.removeQueries();
       document.title = "Finaki";
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

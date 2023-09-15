@@ -1,8 +1,8 @@
-import { Theme, ThemeState } from "@/types/Theme";
-import { useEffect, useState } from "react";
+import { Theme } from "@/types/Theme";
+import { useEffect } from "react";
 import useStore from "../stores/store";
 
-export default function useTheme(theme?: ThemeState) {
+export default function useTheme() {
   const { colorTheme, setColorTheme } = useStore((state) => ({
     colorTheme: state.colorTheme,
     setColorTheme: state.setColorTheme,

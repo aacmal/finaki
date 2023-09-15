@@ -1,8 +1,4 @@
-import React from "react";
-
-type Props = {};
-
-const TransactionHeader = (props: Props) => {
+const TransactionHeader = () => {
   return (
     <thead>
       <tr className="!mb-5 px-4 py-3 border-b border-gray-400 text-slate-800 dark:text-slate-300">

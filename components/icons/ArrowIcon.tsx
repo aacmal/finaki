@@ -1,11 +1,5 @@
-import {
-  ArrowIconProps,
-  defaultIconProps,
-  defaultOutlineIconProps,
-  IconProps,
-} from "@/types/IconProps";
+import { ArrowIconProps, defaultOutlineIconProps } from "@/types/IconProps";
 import classNames from "classnames";
-import React from "react";
 
 const ArrowIcon = ({ direction, className, ...props }: ArrowIconProps) => {
   return (

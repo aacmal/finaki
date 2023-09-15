@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { currencyFormat } from "@/utils/currencyFormat";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useState } from "react";
 import InputWithLabel from "./InputWithLabel";
 
 type Props = {

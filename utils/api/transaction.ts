@@ -1,4 +1,4 @@
-import { Transaction, TransactionByDate } from "@/types/Transaction";
+import { Transaction } from "@/types/Transaction";
 import { instance } from "./api";
 import { makeUrl } from "./config";
 import {

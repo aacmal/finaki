@@ -1,6 +1,6 @@
 import ExportTransactionModal from "@/components/Transactions/ExportTransactionModal";
 import Button from "@/dls/Button/Button";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const ExportPDF = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

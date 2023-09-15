@@ -1,13 +1,10 @@
 import IconWrapper from "@/dls/IconWrapper";
 import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
 import ChevronIcon from "@/icons/ChevronIcon";
-import React from "react";
 import useStore from "../../../stores/store";
 import Action from "./Action";
 
-type Props = {};
-
-const ProfileInfo = (props: Props) => {
+const ProfileInfo = () => {
   const { user } = useStore((state) => ({ user: state.user }));
 
   if (!user) return <LoadingSpinner />;

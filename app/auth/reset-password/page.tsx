@@ -12,14 +12,12 @@ import { Routes } from "@/types/Routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { BsCheckCircle } from "react-icons/bs";
 
-type Props = {};
-
-const ResetPasswordPage = (props: Props) => {
+const ResetPasswordPage = () => {
   const router = useRouter();
 
   const {
@@ -27,7 +25,6 @@ const ResetPasswordPage = (props: Props) => {
     handleSubmit,
     formState: { errors },
     setError,
-    getValues,
   } = useForm();
 
   const verifyToken = useQuery({

@@ -1,9 +1,9 @@
 export interface GenericResponse {
   message: string;
-  data: any;
+  data: object | null;
 }
 
 export interface GenericRequest {
-  param: any;
-  query?: any;
+  param: object;
+  query?: object;
 }

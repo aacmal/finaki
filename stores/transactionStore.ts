@@ -22,7 +22,7 @@ interface TransactionStore {
   pushTransactions: (transactions: Transaction[]) => void;
 }
 
-const useTransaction = create<TransactionStore>((set, get) => ({
+const useTransaction = create<TransactionStore>((set) => ({
   transactionDetailState: {
     isOpen: false,
   },

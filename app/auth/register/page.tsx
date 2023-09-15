@@ -5,8 +5,7 @@ export const metadata = {
   description: "Register to your Finaki account",
 };
 
-type Props = {};
-const RegisterPage = (props: Props) => {
+const RegisterPage = () => {
   return <RegisterComponent />;
 };
 

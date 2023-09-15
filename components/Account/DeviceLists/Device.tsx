@@ -4,7 +4,6 @@ import DesktopIcon from "@/icons/DesktopIcon";
 import PhoneIcon from "@/icons/PhoneIcon";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import React from "react";
 import { toast } from "react-hot-toast";
 import parser from "ua-parser-js";
 
@@ -32,9 +31,9 @@ const Device = ({
     year: "numeric",
   });
 
-  const { isLoading, isError, mutate } = useMutation({
+  const { isLoading, mutate } = useMutation({
     mutationFn: logoutDevices,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.setQueryData(["devices"], (oldData: any) => {
         return oldData.filter((device: any) => device._id !== _id);
       });

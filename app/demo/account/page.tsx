@@ -1,15 +1,12 @@
 "use client";
 
-import React from "react";
+import ContentWrapper from "@/components/Container/ContentWrapper";
 import ThemeSelection from "@/components/ThemeSelection/ThemeSelection";
 import Heading from "@/dls/Heading";
-import ContentWrapper from "@/components/Container/ContentWrapper";
-import Link from "next/link";
 import { Routes } from "@/types/Routes";
+import Link from "next/link";
 
-type Props = {};
-
-const Page = (props: Props) => {
+const Page = () => {
   return (
     <div className="space-y-10 mt-6">
       <div>

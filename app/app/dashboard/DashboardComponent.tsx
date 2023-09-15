@@ -1,21 +1,18 @@
 "use client";
 
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import {
   getAllTransactions,
   getTotalTransactionByPeriod,
 } from "@/api/transaction";
-import { QueryKey } from "@/types/QueryKey";
+import { getAllWallets } from "@/api/wallet";
+import Ratio from "@/components/Dashboard/Ratio";
+import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
 import TransactionActivity from "@/components/Dashboard/TransactionActivity";
 import WalletPercentage from "@/components/Dashboard/WalletPercentage";
-import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
-import Ratio from "@/components/Dashboard/Ratio";
-import { getAllWallets } from "@/api/wallet";
+import { QueryKey } from "@/types/QueryKey";
+import { useQuery } from "@tanstack/react-query";
 
-type Props = {};
-
-const DashboardComponent = (props: Props) => {
+const DashboardComponent = () => {
   const totalTransactionQuery = useQuery({
     queryKey: [QueryKey.TOTAL_TRANSACTIONS],
     queryFn: () => getTotalTransactionByPeriod("week"),
@@ -30,7 +27,7 @@ const DashboardComponent = (props: Props) => {
       getAllTransactions({
         limit: 4,
       }),
-    onSuccess: (data) => {},
+    onSuccess: () => {},
     onError: (error) => {
       console.log(error);
     },

@@ -1,23 +1,15 @@
 "use client";
 
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import {
-  getAllTransactions,
-  getTotalTransactionByPeriod,
-} from "@/api/transaction";
-import { QueryKey } from "@/types/QueryKey";
-import { WalletData } from "@/types/Wallet";
+import Ratio from "@/components/Dashboard/Ratio";
+import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
 import TransactionActivity from "@/components/Dashboard/TransactionActivity";
 import WalletPercentage from "@/components/Dashboard/WalletPercentage";
-import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
-import Ratio from "@/components/Dashboard/Ratio";
-import { getAllWallets } from "@/api/wallet";
+import { QueryKey } from "@/types/QueryKey";
 import { TotalTransactionByDay, Transaction } from "@/types/Transaction";
+import { WalletData } from "@/types/Wallet";
+import { useQuery } from "@tanstack/react-query";
 
-type Props = {};
-
-const Page = (props: Props) => {
+const Page = () => {
   const totalTransactionQuery = useQuery({
     queryKey: [QueryKey.TOTAL_TRANSACTIONS],
     queryFn: (): Promise<TotalTransactionByDay[]> =>

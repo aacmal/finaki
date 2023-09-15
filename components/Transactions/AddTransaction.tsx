@@ -1,32 +1,30 @@
+import { insertNewTransaction } from "@/api/transaction";
+import { TransactionInput } from "@/api/types/TransactionAPI";
+import { getAllWallets } from "@/api/wallet";
 import LoadingButton from "@/dls/Button/LoadingButton";
+import CurrencyInput from "@/dls/Form/CurrencyInput";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import RadioButton from "@/dls/Form/Radio/RadioButton";
+import TextArea from "@/dls/Form/TextArea";
 import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
 import { Modal, ModalContent } from "@/dls/Modal";
+import Option from "@/dls/Select/Option";
+import Select from "@/dls/Select/Select";
 import ArrowIcon from "@/icons/ArrowIcon";
 import XmarkIcon from "@/icons/XmarkIcon";
-import { insertNewTransaction } from "@/api/transaction";
+import { QueryKey } from "@/types/QueryKey";
+import { WalletData } from "@/types/Wallet";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import { Controller, useForm } from "react-hook-form";
-import { TransactionInput } from "@/api/types/TransactionAPI";
-import { QueryKey } from "@/types/QueryKey";
-import { getAllWallets } from "@/api/wallet";
-import Select from "@/dls/Select/Select";
-import Option from "@/dls/Select/Option";
-import { indicatorColor, WalletColor } from "../WalletCard/constants";
-import { removeCurrencyFormat } from "@/utils/currencyFormat";
-import CurrencyInput from "@/dls/Form/CurrencyInput";
-import TextArea from "@/dls/Form/TextArea";
-import useStore from "../../stores/store";
-import { WalletData } from "@/types/Wallet";
-import useTransaction from "../../stores/transactionStore";
 import { useMemo } from "react";
+import { Controller, useForm } from "react-hook-form";
+import useStore from "../../stores/store";
+import useTransaction from "../../stores/transactionStore";
+import { indicatorColor } from "../WalletCard/constants";
 
-type Props = {};
-
-const AddTransaction = (props: Props) => {
+const AddTransaction = () => {
   const { dispatchAddTransaction } = useTransaction((state) => ({
     dispatchAddTransaction: state.dispatchAddTransaction,
   }));
@@ -48,9 +46,6 @@ const AddTransaction = (props: Props) => {
   const walletQuery = useQuery({
     queryKey: [QueryKey.WALLETS],
     queryFn: getAllWallets,
-    onSuccess: (data) => {
-      // console.log(data);
-    },
   });
 
   const { isLoading, mutate, isSuccess, isError } = useMutation({

@@ -8,16 +8,16 @@ interface Store {
   colorTheme: ThemeState;
   accessToken: string | null;
   deleteWalletId: string | null;
-  transactionDetailState:{
+  transactionDetailState: {
     transactionId: string | null;
     setTransactionId: (id: string | null) => void;
-  },
+  };
   addTransactionState: {
     walletId: string | null;
     setWalletId: (id: string | null) => void;
     isOpen: boolean;
     setOpen: (isOpen: boolean) => void;
-  },
+  };
   transferBalanceState: {
     sourceWalletId: string | null;
     setSourceWalletId: (id: string | null) => void;
@@ -25,7 +25,7 @@ interface Store {
     setDestinationWalletId: (id: string | null) => void;
     isOpen: boolean;
     setOpen: (isOpen: boolean) => void;
-  },
+  };
   setDeleteWalletId: (id: string | null) => void;
   setToken: (token: string) => void;
   setUser: (user: User | null) => void;
@@ -41,21 +41,52 @@ const useStore = create<Store>()(
       deleteWalletId: null,
       transactionDetailState: {
         transactionId: null,
-        setTransactionId: (id: string | null) => set({ transactionDetailState: { ...get().transactionDetailState, transactionId: id } }),
+        setTransactionId: (id: string | null) =>
+          set({
+            transactionDetailState: {
+              ...get().transactionDetailState,
+              transactionId: id,
+            },
+          }),
       },
       addTransactionState: {
         walletId: null,
-        setWalletId: (id: string | null) => set({ addTransactionState: { ...get().addTransactionState, walletId: id } }),
+        setWalletId: (id: string | null) =>
+          set({
+            addTransactionState: { ...get().addTransactionState, walletId: id },
+          }),
         isOpen: false,
-        setOpen: (isOpen: boolean) => set({ addTransactionState: { ...get().addTransactionState, isOpen: isOpen, walletId: isOpen ? get().addTransactionState.walletId : null } }),
+        setOpen: (isOpen: boolean) =>
+          set({
+            addTransactionState: {
+              ...get().addTransactionState,
+              isOpen: isOpen,
+              walletId: isOpen ? get().addTransactionState.walletId : null,
+            },
+          }),
       },
       transferBalanceState: {
         sourceWalletId: null,
-        setSourceWalletId: (id: string | null) => set({ transferBalanceState: { ...get().transferBalanceState, sourceWalletId: id } }),
+        setSourceWalletId: (id: string | null) =>
+          set({
+            transferBalanceState: {
+              ...get().transferBalanceState,
+              sourceWalletId: id,
+            },
+          }),
         destinationWalletId: null,
-        setDestinationWalletId: (id: string | null) => set({ transferBalanceState: { ...get().transferBalanceState, destinationWalletId: id } }),
+        setDestinationWalletId: (id: string | null) =>
+          set({
+            transferBalanceState: {
+              ...get().transferBalanceState,
+              destinationWalletId: id,
+            },
+          }),
         isOpen: false,
-        setOpen: (isOpen: boolean) => set({ transferBalanceState: { ...get().transferBalanceState, isOpen } }),
+        setOpen: (isOpen: boolean) =>
+          set({
+            transferBalanceState: { ...get().transferBalanceState, isOpen },
+          }),
       },
       setDeleteWalletId: (id: string | null) => set({ deleteWalletId: id }),
       setToken: (token: string) => set({ accessToken: token }),

@@ -6,9 +6,7 @@ export const metadata = {
   robots: "noindex, nofollow",
 };
 
-type Props = {};
-
-const WalletDetailPage = (props: Props) => {
+const WalletDetailPage = () => {
   return <WalletById />;
 };
 

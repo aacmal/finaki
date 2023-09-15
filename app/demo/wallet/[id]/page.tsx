@@ -1,8 +1,6 @@
 "use client";
 
-import AreaChart from "@/components/Charts/AreaChart/AreaChart";
 import { indicatorColor, WalletColor } from "@/components/WalletCard/constants";
-import { ColorCircle } from "@/components/WalletCard/WalletCardDropdown";
 import WalletOption from "@/components/WalletCard/WalletOption";
 import WalletTransaction from "@/components/WalletCard/WalletTransaction";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
@@ -16,11 +14,7 @@ import PencilIcon from "@/icons/PencilIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { Transaction } from "@/types/Transaction";
 import { WalletData } from "@/types/Wallet";
-import {
-  getOneWallet,
-  getWalletTransactions,
-  updateWallet,
-} from "@/utils/api/wallet";
+import { updateWallet } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
@@ -29,9 +23,7 @@ import { useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-type Props = {};
-
-const WalletDetailPage = (props: Props) => {
+const WalletDetailPage = () => {
   const urlPath = usePathname();
   const router = useRouter();
   const id = urlPath!.split("/")[3];
@@ -39,7 +31,7 @@ const WalletDetailPage = (props: Props) => {
   const customColorRef = useRef<HTMLInputElement | null>(null);
 
   const { register, handleSubmit, control, watch } = useForm();
-  
+
   const { ref, ...rest } = register("color");
 
   const [edit, setEdit] = useState<boolean>(false);
@@ -47,12 +39,12 @@ const WalletDetailPage = (props: Props) => {
   const walletDataQuery = useQuery({
     queryKey: [QueryKey.WALLETS, id],
     queryFn: (): Promise<WalletData> =>
-    new Promise((resolve) => {
-      import("@/data/dummy-data/wallet.json").then((data) => {
-        const wallet = data.data.find((wallet) => wallet._id === id);
-        resolve(wallet as WalletData);
-      });
-    }),
+      new Promise((resolve) => {
+        import("@/data/dummy-data/wallet.json").then((data) => {
+          const wallet = data.data.find((wallet) => wallet._id === id);
+          resolve(wallet as WalletData);
+        });
+      }),
     onError: (error) => {
       console.log(error);
     },
@@ -61,15 +53,15 @@ const WalletDetailPage = (props: Props) => {
   const walletTransactionsQuery = useQuery({
     queryKey: [QueryKey.WALLETS, id, QueryKey.TRANSACTIONS],
     queryFn: (): Promise<Transaction[]> =>
-    new Promise((resolve) => {
-      import("@/data/dummy-data/transaction.json").then((data) => {
-        const walletId = id;
-        const WalletTransaction = data.data.filter((transaction) => {
-          return transaction.walletId === walletId;
-        })
-        resolve(WalletTransaction as Transaction[]);
-      });
-    }),
+      new Promise((resolve) => {
+        import("@/data/dummy-data/transaction.json").then((data) => {
+          const walletId = id;
+          const WalletTransaction = data.data.filter((transaction) => {
+            return transaction.walletId === walletId;
+          });
+          resolve(WalletTransaction as Transaction[]);
+        });
+      }),
   });
 
   const updateWalletMutation = useMutation({
@@ -125,7 +117,6 @@ const WalletDetailPage = (props: Props) => {
 
   const walletColor = walletDataQuery.data.color;
 
-
   return (
     <div
       className={classNames(
@@ -137,8 +128,8 @@ const WalletDetailPage = (props: Props) => {
             ? watch("color")
             : indicatorColor[watch("color") as WalletColor]
           : walletColor.includes("#")
-            ? walletColor
-            : indicatorColor[walletColor as WalletColor],
+          ? walletColor
+          : indicatorColor[walletColor as WalletColor],
       }}
     >
       <div className="flex gap-3 items-center mb-5">

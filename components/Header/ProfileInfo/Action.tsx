@@ -7,20 +7,17 @@ import { Routes } from "@/types/Routes";
 import { logoutUser } from "@/utils/api/authApi";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { toast } from "react-hot-toast";
 import useStore from "../../../stores/store";
 
-type Props = {};
-
-const Action = (props: Props) => {
+const Action = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const setUser = useStore((state) => state.setUser);
 
   const handleLogout = () => {
     logoutUser()
-      .then((res) => {
+      .then(() => {
         toast.success("Logout berhasil");
       })
       .catch((err) => {

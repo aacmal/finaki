@@ -1,18 +1,16 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { QueryKey } from "@/types/QueryKey";
 import TransactionHeader from "@/components/Transactions/AllTransactions/TransactionHeader";
 import TransactionList from "@/components/Transactions/AllTransactions/TransactionList";
 import Heading from "@/dls/Heading";
-import { groupByDay } from "@/utils/array";
-import Head from "next/head";
+import { QueryKey } from "@/types/QueryKey";
 import { Transaction } from "@/types/Transaction";
+import { groupByDay } from "@/utils/array";
+import { useQuery } from "@tanstack/react-query";
+import Head from "next/head";
 
-type Props = {};
-
-const TransactionsPage = (props: Props) => {
-  const { data, error, isLoading } = useQuery({
+const TransactionsPage = () => {
+  const { data, isLoading } = useQuery({
     queryKey: [QueryKey.TRANSACTIONS],
     queryFn: (): Promise<Transaction[]> =>
       new Promise((resolve) => {

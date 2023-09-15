@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { forwardRef, LegacyRef, Ref } from "react";
+import React, { forwardRef, LegacyRef } from "react";
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   transparent?: boolean;
@@ -17,7 +17,6 @@ interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
 const TextArea = forwardRef(
   (
     {
-      transparent,
       className,
       id,
       error,

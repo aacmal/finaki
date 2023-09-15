@@ -1,9 +1,4 @@
-import {
-  defaultIconProps,
-  defaultOutlineIconProps,
-  IconProps,
-} from "@/types/IconProps";
-import React from "react";
+import { defaultOutlineIconProps, IconProps } from "@/types/IconProps";
 
 const ChevronIcon = (props: IconProps) => {
   return (

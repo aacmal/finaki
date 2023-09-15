@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import jwtDecode, { JwtPayload } from "jwt-decode";
 import { refreshAccessToken } from "./authApi";
 import { BASE_URL } from "./config";
 
@@ -19,9 +19,9 @@ instance.interceptors.request.use(
       window?.localStorage.setItem("access-token", refreshToken.accessToken);
       currentToken = refreshToken.accessToken;
     } else {
-      const decodedToken = jwtDecode(currentToken);
+      const decodedToken = jwtDecode(currentToken) as JwtPayload;
       const currentTime = new Date().getTime();
-      if ((decodedToken as any).exp * 1000 < currentTime) {
+      if (!!decodedToken.exp && decodedToken.exp * 1000 < currentTime) {
         const refreshToken = await refreshAccessToken();
         window?.localStorage.setItem("access-token", refreshToken.accessToken);
         currentToken = refreshToken.accessToken;

@@ -1,6 +1,5 @@
 "use client";
 
-import AreaChart from "@/components/Charts/AreaChart/AreaChart";
 import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
 import { indicatorColor, WalletColor } from "@/components/WalletCard/constants";
 import WalletOption from "@/components/WalletCard/WalletOption";
@@ -27,9 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-type Props = {};
-
-const WalletById = (props: Props) => {
+const WalletById = () => {
   const urlPath = usePathname();
   const router = useRouter();
   const id = urlPath!.split("/")[3];

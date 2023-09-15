@@ -1,11 +1,11 @@
-import React, { ComponentProps } from "react";
+import WalletCard from "@/components/WalletCard/WalletCard";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import WalletCard from "@/components/WalletCard/WalletCard";
-import { RxDragHandleDots2 } from "react-icons/rx";
 import classNames from "classnames";
+import React, { ComponentProps } from "react";
+import { RxDragHandleDots2 } from "react-icons/rx";
 
-type Props = {} & ComponentProps<typeof WalletCard>;
+type Props = ComponentProps<typeof WalletCard>;
 
 export const SortableWalletCard = ({ ...props }: Props) => {
   const {

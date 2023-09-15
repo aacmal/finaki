@@ -2,45 +2,37 @@
 
 import Placeholder from "@/components/Placeholder";
 import AddNewWallet from "@/components/WalletCard/AddNewWallet";
-import WalletCard from "@/components/WalletCard/WalletCard";
 import WalletCardSkeleton from "@/components/WalletCard/WalletCardSkeleton";
 import Heading from "@/dls/Heading";
 import { QueryKey } from "@/types/QueryKey";
 import { getAllWallets, reoderWallets } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import {
-  DndContext,
   closestCenter,
+  DndContext,
+  DragEndEvent,
   MouseSensor,
   TouchSensor,
-  DragOverlay,
   useSensor,
   useSensors,
-  DragEndEvent,
 } from "@dnd-kit/core";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 import {
   arrayMove,
-  SortableContext,
   rectSortingStrategy,
+  SortableContext,
 } from "@dnd-kit/sortable";
-import { SortableWalletCard } from "./SortableItem";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { SortableWalletCard } from "./SortableItem";
 
-type Props = {};
-
-const MyWallets = (props: Props) => {
+const MyWallets = () => {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const [items, setItems] = useState<any[]>([]);
 
-  const {
-    data: wallets,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data: wallets, isLoading } = useQuery({
     queryKey: [QueryKey.WALLETS],
     queryFn: getAllWallets,
   });

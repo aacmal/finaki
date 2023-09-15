@@ -1,11 +1,10 @@
+/* eslint-disable no-unused-vars */
 "use client";
 
 import ChevronIcon from "@/icons/ChevronIcon";
-import IconWrapper from "../IconWrapper";
-import { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { createContext, forwardRef } from "react";
-import { useForm } from "react-hook-form";
+import { createContext, forwardRef, useEffect, useState } from "react";
+import IconWrapper from "../IconWrapper";
 import Option from "./Option";
 
 interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {

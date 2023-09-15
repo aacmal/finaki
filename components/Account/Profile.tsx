@@ -1,7 +1,6 @@
 import Heading from "@/dls/Heading";
 import IconWrapper from "@/dls/IconWrapper";
 import ClipboardIcon from "@/icons/ClipboardIcon";
-import React from "react";
 import { toast } from "react-hot-toast";
 import useStore from "../../stores/store";
 import ContentWrapper from "../Container/ContentWrapper";
@@ -14,7 +13,7 @@ const Profile = (props: Props) => {
   const { user } = useStore((state) => ({ user: state.user }));
 
   const copyTokenToClipboard = () => {
-    navigator.clipboard.writeText(user?.token!);
+    navigator.clipboard.writeText(user?.token || "");
     toast.success("Token berhasil disalin");
   };
 

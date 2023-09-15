@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // group by day using timestamp
 
 import { Transaction } from "@/types/Transaction";

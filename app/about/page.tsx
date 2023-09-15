@@ -1,13 +1,10 @@
 import Heading from "@/dls/Heading";
-import React from "react";
-
-type Props = {};
 
 export const metadata = {
   title: "About",
   description: "About Finaki project",
 };
-const AboutPage = (props: Props) => {
+const AboutPage = () => {
   return (
     <div className="mt-32 lg:pt-16 2xl:px-32 px-1 md:px-4 overflow-x-hidden mx-auto max-w-screen-lg space-y-10 dark:text-slate-300">
       <section>

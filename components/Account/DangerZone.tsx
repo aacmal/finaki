@@ -1,15 +1,10 @@
 import { detachTelegramAccount } from "@/api/user";
 import LoadingButton from "@/dls/Button/LoadingButton";
-import { QueryKey } from "@/types/QueryKey";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import useStore from "../../stores/store";
 
-type Props = {};
-
-const DangerZone = (props: Props) => {
-  const queryClient = useQueryClient();
+const DangerZone = () => {
   const { user, setUser } = useStore((state) => ({
     user: state.user,
     setUser: state.setUser,

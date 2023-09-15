@@ -2,7 +2,7 @@
 
 import { Transaction } from "@/types/Transaction";
 import classNames from "classnames";
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import { FullTransactionItem } from "../TransactionItem";
 
 type Props = {
@@ -32,14 +32,12 @@ const TransactionList = ({ data }: Props) => {
                 ></div>
               </td>
             </tr>
-            {transactionData.data?.map(
-              (transaction: Transaction, index: number) => (
-                <FullTransactionItem
-                  key={transaction._id}
-                  transaction={transaction}
-                />
-              )
-            )}
+            {transactionData.data?.map((transaction: Transaction) => (
+              <FullTransactionItem
+                key={transaction._id}
+                transaction={transaction}
+              />
+            ))}
           </Fragment>
         );
       })}

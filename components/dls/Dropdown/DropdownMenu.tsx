@@ -4,6 +4,7 @@ interface Props {
   trigger: React.ReactNode;
   children: React.ReactNode;
   align?: "start" | "center" | "end";
+  // eslint-disable-next-line no-unused-vars
   onOpenChange?: (open: boolean) => void;
   sideOffset?: number;
   alignOffset?: number;

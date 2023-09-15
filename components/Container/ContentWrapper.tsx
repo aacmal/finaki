@@ -1,4 +1,3 @@
-import Heading from "@/dls/Heading";
 import classNames from "classnames";
 import React from "react";
 

@@ -1,6 +1,5 @@
 import Heading from "@/dls/Heading";
 import { Transaction } from "@/types/Transaction";
-import React from "react";
 import { SimpleTransactionItem } from "../Transactions/TransactionItem";
 
 type Props = {
@@ -41,7 +40,7 @@ const WalletTransaction = (props: Props) => {
             return (
               <SimpleTransactionItem
                 key={transaction._id}
-                isLastItem={index === props.transactions?.length! - 1}
+                isLastItem={index === props.transactions!.length - 1}
                 transaction={transaction}
                 theme="light"
               />

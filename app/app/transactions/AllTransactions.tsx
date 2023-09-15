@@ -1,32 +1,28 @@
 "use client";
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getAllTransactions } from "@/api/transaction";
-import { QueryKey } from "@/types/QueryKey";
 import TransactionHeader from "@/components/Transactions/AllTransactions/TransactionHeader";
 import TransactionList from "@/components/Transactions/AllTransactions/TransactionList";
+import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
+import Input from "@/dls/Form/Input";
 import Heading from "@/dls/Heading";
-import { useEffect, useMemo, useState } from "react";
+import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
+import { QueryKey } from "@/types/QueryKey";
 import { groupByDay } from "@/utils/array";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import classNames from "classnames";
 import Head from "next/head";
 import Image from "next/image";
-import { useInView } from "react-intersection-observer";
-import LoadingSpinner from "@/dls/Loading/LoadingSpinner";
-import classNames from "classnames";
-import { shallow } from "zustand/shallow";
-import useTransaction from "../../../stores/transactionStore";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
-import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
-import Button from "@/dls/Button/Button";
-import Input from "@/dls/Form/Input";
-import InputWithLabel from "@/dls/Form/InputWithLabel";
-import ExportPDF from "./ExportPDF";
+import { useInView } from "react-intersection-observer";
+import { shallow } from "zustand/shallow";
 import { useDebounce } from "../../../hooks/useDebounce";
-
-type Props = {};
+import useTransaction from "../../../stores/transactionStore";
+import ExportPDF from "./ExportPDF";
 
 const LIMIT = 20;
-const AllTransactions = (props: Props) => {
+const AllTransactions = () => {
   const { setTransactions, transactions } = useTransaction(
     (state) => ({
       transactions: state.transactions,
@@ -56,7 +52,7 @@ const AllTransactions = (props: Props) => {
       const transactions = data.pages.flatMap((page) => page.transactions);
       setTransactions(transactions);
     },
-    onError: (error) => {
+    onError: () => {
       toast.error("Terjadi kesalahan");
     },
     getNextPageParam: (lastPage) => {

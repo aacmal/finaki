@@ -1,9 +1,9 @@
 import CheckIcon from "@/icons/CheckIcon";
 import {
-  Item,
-  SubTrigger,
-  ItemIndicator,
   CheckboxItem,
+  Item,
+  ItemIndicator,
+  SubTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import classNames from "classnames";
 
@@ -27,7 +27,6 @@ interface SubTriggerProps extends React.ComponentProps<typeof SubTrigger> {
 
 const DropdownItem = ({
   children,
-  indicator,
   className,
   icon,
   shouldCloseAfterClick = false,

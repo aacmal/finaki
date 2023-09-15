@@ -1,18 +1,15 @@
 "use client";
 
 import Hamburger from "@/dls/Hamburger";
-import Heading from "@/dls/Heading";
 import { Routes } from "@/types/Routes";
 import classNames from "classnames";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import ThemeToggleIcon from "../../ThemeSelection/ThemeToggleIcon";
 import HomeNavLink from "./HomeNavLink";
 
-type Props = {};
-
-const HomeNav = (props: Props) => {
+const HomeNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const isInHomePage =

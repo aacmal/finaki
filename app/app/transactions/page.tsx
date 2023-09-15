@@ -5,8 +5,7 @@ export const metadata = {
   description: "Semua transaksi",
 };
 
-type Props = {};
-const TransactionsPage = (props: Props) => {
+const TransactionsPage = () => {
   return <AllTransactions />;
 };
 

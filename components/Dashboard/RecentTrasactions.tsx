@@ -1,17 +1,13 @@
-import React from "react";
-import DashboardContentWrapper from "./DashboardContentWrapper";
-import DashboardHeader from "./DashboardHeader";
+import { Routes } from "@/types/Routes";
+import { Transaction } from "@/types/Transaction";
+import Link from "next/link";
+import { ChartError } from "../Charts/ChartPlaceholder";
 import {
   SimpleTransactionItem,
   SimpleTSkeleton,
 } from "../Transactions/TransactionItem";
-import { useQuery } from "@tanstack/react-query";
-import { QueryKey } from "@/types/QueryKey";
-import { getAllTransactions } from "@/api/transaction";
-import { ChartError } from "../Charts/ChartPlaceholder";
-import Link from "next/link";
-import { Routes } from "@/types/Routes";
-import { Transaction } from "@/types/Transaction";
+import DashboardContentWrapper from "./DashboardContentWrapper";
+import DashboardHeader from "./DashboardHeader";
 
 type Props = {
   data: Transaction[] | undefined;

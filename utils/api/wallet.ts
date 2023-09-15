@@ -1,20 +1,19 @@
 import { instance } from "./api";
 import { makeUrl } from "./config";
 import {
-  UpdatedWalletResponse,
-  WalletInput,
   AllWalletResponse,
-  WalletDetailsResponse,
-  UpdatedWalletColorResponse,
   CreatedWalletResponse,
   DeleteWalletRequest,
-  WalletBalanceActivityResponse,
   TransferBalance,
+  UpdatedWalletColorResponse,
+  UpdatedWalletResponse,
   UpdateWalletRequest,
+  WalletDetailsResponse,
+  WalletInput,
 } from "./types/WalletAPI";
 
-import { TransactionsResponse } from "./types/TransactionAPI";
 import { Transaction } from "@/types/Transaction";
+import { TransactionsResponse } from "./types/TransactionAPI";
 
 export const createNewWallet = async (data: WalletInput) => {
   const response = await instance.post<CreatedWalletResponse>("/wallets", data);
@@ -47,7 +46,10 @@ export const getOneWallet = async (id: string) => {
   return response.data.data;
 };
 
-export const updateWalletColor = async ({ id, color }: any) => {
+export const updateWalletColor = async ({
+  id,
+  color,
+}: Record<string, string>) => {
   const response = await instance.patch<UpdatedWalletColorResponse>(
     `/wallets/${id}/color`,
     { color }

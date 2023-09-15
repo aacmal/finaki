@@ -1,24 +1,22 @@
 "use client";
 
+import { RegisterInput } from "@/api/types/AuthAPI";
 import AuthCard from "@/components/AuthCard/AuthCard";
 import AuthCardContent from "@/components/AuthCard/AuthCardContent";
+import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import { registerUser } from "@/utils/api/authApi";
+import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
-import LoadingButton from "@/dls/Button/LoadingButton";
-import { RegisterInput } from "@/api/types/AuthAPI";
 
-type Props = {};
-
-const RegisterComponent = (props: Props) => {
+const RegisterComponent = () => {
   const router = useRouter();
 
   const {
@@ -28,7 +26,7 @@ const RegisterComponent = (props: Props) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate, isLoading, error, isSuccess, data } = useMutation({
+  const { mutate, isLoading, isSuccess, data } = useMutation({
     mutationFn: registerUser,
     onError: (error) => {
       const errors = (error as any).response.data.errors;

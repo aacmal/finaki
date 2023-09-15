@@ -5,8 +5,7 @@ export const metadata = {
   description: "Akun Saya",
 };
 
-type Props = {};
-const Page = (props: Props) => {
+const Page = () => {
   return <MyAccount />;
 };
 

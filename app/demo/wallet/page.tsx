@@ -9,10 +9,8 @@ import { WalletData } from "@/types/Wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useQuery } from "@tanstack/react-query";
 
-type Props = {};
-
-const AllWalletsPage = (props: Props) => {
-  const { data, isLoading, error } = useQuery({
+const AllWalletsPage = () => {
+  const { data, isLoading } = useQuery({
     queryKey: [QueryKey.WALLETS],
     queryFn: (): Promise<WalletData[]> =>
       new Promise((resolve) => {

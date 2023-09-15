@@ -2,17 +2,15 @@
 
 import { usePathname } from "next/navigation";
 
-import GridIcon from "@/icons/GridIcon";
 import ArrowsIcon from "@/icons/ArrowsIcon";
+import GridIcon from "@/icons/GridIcon";
+import UserIcon from "@/icons/UserIcon";
 import WalletIcon from "@/icons/WalletIcon";
 import { defaultIconProps } from "@/types/IconProps";
 import { Routes } from "@/types/Routes";
 import AppNavLink from "./AppNavLink";
-import UserIcon from "@/icons/UserIcon";
 
-type Props = {};
-
-const DemoNav = (props: Props) => {
+const DemoNav = () => {
   const pathname = usePathname();
 
   return (
