@@ -16,6 +16,7 @@ type Props = {
   name: string;
   balance: number;
   link?: string;
+  isCredit: boolean;
   demoMode?: boolean;
 };
 
@@ -25,6 +26,7 @@ const WalletCard = ({
   initColorKey,
   name,
   balance,
+  isCredit,
   demoMode = false,
 }: Props) => {
   const [colorKey, setColorKey] = useState<string>(initColorKey);
@@ -91,8 +93,9 @@ const WalletCard = ({
       </div>
       <div className="flex justify-between">
         <div>
-          <div className="text-white">Saldo</div>
+          <div className="text-white">Saldo {isCredit && "minus"}</div>
           <div className="text-xl md:text-2xl font-semibold text-white">
+            {isCredit && "-"}
             {currencyFormat(balance)}
           </div>
         </div>

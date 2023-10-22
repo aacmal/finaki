@@ -11,7 +11,12 @@ const Checkbox = forwardRef(function Checkbox(
   ref: React.Ref<HTMLInputElement>
 ) {
   return (
-    <div className={classNames("flex items-center", className)}>
+    <div
+      className={classNames(
+        "flex items-center text-gray-900 dark:text-gray-300",
+        className
+      )}
+    >
       <input
         className="w-4 h-4 accent-blue-500"
         id={id}
@@ -19,10 +24,7 @@ const Checkbox = forwardRef(function Checkbox(
         {...props}
         ref={ref}
       />
-      <label
-        htmlFor={id}
-        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 select-none"
-      >
+      <label htmlFor={id} className="ml-2 text-sm font-medium select-none">
         {label}
       </label>
     </div>

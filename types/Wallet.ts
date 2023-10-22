@@ -3,6 +3,7 @@ export interface WalletData {
   name: string;
   balance: number;
   color: string;
+  isCredit: boolean;
   creadtedAt?: string;
   updatedAt?: Date;
 }

@@ -1,6 +1,7 @@
 "use cleint";
 
 import LoadingButton from "@/dls/Button/LoadingButton";
+import Checkbox from "@/dls/Form/Checkbox/Checkbox";
 import CurrencyInput from "@/dls/Form/CurrencyInput";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
@@ -9,12 +10,14 @@ import { Modal, ModalCloseTringger, ModalContent } from "@/dls/Modal";
 import ModalTrigger from "@/dls/Modal/ModalTrigger";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
+import Tooltip from "@/dls/Tooltip/Tooltip";
 import XmarkIcon from "@/icons/XmarkIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { createNewWallet } from "@/utils/api/wallet";
 import { removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { indicatorColor, WalletColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
 
@@ -41,6 +44,7 @@ const AddNewWallet = () => {
   });
 
   const onSubmitHandler = (data: any) => {
+    console.log(data);
     mutate({
       ...data,
       balance: removeCurrencyFormat(data.balance),
@@ -116,6 +120,16 @@ const AddNewWallet = () => {
                   />
                 )}
               />
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="check-wallet-is-credit"
+                label="Jadikan dompet kredit"
+                {...register("isCredit")}
+              />
+              <Tooltip content="Dompet kredit akan menampilkan saldo negatif">
+                <AiOutlineInfoCircle className="dark:text-slate-100" />
+              </Tooltip>
             </div>
             <LoadingButton
               title="Tambahkan"

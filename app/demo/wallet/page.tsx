@@ -66,6 +66,7 @@ const AllWalletsPage = () => {
             name={wallet.name}
             initColorKey={wallet.color}
             balance={wallet.balance}
+            isCredit={false}
           />
         ))}
       </div>

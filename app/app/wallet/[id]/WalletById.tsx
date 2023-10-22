@@ -4,12 +4,14 @@ import { SimpleTSkeleton } from "@/components/Transactions/TransactionItem";
 import { indicatorColor, WalletColor } from "@/components/WalletCard/constants";
 import WalletOption from "@/components/WalletCard/WalletOption";
 import WalletTransaction from "@/components/WalletCard/WalletTransaction";
+import Checkbox from "@/dls/Form/Checkbox/Checkbox";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import IconButton from "@/dls/IconButton";
 import IconWrapper from "@/dls/IconWrapper";
 import Option from "@/dls/Select/Option";
 import Select from "@/dls/Select/Select";
+import Tooltip from "@/dls/Tooltip/Tooltip";
 import ArrowIcon from "@/icons/ArrowIcon";
 import PencilIcon from "@/icons/PencilIcon";
 import { QueryKey } from "@/types/QueryKey";
@@ -25,6 +27,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const WalletById = () => {
   const urlPath = usePathname();
@@ -52,6 +55,8 @@ const WalletById = () => {
     queryFn: () => getWalletTransactions(id),
   });
 
+  console.log(walletDataQuery.data);
+
   const updateWalletMutation = useMutation({
     mutationFn: updateWallet,
     onSuccess: (data) => {
@@ -60,13 +65,19 @@ const WalletById = () => {
         ...walletDataQuery.data,
         name: data.name,
         color: data.color,
+        isCredit: data.isCredit,
       });
 
       // update all wallets
       queryClient.setQueryData([QueryKey.WALLETS], (oldData: any) => {
         return oldData.map((wallet: any) => {
           if (wallet._id === id) {
-            return { ...wallet, name: data.name, color: data.color };
+            return {
+              ...wallet,
+              name: data.name,
+              color: data.color,
+              isCredit: data.isCredit,
+            };
           }
           return wallet;
         });
@@ -116,7 +127,8 @@ const WalletById = () => {
     // if the data same, dont update
     if (
       data.name === walletDataQuery.data.name &&
-      data.color === walletDataQuery.data.color
+      data.color === walletDataQuery.data.color &&
+      data.isCredit === walletDataQuery.data.isCredit
     ) {
       setEdit(false);
       return;
@@ -166,56 +178,75 @@ const WalletById = () => {
       /> */}
       {!edit ? (
         <div className="text-center text-2xl font-semibold text-slate-50 py-10">
-          {walletDataQuery.data.name} <br />
+          {walletDataQuery.data.name}{" "}
+          {walletDataQuery.data.isCredit && (
+            <span className="italic text-sm font-light">(Credit)</span>
+          )}{" "}
+          <br />
+          {walletDataQuery.data.isCredit && "-"}
           {currencyFormat(walletDataQuery.data.balance as number)}
         </div>
       ) : (
         <form
-          className="flex justify-center gap-3 font-medium"
+          className="flex-col justify-center items-center font-medium"
           id="edit-wallet-form"
           onSubmit={handleSubmit(onSaveHandle)}
         >
-          <InputWithLabel
-            spellCheck={false}
-            placeholder="Nama Dompet"
-            defaultValue={walletDataQuery.data.name}
-            className="w-44"
-            inputStyle="!p-2 !text-white !placeholder-slate-200 !bg-transparent"
-            type="text"
-            id="name"
-            required
-            {...register("name")}
-          />
-          <Controller
-            name="color"
-            control={control}
-            render={({ field }) => (
-              <Select
-                className="!p-2 !text-slate-50"
-                minWidth="min-w-[7rem]"
-                required
-                placeholder="Warna"
-                {...field}
-              >
-                {Object.keys(indicatorColor).map((key: string) => (
-                  <Option
-                    selected={key === walletDataQuery.data.color}
-                    key={key}
-                    value={key}
-                  >
-                    {key}
-                  </Option>
-                ))}
-                <Option
-                  selected={walletColor.includes("#")}
-                  value={walletColor}
-                  onClick={() => customColorRef.current?.click()}
+          <div className="flex gap-3 justify-center">
+            <InputWithLabel
+              spellCheck={false}
+              placeholder="Nama Dompet"
+              defaultValue={walletDataQuery.data.name}
+              className="w-44"
+              inputStyle="!p-2 !text-white !placeholder-slate-200 !bg-transparent"
+              type="text"
+              id="name"
+              required
+              {...register("name")}
+            />
+            <Controller
+              name="color"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  className="!p-2 !text-slate-50"
+                  minWidth="min-w-[7rem]"
+                  required
+                  placeholder="Warna"
+                  {...field}
                 >
-                  custom color
-                </Option>
-              </Select>
-            )}
-          />
+                  {Object.keys(indicatorColor).map((key: string) => (
+                    <Option
+                      selected={key === walletDataQuery.data.color}
+                      key={key}
+                      value={key}
+                    >
+                      {key}
+                    </Option>
+                  ))}
+                  <Option
+                    selected={walletColor.includes("#")}
+                    value={walletColor}
+                    onClick={() => customColorRef.current?.click()}
+                  >
+                    custom color
+                  </Option>
+                </Select>
+              )}
+            />
+          </div>
+          <div className="flex justify-center items-center my-2 gap-2">
+            <Checkbox
+              className="!text-white dark:!text-white"
+              id="check-wallet-is-credit"
+              defaultChecked={walletDataQuery.data.isCredit}
+              label="Jadikan dompet kredit"
+              {...register("isCredit")}
+            />
+            <Tooltip content="Dompet kredit akan menampilkan saldo negatif">
+              <AiOutlineInfoCircle className="dark:text-slate-100" />
+            </Tooltip>
+          </div>
           <input
             value={walletColor}
             {...rest}

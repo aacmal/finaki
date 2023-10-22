@@ -5,6 +5,7 @@ export interface WalletInput {
   name: string;
   balance?: number;
   color: string;
+  isCredit: boolean;
 }
 
 export interface CreatedWalletResponse extends GenericResponse {

@@ -43,6 +43,7 @@ export const SortableWalletCard = ({ ...props }: Props) => {
         name={props.name}
         initColorKey={props.initColorKey}
         balance={props.balance}
+        isCredit={props.isCredit}
       />
     </div>
   );

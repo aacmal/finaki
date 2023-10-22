@@ -18,13 +18,15 @@ import {
 } from "@dnd-kit/core";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
+import Tooltip from "@/dls/Tooltip/Tooltip";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { SortableWalletCard } from "./SortableItem";
 
@@ -48,6 +50,7 @@ const MyWallets = () => {
           name: wallet.name,
           color: wallet.color,
           balance: wallet.balance,
+          isCredit: wallet.isCredit,
         }))
       );
     },
@@ -61,9 +64,18 @@ const MyWallets = () => {
           name: wallet.name,
           color: wallet.color,
           balance: wallet.balance,
+          isCredit: wallet.isCredit,
         }))
       );
     }
+  }, [wallets]);
+
+  const totalBalance = useMemo(() => {
+    if (!wallets) return 0;
+    return wallets.reduce((acc: number, curr: any) => {
+      if (curr.isCredit) return acc - curr.balance;
+      return acc + curr.balance;
+    }, 0);
   }, [wallets]);
 
   if (isLoading) {
@@ -93,11 +105,6 @@ const MyWallets = () => {
     );
   }
 
-  const totalBalance = wallets.reduce(
-    (acc: number, curr: any) => acc + curr.balance,
-    0
-  );
-
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
 
@@ -121,6 +128,9 @@ const MyWallets = () => {
         <div className="font-semibold text-stone-700 dark:text-slate-200">
           <span className="text-center md:text-left block w-full">
             Total saldo
+            <Tooltip content="Penjumlahan dan Pengurangan dari semua dompet">
+              <AiOutlineInfoCircle className="dark:text-slate-100 ml-2" />
+            </Tooltip>
           </span>
           <span className="text-2xl">{currencyFormat(totalBalance)}</span>
         </div>
@@ -141,6 +151,7 @@ const MyWallets = () => {
                   name={wallet.name}
                   initColorKey={wallet.color}
                   balance={wallet.balance}
+                  isCredit={wallet.isCredit}
                 />
               ))}
             </div>
