@@ -67,6 +67,7 @@ async function createWallet(req, res) {
                 name: newWallet.name,
                 color: newWallet.color,
                 balance: newWallet.balance,
+                isCredit: newWallet.isCredit,
             },
         });
     }

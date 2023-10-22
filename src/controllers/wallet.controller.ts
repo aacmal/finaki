@@ -45,6 +45,7 @@ export async function createWallet(req: Request, res: Response) {
         name: newWallet.name,
         color: newWallet.color,
         balance: newWallet.balance,
+        isCredit: newWallet.isCredit,
       },
     });
   } catch (error) {
