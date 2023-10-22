@@ -8,7 +8,9 @@ exports.generateForgotPasswordToken = exports.generateRefreshToken = exports.gen
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const __1 = require("../..");
 function generateAccessToken(user) {
-    return jsonwebtoken_1.default.sign({ _id: user._id, name: user.name }, __1.ACCESS_TOKEN_SECRET, { expiresIn: "5m" });
+    return jsonwebtoken_1.default.sign({ _id: user._id, name: user.name }, __1.ACCESS_TOKEN_SECRET, {
+        expiresIn: process.env.NODE_ENV === "production" ? "10m" : "1h",
+    });
 }
 exports.generateAccessToken = generateAccessToken;
 function generateRefreshToken(user) {

@@ -16,13 +16,14 @@ export async function createWallet(req: Request, res: Response) {
 
   try {
     const userId = req.user as Types.ObjectId;
-    const { name, balance, color } = req.body;
+    const { name, balance, color, isCredit } = req.body;
 
     const newWallet = await WalletService.create({
       userId,
       name,
       color,
       balance: balance || 0,
+      isCredit: isCredit || false,
     });
 
     if (balance > 0) {
@@ -62,6 +63,7 @@ export async function getAllWallets(req: Request, res: Response) {
         color: 1,
         balance: 1,
         updatedAt: 1,
+        isCredit: 1,
       },
     });
     return res.status(200).json({
@@ -99,7 +101,7 @@ export async function updateWallet(req: Request, res: Response) {
   }
   try {
     const id = req.params.id as unknown;
-    const { name, color } = req.body;
+    const { name, color, isCredit } = req.body;
 
     const updatedWallet = await WalletModel.findOneAndUpdate(
       {
@@ -108,6 +110,7 @@ export async function updateWallet(req: Request, res: Response) {
       {
         name,
         color,
+        isCredit,
       },
       {
         new: true,
@@ -116,6 +119,7 @@ export async function updateWallet(req: Request, res: Response) {
       _id: 1,
       name: 1,
       color: 1,
+      isCredit: 1,
     });
 
     if (!updatedWallet) return res.status(404).json({ message: "Wallet not found" });
@@ -173,6 +177,7 @@ export async function getOneWallet(req: Request, res: Response) {
       name: 1,
       color: 1,
       balance: 1,
+      isCredit: 1,
     });
 
     if (!wallet) return res.status(404).json({ message: "Wallet not found" });

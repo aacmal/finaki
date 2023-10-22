@@ -30,5 +30,10 @@ exports.WalletSchema = new mongoose_1.default.Schema({
             ref: "Transaction",
         },
     ],
+    isCredit: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 }, { timestamps: true });
 exports.default = mongoose_1.default.model("Wallet", exports.WalletSchema);
