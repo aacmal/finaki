@@ -32,7 +32,7 @@ const Tooltip = ({
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
-        <TooltipTrigger>{children}</TooltipTrigger>
+        <TooltipTrigger type="button">{children}</TooltipTrigger>
         <TooltipContent>
           <p>{content}</p>
         </TooltipContent>

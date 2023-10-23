@@ -44,7 +44,6 @@ const AddNewWallet = () => {
   });
 
   const onSubmitHandler = (data: any) => {
-    console.log(data);
     mutate({
       ...data,
       balance: removeCurrencyFormat(data.balance),
