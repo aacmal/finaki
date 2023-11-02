@@ -30,6 +30,7 @@ const forgotPassword_validator_1 = require("../middlewares/validator/forgotPassw
 const router = (0, express_1.Router)();
 router.post("/register", validator_1.registerValidator, AuthController.register);
 router.post("/sign", validator_1.signValidator, AuthController.sign);
+router.post("/login-with-google", AuthController.loginWithGoogle);
 router.get("/refresh-token", AuthController.refreshToken);
 router.delete("/logout", AuthController.logout);
 router.post("/forgot-password", forgotPassword_validator_1.forgotPasswordValidator, AuthController.forgotPassword);

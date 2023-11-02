@@ -6,11 +6,16 @@ import * as UserService from "../services/user.service";
 import { compare } from "bcrypt";
 import TokenModel from "../models/token.model";
 import jwt from "jsonwebtoken";
-import { IUser } from "../interfaces/User";
+import { GoogleUser, IUser } from "../interfaces/User";
 import { REFRESH_TOKEN_SECRET } from "../..";
 import crypto from "crypto";
 import * as mailService from "../services/mail.service";
 import { errorResponse } from "../utils/errorHander";
+import { OAuth2Client } from "google-auth-library";
+import { jwtDecode } from "jwt-decode";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 
@@ -303,6 +308,49 @@ export async function resetPassword(req: Request, res: Response) {
 
     res.status(200).json({
       message: "Password berhasil diubah",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
+export async function loginWithGoogle(req: Request, res: Response) {
+  try {
+    const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "postmessage");
+
+    const { code } = req.body;
+    if (!code) {
+      return res.status(400).json({
+        message: "Token is required",
+      });
+    }
+
+    const { tokens } = await oAuth2Client.getToken(code);
+
+    if (!tokens.id_token)
+      return res.status(400).json({
+        message: "Something went wrong",
+      });
+
+    const decodedIdToken = jwtDecode(tokens.id_token) as GoogleUser;
+
+    const user = await UserModel.findOne({ email: decodedIdToken.email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Akun google dan email belum terdaftar",
+      });
+    }
+
+    // generate access token and refresh token
+    const accessToken = await generateAuthCredential(req, res, user);
+
+    res.status(200).json({
+      message: "User has been logged in successfully",
+      data: {
+        accessToken,
+      },
     });
   } catch (error) {
     res.status(500).json({

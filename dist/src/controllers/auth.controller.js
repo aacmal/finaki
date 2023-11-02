@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.verifyResetPasswordToken = exports.forgotPassword = exports.logout = exports.refreshToken = exports.sign = exports.register = exports.generateAuthCredential = void 0;
+exports.loginWithGoogle = exports.resetPassword = exports.verifyResetPasswordToken = exports.forgotPassword = exports.logout = exports.refreshToken = exports.sign = exports.register = exports.generateAuthCredential = void 0;
 const express_validator_1 = require("express-validator");
 const generateToken_1 = require("../utils/generateToken");
 const user_model_1 = __importDefault(require("../models/user.model"));
@@ -38,6 +38,10 @@ const __1 = require("../..");
 const crypto_1 = __importDefault(require("crypto"));
 const mailService = __importStar(require("../services/mail.service"));
 const errorHander_1 = require("../utils/errorHander");
+const google_auth_library_1 = require("google-auth-library");
+const jwt_decode_1 = require("jwt-decode");
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -318,3 +322,40 @@ async function resetPassword(req, res) {
     }
 }
 exports.resetPassword = resetPassword;
+async function loginWithGoogle(req, res) {
+    try {
+        const oAuth2Client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "postmessage");
+        const { code } = req.body;
+        if (!code) {
+            return res.status(400).json({
+                message: "Token is required",
+            });
+        }
+        const { tokens } = await oAuth2Client.getToken(code);
+        if (!tokens.id_token)
+            return res.status(400).json({
+                message: "Something went wrong",
+            });
+        const decodedIdToken = (0, jwt_decode_1.jwtDecode)(tokens.id_token);
+        const user = await user_model_1.default.findOne({ email: decodedIdToken.email });
+        if (!user) {
+            return res.status(400).json({
+                message: "Akun google dan email belum terdaftar",
+            });
+        }
+        // generate access token and refresh token
+        const accessToken = await generateAuthCredential(req, res, user);
+        res.status(200).json({
+            message: "User has been logged in successfully",
+            data: {
+                accessToken,
+            },
+        });
+    }
+    catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+}
+exports.loginWithGoogle = loginWithGoogle;
