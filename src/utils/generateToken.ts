@@ -4,7 +4,9 @@ import { IUser } from "../interfaces/User";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../..";
 
 export function generateAccessToken(user: IUser) {
-  return jwt.sign({ _id: user._id, name: user.name }, ACCESS_TOKEN_SECRET!, { expiresIn: "5m" });
+  return jwt.sign({ _id: user._id, name: user.name }, ACCESS_TOKEN_SECRET!, {
+    expiresIn: process.env.NODE_ENV === "production" ? "10m" : "1h",
+  });
 }
 
 export function generateRefreshToken(user: IUser) {
