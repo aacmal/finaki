@@ -7,7 +7,6 @@ import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
-import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import { registerUser } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
@@ -50,12 +49,10 @@ const RegisterComponent = () => {
   }, [isSuccess]);
 
   return (
-    <AuthCard>
-      <Image
-        src="/images/register_illustration.png"
-        alt="Register Illustration"
-        className="w-[40%] lg:w-[60%] aspect-square"
-      />
+    <AuthCard
+      imageAlt="Register Illustration"
+      imageUrl="/images/register_illustration.png"
+    >
       <AuthCardContent>
         <Heading level={1} className="text-center mt-2">
           Selamat Datang!

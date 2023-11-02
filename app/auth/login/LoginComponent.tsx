@@ -7,7 +7,6 @@ import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
-import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import { loginUser, loginWithGoogleCode } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
@@ -68,12 +67,10 @@ const LoginComponent = () => {
   }, [isSuccess]);
 
   return (
-    <AuthCard>
-      <Image
-        src="/images/login_illustration.png"
-        alt="Register Illustration"
-        className="w-[40%] lg:w-[60%] aspect-square"
-      />
+    <AuthCard
+      imageUrl="/images/login_illustration.png"
+      imageAlt="Register Illustration"
+    >
       <AuthCardContent>
         {
           errors.root &&
@@ -127,7 +124,7 @@ const LoginComponent = () => {
           className="!bg-white dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
           onClick={() => loginWithGoole()}
         >
-          <span className="text-slate-600 dark:text-slate-200 font-semibold">Login With Google</span>
+          <span className="text-slate-600 dark:text-slate-200 font-semibold text-center">Login dengan Google</span>
           <FcGoogle size={24}/>
         </Button>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
