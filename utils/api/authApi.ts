@@ -58,3 +58,10 @@ export const resetPassword = async (data: ResetPasswordInput) => {
   const response = await authApi.post<GenericResponse>("/reset-password", data);
   return response.data.message;
 };
+
+export const loginWithGoogleCode = async (code: string)=> {
+  const response = await authApi.post("/login-with-google", {
+    code
+  })
+  return response.data
+}

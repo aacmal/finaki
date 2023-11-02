@@ -24,7 +24,7 @@ const Button = ({
     <button
       type={type}
       className={classNames(
-        "px-4 py-4 disabled:cursor-not-allowed rounded-xl text-white hover:shadow-2xl",
+        "px-4 py-4 disabled:cursor-not-allowed rounded-xl text-white hover:shadow-2xl transition-all",
         { "w-full": width === "full" },
         { "w-auto": width === "auto" },
         { "w-fit": width === "fit" },

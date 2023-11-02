@@ -3,6 +3,7 @@
 import { Routes } from "@/types/Routes";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import {GoogleOAuthProvider} from "@react-oauth/google";
 
 type Props = {
   children: React.ReactNode;
@@ -27,7 +28,9 @@ const AuthLayout = ({ children }: Props) => {
   }, []);
 
   return (
-    <div className="grid place-items-center w-screen h-screen">{children}</div>
+    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
+      <div className="grid place-items-center w-screen h-screen">{children}</div>
+    </GoogleOAuthProvider>
   );
 };
 

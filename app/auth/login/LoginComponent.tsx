@@ -9,15 +9,32 @@ import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
-import { loginUser } from "@/utils/api/authApi";
+import { loginUser, loginWithGoogleCode } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useGoogleLogin } from "@react-oauth/google";
+import Button from "@/dls/Button/Button";
+import { FcGoogle } from "react-icons/fc"
 
 const LoginComponent = () => {
   const router = useRouter();
+
+  const loginWithGoole = useGoogleLogin({
+    onSuccess:  ({ code }) => {
+      loginWithGoogleCode(code).then(res => {
+        router.replace(Routes.App);
+        localStorage.setItem("access-token", res.data.accessToken);
+      }).catch(err => {
+        setError("root", {
+          message: err.response.data.message
+        })
+      })
+    },
+    flow: "auth-code"
+  })
 
   const {
     register,
@@ -58,6 +75,10 @@ const LoginComponent = () => {
         className="w-[40%] lg:w-[60%] aspect-square"
       />
       <AuthCardContent>
+        {
+          errors.root &&
+            <span className="mx-auto text-red-400 font-semibold">{errors.root?.message}</span>
+        }
         <Heading level={1} className="text-center mt-2">
           Selamat Datang Kembali!
         </Heading>
@@ -99,6 +120,16 @@ const LoginComponent = () => {
             title="Login"
           />
         </FormGroup>
+        <hr/>
+        <Button
+          type="button"
+          width="full"
+          className="!bg-white dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
+          onClick={() => loginWithGoole()}
+        >
+          <span className="text-slate-600 dark:text-slate-200 font-semibold">Login With Google</span>
+          <FcGoogle size={24}/>
+        </Button>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}
           <Link href={Routes.Register} className="text-blue-500">
