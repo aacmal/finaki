@@ -7,7 +7,6 @@ import LoadingButton from "@/dls/Button/LoadingButton";
 import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
-import Image from "@/dls/Image";
 import { Routes } from "@/types/Routes";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Link from "next/link";
@@ -77,12 +76,10 @@ const ResetPasswordPage = () => {
   }
 
   return (
-    <AuthCard>
-      <Image
-        src="/images/register_illustration.png"
-        alt="Register Illustration"
-        className="w-[40%] lg:w-[60%] aspect-square"
-      />
+    <AuthCard
+      imageUrl="/images/register_illustration.png"
+      imageAlt="Register Illustration"
+    >
       <AuthCardContent>
         {verifyToken.isError ? (
           <div className="my-auto">
