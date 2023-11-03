@@ -54,9 +54,14 @@ const RegisterComponent = () => {
       imageUrl="/images/register_illustration.png"
     >
       <AuthCardContent>
-        <Heading level={1} className="text-center mt-2">
-          Selamat Datang!
-        </Heading>
+        <div>
+          <Heading level={1} className="text-center mt-2">
+            Selamat Datang!
+          </Heading>
+          <Heading level={4} className="text-center font-medium mt-2">
+            Masukan informasi personal Anda
+          </Heading>
+        </div>
         <FormGroup onSubmit={handleSubmit(onSubmitHandler)}>
           <InputWithLabel
             label="Email"
@@ -99,7 +104,7 @@ const RegisterComponent = () => {
         </FormGroup>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Sudah punya akun?{" "}
-          <Link href={Routes.Login} className="text-blue-500">
+          <Link href={Routes.Login} className="text-blue-400 font-semibold">
             Login
           </Link>
         </span>

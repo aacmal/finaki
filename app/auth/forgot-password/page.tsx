@@ -58,14 +58,14 @@ const ForgotPasswordPage = () => {
         {isSuccess ? (
           <>
             <BsCheckCircle className="mx-auto text-green-500" size={50} />
-            <p className="text-center block w-full">
+            <p className="text-center dark:text-slate-100 block w-full">
               Link reset password telah dikirim ke email anda, silahkan cek
               bagian spam jika tidak ada di inbox
             </p>
           </>
         ) : (
           <>
-            <p className="text-center block w-full">
+            <p className="text-center dark:text-slate-100 block w-full">
               Masukan email akun anda untuk mendapatkan link reset password
             </p>
             {errors.root && (

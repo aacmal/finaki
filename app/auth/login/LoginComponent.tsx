@@ -76,9 +76,14 @@ const LoginComponent = () => {
           errors.root &&
             <span className="mx-auto text-red-400 font-semibold">{errors.root?.message}</span>
         }
-        <Heading level={1} className="text-center mt-2">
-          Selamat Datang Kembali!
-        </Heading>
+        <div>
+          <Heading level={1} className="text-center mt-2">
+            Selamat Datang Kembali!
+          </Heading>
+          <Heading level={4} className="text-center font-medium mt-2">
+            Login untuk melanjutkan penggunaan aplikasi
+          </Heading>
+        </div>
         <FormGroup onSubmit={handleSubmit(onSubmitHandler)}>
           <InputWithLabel
             label="Email"
@@ -103,7 +108,7 @@ const LoginComponent = () => {
             />
             <Link
               href={Routes.ForgotPassword}
-              className="text-blue-500 block w-full mt-1 text-right font-medium"
+              className="text-blue-400 block w-full mt-1 text-right font-semibold"
             >
               Lupa password?
             </Link>
@@ -121,7 +126,7 @@ const LoginComponent = () => {
         <Button
           type="button"
           width="full"
-          className="!bg-white dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
+          className="!bg-slate-50 dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
           onClick={() => loginWithGoole()}
         >
           <span className="text-slate-600 dark:text-slate-200 font-semibold text-center">Login dengan Google</span>
@@ -129,7 +134,7 @@ const LoginComponent = () => {
         </Button>
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}
-          <Link href={Routes.Register} className="text-blue-500">
+          <Link href={Routes.Register} className="text-blue-400 font-semibold">
             Daftar
           </Link>
         </span>

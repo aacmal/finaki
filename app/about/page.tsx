@@ -6,7 +6,7 @@ export const metadata = {
 };
 const AboutPage = () => {
   return (
-    <div className="mt-32 lg:pt-16 2xl:px-32 px-1 md:px-4 overflow-x-hidden mx-auto max-w-screen-lg space-y-10 dark:text-slate-300">
+    <div className="mt-32 lg:pt-16 2xl:px-32 px-3 md:px-4 overflow-x-hidden mx-auto max-w-screen-lg space-y-10 dark:text-slate-300">
       <section>
         <Heading level={1} className="mb-4 text-center">
           About this project
@@ -31,7 +31,7 @@ const AboutPage = () => {
             - Technology
           </Heading>
           <p>
-            This application is made with Typescript language on the frontend
+            This application is made with Typescript on the frontend
             and backend. The frontend is built with NextJS and TailwindCSS, and
             the backed is built with ExpressJS. For security this application is
             equipped with JWT (JSON Web Token).
