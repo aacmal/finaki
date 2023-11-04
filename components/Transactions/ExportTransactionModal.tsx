@@ -51,8 +51,6 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
             .toLocaleDateString("id-ID", {
               weekday: "long",
               day: "2-digit",
-              month: "short",
-              year: "numeric",
               hour: "numeric",
               minute: "numeric",
             })
