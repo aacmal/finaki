@@ -77,7 +77,7 @@ const LoginComponent = () => {
             <span className="mx-auto text-red-400 font-semibold">{errors.root?.message}</span>
         }
         <div>
-          <Heading level={1} className="text-center mt-2">
+          <Heading level={1} gradient className="text-center mt-2 text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
             Selamat Datang Kembali!
           </Heading>
           <Heading level={4} className="text-center font-medium mt-2">
@@ -122,7 +122,7 @@ const LoginComponent = () => {
             title="Login"
           />
         </FormGroup>
-        <hr/>
+        <hr className="dark:border-slate-400"/>
         <Button
           type="button"
           width="full"

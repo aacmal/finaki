@@ -8,6 +8,7 @@ type HeadingTextProps = {
   isUnderline?: boolean;
   defaultColor?: "bright" | "dark";
   level: 1 | 2 | 3 | 4 | 5 | 6;
+  gradient?: boolean
 };
 
 const Heading = ({
@@ -18,13 +19,14 @@ const Heading = ({
   fontWeight = "bold",
   isItalic = false,
   isUnderline = false,
+  gradient = false
 }: HeadingTextProps) => {
   return (
     <div
       role="heading"
       aria-level={level}
       className={classNames(
-        { "text-stone-700 dark:text-slate-200": defaultColor === "dark" },
+        { "text-stone-700 dark:text-slate-200": (defaultColor === "dark") && !gradient },
         { "text-gray-100": defaultColor === "bright" },
 
         { "lg:text-2xl text-xl": level === 1 },

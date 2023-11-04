@@ -55,7 +55,7 @@ const RegisterComponent = () => {
     >
       <AuthCardContent>
         <div>
-          <Heading level={1} className="text-center mt-2">
+          <Heading level={1} gradient className="text-center mt-2 text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
             Selamat Datang!
           </Heading>
           <Heading level={4} className="text-center font-medium mt-2">

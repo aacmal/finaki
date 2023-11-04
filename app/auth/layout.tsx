@@ -29,7 +29,7 @@ const AuthLayout = ({ children }: Props) => {
 
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
-      <div className="grid place-items-center w-screen h-screen">{children}</div>
+      <div className="lg:grid lg:place-items-center min-h-screen w-screen">{children}</div>
     </GoogleOAuthProvider>
   );
 };

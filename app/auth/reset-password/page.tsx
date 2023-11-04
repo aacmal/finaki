@@ -96,7 +96,7 @@ const ResetPasswordPage = () => {
           </div>
         ) : (
           <>
-            <Heading level={1} className="text-center mt-2">
+            <Heading gradient level={1} className="text-center mt-2 text-transparent bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text dark:from-purple-300 dark:to-blue-400">
               Reset Password
             </Heading>
             {isSuccess ? (
