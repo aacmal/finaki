@@ -8,32 +8,16 @@ import FormGroup from "@/dls/Form/FormGroup";
 import InputWithLabel from "@/dls/Form/InputWithLabel";
 import Heading from "@/dls/Heading";
 import { Routes } from "@/types/Routes";
-import { loginUser, loginWithGoogleCode } from "@/utils/api/authApi";
+import { loginUser } from "@/utils/api/authApi";
 import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useGoogleLogin } from "@react-oauth/google";
-import Button from "@/dls/Button/Button";
-import { FcGoogle } from "react-icons/fc"
+import LoginWithGoogle from "../LoginWithGoogle";
 
 const LoginComponent = () => {
   const router = useRouter();
-
-  const loginWithGoole = useGoogleLogin({
-    onSuccess:  ({ code }) => {
-      loginWithGoogleCode(code).then(res => {
-        router.replace(Routes.App);
-        localStorage.setItem("access-token", res.data.accessToken);
-      }).catch(err => {
-        setError("root", {
-          message: err.response.data.message
-        })
-      })
-    },
-    flow: "auth-code"
-  })
 
   const {
     register,
@@ -123,15 +107,12 @@ const LoginComponent = () => {
           />
         </FormGroup>
         <hr className="dark:border-slate-400"/>
-        <Button
-          type="button"
-          width="full"
-          className="!bg-slate-50 dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
-          onClick={() => loginWithGoole()}
-        >
-          <span className="text-slate-600 dark:text-slate-200 font-semibold text-center">Login dengan Google</span>
-          <FcGoogle size={24}/>
-        </Button>
+        <LoginWithGoogle
+          onError={ (message) => setError("root", {
+            message: message
+            })
+          }
+        />
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}
           <Link href={Routes.Register} className="text-blue-400 font-semibold">

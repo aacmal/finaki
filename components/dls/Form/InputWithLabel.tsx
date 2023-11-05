@@ -55,7 +55,7 @@ const InputWithLabel = forwardRef(
         {error && (
           <small
             role="alert"
-            className="text-red-400 absolute -bottom-5 font-semibold left-3"
+            className="text-red-400 font-semibold left-3"
           >
             {error.message}
           </small>

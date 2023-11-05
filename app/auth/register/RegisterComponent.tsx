@@ -14,6 +14,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import LoginWithGoogle from "../LoginWithGoogle";
 
 const RegisterComponent = () => {
   const router = useRouter();
@@ -54,6 +55,10 @@ const RegisterComponent = () => {
       imageUrl="/images/register_illustration.png"
     >
       <AuthCardContent>
+        {
+          errors.root &&
+            <span className="mx-auto text-red-400 font-semibold">{errors.root?.message}</span>
+        }
         <div>
           <Heading level={1} gradient className="text-center mt-2 text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
             Selamat Datang!
@@ -102,6 +107,12 @@ const RegisterComponent = () => {
             title="Daftar"
           />
         </FormGroup>
+        <hr className="dark:border-slate-400"/>
+        <LoginWithGoogle
+          onError={ (message) => setError("root", {
+            message: message
+          })}
+        />
         <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
           Sudah punya akun?{" "}
           <Link href={Routes.Login} className="text-blue-400 font-semibold">
