@@ -18,7 +18,8 @@ exports.UserSchema = new mongoose_1.default.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
+        default: null,
     },
     token: {
         type: String,
@@ -70,6 +71,8 @@ exports.UserSchema = new mongoose_1.default.Schema({
     ],
 }, { timestamps: true });
 exports.UserSchema.pre("save", async function (next) {
+    if (!this.password)
+        return next();
     if (!this.isModified("password"))
         return next();
     const hash = await bcrypt_1.default.hash(this.password, 10);

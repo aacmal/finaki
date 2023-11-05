@@ -133,6 +133,16 @@ async function sign(req, res) {
                 ],
             });
         }
+        if (!user.password) {
+            return res.status(400).json({
+                errors: [
+                    {
+                        msg: "Email ini telah terdaftar dengan Google. Silahkan login dengan Google",
+                        param: "email",
+                    },
+                ],
+            });
+        }
         // compare password
         const isPassowrdValid = await (0, bcrypt_1.compare)(password, user.password);
         if (!isPassowrdValid) {
@@ -302,11 +312,14 @@ async function resetPassword(req, res) {
                 message: "User not found",
             });
         }
-        const isPasswordMatch = await (0, bcrypt_1.compare)(password, user.password);
-        if (isPasswordMatch) {
-            return res.status(400).json({
-                message: "Password baru tidak boleh sama dengan password lama",
-            });
+        // if user has password, check if the new password is the same as the old one
+        if (user.password) {
+            const isPasswordMatch = await (0, bcrypt_1.compare)(password, user.password);
+            if (isPasswordMatch) {
+                return res.status(400).json({
+                    message: "Password baru tidak boleh sama dengan password lama",
+                });
+            }
         }
         user.password = password;
         user.resetPasswordToken = "";
@@ -339,8 +352,20 @@ async function loginWithGoogle(req, res) {
         const decodedIdToken = (0, jwt_decode_1.jwtDecode)(tokens.id_token);
         const user = await user_model_1.default.findOne({ email: decodedIdToken.email });
         if (!user) {
-            return res.status(400).json({
-                message: "Akun google dan email belum terdaftar",
+            // if user not registered yet, register the user
+            const telegramToken = crypto_1.default.randomBytes(10).toString("hex");
+            const newUser = await UserService.create({
+                email: decodedIdToken.email,
+                name: decodedIdToken.name,
+                token: telegramToken,
+            });
+            // generate access token and refresh token
+            const accessToken = await generateAuthCredential(req, res, newUser);
+            return res.status(200).json({
+                message: "User has been created successfully",
+                data: {
+                    accessToken,
+                },
             });
         }
         // generate access token and refresh token
