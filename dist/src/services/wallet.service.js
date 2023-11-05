@@ -32,9 +32,12 @@ const UserService = __importStar(require("../services/user.service"));
 const wallet_model_1 = __importDefault(require("../models/wallet.model"));
 const transaction_model_1 = __importDefault(require("../models/transaction.model"));
 const token_model_1 = __importDefault(require("../models/token.model"));
-async function getById(walletId) {
+async function getById(data) {
     try {
-        return await wallet_model_1.default.findById(walletId);
+        return await wallet_model_1.default.findOne({
+            _id: data.walletId,
+            userId: data.userId,
+        });
     }
     catch (error) {
         throw error;
@@ -64,9 +67,12 @@ async function create(walletData) {
     }
 }
 exports.create = create;
-async function deleteById(walletId, deleteTransactions) {
+async function deleteById(data, deleteTransactions) {
     try {
-        const wallet = await wallet_model_1.default.findById(walletId);
+        const wallet = await wallet_model_1.default.findOne({
+            _id: data.walletId,
+            userId: data.userId,
+        });
         if (!wallet)
             return;
         if (deleteTransactions === "true") {
@@ -85,7 +91,7 @@ async function deleteById(walletId, deleteTransactions) {
                 },
             });
         }
-        await UserService.pullWallet(wallet.userId, walletId);
+        await UserService.pullWallet(wallet.userId, data.walletId);
         return await wallet.remove();
     }
     catch (error) {
@@ -248,10 +254,11 @@ async function balanceHistory(walletId, interval) {
     }
 }
 exports.balanceHistory = balanceHistory;
-async function getWalletTransactions(walletId) {
+async function getWalletTransactions(data) {
     try {
         const transactions = await transaction_model_1.default.find({
-            walletId: new mongoose_1.Types.ObjectId(walletId),
+            walletId: new mongoose_1.Types.ObjectId(data.walletId),
+            userId: new mongoose_1.Types.ObjectId(data.walletId),
         });
         return transactions;
     }

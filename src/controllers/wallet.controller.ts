@@ -81,7 +81,11 @@ export async function deleteWallet(req: Request, res: Response) {
     const id = req.params.id as unknown;
     const deleteTransactions = req.query.deleteTransactions as unknown as string;
 
-    const deletedWallet = await WalletService.deleteById(id as Types.ObjectId, deleteTransactions);
+    const credentials = {
+      userId: req.user as Types.ObjectId,
+      walletId: id as Types.ObjectId,
+    };
+    const deletedWallet = await WalletService.deleteById(credentials, deleteTransactions);
     if (!deletedWallet) return res.status(404).json({ message: "Wallet not found" });
 
     res.json({
@@ -97,6 +101,7 @@ export async function deleteWallet(req: Request, res: Response) {
 
 export async function updateWallet(req: Request, res: Response) {
   const error = validationResult(req);
+  const userId = req.user as Types.ObjectId;
   if (!error.isEmpty()) {
     return res.status(400).json({ errors: error.array() });
   }
@@ -107,6 +112,7 @@ export async function updateWallet(req: Request, res: Response) {
     const updatedWallet = await WalletModel.findOneAndUpdate(
       {
         _id: id,
+        userId,
       },
       {
         name,
@@ -142,11 +148,13 @@ export async function updateWalletColor(req: Request, res: Response) {
 
   try {
     const id = req.params.id as unknown;
+    const userId = req.user as Types.ObjectId;
     const { color } = req.body;
 
     const updatedColor = await WalletModel.findOneAndUpdate(
       {
         _id: id,
+        userId,
       },
       {
         $set: {
@@ -173,7 +181,10 @@ export async function updateWalletColor(req: Request, res: Response) {
 export async function getOneWallet(req: Request, res: Response) {
   try {
     const id = req.params.id as unknown;
-    const wallet = await WalletModel.findById(id).select({
+    const wallet = await WalletModel.findOne({
+      _id: id,
+      userId: req.user as Types.ObjectId,
+    }).select({
       _id: 1,
       name: 1,
       color: 1,
@@ -204,10 +215,16 @@ export async function transferWalletBalance(req: Request, res: Response) {
       return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
     }
 
-    const sourceWalletData = await WalletModel.findById(sourceWallet);
+    const sourceWalletData = await WalletModel.findOne({
+      _id: sourceWallet,
+      userId: req.user as Types.ObjectId,
+    });
     if (!sourceWalletData) return res.status(404).json({ message: "Source wallet not found" });
 
-    const destinationWalletData = await WalletModel.findById(destinationWallet);
+    const destinationWalletData = await WalletModel.findOne({
+      _id: destinationWallet,
+      userId: req.user as Types.ObjectId,
+    });
     if (!destinationWalletData) return res.status(404).json({ message: "Destination wallet not found" });
 
     const originDescription =
@@ -251,7 +268,10 @@ export async function transferWalletBalance(req: Request, res: Response) {
 export async function walletTransactions(req: Request, res: Response) {
   try {
     const id = req.params.id as unknown;
-    const transactions = await WalletModel.findById(id).populate({
+    const transactions = await WalletModel.findOne({
+      _id: id,
+      userId: req.user as Types.ObjectId,
+    }).populate({
       path: "transactions",
       select: {
         includeInCalculation: 0,
@@ -273,7 +293,7 @@ export async function reorderWallets(req: Request, res: Response) {
   try {
     const userId = req.user as Types.ObjectId;
     const { walletIds } = req.body;
-    const userWallets = await UserModel.findById(userId).select({ wallets: 1 });
+    const userWallets = await UserModel.findOne(userId).select({ wallets: 1 });
     const arrayWalletIds = JSON.parse(walletIds);
 
     if (!userWallets) return res.status(404).json({ message: "User not defined" });

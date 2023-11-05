@@ -104,7 +104,11 @@ async function deleteWallet(req, res) {
     try {
         const id = req.params.id;
         const deleteTransactions = req.query.deleteTransactions;
-        const deletedWallet = await WalletService.deleteById(id, deleteTransactions);
+        const credentials = {
+            userId: req.user,
+            walletId: id,
+        };
+        const deletedWallet = await WalletService.deleteById(credentials, deleteTransactions);
         if (!deletedWallet)
             return res.status(404).json({ message: "Wallet not found" });
         res.json({
@@ -121,6 +125,7 @@ async function deleteWallet(req, res) {
 exports.deleteWallet = deleteWallet;
 async function updateWallet(req, res) {
     const error = (0, express_validator_1.validationResult)(req);
+    const userId = req.user;
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
@@ -129,6 +134,7 @@ async function updateWallet(req, res) {
         const { name, color, isCredit } = req.body;
         const updatedWallet = await wallet_model_1.default.findOneAndUpdate({
             _id: id,
+            userId,
         }, {
             name,
             color,
@@ -160,9 +166,11 @@ async function updateWalletColor(req, res) {
     }
     try {
         const id = req.params.id;
+        const userId = req.user;
         const { color } = req.body;
         const updatedColor = await wallet_model_1.default.findOneAndUpdate({
             _id: id,
+            userId,
         }, {
             $set: {
                 color,
@@ -188,7 +196,10 @@ exports.updateWalletColor = updateWalletColor;
 async function getOneWallet(req, res) {
     try {
         const id = req.params.id;
-        const wallet = await wallet_model_1.default.findById(id).select({
+        const wallet = await wallet_model_1.default.findOne({
+            _id: id,
+            userId: req.user,
+        }).select({
             _id: 1,
             name: 1,
             color: 1,
@@ -217,10 +228,16 @@ async function transferWalletBalance(req, res) {
         if (sourceWallet === destinationWallet) {
             return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
         }
-        const sourceWalletData = await wallet_model_1.default.findById(sourceWallet);
+        const sourceWalletData = await wallet_model_1.default.findOne({
+            _id: sourceWallet,
+            userId: req.user,
+        });
         if (!sourceWalletData)
             return res.status(404).json({ message: "Source wallet not found" });
-        const destinationWalletData = await wallet_model_1.default.findById(destinationWallet);
+        const destinationWalletData = await wallet_model_1.default.findOne({
+            _id: destinationWallet,
+            userId: req.user,
+        });
         if (!destinationWalletData)
             return res.status(404).json({ message: "Destination wallet not found" });
         const originDescription = description.length > 0 ? description : `Transfer saldo ke dompet ${destinationWalletData.name}`;
@@ -259,7 +276,10 @@ exports.transferWalletBalance = transferWalletBalance;
 async function walletTransactions(req, res) {
     try {
         const id = req.params.id;
-        const transactions = await wallet_model_1.default.findById(id).populate({
+        const transactions = await wallet_model_1.default.findOne({
+            _id: id,
+            userId: req.user,
+        }).populate({
             path: "transactions",
             select: {
                 includeInCalculation: 0,
@@ -282,7 +302,7 @@ async function reorderWallets(req, res) {
     try {
         const userId = req.user;
         const { walletIds } = req.body;
-        const userWallets = await user_model_1.default.findById(userId).select({ wallets: 1 });
+        const userWallets = await user_model_1.default.findOne(userId).select({ wallets: 1 });
         const arrayWalletIds = JSON.parse(walletIds);
         if (!userWallets)
             return res.status(404).json({ message: "User not defined" });

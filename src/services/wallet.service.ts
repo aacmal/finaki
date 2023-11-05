@@ -5,9 +5,17 @@ import TransactionModel from "../models/transaction.model";
 import UserModel from "../models/token.model";
 import { BalanceHistory, IWalletData } from "../interfaces/Wallet";
 
-export async function getById(walletId: Types.ObjectId) {
+type WalletQuery = {
+  userId: Types.ObjectId;
+  walletId: Types.ObjectId;
+};
+
+export async function getById(data: WalletQuery) {
   try {
-    return await WalletModel.findById(walletId);
+    return await WalletModel.findOne({
+      _id: data.walletId,
+      userId: data.userId,
+    });
   } catch (error) {
     throw error;
   }
@@ -34,9 +42,12 @@ export async function create(walletData: IWalletData) {
   }
 }
 
-export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: string) {
+export async function deleteById(data: WalletQuery, deleteTransactions?: string) {
   try {
-    const wallet = await WalletModel.findById(walletId);
+    const wallet = await WalletModel.findOne({
+      _id: data.walletId,
+      userId: data.userId,
+    });
     if (!wallet) return;
     if (deleteTransactions === "true") {
       await TransactionModel.deleteMany({
@@ -57,7 +68,7 @@ export async function deleteById(walletId: Types.ObjectId, deleteTransactions?: 
         },
       );
     }
-    await UserService.pullWallet(wallet.userId, walletId);
+    await UserService.pullWallet(wallet.userId, data.walletId);
     return await wallet.remove();
   } catch (error) {
     throw error;
@@ -223,10 +234,11 @@ export async function balanceHistory(walletId: Types.ObjectId, interval: "week" 
   }
 }
 
-export async function getWalletTransactions(walletId: Types.ObjectId) {
+export async function getWalletTransactions(data: WalletQuery) {
   try {
     const transactions = await TransactionModel.find({
-      walletId: new Types.ObjectId(walletId),
+      walletId: new Types.ObjectId(data.walletId),
+      userId: new Types.ObjectId(data.walletId),
     });
 
     return transactions;
