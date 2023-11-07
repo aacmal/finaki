@@ -1,5 +1,6 @@
-import { Transaction } from "@/types/Transaction";
-import { create } from "zustand";
+import {Transaction} from "@/types/Transaction";
+import {create} from "zustand";
+import {Interval} from "@/api/types/TransactionAPI";
 
 interface TransactionStore {
   transactionDetailState: {
@@ -13,7 +14,8 @@ interface TransactionStore {
     isOpen: boolean;
     transaction?: Transaction;
   }) => void;
-
+  interval: Interval;
+  setInterval: (val: Interval) => void;
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
   dispatchUpdateTransaction: (id: string, newTransaction: Transaction) => void;
@@ -27,6 +29,10 @@ const useTransaction = create<TransactionStore>((set) => ({
     isOpen: false,
   },
   transactions: [],
+  interval: Interval.Weekly,
+  setInterval: (val) => {
+    set({ interval: val })
+  },
   setTransactions: (transactions: Transaction[]) => {
     set({ transactions });
   },

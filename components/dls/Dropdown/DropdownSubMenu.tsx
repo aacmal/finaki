@@ -6,17 +6,19 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 
 import styles from "./DropdownItem.module.scss";
+import classNames from "classnames";
 
 interface Props extends React.ComponentProps<typeof Sub> {
   trigger: React.ReactNode;
   iconTrigger?: React.ReactNode;
+  className?: string
 }
 
-const DropdownSubMenu = ({ children, trigger, iconTrigger }: Props) => {
+const DropdownSubMenu = ({ children, trigger, iconTrigger, className }: Props) => {
   return (
     <Sub>
       <SubTrigger asChild>
-        <div className={styles.dropdownItem}>
+        <div className={classNames(styles.dropdownItem, "py-1 px-2 rounded hover:bg-blue-100 relative text-slate-600 cursor-default", {"pl-7": !!iconTrigger}, className)}>
           {iconTrigger && (
             <div className={styles.itemIndicator}>{iconTrigger}</div>
           )}

@@ -2,6 +2,12 @@ import { TotalTransactionByDay } from "@/types/Transaction";
 import AreaChart from "../Charts/AreaChart/AreaChart";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
+import DropdownMenu from "@/dls/Dropdown/DropdownMenu";
+import {DropdownItem} from "@/dls/Dropdown/DropdownItem";
+import {BsClockHistory} from "react-icons/all";
+import {Interval} from "@/api/types/TransactionAPI";
+import useTransaction from "../../stores/transactionStore";
+import {shallow} from "zustand/shallow";
 
 type Props = {
   data: TotalTransactionByDay[] | undefined;
@@ -15,10 +21,33 @@ const TransactionActivity = ({ data, loading }: Props) => {
     value: item.totalAmount,
   }));
 
+  const { interval, setInterval } = useTransaction(state => ({
+    interval: state.interval,
+    setInterval: state.setInterval
+  }), shallow)
+
+  const ButtonTrigger = () => (
+    <button className="flex gap-3 items-center rounded-md px-3 py-1 border" type="button">
+      <BsClockHistory/>
+      <span className="capitalize font-medium">{interval}</span>
+    </button>
+  )
+
   return (
     <DashboardContentWrapper>
       <DashboardHeader title="Aktivitas">
-        <span className="text-sm">7 Hari</span>
+        <DropdownMenu align="start" trigger={<ButtonTrigger/>}>
+          {
+            Object.values(Interval).map(val => (
+              <DropdownItem
+                shouldCloseAfterClick
+                onClick={() => setInterval(val as Interval)}
+                className="px-3 font-medium capitalize"
+                key={val}>{val}
+              </DropdownItem>
+            ))
+          }
+        </DropdownMenu>
       </DashboardHeader>
       <AreaChart loading={loading} size="large" data={areaChartData!} />
     </DashboardContentWrapper>

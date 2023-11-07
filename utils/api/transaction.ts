@@ -3,7 +3,7 @@ import { instance } from "./api";
 import { makeUrl } from "./config";
 import {
   EditTransactionInput,
-  InfiniteTransactionResponse,
+  InfiniteTransactionResponse, Interval,
   TotalTransactionByDayResponse,
   TransactionInput,
   TransactionResponse,
@@ -39,7 +39,7 @@ export const deleteTransaction = async (id: string) => {
 };
 
 export const getTotalTransactionByPeriod = async (
-  interval: "month" | "week"
+  interval: Interval
 ) => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const response = await instance.get<TotalTransactionByDayResponse>(

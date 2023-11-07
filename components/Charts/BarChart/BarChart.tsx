@@ -1,18 +1,15 @@
 "use client";
 
-import { TotalTransactionByDay } from "@/types/Transaction";
+import {TotalTransactionByDay} from "@/types/Transaction";
 import classNames from "classnames";
-import {
-  Bar,
-  BarChart as BaChart,
-  CartesianGrid,
-  Tooltip,
-  XAxis,
-} from "recharts";
-import { ChartError, ChartLoading } from "../ChartPlaceholder";
+import {Bar, BarChart as BaChart, CartesianGrid, Tooltip, XAxis,} from "recharts";
+import {ChartError, ChartLoading} from "../ChartPlaceholder";
 import ChartWrapper from "../ChartWrapper";
 
 import renderBarTooltip from "./BarTooltip";
+import useTransaction from "../../../stores/transactionStore";
+import {shallow} from "zustand/shallow";
+import {Interval} from "@/api/types/TransactionAPI";
 
 type Props = {
   data: TotalTransactionByDay[];
@@ -23,6 +20,9 @@ type Props = {
 };
 
 const BarChart = ({ data, color, loading, className }: Props) => {
+  const interval = useTransaction(state => state.interval, shallow)
+  const barSize = interval === Interval.Weekly ? 8 :4
+
   return (
     <ChartWrapper className={classNames("w-full h-48 lg:72", className)}>
       {loading ? (
@@ -41,14 +41,14 @@ const BarChart = ({ data, color, loading, className }: Props) => {
           <Bar
             isAnimationActive
             radius={[10, 10, 10, 10]}
-            barSize={8}
+            barSize={barSize}
             dataKey="in"
             fill={color[0]}
           />
           <Bar
             isAnimationActive
             radius={[10, 10, 10, 10]}
-            barSize={8}
+            barSize={barSize}
             dataKey="out"
             fill={color[1]}
           />

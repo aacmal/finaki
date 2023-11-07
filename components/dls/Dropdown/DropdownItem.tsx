@@ -8,6 +8,7 @@ import {
 import classNames from "classnames";
 
 import styles from "./DropdownItem.module.scss";
+import React from "react";
 
 interface ItemProps extends React.ComponentProps<typeof Item> {
   indicator?: React.ReactNode;
@@ -45,7 +46,7 @@ const DropdownItem = ({
           onClick(e);
         }
       }}
-      className={classNames(styles.dropdownItem, className)}
+      className={classNames(styles.dropdownItem, "py-1 px-2 rounded hover:bg-blue-100 relative text-slate-600 cursor-default", {"pl-7": !!icon}, className)}
       {...props}
     >
       {icon && <div className={styles.itemIndicator}>{icon}</div>}
