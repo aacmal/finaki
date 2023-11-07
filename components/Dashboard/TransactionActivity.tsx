@@ -27,7 +27,7 @@ const TransactionActivity = ({ data, loading }: Props) => {
   }), shallow)
 
   const ButtonTrigger = () => (
-    <button className="flex gap-3 items-center rounded-md px-3 py-1 border" type="button">
+    <button className="flex gap-3 text-xs md:text-sm items-center rounded-md px-3 py-1 border dark:border-slate-500" type="button">
       <BsClockHistory/>
       <span className="capitalize font-medium">{interval}</span>
     </button>
