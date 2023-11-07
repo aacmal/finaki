@@ -3,7 +3,7 @@ import { validationResult } from "express-validator";
 import * as TransactionService from "../services/transaction.service";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { ITransactionRequestQuery } from "../interfaces/Transaction";
+import { ITransactionRequestQuery, Interval } from "../interfaces/Transaction";
 
 export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
@@ -96,7 +96,7 @@ export async function getTransactionById(req: Request, res: Response) {
 export async function getTotalTransaction(req: Request, res: Response) {
   try {
     const userId = req.user;
-    const interval = (req.query.interval as "week" | "month") ?? "week";
+    const interval = (req.query.interval as Interval) ?? Interval.Weekly;
     const timezone = "Asia/Jakarta";
 
     const totalTranscation = await TransactionService.getTotalTransactionByPeriods(

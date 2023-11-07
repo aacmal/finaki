@@ -30,6 +30,11 @@ exports.UserSchema = new mongoose_1.default.Schema({
         required: false,
         default: null,
     },
+    intervalPreference: {
+        type: String,
+        required: false,
+        default: "daily",
+    },
     telegramAccount: {
         // type: String,
         // index: true,

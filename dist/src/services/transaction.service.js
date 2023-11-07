@@ -257,7 +257,7 @@ async function remove(id) {
 }
 exports.remove = remove;
 async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/Jakarta") {
-    const intervals = interval === "week" ? 7 : 30;
+    const intervals = interval === Transaction_1.Interval.Weekly ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
     try {
         const totalTranscation = await transaction_model_1.default.aggregate([

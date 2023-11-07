@@ -26,6 +26,11 @@ export const UserSchema = new mongoose.Schema(
       required: false,
       default: null,
     },
+    intervalPreference: {
+      type: String,
+      required: false,
+      default: "daily",
+    },
     telegramAccount: {
       // type: String,
       // index: true,

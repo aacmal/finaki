@@ -27,6 +27,7 @@ exports.getAllTransactionsByMonth = exports.getAllTransactions = exports.getTota
 // import Transaction from "../models/Transaction";
 const express_validator_1 = require("express-validator");
 const TransactionService = __importStar(require("../services/transaction.service"));
+const Transaction_1 = require("../interfaces/Transaction");
 async function getAllTransactionsByDate(req, res) {
     try {
         // const transactions = await Transaction.getAll();
@@ -122,7 +123,7 @@ async function getTotalTransaction(req, res) {
     var _a;
     try {
         const userId = req.user;
-        const interval = (_a = req.query.interval) !== null && _a !== void 0 ? _a : "week";
+        const interval = (_a = req.query.interval) !== null && _a !== void 0 ? _a : Transaction_1.Interval.Weekly;
         const timezone = "Asia/Jakarta";
         const totalTranscation = await TransactionService.getTotalTransactionByPeriods(userId, interval, timezone);
         if (!totalTranscation)

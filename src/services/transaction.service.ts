@@ -6,6 +6,7 @@ import {
   TransactionType,
   IUpdateTransactionInput,
   ITransactionRequestQuery,
+  Interval,
 } from "../interfaces/Transaction";
 import * as UserService from "./user.service";
 import * as WalletService from "./wallet.service";
@@ -253,10 +254,10 @@ export async function remove(id: string) {
 
 export async function getTotalTransactionByPeriods(
   userId: Types.ObjectId,
-  interval: "week" | "month",
+  interval: Interval,
   timezone = "Asia/Jakarta",
 ): Promise<ITotalTransaction[]> {
-  const intervals = interval === "week" ? 7 : 30;
+  const intervals = interval === Interval.Weekly ? 7 : 30;
 
   const dateInterval = new Date().setDate(new Date().getDate() - intervals);
 
