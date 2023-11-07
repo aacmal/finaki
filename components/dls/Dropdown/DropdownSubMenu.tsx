@@ -24,7 +24,7 @@ const DropdownSubMenu = ({ children, trigger, iconTrigger }: Props) => {
         </div>
       </SubTrigger>
       <Portal>
-        <SubContent className="py-2 px-1 bg-white shadow-xl rounded-lg text-sm">
+        <SubContent className="py-2 px-1 bg-white shadow-xl rounded-lg text-sm animate-in zoom-in-75 slide-in-from-left-12">
           {children}
         </SubContent>
       </Portal>

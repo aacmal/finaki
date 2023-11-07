@@ -28,7 +28,7 @@ const DropdownMenu = ({
           align={align}
           sideOffset={sideOffset}
           alignOffset={alignOffset}
-          className="py-1 px-1 bg-white shadow-xl rounded-lg text-sm"
+          className="py-1 px-1 bg-white shadow-xl rounded-lg text-sm animate-in zoom-in-75"
         >
           {children}
         </RadixDropdown.Content>
