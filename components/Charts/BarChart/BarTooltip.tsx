@@ -13,13 +13,13 @@ const renderBarTooltip = ({ active, payload }: any) => {
     );
     return (
       <TooltipWrapper>
-        <p className="text-gray-500 font-sm mb-2">{date}</p>
+        <p className="font-sm mb-2">{date}</p>
         <div className="flex items-center">
           <div
             style={{ backgroundColor: COLOR["INCOME"] }}
             className="h-2 w-2 rounded-full mr-2"
-          ></div>
-          <span className="text-sm text-slate-700">
+          />
+          <span className="text-sm text-slate-700 dark:text-slate-100">
             {currencyFormat(payload[0].value)}
           </span>
         </div>
@@ -27,8 +27,8 @@ const renderBarTooltip = ({ active, payload }: any) => {
           <div
             style={{ backgroundColor: COLOR["OUTCOME"] }}
             className="h-2 w-2 rounded-full mr-2"
-          ></div>
-          <span className="text-sm text-slate-700">
+          />
+          <span className="text-sm text-slate-700 dark:text-slate-100">
             {currencyFormat(payload[1].value)}
           </span>
         </div>

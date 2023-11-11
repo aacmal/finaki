@@ -12,8 +12,8 @@ const renderAreaTooltip = ({ active, payload }: any) => {
     );
     return (
       <TooltipWrapper>
-        <p className="text-gray-500 font-sm">{date}</p>
-        <p className="text-gray-500 font-medium">
+        <p className="font-sm">{date}</p>
+        <p className="font-medium">
           {currencyFormat(payload[0].value)}
         </p>
       </TooltipWrapper>

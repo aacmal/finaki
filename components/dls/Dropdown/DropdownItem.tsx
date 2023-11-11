@@ -46,7 +46,7 @@ const DropdownItem = ({
           onClick(e);
         }
       }}
-      className={classNames(styles.dropdownItem, "py-1 px-2 rounded hover:bg-blue-100 relative text-slate-600 cursor-default", {"pl-7": !!icon}, className)}
+      className={classNames(styles.dropdownItem, "py-1 px-2 rounded hover:bg-blue-100 dark:hover:bg-blue-500/50 relative cursor-default", {"pl-7": !!icon}, className)}
       {...props}
     >
       {icon && <div className={styles.itemIndicator}>{icon}</div>}

@@ -31,7 +31,7 @@ export const ColorCircle = ({ style }: { style?: React.CSSProperties }) => (
 
 const SubMenuTrigger = () => (
   <div className="flex items-center justify-between">
-    Ganti warna
+    <span>Ganti warna</span>
     <IconWrapper className="!w-4 transform -rotate-90">
       <ChevronIcon />
     </IconWrapper>
