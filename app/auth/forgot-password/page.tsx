@@ -26,7 +26,6 @@ const ForgotPasswordPage = () => {
     },
     onError: (error) => {
       const errors = (error as any).response.data.errors as [];
-      console.log(errors);
       errors.forEach(({ msg, param }: any) => {
         setError(param, { message: msg }, { shouldFocus: true });
       });
@@ -52,7 +51,11 @@ const ForgotPasswordPage = () => {
         onSubmit={handleSubmit(onSubmitHandler)}
         className="space-y-5 w-full "
       >
-        <Heading gradient level={1} className="text-center block w-full text-transparent bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text dark:from-purple-300 dark:to-blue-400">
+        <Heading
+          gradient
+          level={1}
+          className="text-center block w-full text-transparent bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text dark:from-purple-300 dark:to-blue-400"
+        >
           Lupa Password
         </Heading>
         {isSuccess ? (

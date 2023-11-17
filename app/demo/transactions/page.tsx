@@ -18,9 +18,6 @@ const TransactionsPage = () => {
           resolve(data.data as Transaction[]);
         });
       }),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   if (isLoading || !data) {

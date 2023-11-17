@@ -20,8 +20,8 @@ const Action = () => {
       .then(() => {
         toast.success("Logout berhasil");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        toast.error("Ada kesalahan saat logout");
       })
       .finally(() => {
         queryClient.invalidateQueries();

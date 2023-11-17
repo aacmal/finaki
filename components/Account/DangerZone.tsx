@@ -19,8 +19,7 @@ const DangerZone = () => {
       });
       toast.success("Akun Telegram Berhasil diputuskan");
     },
-    onError: (err) => {
-      console.log(err);
+    onError: () => {
       toast.error("Gagal memutuskan akun Telegram");
     },
   });

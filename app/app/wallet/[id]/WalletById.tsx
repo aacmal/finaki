@@ -45,17 +45,12 @@ const WalletById = () => {
   const walletDataQuery = useQuery({
     queryKey: [QueryKey.WALLETS, id],
     queryFn: () => getOneWallet(id),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const walletTransactionsQuery = useQuery({
     queryKey: [QueryKey.WALLETS, id, QueryKey.TRANSACTIONS],
     queryFn: () => getWalletTransactions(id),
   });
-
-  console.log(walletDataQuery.data);
 
   const updateWalletMutation = useMutation({
     mutationFn: updateWallet,

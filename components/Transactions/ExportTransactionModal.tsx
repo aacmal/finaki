@@ -24,11 +24,10 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
     onSuccess: (data) => {
       generatePDF(data[0]);
     },
-    onError: (error) => {
+    onError: () => {
       setError(
         "Terjadi kesalahan atau tidak ada transaksi pada bulan yang dipilih"
       );
-      console.log(error);
     },
   });
 
@@ -118,7 +117,6 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       return;
     }
     setError(null);
-    console.log(value);
     mutate(new Date(value));
   };
 

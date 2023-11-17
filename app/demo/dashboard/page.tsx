@@ -18,9 +18,6 @@ const Page = () => {
           resolve(data.data);
         });
       }),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const recentTransactionsQuery = useQuery({
@@ -31,9 +28,6 @@ const Page = () => {
           resolve(data.data as unknown as Transaction[]);
         });
       }),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const walletQuery = useQuery({
@@ -44,9 +38,6 @@ const Page = () => {
           resolve(data.data as WalletData[]);
         });
       }),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   return (

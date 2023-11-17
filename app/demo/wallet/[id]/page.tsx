@@ -45,9 +45,6 @@ const WalletDetailPage = () => {
           resolve(wallet as WalletData);
         });
       }),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const walletTransactionsQuery = useQuery({

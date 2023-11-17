@@ -1,27 +1,30 @@
 "use client";
 
-import {getAllTransactions, getTotalTransactionByPeriod,} from "@/api/transaction";
-import {getAllWallets} from "@/api/wallet";
+import {
+  getAllTransactions,
+  getTotalTransactionByPeriod,
+} from "@/api/transaction";
+import { getAllWallets } from "@/api/wallet";
 import Ratio from "@/components/Dashboard/Ratio";
 import RecentTransactions from "@/components/Dashboard/RecentTrasactions";
 import TransactionActivity from "@/components/Dashboard/TransactionActivity";
 import WalletPercentage from "@/components/Dashboard/WalletPercentage";
-import {QueryKey} from "@/types/QueryKey";
-import {useQuery} from "@tanstack/react-query";
+import { QueryKey } from "@/types/QueryKey";
+import { useQuery } from "@tanstack/react-query";
 import useTransaction from "../../../stores/transactionStore";
-import {shallow} from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 const DashboardComponent = () => {
-  const { interval } = useTransaction(state => ({
-    interval: state.interval
-  }), shallow)
+  const { interval } = useTransaction(
+    (state) => ({
+      interval: state.interval,
+    }),
+    shallow
+  );
 
   const totalTransactionQuery = useQuery({
     queryKey: [QueryKey.TOTAL_TRANSACTIONS, interval],
     queryFn: () => getTotalTransactionByPeriod(interval),
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const recentTransactionsQuery = useQuery({
@@ -30,18 +33,11 @@ const DashboardComponent = () => {
       getAllTransactions({
         limit: 4,
       }),
-    onSuccess: () => {},
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   const walletQuery = useQuery({
     queryKey: [QueryKey.WALLETS],
     queryFn: getAllWallets,
-    onError: (error) => {
-      console.log(error);
-    },
   });
 
   return (

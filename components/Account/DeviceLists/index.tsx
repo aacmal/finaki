@@ -30,9 +30,6 @@ const DevicesLists = () => {
       queryClient.removeQueries([QueryKey.USER]);
       toast.success("Berhasil keluar dari semua perangkat");
     },
-    onError: (err) => {
-      console.log(err);
-    },
   });
 
   const handleDeleteAllDevices = () => {

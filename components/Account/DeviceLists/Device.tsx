@@ -41,9 +41,6 @@ const Device = ({
         `Perangkat ${ua.device.model} berhasil dihapus, proses ini setidaknya membutuhkan waktu 15 menit`
       );
     },
-    onError: (err) => {
-      console.log(err);
-    },
   });
 
   const handleDeleteDevice = (id: string) => {

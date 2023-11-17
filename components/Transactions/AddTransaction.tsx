@@ -78,9 +78,6 @@ const AddTransaction = () => {
       }
       reset();
     },
-    onError: (error) => {
-      console.log("error", error);
-    },
   });
 
   const onSubmitHandler = (values: any) => {
