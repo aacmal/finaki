@@ -15,19 +15,20 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/icons/*": ["./components/icons/*"],
-      "@/types/*": ["./types/*"],
-      "@/api/*": ["./utils/api/*"],
-      "@/dls/*": ["./components/dls/*"],
-      "@/components/*": ["./components/*"],
-      "@/utils/*": ["./utils/*"],
-      "@/data/*": ["./data/*"],
+      "@/icons/*": ["src/components/icons/*"],
+      "@/types/*": ["src/types/*"],
+      "@/api/*": ["src/utils/api/*"],
+      "@/dls/*": ["src/components/dls/*"],
+      "@/components/*": ["src/components/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/data/*": ["src/data/*"],
     },
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
