@@ -34,7 +34,7 @@ const RecentTransactions = ({ data, isLoading, isError }: Props) => {
     );
   }
 
-  const slicedData = data!.slice(0, 4);
+  const slicedData = data ? data.slice(0, 4) : [];
   const lengthData = slicedData.length;
 
   return (

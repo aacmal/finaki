@@ -4,7 +4,7 @@ import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
 import DropdownMenu from "../dls/Dropdown/DropdownMenu";
 import { DropdownItem } from "../dls/Dropdown/DropdownItem";
-import { BsClockHistory } from "react-icons/all";
+import { BsClockHistory } from "react-icons/bs";
 import { Interval } from "@/api/types/TransactionAPI";
 import useTransaction from "../../stores/transactionStore";
 import { shallow } from "zustand/shallow";
