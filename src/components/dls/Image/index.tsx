@@ -1,5 +1,4 @@
 import { default as Img } from "next/image";
-import React from "react";
 
 type Props = {
   src: string;
@@ -20,6 +19,7 @@ const Image = ({ src, alt, className, priority, sizes }: Props) => {
           src={src}
           alt={alt}
           sizes={sizes}
+          quality={70}
         />
       </div>
     </div>
