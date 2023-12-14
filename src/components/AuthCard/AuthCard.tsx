@@ -22,6 +22,7 @@ const AuthCard = ({ children, className, imageUrl, imageAlt }: Props) => {
           src={imageUrl}
           alt={imageAlt ?? ""}
           className="w-[40%] lg:w-[60%] aspect-square hidden lg:block"
+          priority
         />
       )}
 
