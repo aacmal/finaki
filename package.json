@@ -6,10 +6,13 @@
   },
   "packageManager": "pnpm@8.15.1",
   "scripts": {
-    "build": "turbo build"
+    "build": "turbo build",
+    "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo format:fix"
   },
   "devDependencies": {
     "@finaki/eslint-config": "workspace:^",
+    "@finaki/prettier-config": "workspace:^",
     "prettier": "^3.2.5",
     "turbo": "^1.12.3",
     "typescript": "^5.3.3"
@@ -21,5 +24,6 @@
       "@finaki/eslint-config/nextjs",
       "@finaki/eslint-config/react"
     ]
-  }
+  },
+  "prettier": "@finaki/prettier-config"
 }

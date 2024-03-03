@@ -24,6 +24,7 @@
     "eslint-plugin-react-hooks": "^4.6.0"
   },
   "devDependencies": {
+    "@finaki/prettier-config": "workspace:^",
     "@finaki/ts-config": "workspace:^0.1.0",
     "@types/eslint": "^8.56.2",
     "eslint": "^8.56.0",
@@ -35,5 +36,6 @@
     "extends": [
       "./base.js"
     ]
-  }
+  },
+  "prettier": "@finaki/prettier-config"
 }
