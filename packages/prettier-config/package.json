@@ -1,0 +1,22 @@
+{
+  "name": "@finaki/prettier-config",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "prettier": "^3.2.5"
+  },
+  "devDependencies": {
+    "@finaki/ts-config": "workspace:^",
+    "typescript": "^5.3.3"
+  },
+  "prettier": "@finaki/prettier-config"
+}

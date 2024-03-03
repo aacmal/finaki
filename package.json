@@ -1,0 +1,25 @@
+{
+  "name": "finaki",
+  "private": true,
+  "engines": {
+    "node": ">=18.10.0"
+  },
+  "packageManager": "pnpm@8.15.1",
+  "scripts": {
+    "build": "turbo build"
+  },
+  "devDependencies": {
+    "@finaki/eslint-config": "workspace:^",
+    "prettier": "^3.2.5",
+    "turbo": "^1.12.3",
+    "typescript": "^5.3.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@finaki/eslint-config/base",
+      "@finaki/eslint-config/nextjs",
+      "@finaki/eslint-config/react"
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "finaki-backend",
+  "name": "@finaki/backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
