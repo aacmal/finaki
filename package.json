@@ -7,6 +7,7 @@
   "packageManager": "pnpm@8.15.1",
   "scripts": {
     "build": "turbo build",
+    "dev": "turbo dev",
     "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
     "format:fix": "turbo format:fix"
   },

@@ -3,7 +3,9 @@ export default [
     parser: '@typescript-eslint/parser',
     extends: [
       'next/core-web-vitals',
-      '@finali/eslint-config'
+      '@finaki/eslint-config/base',
+      "@finaki/eslint-config/nextjs",
+      "@finaki/eslint-config/react",
     ],
     rules: {
       'no-unused-vars': 'off',

@@ -30,12 +30,12 @@ const ThemeSelection = () => {
       </Heading>
       <ContentWrapper className="flex gap-3 p-3 lg:p-5">
         <ThemeOption
-          {...themeList[0]}
+          {...themeList[0]!}
           onClick={() => setColorTheme(Theme.Light)}
           active={colorTheme === Theme.Light}
         />
         <ThemeOption
-          {...themeList[1]}
+          {...themeList[1]!}
           onClick={() => setColorTheme(Theme.Dark)}
           active={colorTheme === Theme.Dark}
         />

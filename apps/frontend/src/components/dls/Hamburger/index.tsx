@@ -1,5 +1,5 @@
 import React from "react";
-import style from "./Hamburger.module.scss";
+import style from "./Hamburger.module.css";
 import classNames from "classnames";
 
 type Props = {
@@ -12,17 +12,17 @@ const Hamburger = ({ className, isOpen }: Props) => {
     <label className={classNames(style.hamburgerMenu, className)}>
       <span
         className={classNames("bg-slate-700 dark:bg-slate-100", {
-          [style.st]: isOpen,
+          [String(style.st)]: isOpen,
         })}
       ></span>
       <span
         className={classNames("bg-slate-700 dark:bg-slate-100", {
-          [style.nd]: isOpen,
+          [String(style.nd)]: isOpen,
         })}
       ></span>
       <span
         className={classNames("bg-slate-700 dark:bg-slate-100", {
-          [style.rd]: isOpen,
+          [String(style.rd)]: isOpen,
         })}
       ></span>
     </label>

@@ -1,9 +1,12 @@
-import { Inter } from "@next/font/google";
+import { Inter } from "next/font/google";
 import classNames from "classnames";
+
 import "./globals.scss";
-import HomeNav from "../components/Navigation/HomeNav/HomeNav";
+
 import { Toaster } from "react-hot-toast";
+
 import GoogleAnalytics from "../components/Analytics/ga";
+import HomeNav from "../components/Navigation/HomeNav/HomeNav";
 import RQProvider from "./provider";
 import * as Seo from "./seo";
 
