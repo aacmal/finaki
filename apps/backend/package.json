@@ -57,5 +57,12 @@
     "prettier": "^3.2.5",
     "tsconfig-paths": "^4.1.2",
     "typescript": "^5.3.3"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": "@finaki/eslint-config/base",
+    "rules": {
+      "no-useless-catch": "off"
+    }
   }
 }

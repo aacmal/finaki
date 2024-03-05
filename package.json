@@ -18,13 +18,5 @@
     "turbo": "^1.12.3",
     "typescript": "^5.3.3"
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@finaki/eslint-config/base",
-      "@finaki/eslint-config/nextjs",
-      "@finaki/eslint-config/react"
-    ]
-  },
   "prettier": "@finaki/prettier-config"
 }

@@ -58,5 +58,14 @@
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.3.3"
+  },
+
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@finaki/eslint-config/base",
+      "@finaki/eslint-config/nextjs",
+      "@finaki/eslint-config/react"
+    ]
   }
 }
