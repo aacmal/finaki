@@ -1,7 +1,7 @@
 const renderPieLabel = (props: any) => {
   const { payload } = props;
   let orderedPayload = payload.sort(
-    (a: any, b: any) => b.payload.percent - a.payload.percent
+    (a: any, b: any) => b.payload.percent - a.payload.percent,
   );
 
   if (orderedPayload.length > 6) {

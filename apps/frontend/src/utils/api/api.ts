@@ -1,5 +1,6 @@
 import axios from "axios";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+
 import { refreshAccessToken } from "./authApi";
 import { BASE_URL } from "./config";
 
@@ -34,5 +35,5 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );

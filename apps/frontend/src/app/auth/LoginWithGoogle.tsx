@@ -1,12 +1,13 @@
-import Button from "../../components/dls/Button/Button";
-import { FcGoogle } from "react-icons/fc";
-import { useGoogleLogin } from "@react-oauth/google";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { loginWithGoogleCode } from "@/api/authApi";
 import { Routes } from "@/types/Routes";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "../../components/dls/Loading/LoadingSpinner";
+import { useGoogleLogin } from "@react-oauth/google";
 import classNames from "classnames";
-import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
+
+import Button from "../../components/dls/Button/Button";
+import LoadingSpinner from "../../components/dls/Loading/LoadingSpinner";
 
 const LoginWithGoogle = ({
   onError,
@@ -39,19 +40,19 @@ const LoginWithGoogle = ({
     <Button
       type="button"
       width="full"
-      className="!bg-slate-50 dark:!bg-slate-500 flex justify-center items-center gap-4 !hover:shadow-lg dark:border-slate-400 !shadow-slate-700/20 border border-slate-200"
+      className="!hover:shadow-lg flex items-center justify-center gap-4 border border-slate-200 !bg-slate-50 !shadow-slate-700/20 dark:border-slate-400 dark:!bg-slate-500"
       onClick={() => {
         login();
         setLoading(true);
       }}
     >
       <LoadingSpinner
-        className={classNames("transition-all duration-500 stroke-current", {
+        className={classNames("stroke-current transition-all duration-500", {
           "max-w-0": !loading,
           "max-w-xs": loading,
         })}
       />
-      <span className="text-slate-600 dark:text-slate-200 font-semibold text-center">
+      <span className="text-center font-semibold text-slate-600 dark:text-slate-200">
         {loading ? "Memproses" : "Login dengan Google"}
       </span>
       <FcGoogle size={24} />

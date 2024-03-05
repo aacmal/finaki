@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 type Props = {
   vertical?: boolean;
@@ -18,7 +18,7 @@ const Divider = ({ vertical, horizontal, className }: Props) => {
         {
           "h-px w-full": horizontal,
         },
-        className
+        className,
       )}
     ></div>
   );

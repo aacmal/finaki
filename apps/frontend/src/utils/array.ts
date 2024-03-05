@@ -11,7 +11,7 @@ export const groupByDay = (array: any[]): any[] => {
         year: "numeric",
         month: "long",
         day: "numeric",
-      }
+      },
     );
     if (!acc[date]) {
       acc[date] = [];

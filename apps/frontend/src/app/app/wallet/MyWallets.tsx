@@ -1,9 +1,7 @@
 "use client";
 
-import Placeholder from "../../../components/Placeholder";
-import AddNewWallet from "../../../components/WalletCard/AddNewWallet";
-import WalletCardSkeleton from "../../../components/WalletCard/WalletCardSkeleton";
-import Heading from "../../../components/dls/Heading";
+import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import { QueryKey } from "@/types/QueryKey";
 import { getAllWallets, reoderWallets } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
@@ -16,18 +14,20 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import { AiOutlineInfoCircle } from "react-icons/ai";
-
-import Tooltip from "../../../components/dls/Tooltip/Tooltip";
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
 } from "@dnd-kit/sortable";
-import { useEffect, useMemo, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+
+import Heading from "../../../components/dls/Heading";
+import Tooltip from "../../../components/dls/Tooltip/Tooltip";
+import Placeholder from "../../../components/Placeholder";
+import AddNewWallet from "../../../components/WalletCard/AddNewWallet";
+import WalletCardSkeleton from "../../../components/WalletCard/WalletCardSkeleton";
 import { SortableWalletCard } from "./SortableItem";
 
 const MyWallets = () => {
@@ -51,7 +51,7 @@ const MyWallets = () => {
           color: wallet.color,
           balance: wallet.balance,
           isCredit: wallet.isCredit,
-        }))
+        })),
       );
     },
   });
@@ -65,7 +65,7 @@ const MyWallets = () => {
           color: wallet.color,
           balance: wallet.balance,
           isCredit: wallet.isCredit,
-        }))
+        })),
       );
     }
   }, [wallets]);
@@ -82,15 +82,15 @@ const MyWallets = () => {
     return (
       <div className="mt-6 space-y-3">
         <div className="mt-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
             <div className="font-semibold text-stone-700 dark:text-slate-200">
-              <span className="text-center md:text-left block w-full">
+              <span className="block w-full text-center md:text-left">
                 Total saldo
               </span>
-              <Placeholder className="w-44 h-12 mt-1" />
+              <Placeholder className="mt-1 h-12 w-44" />
             </div>
           </div>
-          <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
+          <div className="mt-6 grid grid-cols-1  gap-5  md:grid-cols-2 lg:grid-cols-3">
             <WalletCardSkeleton />
           </div>
         </div>
@@ -99,7 +99,7 @@ const MyWallets = () => {
   }
   if (!wallets) {
     return (
-      <Heading className="text-center mt-10" level={3}>
+      <Heading className="mt-10 text-center" level={3}>
         Terjadi Kesalahan
       </Heading>
     );
@@ -124,12 +124,12 @@ const MyWallets = () => {
 
   return (
     <div className="mt-6">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
         <div className="font-semibold text-stone-700 dark:text-slate-200">
-          <span className="text-center md:text-left block w-full">
+          <span className="block w-full text-center md:text-left">
             Total saldo
             <Tooltip content="Penjumlahan dan Pengurangan dari semua dompet">
-              <AiOutlineInfoCircle className="dark:text-slate-100 ml-2" />
+              <AiOutlineInfoCircle className="ml-2 dark:text-slate-100" />
             </Tooltip>
           </span>
           <span className="text-2xl">{currencyFormat(totalBalance)}</span>
@@ -143,7 +143,7 @@ const MyWallets = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={items} strategy={rectSortingStrategy}>
-            <div className="mt-6 grid grid-cols-1  md:grid-cols-2  lg:grid-cols-3 gap-5">
+            <div className="mt-6 grid grid-cols-1  gap-5  md:grid-cols-2 lg:grid-cols-3">
               {items.map((wallet: any) => (
                 <SortableWalletCard
                   key={wallet.id}
@@ -166,7 +166,7 @@ const MyWallets = () => {
             height={200}
             alt="empty-wallet"
           />
-          <Heading className="text-center mt-2" level={3}>
+          <Heading className="mt-2 text-center" level={3}>
             Belum ada Dompet yang ditambahkan
           </Heading>
         </div>

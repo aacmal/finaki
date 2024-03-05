@@ -1,11 +1,17 @@
 "use client";
 
-import {
-  indicatorColor,
-  WalletColor,
-} from "../../../../components/WalletCard/constants";
-import WalletOption from "../../../../components/WalletCard/WalletOption";
-import WalletTransaction from "../../../../components/WalletCard/WalletTransaction";
+import { useRef, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { QueryKey } from "@/types/QueryKey";
+import { Transaction } from "@/types/Transaction";
+import { WalletData } from "@/types/Wallet";
+import { updateWallet } from "@/utils/api/wallet";
+import { currencyFormat } from "@/utils/currencyFormat";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+
 import InputWithLabel from "../../../../components/dls/Form/InputWithLabel";
 import Heading from "../../../../components/dls/Heading";
 import IconButton from "../../../../components/dls/IconButton";
@@ -14,17 +20,12 @@ import Option from "../../../../components/dls/Select/Option";
 import Select from "../../../../components/dls/Select/Select";
 import ArrowIcon from "../../../../components/icons/ArrowIcon";
 import PencilIcon from "../../../../components/icons/PencilIcon";
-import { QueryKey } from "@/types/QueryKey";
-import { Transaction } from "@/types/Transaction";
-import { WalletData } from "@/types/Wallet";
-import { updateWallet } from "@/utils/api/wallet";
-import { currencyFormat } from "@/utils/currencyFormat";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import classNames from "classnames";
-import { usePathname, useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
+import {
+  indicatorColor,
+  WalletColor,
+} from "../../../../components/WalletCard/constants";
+import WalletOption from "../../../../components/WalletCard/WalletOption";
+import WalletTransaction from "../../../../components/WalletCard/WalletTransaction";
 
 const WalletDetailPage = () => {
   const urlPath = usePathname();
@@ -90,7 +91,7 @@ const WalletDetailPage = () => {
 
   if (walletDataQuery.isLoading) {
     return (
-      <Heading className="text-center mt-10 animate-pulse" level={3}>
+      <Heading className="mt-10 animate-pulse text-center" level={3}>
         Memuat...
       </Heading>
     );
@@ -120,7 +121,7 @@ const WalletDetailPage = () => {
   return (
     <div
       className={classNames(
-        "p-3 lg:p-5 rounded-2xl w-full absolute min-h-screen lg:min-h-fit lg:h-auto lg:static left-0 lg:pb-5 pb-32"
+        "absolute left-0 min-h-screen w-full rounded-2xl p-3 pb-32 lg:static lg:h-auto lg:min-h-fit lg:p-5 lg:pb-5",
       )}
       style={{
         backgroundColor: edit
@@ -128,11 +129,11 @@ const WalletDetailPage = () => {
             ? watch("color")
             : indicatorColor[watch("color") as WalletColor]
           : walletColor.includes("#")
-          ? walletColor
-          : indicatorColor[walletColor as WalletColor],
+            ? walletColor
+            : indicatorColor[walletColor as WalletColor],
       }}
     >
-      <div className="flex gap-3 items-center mb-5">
+      <div className="mb-5 flex items-center gap-3">
         {!edit ? (
           <IconButton onClick={() => router.back()} className="text-slate-50">
             <ArrowIcon direction="left" strokeWidth={2} />
@@ -154,7 +155,7 @@ const WalletDetailPage = () => {
         data={walletDataQuery.data.balanceHistory}
       /> */}
       {!edit ? (
-        <div className="text-center text-2xl font-semibold text-slate-50 py-10">
+        <div className="py-10 text-center text-2xl font-semibold text-slate-50">
           {walletDataQuery.data.name} <br />
           {currencyFormat(walletDataQuery.data.balance as number)}
         </div>

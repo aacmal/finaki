@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
+
 import IconWrapper from "../IconWrapper";
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -26,7 +27,7 @@ const IconButton = ({
         {
           "!rounded-full": shape === "circle",
         },
-        className
+        className,
       )}
       type="button"
       {...props}

@@ -1,6 +1,7 @@
-import IconWrapper from "../../IconWrapper";
-import classNames from "classnames";
 import { forwardRef, InputHTMLAttributes, Ref } from "react";
+import classNames from "classnames";
+
+import IconWrapper from "../../IconWrapper";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
@@ -15,27 +16,27 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 const RadioButton = forwardRef(
   (
     { id, label, className, icon, ...props }: Props,
-    ref: Ref<HTMLInputElement>
+    ref: Ref<HTMLInputElement>,
   ) => {
     return (
       <li className={classNames("w-full cursor-pointer", className)}>
         <input
-          className="sr-only peer"
+          className="peer sr-only"
           type="radio"
           id={id}
           ref={ref}
           {...props}
         />
         <label
-          className="flex cursor-pointer dark:text-slate-200 items-center justify-center gap-1 font-medium pl-3 pr-4 h-full py-4 w-full text-sm rounded-lg border-slate-200 dark:border-slate-500 border peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-500/20"
+          className="flex h-full w-full cursor-pointer items-center justify-center gap-1 rounded-lg border border-slate-200 py-4 pl-3 pr-4 text-sm font-medium peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:border-slate-500 dark:text-slate-200 dark:peer-checked:bg-blue-500/20"
           htmlFor={id}
         >
-          {icon && <IconWrapper className="!w-4 mr-1">{icon}</IconWrapper>}
+          {icon && <IconWrapper className="mr-1 !w-4">{icon}</IconWrapper>}
           {label}
         </label>
       </li>
     );
-  }
+  },
 );
 
 export default RadioButton;

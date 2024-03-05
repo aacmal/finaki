@@ -1,9 +1,10 @@
-import IconWrapper from "../../dls/IconWrapper";
-import ArrowCircleIcon from "../../icons/ArrowCircleIcon";
 import { Transaction } from "@/types/Transaction";
 import { currencyFormat } from "@/utils/currencyFormat";
 import classNames from "classnames";
+
 import transactionStore from "../../../stores/transactionStore";
+import IconWrapper from "../../dls/IconWrapper";
+import ArrowCircleIcon from "../../icons/ArrowCircleIcon";
 
 type Props = {
   isLastItem: boolean;
@@ -44,9 +45,9 @@ const SimpleTransactionItem = ({
 
   return (
     <li
-      className={classNames("flex w-full py-3 items-center gap-3", {
+      className={classNames("flex w-full items-center gap-3 py-3", {
         "border-b": !isLastItem,
-        "dark:border-slate-500 dark:text-slate-200 text-slate-800":
+        "text-slate-800 dark:border-slate-500 dark:text-slate-200":
           theme === "default",
         "border-white/40": theme === "light",
       })}
@@ -64,12 +65,12 @@ const SimpleTransactionItem = ({
                 "text-orange-500":
                   transaction.type === "out" && theme === "default",
               },
-              { "text-white": theme === "light" }
+              { "text-white": theme === "light" },
             )}
           />
         </IconWrapper>
       </span>
-      <div className="w-[70%] inline-block">
+      <div className="inline-block w-[70%]">
         <div
           onClick={() =>
             setTransactionDetailState({
@@ -78,21 +79,21 @@ const SimpleTransactionItem = ({
             })
           }
           className={classNames(
-            "font-medium cursor-pointer w-44 md:w-60 lg:w-72 truncate"
+            "w-44 cursor-pointer truncate font-medium md:w-60 lg:w-72",
           )}
         >
           {transaction.description}
         </div>
         <span className="flex items-center text-sm">
-          <span className="font-medium mr-1">{date}</span>
+          <span className="mr-1 font-medium">{date}</span>
           <span
             className={classNames(
               {
-                "dark:text-slate-400 text-slate-500": theme === "default",
+                "text-slate-500 dark:text-slate-400": theme === "default",
               },
               {
                 "text-white/80": theme === "light",
-              }
+              },
             )}
           >
             {hour}
@@ -101,13 +102,13 @@ const SimpleTransactionItem = ({
       </div>
       <span
         className={classNames(
-          "font-medium  ml-auto whitespace-nowrap",
+          "ml-auto  whitespace-nowrap font-medium",
           { "text-blue-500": transaction.type === "in" && theme === "default" },
           {
             "text-orange-500":
               transaction.type === "out" && theme === "default",
           },
-          { "text-white": theme === "light" }
+          { "text-white": theme === "light" },
         )}
       >
         {transaction.type === "in" ? "+" : "-"}

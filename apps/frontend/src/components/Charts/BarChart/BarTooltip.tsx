@@ -1,4 +1,5 @@
 import { currencyFormat } from "@/utils/currencyFormat";
+
 import { COLOR } from "../constant";
 import TooltipWrapper from "../TooltipWrapper";
 
@@ -9,7 +10,7 @@ const renderBarTooltip = ({ active, payload }: any) => {
       {
         day: "numeric",
         month: "short",
-      }
+      },
     );
     return (
       <TooltipWrapper>
@@ -17,7 +18,7 @@ const renderBarTooltip = ({ active, payload }: any) => {
         <div className="flex items-center">
           <div
             style={{ backgroundColor: COLOR["INCOME"] }}
-            className="h-2 w-2 rounded-full mr-2"
+            className="mr-2 h-2 w-2 rounded-full"
           />
           <span className="text-sm text-slate-700 dark:text-slate-100">
             {currencyFormat(payload[0].value)}
@@ -26,7 +27,7 @@ const renderBarTooltip = ({ active, payload }: any) => {
         <div className="flex items-center">
           <div
             style={{ backgroundColor: COLOR["OUTCOME"] }}
-            className="h-2 w-2 rounded-full mr-2"
+            className="mr-2 h-2 w-2 rounded-full"
           />
           <span className="text-sm text-slate-700 dark:text-slate-100">
             {currencyFormat(payload[1].value)}

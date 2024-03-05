@@ -1,21 +1,22 @@
 "use client";
 
-import Button from "../dls/Button/Button";
-import LoadingButton from "../dls/Button/LoadingButton";
-import Checkbox from "../dls/Form/Checkbox/Checkbox";
-import Heading from "../dls/Heading";
-import { Modal, ModalContent } from "../dls/Modal";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { WalletData } from "@/types/Wallet";
 import { deleteWallet } from "@/utils/api/wallet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+
 import useStore from "../../stores/store";
+import Button from "../dls/Button/Button";
+import LoadingButton from "../dls/Button/LoadingButton";
+import Checkbox from "../dls/Form/Checkbox/Checkbox";
+import Heading from "../dls/Heading";
+import { Modal, ModalContent } from "../dls/Modal";
 import { indicatorColor, WalletColor } from "./constants";
 
 const DeleteWalletDialog = () => {
@@ -76,7 +77,7 @@ const DeleteWalletDialog = () => {
         QueryKey.WALLETS,
       ]) as WalletData[];
       const walletData = wallets?.find(
-        (wallet: WalletData) => wallet._id === deleteId
+        (wallet: WalletData) => wallet._id === deleteId,
       );
 
       if (!walletData) setOpen(false);
@@ -93,7 +94,7 @@ const DeleteWalletDialog = () => {
         <Heading className="mb-4" level={3}>
           Apakah anda yakin untuk menghapus dompet{" "}
           <span
-            className={classNames("px-2 py-1 rounded-md mx-1 text-slate-50")}
+            className={classNames("mx-1 rounded-md px-2 py-1 text-slate-50")}
             style={{
               backgroundColor: walletData?.color?.includes("#")
                 ? walletData?.color
@@ -104,7 +105,7 @@ const DeleteWalletDialog = () => {
           </span>
           ?
         </Heading>
-        <span className=" text-slate-600 dark:text-slate-100 mb-2 block">
+        <span className=" mb-2 block text-slate-600 dark:text-slate-100">
           Dompet ini akan dihapus secara permanen dan tidak dapat dikembalikan
         </span>
         <form onSubmit={handleSubmit(onSubmitHanlder)}>
@@ -114,7 +115,7 @@ const DeleteWalletDialog = () => {
             label="Hapus semua transaksi yang berkaitan dengan dompet ini"
             {...register("deleteTransactions")}
           />
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col gap-4 lg:flex-row">
             <Button
               onClick={() => setDeleteId(null)}
               buttonStyle="secondary"

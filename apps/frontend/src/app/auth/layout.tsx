@@ -1,9 +1,9 @@
 "use client";
 
-import { Routes } from "@/types/Routes";
-import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import {GoogleOAuthProvider} from "@react-oauth/google";
+import { usePathname, useRouter } from "next/navigation";
+import { Routes } from "@/types/Routes";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 type Props = {
   children: React.ReactNode;
@@ -29,7 +29,9 @@ const AuthLayout = ({ children }: Props) => {
 
   return (
     <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_CLIENT_ID as string}>
-      <div className="lg:grid lg:place-items-center min-h-screen w-screen">{children}</div>
+      <div className="min-h-screen w-screen lg:grid lg:place-items-center">
+        {children}
+      </div>
     </GoogleOAuthProvider>
   );
 };

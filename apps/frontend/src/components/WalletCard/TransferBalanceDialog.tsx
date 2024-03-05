@@ -1,4 +1,13 @@
 import { transferBalance } from "@/api/wallet";
+import { QueryKey } from "@/types/QueryKey";
+import { WalletData } from "@/types/Wallet";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+
+import useStore from "../../stores/store";
 import LoadingButton from "../dls/Button/LoadingButton";
 import CurrencyInput from "../dls/Form/CurrencyInput";
 import InputWithLabel from "../dls/Form/InputWithLabel";
@@ -11,19 +20,11 @@ import Option from "../dls/Select/Option";
 import Select from "../dls/Select/Select";
 import ArrowIcon from "../icons/ArrowIcon";
 import XmarkIcon from "../icons/XmarkIcon";
-import { QueryKey } from "@/types/QueryKey";
-import { WalletData } from "@/types/Wallet";
-import { removeCurrencyFormat } from "@/utils/currencyFormat";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import classNames from "classnames";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import useStore from "../../stores/store";
 import { indicatorColor } from "./constants";
 
 const TransferBalanceDialog = () => {
   const { sourceWalletId, destinationWalletId, isOpen, setOpen } = useStore(
-    (state) => state.transferBalanceState
+    (state) => state.transferBalanceState,
   );
 
   const { control, handleSubmit, register, unregister, reset } = useForm();
@@ -56,7 +57,7 @@ const TransferBalanceDialog = () => {
   return (
     <Modal stateOpen={isOpen}>
       <ModalContent>
-        <div className="flex justify-between items-center mb-5">
+        <div className="mb-5 flex items-center justify-between">
           <Heading level={3}>Pindahkan Saldo</Heading>
           <IconButton
             className="dark:text-slate-100"
@@ -69,7 +70,7 @@ const TransferBalanceDialog = () => {
           </IconButton>
         </div>
         <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <div className="flex items-center gap-4 flex-col lg:flex-row mb-6">
+          <div className="mb-6 flex flex-col items-center gap-4 lg:flex-row">
             <Controller
               name="sourceWallet"
               control={control}
@@ -85,7 +86,7 @@ const TransferBalanceDialog = () => {
                     <Option
                       selected={wallet._id === sourceWalletId}
                       className={classNames(
-                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
+                        "mx-2 mb-2 flex items-center justify-between rounded-lg border-2 border-transparent p-3 font-bold text-slate-50 hover:border-blue-400",
                       )}
                       key={wallet._id}
                       value={wallet._id}
@@ -104,7 +105,7 @@ const TransferBalanceDialog = () => {
             <IconWrapper>
               <ArrowIcon
                 strokeWidth={2}
-                className="lg:-rotate-90 dark:text-slate-100"
+                className="dark:text-slate-100 lg:-rotate-90"
                 direction="down"
               />
             </IconWrapper>
@@ -122,7 +123,7 @@ const TransferBalanceDialog = () => {
                     <Option
                       selected={wallet._id === destinationWalletId}
                       className={classNames(
-                        "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
+                        "mx-2 mb-2 flex items-center justify-between rounded-lg border-2 border-transparent p-3 font-bold text-slate-50 hover:border-blue-400",
                       )}
                       key={wallet._id}
                       value={wallet._id}
@@ -154,7 +155,7 @@ const TransferBalanceDialog = () => {
               <CurrencyInput
                 required
                 min={1}
-                className="!w-full mb-6"
+                className="mb-6 !w-full"
                 placeholder="5.000"
                 label="Jumlah"
                 id="amount"

@@ -1,11 +1,6 @@
+import { useState } from "react";
+import Link from "next/link";
 import { deleteTransaction, editTransaction } from "@/api/transaction";
-import { walletLabelColor } from "../../WalletCard/constants";
-import CurrencyInput from "../../dls/Form/CurrencyInput";
-import TextArea from "../../dls/Form/TextArea";
-import IconWrapper from "../../dls/IconWrapper";
-import Option from "../../dls/Select/Option";
-import Select from "../../dls/Select/Select";
-import ArrowIcon from "../../icons/ArrowIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { Transaction } from "@/types/Transaction";
@@ -13,11 +8,17 @@ import { WalletData } from "@/types/Wallet";
 import { currencyFormat, removeCurrencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import Link from "next/link";
-import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+
 import useTransaction from "../../../stores/transactionStore";
+import CurrencyInput from "../../dls/Form/CurrencyInput";
+import TextArea from "../../dls/Form/TextArea";
+import IconWrapper from "../../dls/IconWrapper";
+import Option from "../../dls/Select/Option";
+import Select from "../../dls/Select/Select";
+import ArrowIcon from "../../icons/ArrowIcon";
+import { walletLabelColor } from "../../WalletCard/constants";
 import TransactionOption from "../AllTransactions/TransactionOption";
 
 type Props = {
@@ -48,7 +49,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
   const wallets = queryClient.getQueryData([QueryKey.WALLETS]) as WalletData[];
 
   const currentWallet = wallets?.find(
-    (wallet: any) => wallet._id === transaction.walletId
+    (wallet: any) => wallet._id === transaction.walletId,
   );
 
   const deleteMutation = useMutation({
@@ -66,10 +67,10 @@ const FullTransactionItem = ({ transaction }: Props) => {
         (oldData: any) => {
           if (!oldData) return;
           const newData = oldData.filter(
-            (transaction: Transaction) => transaction._id !== data._id
+            (transaction: Transaction) => transaction._id !== data._id,
           );
           return newData;
-        }
+        },
       );
 
       // if deleted transaction has wallet id, update wallet data
@@ -126,10 +127,10 @@ const FullTransactionItem = ({ transaction }: Props) => {
                 };
               }
               return oldTransaction;
-            }
+            },
           );
           return newData;
-        }
+        },
       );
 
       // if edited transaction has wallet id and transaction amount is changed, invalidate wallet query
@@ -155,7 +156,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
         },
         {
           shouldFocus: true,
-        }
+        },
       );
     },
   });
@@ -178,7 +179,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
         },
         {
           shouldFocus: true,
-        }
+        },
       );
       toast.error("Jumlah tidak boleh kurang dari 0");
       return;
@@ -217,19 +218,19 @@ const FullTransactionItem = ({ transaction }: Props) => {
   return (
     <>
       {isOnEdit && (
-        <div className="w-screen h-screen bg-transparent absolute top-0 right-0 z-40"></div>
+        <div className="absolute right-0 top-0 z-40 h-screen w-screen bg-transparent"></div>
       )}
       <tr
-        className={classNames("dark:hover:bg-blue-900/50 lg:pr-4 pr-0 group", {
-          "z-50 relative": isOnEdit,
+        className={classNames("group pr-0 dark:hover:bg-blue-900/50 lg:pr-4", {
+          "relative z-50": isOnEdit,
         })}
       >
         {!isOnEdit ? (
           <>
-            <td className="hidden rounded-l-xl group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 h-14 pl-3 lg:table-cell text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900 ">
+            <td className="hidden h-14 rounded-l-xl pl-3 text-gray-500 group-hover:bg-blue-100 group-hover:text-slate-900 dark:group-hover:bg-blue-900/50 dark:group-hover:text-slate-200 lg:table-cell ">
               {date}
             </td>
-            <td className="rounded-l-xl lg:rounded-none group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 py-3 lg:pl-0 pl-2">
+            <td className="rounded-l-xl py-3 pl-2 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 lg:rounded-none lg:pl-0">
               <div
                 onClick={() =>
                   setTransactionDetailState({
@@ -237,13 +238,13 @@ const FullTransactionItem = ({ transaction }: Props) => {
                     transaction: transaction,
                   })
                 }
-                className="font-semibold lg:font-medium text-slate-800  dark:text-slate-200 cursor-pointer block w-36 md:w-72 lg:w-96 truncate"
+                className="block w-36 cursor-pointer  truncate font-semibold text-slate-800 dark:text-slate-200 md:w-72 lg:w-96 lg:font-medium"
               >
                 {transaction.description}
               </div>
               <div
                 className={classNames(
-                  "lg:hidden text-gray-500 dark:group-hover:text-slate-200 group-hover:text-slate-900"
+                  "text-gray-500 group-hover:text-slate-900 dark:group-hover:text-slate-200 lg:hidden",
                 )}
               >
                 {date}
@@ -260,7 +261,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                     : Routes.Transactions
                 }
                 className={classNames(
-                  "px-3 py-1 w-fit block text-center text-sm rounded-xl font-medium",
+                  "block w-fit rounded-xl px-3 py-1 text-center text-sm font-medium",
                   `${
                     currentWallet &&
                     !currentWallet.color.includes("#") &&
@@ -270,12 +271,12 @@ const FullTransactionItem = ({ transaction }: Props) => {
                     "cursor-pointer": currentWallet,
                   },
                   {
-                    "text-slate-600 dark:text-slate-200 !cursor-default":
+                    "!cursor-default text-slate-600 dark:text-slate-200":
                       !currentWallet,
                   },
                   {
                     "text-white": currentWallet?.color.includes("#"),
-                  }
+                  },
                 )}
                 style={{
                   backgroundColor: currentWallet?.color.includes("#")
@@ -290,7 +291,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
               className={classNames(
                 "text-right font-medium group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50",
                 { "text-blue-500": transaction.type === "in" },
-                { "text-orange-500": transaction.type === "out" }
+                { "text-orange-500": transaction.type === "out" },
               )}
             >
               <span>
@@ -302,10 +303,10 @@ const FullTransactionItem = ({ transaction }: Props) => {
         ) : (
           <td
             colSpan={4}
-            className="py-2 pl-3 bg-blue-100 dark:bg-blue-900/50 rounded-l-xl pr-2"
+            className="rounded-l-xl bg-blue-100 py-2 pl-3 pr-2 dark:bg-blue-900/50"
           >
             <form
-              className="flex gap-3 items-center w-full"
+              className="flex w-full items-center gap-3"
               id="edit-transaction-form"
               onSubmit={handleSubmit(onSaveHandler)}
             >
@@ -316,7 +317,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                 placeholder="Deskripsi"
                 transparent
                 defaultValue={transaction.description}
-                className="w-[50%] h-auto"
+                className="h-auto w-[50%]"
                 padding="p-2 h-12"
                 {...register("description")}
               />
@@ -328,7 +329,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                   render={({ field }) => (
                     <Select required className="!p-3" {...field}>
                       <Option selected={transaction.type === "in"} value="in">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                           <IconWrapper className="!w-4 text-blue-500">
                             <ArrowIcon direction="up" />
                           </IconWrapper>
@@ -336,7 +337,7 @@ const FullTransactionItem = ({ transaction }: Props) => {
                         </div>
                       </Option>
                       <Option selected={transaction.type === "out"} value="out">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                           <IconWrapper className="!w-4 text-orange-500">
                             <ArrowIcon direction="down" />
                           </IconWrapper>
@@ -366,10 +367,10 @@ const FullTransactionItem = ({ transaction }: Props) => {
         )}
         <td
           className={classNames(
-            "group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 rounded-r-xl",
+            "rounded-r-xl group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50",
             {
               "bg-blue-100 dark:bg-blue-900/50": isOnEdit,
-            }
+            },
           )}
         >
           <TransactionOption

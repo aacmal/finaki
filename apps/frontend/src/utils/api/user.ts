@@ -11,16 +11,20 @@ export const getUserDevices = async () => {
     withCredentials: true,
   });
   return response.data.data;
-}
+};
 
 export const logoutDevices = async (deviceIds: string[]) => {
-  const response = await instance.post("/user/devices", { deviceIds }, {
-    withCredentials: true,
-  });
+  const response = await instance.post(
+    "/user/devices",
+    { deviceIds },
+    {
+      withCredentials: true,
+    },
+  );
   return response.data.data;
-}
+};
 
 export const detachTelegramAccount = async () => {
   const response = await instance.delete("/user/telegram");
   return response.data.data;
-}
+};

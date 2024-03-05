@@ -1,5 +1,8 @@
 "use client";
 
+import React, { useState } from "react";
+import classNames from "classnames";
+
 import IconButton from "../../dls/IconButton";
 import LoadingSpinner from "../../dls/Loading/LoadingSpinner";
 import CheckIcon from "../../icons/CheckIcon";
@@ -7,8 +10,6 @@ import ElipsisVerticalIcon from "../../icons/ElipsisVerticalIcon";
 import PencilIcon from "../../icons/PencilIcon";
 import TrashIcon from "../../icons/TrashIcon";
 import XmarkIcon from "../../icons/XmarkIcon";
-import classNames from "classnames";
-import React, { useState } from "react";
 
 type Props = {
   onEdit?: () => void;
@@ -29,7 +30,7 @@ const TransactionOption = ({
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex justify-center">
+      <div className="flex flex-1 justify-center">
         <LoadingSpinner className=" stroke-blue-500" />
       </div>
     );
@@ -37,13 +38,13 @@ const TransactionOption = ({
 
   return (
     <div
-      className={classNames("flex-1 text-center lg:static relative", {
+      className={classNames("relative flex-1 text-center lg:static", {
         "lg:invisible lg:group-hover:visible": !isOnEdit,
       })}
     >
       {!isOnEdit ? (
         <>
-          <div className="hidden lg:flex gap-3 justify-center">
+          <div className="hidden justify-center gap-3 lg:flex">
             <IconButton
               type="button"
               onClick={onEdit}
@@ -64,16 +65,16 @@ const TransactionOption = ({
             className="lg:hidden"
           >
             <ElipsisVerticalIcon
-              className="w-5 h-5 dark:text-slate-200 text-slate-900"
+              className="h-5 w-5 text-slate-900 dark:text-slate-200"
               strokeWidth={2}
               stroke="currentColor"
             />
           </IconButton>
           <div
             className={classNames(
-              "lg:hidden absolute p-1 flex gap-3 right-0 rounded top-8 shadow-lg bg-white transform transition-all",
-              { "visible opacity-100  translate-y-0": isHover },
-              { "invisible opacity-0 -translate-y-4": !isHover }
+              "absolute right-0 top-8 flex transform gap-3 rounded bg-white p-1 shadow-lg transition-all lg:hidden",
+              { "visible translate-y-0  opacity-100": isHover },
+              { "invisible -translate-y-4 opacity-0": !isHover },
             )}
           >
             <IconButton
@@ -91,7 +92,7 @@ const TransactionOption = ({
           </div>
         </>
       ) : (
-        <div className="flex gap-3 justify-center lg:static absolute right-0 lg:bg-transparent bg-white lg:shadow-none shadow-xl rounded-md lg:p-0 p-1 top-6">
+        <div className="absolute right-0 top-6 flex justify-center gap-3 rounded-md bg-white p-1 shadow-xl lg:static lg:bg-transparent lg:p-0 lg:shadow-none">
           <IconButton
             onClick={onCancel}
             className="text-red-600 hover:bg-red-600/10"

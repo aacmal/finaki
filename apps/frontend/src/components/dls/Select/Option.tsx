@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React, { useContext, useEffect } from "react";
+import classNames from "classnames";
+
 import { SelectContext, SelectContextType } from "./Select";
 
 type Props = {
@@ -26,7 +27,7 @@ const Option = ({ children, value, selected, ...props }: Props) => {
   return (
     <div
       className={classNames(
-        "p-1 dark:hover:bg-slate-400/30 rounded-md hover:bg-slate-200/50"
+        "rounded-md p-1 hover:bg-slate-200/50 dark:hover:bg-slate-400/30",
       )}
       onClick={() =>
         setSelected({

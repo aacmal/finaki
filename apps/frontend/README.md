@@ -10,9 +10,11 @@
 </h6>
 
 ## 💵 About
+
 A web-based application created to solve financial recording solutions, Finaki was created so that users can record finances anywhere and anytime.
 
 ## ✨ Features
+
 - 💳 Authentication
   - Login
   - Register
@@ -29,8 +31,8 @@ A web-based application created to solve financial recording solutions, Finaki w
 - 📱 PWA
 - 🏫 Export Transaction to PDF
 
-
 ## 🚀 Tech Stack
+
 - Front end
   - [NextJS](https://nextjs.org/)
   - [ReactJS](https://reactjs.org/)
@@ -41,6 +43,6 @@ A web-based application created to solve financial recording solutions, Finaki w
   - [ExpressJS](https://expressjs.com/)
   - [MongoDB](https://www.mongodb.com/)
 
-
 ## ⚖️ License
+
 Distributed under the MIT License. See `LICENSE` for more information.

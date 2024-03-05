@@ -1,5 +1,5 @@
 export interface IconProps {
-  className?: string | undefined; 
+  className?: string | undefined;
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
@@ -8,15 +8,15 @@ export interface IconProps {
 }
 
 export interface ArrowIconProps extends IconProps {
-  direction: 'up' | 'down' | 'left' | 'right';
+  direction: "up" | "down" | "left" | "right";
 }
 
 export const defaultIconProps: IconProps = {
-  fill: 'currentColor',
-}
+  fill: "currentColor",
+};
 
 export const defaultOutlineIconProps: IconProps = {
-  fill: 'none',
-  stroke: 'currentColor',
+  fill: "none",
+  stroke: "currentColor",
   strokeWidth: 1.5,
-}
+};

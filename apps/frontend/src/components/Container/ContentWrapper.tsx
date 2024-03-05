@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 type Props = {
   className?: string;
@@ -10,8 +10,8 @@ const ContentWrapper = ({ className, children }: Props) => {
   return (
     <div
       className={classNames(
-        "p-5 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-2xl shadow-xl shadow-zinc-200/40 dark:shadow-slate-800 mt-4",
-        className
+        "mt-4 rounded-2xl bg-white p-5 shadow-xl shadow-zinc-200/40 dark:bg-slate-700 dark:text-slate-200 dark:shadow-slate-800",
+        className,
       )}
     >
       {children}

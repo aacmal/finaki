@@ -13,7 +13,7 @@ export const BASE_URL =
  */
 export const makeUrl = (
   path: string,
-  parameters?: Record<string, unknown>
+  parameters?: Record<string, unknown>,
 ): string => {
   if (!parameters) return path;
 

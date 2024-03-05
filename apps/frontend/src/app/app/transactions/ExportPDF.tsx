@@ -1,6 +1,7 @@
-import ExportTransactionModal from "../../../components/Transactions/ExportTransactionModal";
-import Button from "../../../components/dls/Button/Button";
 import { useState } from "react";
+
+import Button from "../../../components/dls/Button/Button";
+import ExportTransactionModal from "../../../components/Transactions/ExportTransactionModal";
 
 const ExportPDF = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -8,7 +9,7 @@ const ExportPDF = () => {
     <>
       <Button
         type="button"
-        className="!py-2 !text-sm whitespace-nowrap font-semibold !rounded-md"
+        className="whitespace-nowrap !rounded-md !py-2 !text-sm font-semibold"
         width="fit"
         onClick={() => setIsOpen(true)}
       >

@@ -1,8 +1,9 @@
 import React from "react";
+import { WalletData } from "@/types/Wallet";
+
+import PieChart from "../Charts/PieChart/PieChart";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
-import PieChart from "../Charts/PieChart/PieChart";
-import { WalletData } from "@/types/Wallet";
 
 type Props = {
   data: WalletData[] | undefined;

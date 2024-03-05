@@ -1,22 +1,23 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
+import Head from "next/head";
+import Image from "next/image";
 import { getAllTransactions } from "@/api/transaction";
-import TransactionHeader from "../../../components/Transactions/AllTransactions/TransactionHeader";
-import TransactionList from "../../../components/Transactions/AllTransactions/TransactionList";
-import { SimpleTSkeleton } from "../../../components/Transactions/TransactionItem";
-import Input from "../../../components/dls/Form/Input";
-import Heading from "../../../components/dls/Heading";
-import LoadingSpinner from "../../../components/dls/Loading/LoadingSpinner";
 import { QueryKey } from "@/types/QueryKey";
 import { groupByDay } from "@/utils/array";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import classNames from "classnames";
-import Head from "next/head";
-import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
 import { shallow } from "zustand/shallow";
+
+import Input from "../../../components/dls/Form/Input";
+import Heading from "../../../components/dls/Heading";
+import LoadingSpinner from "../../../components/dls/Loading/LoadingSpinner";
+import TransactionHeader from "../../../components/Transactions/AllTransactions/TransactionHeader";
+import TransactionList from "../../../components/Transactions/AllTransactions/TransactionList";
+import { SimpleTSkeleton } from "../../../components/Transactions/TransactionItem";
 import { useDebounce } from "../../../hooks/useDebounce";
 import useTransaction from "../../../stores/transactionStore";
 import ExportPDF from "./ExportPDF";
@@ -28,7 +29,7 @@ const AllTransactions = () => {
       transactions: state.transactions,
       setTransactions: state.setTransactions,
     }),
-    shallow
+    shallow,
   );
   const { ref, inView } = useInView();
   const [search, setSearch] = useState("");
@@ -98,7 +99,7 @@ const AllTransactions = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-4 mt-7">
+      <div className="mt-7 space-y-4">
         {Array(6)
           .fill("")
           .map((_, index) => (
@@ -110,7 +111,7 @@ const AllTransactions = () => {
 
   if (!transactionLists || error) {
     return (
-      <Heading className="text-center mt-10" level={3}>
+      <Heading className="mt-10 text-center" level={3}>
         Terjadi Kesalahan
       </Heading>
     );
@@ -118,7 +119,7 @@ const AllTransactions = () => {
 
   if (transactionLists.length < 1) {
     return (
-      <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
+      <div className="mt-10 flex flex-col items-center justify-center font-semibold dark:text-slate-300">
         <Image
           src="/images/transaction.png"
           alt="Transaction is empty"
@@ -141,7 +142,7 @@ const AllTransactions = () => {
       !searchQuery.isLoading
     ) {
       return (
-        <div className="flex flex-col justify-center items-center mt-10 dark:text-slate-300 font-semibold">
+        <div className="mt-10 flex flex-col items-center justify-center font-semibold dark:text-slate-300">
           <Image
             src="/images/transaction.png"
             alt="Transaction is empty"
@@ -165,7 +166,7 @@ const AllTransactions = () => {
       </Head>
       <div className="flex justify-between gap-4">
         <Input
-          className="max-w-md ring-0 focus:ring-2 dark:ring-slate-500 ring-slate-300 transition-all focus:!bg-gray-100 dark:!bg-slate-700 !bg-gray-200 font-semibold"
+          className="max-w-md !bg-gray-200 font-semibold ring-0 ring-slate-300 transition-all focus:!bg-gray-100 focus:ring-2 dark:!bg-slate-700 dark:ring-slate-500"
           type="text"
           placeholder="Cari Transaksi"
           onChange={(e) => setSearch(e.target.value)}
@@ -180,7 +181,7 @@ const AllTransactions = () => {
       </table>
       {notFound()}
       {searchQuery.isLoading && search.length > 0 && (
-        <div className="space-y-4 mt-7">
+        <div className="mt-7 space-y-4">
           {Array(6)
             .fill("")
             .map((_, index) => (
@@ -192,8 +193,8 @@ const AllTransactions = () => {
         ref={ref}
         disabled={!hasNextPage || isFetchingNextPage}
         className={classNames(
-          "px-5 py-2 font-medium mx-auto mt-5 rounded-lg bg-blue-200 text-blue-500 flex gap-2 items-center",
-          { hidden: !hasNextPage }
+          "mx-auto mt-5 flex items-center gap-2 rounded-lg bg-blue-200 px-5 py-2 font-medium text-blue-500",
+          { hidden: !hasNextPage },
         )}
         onClick={() => fetchNextPage()}
       >

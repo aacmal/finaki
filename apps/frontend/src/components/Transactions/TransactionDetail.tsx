@@ -1,18 +1,19 @@
 "use client";
 
-import Heading from "../dls/Heading";
-import IconButton from "../dls/IconButton";
-import IconWrapper from "../dls/IconWrapper";
-import { Modal, ModalContent } from "../dls/Modal";
-import ArrowIcon from "../icons/ArrowIcon";
-import XmarkIcon from "../icons/XmarkIcon";
 import { QueryKey } from "@/types/QueryKey";
 import { WalletData } from "@/types/Wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { dateFormat, timeFormat } from "@/utils/timeFormat";
 import { useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
+
 import transactionStore from "../../stores/transactionStore";
+import Heading from "../dls/Heading";
+import IconButton from "../dls/IconButton";
+import IconWrapper from "../dls/IconWrapper";
+import { Modal, ModalContent } from "../dls/Modal";
+import ArrowIcon from "../icons/ArrowIcon";
+import XmarkIcon from "../icons/XmarkIcon";
 import { walletLabelColor } from "../WalletCard/constants";
 
 const TransactionDetail = () => {
@@ -38,7 +39,7 @@ const TransactionDetail = () => {
         }
         className="!max-w-2xl lg:!-mt-96"
       >
-        <div className="flex justify-between items-center mb-5">
+        <div className="mb-5 flex items-center justify-between">
           <Heading level={3}>Detail Transaksi</Heading>
           <IconButton
             className="dark:text-slate-100"
@@ -94,10 +95,10 @@ const TransactionDetail = () => {
                 <div
                   className={classNames(
                     {
-                      "px-3 py-1 w-fit text-center text-sm rounded-lg font-medium":
+                      "w-fit rounded-lg px-3 py-1 text-center text-sm font-medium":
                         wallet,
                     },
-                    `${wallet && (walletLabelColor as any)[wallet.color]}`
+                    `${wallet && (walletLabelColor as any)[wallet.color]}`,
                   )}
                 >
                   {wallet?.name ?? "-"}

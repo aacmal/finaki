@@ -6,7 +6,7 @@ export const metadata = {
 };
 const AboutPage = () => {
   return (
-    <div className="mt-32 lg:pt-16 2xl:px-32 px-3 md:px-4 overflow-x-hidden mx-auto max-w-screen-lg space-y-10 dark:text-slate-300">
+    <div className="mx-auto mt-32 max-w-screen-lg space-y-10 overflow-x-hidden px-3 dark:text-slate-300 md:px-4 lg:pt-16 2xl:px-32">
       <section>
         <Heading level={1} className="mb-4 text-center">
           About this project
@@ -17,7 +17,7 @@ const AboutPage = () => {
           make it easier for you to analyze your finances.
         </p>
         <section>
-          <Heading level={2} className="mt-8 mb-4" fontWeight="normal" isItalic>
+          <Heading level={2} className="mb-4 mt-8" fontWeight="normal" isItalic>
             - Background
           </Heading>
           <p>
@@ -27,7 +27,7 @@ const AboutPage = () => {
           </p>
         </section>
         <section>
-          <Heading level={2} className="mt-8 mb-4" fontWeight="normal" isItalic>
+          <Heading level={2} className="mb-4 mt-8" fontWeight="normal" isItalic>
             - Technology
           </Heading>
           <p>

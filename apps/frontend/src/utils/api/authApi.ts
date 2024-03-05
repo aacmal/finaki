@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { BASE_URL } from "./config";
 import { GenericResponse } from "./types/Api";
 import {
@@ -49,7 +50,7 @@ export const forgotPassword = async (email: string) => {
 
 export const verifyResetPasswordToken = async (token: string) => {
   const response = await authApi.get<GenericResponse>(
-    `/reset-password?token=${token}`
+    `/reset-password?token=${token}`,
   );
   return response.data.data;
 };
@@ -59,9 +60,9 @@ export const resetPassword = async (data: ResetPasswordInput) => {
   return response.data.message;
 };
 
-export const loginWithGoogleCode = async (code: string)=> {
+export const loginWithGoogleCode = async (code: string) => {
   const response = await authApi.post("/login-with-google", {
-    code
-  })
-  return response.data
-}
+    code,
+  });
+  return response.data;
+};

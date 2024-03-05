@@ -1,14 +1,15 @@
 "use client";
 
-import OnHoverWrapper from "../../dls/ActionWrapper/OnHoverWrapper";
-import IconWrapper from "../../dls/IconWrapper";
-import ArrowRectangleIcon from "../../icons/ArrowRectangleIcon";
+import { useRouter } from "next/navigation";
 import { Routes } from "@/types/Routes";
 import { logoutUser } from "@/utils/api/authApi";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+
 import useStore from "../../../stores/store";
+import OnHoverWrapper from "../../dls/ActionWrapper/OnHoverWrapper";
+import IconWrapper from "../../dls/IconWrapper";
+import ArrowRectangleIcon from "../../icons/ArrowRectangleIcon";
 
 const Action = () => {
   const router = useRouter();
@@ -37,7 +38,7 @@ const Action = () => {
       <span
         role="button"
         onClick={handleLogout}
-        className="py-2 px-4 hover:bg-red-500 hover:text-white flex items-center gap-5"
+        className="flex items-center gap-5 px-4 py-2 hover:bg-red-500 hover:text-white"
       >
         <IconWrapper>
           <ArrowRectangleIcon />

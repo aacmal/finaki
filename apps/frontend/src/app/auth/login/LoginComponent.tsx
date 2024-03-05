@@ -1,19 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { LoginInput } from "@/api/types/AuthAPI";
+import { Routes } from "@/types/Routes";
+import { loginUser } from "@/utils/api/authApi";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+
 import AuthCard from "../../../components/AuthCard/AuthCard";
 import AuthCardContent from "../../../components/AuthCard/AuthCardContent";
 import LoadingButton from "../../../components/dls/Button/LoadingButton";
 import FormGroup from "../../../components/dls/Form/FormGroup";
 import InputWithLabel from "../../../components/dls/Form/InputWithLabel";
 import Heading from "../../../components/dls/Heading";
-import { Routes } from "@/types/Routes";
-import { loginUser } from "@/utils/api/authApi";
-import { useMutation } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import LoginWithGoogle from "../LoginWithGoogle";
 
 const LoginComponent = () => {
@@ -56,7 +57,7 @@ const LoginComponent = () => {
     >
       <AuthCardContent>
         {errors.root && (
-          <span className="mx-auto text-red-400 font-semibold">
+          <span className="mx-auto font-semibold text-red-400">
             {errors.root?.message}
           </span>
         )}
@@ -64,11 +65,11 @@ const LoginComponent = () => {
           <Heading
             level={1}
             gradient
-            className="text-center mt-2 text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text"
+            className="mt-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-center text-transparent"
           >
             Selamat Datang Kembali!
           </Heading>
-          <Heading level={4} className="text-center font-medium mt-2">
+          <Heading level={4} className="mt-2 text-center font-medium">
             Login untuk melanjutkan penggunaan aplikasi
           </Heading>
         </div>
@@ -96,7 +97,7 @@ const LoginComponent = () => {
             />
             <Link
               href={Routes.ForgotPassword}
-              className="text-blue-400 block w-full mt-1 text-right font-semibold"
+              className="mt-1 block w-full text-right font-semibold text-blue-400"
             >
               Lupa password?
             </Link>
@@ -118,9 +119,9 @@ const LoginComponent = () => {
             })
           }
         />
-        <span className="text-center justify-self-end text-gray-600 dark:text-slate-300">
+        <span className="justify-self-end text-center text-gray-600 dark:text-slate-300">
           Belum punya akun?{" "}
-          <Link href={Routes.Register} className="text-blue-400 font-semibold">
+          <Link href={Routes.Register} className="font-semibold text-blue-400">
             Daftar
           </Link>
         </span>

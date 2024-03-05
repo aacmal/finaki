@@ -1,8 +1,9 @@
 "use client";
 
+import { Fragment } from "react";
 import { Transaction } from "@/types/Transaction";
 import classNames from "classnames";
-import { Fragment } from "react";
+
 import { FullTransactionItem } from "../TransactionItem";
 
 type Props = {
@@ -20,14 +21,14 @@ const TransactionList = ({ data }: Props) => {
           <Fragment key={index}>
             <tr>
               <td align="left" colSpan={5}>
-                <h3 className="font-bold text-gray-400 mt-3 pb-1">
+                <h3 className="mt-3 pb-1 font-bold text-gray-400">
                   {transactionData.date}
                 </h3>
                 <div
                   className={classNames(
-                    "w-full h-px bg-slate-400 dark:bg-slate-500 mb-1",
+                    "mb-1 h-px w-full bg-slate-400 dark:bg-slate-500",
                     { hidden: index === 0 },
-                    { block: index > 0 }
+                    { block: index > 0 },
                   )}
                 ></div>
               </td>

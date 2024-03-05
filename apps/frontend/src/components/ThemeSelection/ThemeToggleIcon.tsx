@@ -1,11 +1,12 @@
 "use client";
 
+import { Theme } from "@/types/Theme";
+
+import useHydration from "../../hooks/useHydration";
+import useTheme from "../../hooks/useTheme";
 import IconButton from "../dls/IconButton";
 import MoonIcon from "../icons/MoonIcon";
 import SunIcon from "../icons/SunIcon";
-import { Theme } from "@/types/Theme";
-import useHydration from "../../hooks/useHydration";
-import useTheme from "../../hooks/useTheme";
 
 const ThemeToggleIcon = () => {
   const { colorTheme, setColorTheme } = useTheme();

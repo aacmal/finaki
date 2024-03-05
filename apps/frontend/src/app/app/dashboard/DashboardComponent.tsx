@@ -5,21 +5,22 @@ import {
   getTotalTransactionByPeriod,
 } from "@/api/transaction";
 import { getAllWallets } from "@/api/wallet";
+import { QueryKey } from "@/types/QueryKey";
+import { useQuery } from "@tanstack/react-query";
+import { shallow } from "zustand/shallow";
+
 import Ratio from "../../../components/Dashboard/Ratio";
 import RecentTransactions from "../../../components/Dashboard/RecentTrasactions";
 import TransactionActivity from "../../../components/Dashboard/TransactionActivity";
 import WalletPercentage from "../../../components/Dashboard/WalletPercentage";
-import { QueryKey } from "@/types/QueryKey";
-import { useQuery } from "@tanstack/react-query";
 import useTransaction from "../../../stores/transactionStore";
-import { shallow } from "zustand/shallow";
 
 const DashboardComponent = () => {
   const { interval } = useTransaction(
     (state) => ({
       interval: state.interval,
     }),
-    shallow
+    shallow,
   );
 
   const totalTransactionQuery = useQuery({
@@ -50,7 +51,7 @@ const DashboardComponent = () => {
         loading={totalTransactionQuery.isLoading}
         data={totalTransactionQuery.data}
       />
-      <div className="flex gap-4 h-fit flex-col lg:flex-row">
+      <div className="flex h-fit flex-col gap-4 lg:flex-row">
         <WalletPercentage
           data={walletQuery.data}
           loading={walletQuery.isLoading}

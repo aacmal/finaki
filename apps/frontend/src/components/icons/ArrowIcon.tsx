@@ -14,7 +14,7 @@ const ArrowIcon = ({ direction, className, ...props }: ArrowIconProps) => {
         { "rotate-90": direction === "left" },
         { "-rotate-90": direction === "right" },
         { "": direction === "down" },
-        className
+        className,
       )}
       stroke="currentColor"
     >

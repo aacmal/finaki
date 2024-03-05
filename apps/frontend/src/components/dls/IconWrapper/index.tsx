@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 type IconWrapperProps = {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ const IconWrapper = ({
       className={classNames(
         { "w-6": !withPadding },
         { "w-10 p-3": withPadding },
-        className
+        className,
       )}
       onClick={onClick}
     >

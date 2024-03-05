@@ -1,6 +1,7 @@
 import React from "react";
-import style from "./Hamburger.module.css";
 import classNames from "classnames";
+
+import style from "./Hamburger.module.css";
 
 type Props = {
   className?: string;

@@ -1,7 +1,7 @@
+import useStore from "../../../stores/store";
 import IconWrapper from "../../dls/IconWrapper";
 import LoadingSpinner from "../../dls/Loading/LoadingSpinner";
 import ChevronIcon from "../../icons/ChevronIcon";
-import useStore from "../../../stores/store";
 import Action from "./Action";
 
 const ProfileInfo = () => {
@@ -9,13 +9,13 @@ const ProfileInfo = () => {
 
   if (!user) return <LoadingSpinner />;
   return (
-    <div className="flex gap-2 items-center relative group">
+    <div className="group relative flex items-center gap-2">
       <span className="font-medium dark:text-slate-200">
         Hi, {user?.name.split(" ")[0]}
       </span>
-      <IconWrapper className="text-gray-800 dark:text-slate-300 w-5">
+      <IconWrapper className="w-5 text-gray-800 dark:text-slate-300">
         <ChevronIcon
-          className=" group-hover:rotate-180 transition-all"
+          className=" transition-all group-hover:rotate-180"
           fill="none"
           stroke="currentColor"
           strokeWidth={1}

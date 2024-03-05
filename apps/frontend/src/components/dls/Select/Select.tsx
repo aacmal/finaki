@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 "use client";
 
-import ChevronIcon from "../../icons/ChevronIcon";
-import classNames from "classnames";
 import { createContext, forwardRef, useEffect, useState } from "react";
+import classNames from "classnames";
+
+import ChevronIcon from "../../icons/ChevronIcon";
 import IconWrapper from "../IconWrapper";
 import Option from "./Option";
 
@@ -40,11 +41,11 @@ const Select = forwardRef(function Select(
     disabled,
     ...props
   }: SelectProps,
-  ref: React.Ref<HTMLInputElement>
+  ref: React.Ref<HTMLInputElement>,
 ) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedValue, setSelectedValue] = useState<SelectedValue | null>(
-    null
+    null,
   );
 
   function toggle() {
@@ -100,12 +101,12 @@ const Select = forwardRef(function Select(
   return (
     <div
       className={classNames(
-        "select bg-gray-100 relative text-slate-800 dark:text-slate-100 dark:bg-slate-500 px-3 w-auto py-4 whitespace-pre rounded-xl cursor-pointer focus:ring-2 focus:ring-blue-400 outline-none transition-all duration-200",
+        "select relative w-auto cursor-pointer whitespace-pre rounded-xl bg-gray-100 px-3 py-4 text-slate-800 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-400 dark:bg-slate-500 dark:text-slate-100",
         {
           "!bg-transparent ring-1 ring-gray-300": selectedValue?.value,
           "bg-gray-100": !selectedValue?.value,
         },
-        className
+        className,
       )}
       tabIndex={0}
       onClick={toggle}
@@ -122,8 +123,8 @@ const Select = forwardRef(function Select(
       />
       <div
         className={classNames(
-          "flex items-center gap-1 justify-between",
-          props.minWidth
+          "flex items-center justify-between gap-1",
+          props.minWidth,
         )}
       >
         <div>{selectedValue?.value ? selectedValue.label : placeholder}</div>
@@ -132,7 +133,7 @@ const Select = forwardRef(function Select(
             className={classNames(
               "transform transition-transform duration-200",
               { "rotate-180": isOpen },
-              { "rotate-0": !isOpen }
+              { "rotate-0": !isOpen },
             )}
           />
         </IconWrapper>
@@ -143,9 +144,9 @@ const Select = forwardRef(function Select(
         <div
           role="list"
           className={classNames(
-            "absolute overflow-auto p-1 bg-white shadow-xl text-slate-800 dark:text-slate-100 dark:bg-slate-500 top-16 left-0 w-full rounded-lg transition-[max-height] z-50",
+            "absolute left-0 top-16 z-50 w-full overflow-auto rounded-lg bg-white p-1 text-slate-800 shadow-xl transition-[max-height] dark:bg-slate-500 dark:text-slate-100",
             { "!max-h-0 !max-w-0 !p-0": !isOpen },
-            { "max-h-96 max-w-96 p-1": isOpen }
+            { "max-w-96 max-h-96 p-1": isOpen },
           )}
         >
           {optional && <Option value={null}>Tidak Memilih</Option>}

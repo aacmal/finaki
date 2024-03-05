@@ -1,15 +1,16 @@
 import React from "react";
+import { TotalTransactionByDay } from "@/types/Transaction";
+import { currencyFormat } from "@/utils/currencyFormat";
+import classNames from "classnames";
+
+import BarChart from "../Charts/BarChart/BarChart";
+import Heading from "../dls/Heading";
+import TextWithIcon from "../dls/TextWithIcon";
+import TextWithIconPlaceholder from "../dls/TextWithIcon/Placeholder";
+import ArrowIcon from "../icons/ArrowIcon";
+import Placeholder from "../Placeholder";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
-import TextWithIcon from "../dls/TextWithIcon";
-import ArrowIcon from "../icons/ArrowIcon";
-import classNames from "classnames";
-import { TotalTransactionByDay } from "@/types/Transaction";
-import Heading from "../dls/Heading";
-import BarChart from "../Charts/BarChart/BarChart";
-import { currencyFormat } from "@/utils/currencyFormat";
-import TextWithIconPlaceholder from "../dls/TextWithIcon/Placeholder";
-import Placeholder from "../Placeholder";
 
 type Props = {
   data: TotalTransactionByDay[] | undefined;
@@ -29,20 +30,20 @@ const Ratio = ({ data, loading }: Props) => {
           <div className="flex items-center">
             <div
               style={{ backgroundColor: COLOR[0] }}
-              className="h-2 w-2 rounded-full mr-2"
+              className="mr-2 h-2 w-2 rounded-full"
             ></div>
             <span className="text-sm">Masuk</span>
           </div>
           <div className="flex items-center">
             <div
               style={{ backgroundColor: COLOR[1] }}
-              className="h-2 w-2 rounded-full mr-2"
+              className="mr-2 h-2 w-2 rounded-full"
             ></div>
             <span className="text-sm">Keluar</span>
           </div>
         </div>
       </DashboardHeader>
-      <div className="flex gap-4 lg:flex-row flex-col">
+      <div className="flex flex-col gap-4 lg:flex-row">
         <div className="flex-1">
           <BarChart
             color={COLOR}
@@ -51,7 +52,7 @@ const Ratio = ({ data, loading }: Props) => {
             loading={loading}
           />
         </div>
-        <div className="lg:w-[17rem] w-full h-full bg-transparent py-7 px-3 rounded-xl flex flex-col gap-5">
+        <div className="flex h-full w-full flex-col gap-5 rounded-xl bg-transparent px-3 py-7 lg:w-[17rem]">
           {!loading ? (
             <>
               <TextWithIcon
@@ -64,7 +65,7 @@ const Ratio = ({ data, loading }: Props) => {
                   />
                 }
                 className={classNames(
-                  "bg-blue-500 text-white shadow-xl shadow-blue-200 dark:shadow-blue-800"
+                  "bg-blue-500 text-white shadow-xl shadow-blue-200 dark:shadow-blue-800",
                 )}
               >
                 {currencyFormat(totalIncome)}
@@ -79,7 +80,7 @@ const Ratio = ({ data, loading }: Props) => {
                   />
                 }
                 className={classNames(
-                  "bg-orange-500 text-white shadow-xl shadow-orange-200 dark:shadow-orange-800"
+                  "bg-orange-500 text-white shadow-xl shadow-orange-200 dark:shadow-orange-800",
                 )}
               >
                 -{currencyFormat(totalOutcome)}
@@ -95,7 +96,7 @@ const Ratio = ({ data, loading }: Props) => {
             <>
               <TextWithIconPlaceholder />
               <TextWithIconPlaceholder delay={500} />
-              <Placeholder className="w-1/2 h-8" animationDelay={1000} />
+              <Placeholder className="h-8 w-1/2" animationDelay={1000} />
             </>
           )}
         </div>

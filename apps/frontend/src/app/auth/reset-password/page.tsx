@@ -1,20 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword, verifyResetPasswordToken } from "@/api/authApi";
+import { Routes } from "@/types/Routes";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { BsCheckCircle } from "react-icons/bs";
+
 import AuthCard from "../../../components/AuthCard/AuthCard";
 import AuthCardContent from "../../../components/AuthCard/AuthCardContent";
 import LoadingButton from "../../../components/dls/Button/LoadingButton";
 import FormGroup from "../../../components/dls/Form/FormGroup";
 import InputWithLabel from "../../../components/dls/Form/InputWithLabel";
 import Heading from "../../../components/dls/Heading";
-import { Routes } from "@/types/Routes";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-import { BsCheckCircle } from "react-icons/bs";
 
 const ResetPasswordPage = () => {
   const router = useRouter();
@@ -69,7 +70,7 @@ const ResetPasswordPage = () => {
 
   if (verifyToken.isLoading) {
     return (
-      <div className="h-screen w-screen dark:text-slate-300 grid place-items-center font-semibold">
+      <div className="grid h-screen w-screen place-items-center font-semibold dark:text-slate-300">
         Loading...
       </div>
     );
@@ -83,12 +84,12 @@ const ResetPasswordPage = () => {
       <AuthCardContent>
         {verifyToken.isError ? (
           <div className="my-auto">
-            <Heading level={1} className="text-center mt-2 font-medium mb-5">
+            <Heading level={1} className="mb-5 mt-2 text-center font-medium">
               Link reset password tidak valid atau sudah kadaluarsa, silahkan
               minta link reset password kembali
             </Heading>
             <Link
-              className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-center block font-semibold text-slate-50"
+              className="block rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-center font-semibold text-slate-50"
               href={Routes.ForgotPassword}
             >
               Kembali ke lupa password
@@ -99,18 +100,18 @@ const ResetPasswordPage = () => {
             <Heading
               gradient
               level={1}
-              className="text-center mt-2 text-transparent bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text dark:from-purple-300 dark:to-blue-400"
+              className="mt-2 bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-center text-transparent dark:from-purple-300 dark:to-blue-400"
             >
               Reset Password
             </Heading>
             {isSuccess ? (
-              <div className="flex flex-col gap-5 h-fit">
+              <div className="flex h-fit flex-col gap-5">
                 <BsCheckCircle size={50} className="mx-auto text-green-500" />
                 <p className="text-center font-semibold">
                   Password berhasil direset
                 </p>
                 <Link
-                  className="px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg text-center block font-semibold text-slate-50"
+                  className="block rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3 text-center font-semibold text-slate-50"
                   href={Routes.Login}
                 >
                   Login

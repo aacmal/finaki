@@ -6,7 +6,7 @@ type Props = {
 
 const ChartPlaceholder = ({ message }: Props) => {
   return (
-    <div className="grid place-items-center w-full h-full text-xs md:text-sm dark:text-slate-200">
+    <div className="grid h-full w-full place-items-center text-xs dark:text-slate-200 md:text-sm">
       {message}
     </div>
   );

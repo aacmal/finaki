@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 type Props = {
   className: string;
@@ -13,8 +13,8 @@ const Placeholder = ({ className, animationDelay = 0 }: Props) => {
         animationDelay: `${animationDelay}ms`,
       }}
       className={classNames(
-        "animate-pulse dark:bg-slate-500 bg-slate-300 rounded-lg",
-        className
+        "animate-pulse rounded-lg bg-slate-300 dark:bg-slate-500",
+        className,
       )}
     ></div>
   );

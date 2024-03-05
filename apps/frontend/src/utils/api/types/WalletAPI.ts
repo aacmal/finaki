@@ -1,4 +1,5 @@
 import { BalanceHistory, WalletData } from "@/types/Wallet";
+
 import { GenericRequest, GenericResponse } from "./Api";
 
 export interface WalletInput {

@@ -1,5 +1,6 @@
-import { Theme } from "@/types/Theme";
 import { useEffect } from "react";
+import { Theme } from "@/types/Theme";
+
 import useStore from "../stores/store";
 
 export default function useTheme() {

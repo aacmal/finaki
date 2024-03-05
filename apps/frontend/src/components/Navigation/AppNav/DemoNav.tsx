@@ -1,20 +1,20 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { defaultIconProps } from "@/types/IconProps";
+import { Routes } from "@/types/Routes";
 
 import ArrowsIcon from "../../icons/ArrowsIcon";
 import GridIcon from "../../icons/GridIcon";
 import UserIcon from "../../icons/UserIcon";
 import WalletIcon from "../../icons/WalletIcon";
-import { defaultIconProps } from "@/types/IconProps";
-import { Routes } from "@/types/Routes";
 import AppNavLink from "./AppNavLink";
 
 const DemoNav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex justify-around lg:justify-start lg:flex-col gap-4 h-fit fixed lg:sticky lg:top-4 bottom-0 p-3 lg:p-0 shadow-2xl lg:shadow-none shadow-gray-700 bg-white dark:bg-slate-700 z-50 left-0 w-screen lg:w-fit lg:mt-20 lg:bg-transparent dark:lg:bg-transparent">
+    <nav className="fixed bottom-0 left-0 z-50 flex h-fit w-screen justify-around gap-4 bg-white p-3 shadow-2xl shadow-gray-700 dark:bg-slate-700 lg:sticky lg:top-4 lg:mt-20 lg:w-fit lg:flex-col lg:justify-start lg:bg-transparent lg:p-0 lg:shadow-none dark:lg:bg-transparent">
       <AppNavLink
         icon={<GridIcon {...defaultIconProps} />}
         href={Routes.DashboardDemo}

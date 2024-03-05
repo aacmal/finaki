@@ -1,5 +1,10 @@
 /* eslint-disable no-unused-vars */
 "use client";
+
+import { useRef } from "react";
+import { IoIosColorPalette } from "react-icons/io";
+
+import useStore from "../../stores/store";
 import { DropdownItem } from "../dls/Dropdown/DropdownItem";
 import DropdownMenu from "../dls/Dropdown/DropdownMenu";
 import DropdownSubMenu from "../dls/Dropdown/DropdownSubMenu";
@@ -7,9 +12,6 @@ import IconWrapper from "../dls/IconWrapper";
 import ChevronIcon from "../icons/ChevronIcon";
 import ElipsisVerticalIcon from "../icons/ElipsisVerticalIcon";
 import TrashIcon from "../icons/TrashIcon";
-import { useRef } from "react";
-import { IoIosColorPalette } from "react-icons/io";
-import useStore from "../../stores/store";
 import { hashCodeColor, indicatorColor, WalletColor } from "./constants";
 
 type Props = {
@@ -20,19 +22,19 @@ type Props = {
 };
 
 const ButtonTrigger = () => (
-  <button className="text-white w-6 hover:bg-slate-300/30 rounded cursor-pointer lg:hidden block group-hover:block">
+  <button className="block w-6 cursor-pointer rounded text-white hover:bg-slate-300/30 group-hover:block lg:hidden">
     <ElipsisVerticalIcon />
   </button>
 );
 
 export const ColorCircle = ({ style }: { style?: React.CSSProperties }) => (
-  <div style={style} className={"w-3 h-3 rounded-full"}></div>
+  <div style={style} className={"h-3 w-3 rounded-full"}></div>
 );
 
 const SubMenuTrigger = () => (
   <div className="flex items-center justify-between">
     <span>Ganti warna</span>
-    <IconWrapper className="!w-4 transform -rotate-90">
+    <IconWrapper className="!w-4 -rotate-90 transform">
       <ChevronIcon />
     </IconWrapper>
   </div>

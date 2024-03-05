@@ -13,5 +13,5 @@ export const timeFormat = (timestamp: string) =>
       hour: "numeric",
       minute: "numeric",
       hour12: false,
-    }
+    },
   );

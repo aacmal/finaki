@@ -6,7 +6,7 @@ type Props = {
 };
 
 const DashboardHeader = ({ title, children }: Props) => (
-  <div className="flex justify-between items-center px-3 mb-5">
+  <div className="mb-5 flex items-center justify-between px-3">
     <Heading fontWeight="medium" level={3}>
       {title}
     </Heading>

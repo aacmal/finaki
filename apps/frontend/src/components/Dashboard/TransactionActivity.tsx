@@ -1,13 +1,14 @@
+import { Interval } from "@/api/types/TransactionAPI";
 import { TotalTransactionByDay } from "@/types/Transaction";
+import { BsClockHistory } from "react-icons/bs";
+import { shallow } from "zustand/shallow";
+
+import useTransaction from "../../stores/transactionStore";
 import AreaChart from "../Charts/AreaChart/AreaChart";
+import { DropdownItem } from "../dls/Dropdown/DropdownItem";
+import DropdownMenu from "../dls/Dropdown/DropdownMenu";
 import DashboardContentWrapper from "./DashboardContentWrapper";
 import DashboardHeader from "./DashboardHeader";
-import DropdownMenu from "../dls/Dropdown/DropdownMenu";
-import { DropdownItem } from "../dls/Dropdown/DropdownItem";
-import { BsClockHistory } from "react-icons/bs";
-import { Interval } from "@/api/types/TransactionAPI";
-import useTransaction from "../../stores/transactionStore";
-import { shallow } from "zustand/shallow";
 
 type Props = {
   data: TotalTransactionByDay[] | undefined;
@@ -26,16 +27,16 @@ const TransactionActivity = ({ data, loading }: Props) => {
       interval: state.interval,
       setInterval: state.setInterval,
     }),
-    shallow
+    shallow,
   );
 
   const ButtonTrigger = () => (
     <button
-      className="flex gap-3 text-xs md:text-sm items-center rounded-md px-3 py-1 border dark:border-slate-500"
+      className="flex items-center gap-3 rounded-md border px-3 py-1 text-xs dark:border-slate-500 md:text-sm"
       type="button"
     >
       <BsClockHistory />
-      <span className="capitalize font-medium">{interval}</span>
+      <span className="font-medium capitalize">{interval}</span>
     </button>
   );
 

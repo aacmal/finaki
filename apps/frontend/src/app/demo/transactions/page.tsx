@@ -1,13 +1,14 @@
 "use client";
 
-import TransactionHeader from "../../../components/Transactions/AllTransactions/TransactionHeader";
-import TransactionList from "../../../components/Transactions/AllTransactions/TransactionList";
-import Heading from "../../../components/dls/Heading";
+import Head from "next/head";
 import { QueryKey } from "@/types/QueryKey";
 import { Transaction } from "@/types/Transaction";
 import { groupByDay } from "@/utils/array";
 import { useQuery } from "@tanstack/react-query";
-import Head from "next/head";
+
+import Heading from "../../../components/dls/Heading";
+import TransactionHeader from "../../../components/Transactions/AllTransactions/TransactionHeader";
+import TransactionList from "../../../components/Transactions/AllTransactions/TransactionList";
 
 const TransactionsPage = () => {
   const { data, isLoading } = useQuery({
@@ -22,7 +23,7 @@ const TransactionsPage = () => {
 
   if (isLoading || !data) {
     return (
-      <Heading className="text-center mt-10 animate-pulse" level={3}>
+      <Heading className="mt-10 animate-pulse text-center" level={3}>
         Memuat...
       </Heading>
     );

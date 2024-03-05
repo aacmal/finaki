@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { Routes } from "@/types/Routes";
 import { Transaction } from "@/types/Transaction";
-import Link from "next/link";
+
 import { ChartError } from "../Charts/ChartPlaceholder";
 import {
   SimpleTransactionItem,
@@ -43,7 +44,7 @@ const RecentTransactions = ({ data, isLoading, isError }: Props) => {
         {slicedData?.length > 0 && (
           <Link
             href={Routes.Transactions}
-            className="text-sm font-medium text-slate-500 dark:text-slate-200 hover:text-slate-600 dark:hover:text-slate-100"
+            className="text-sm font-medium text-slate-500 hover:text-slate-600 dark:text-slate-200 dark:hover:text-slate-100"
           >
             Lihat semua
           </Link>
@@ -62,7 +63,7 @@ const RecentTransactions = ({ data, isLoading, isError }: Props) => {
           })}
         </ul>
       ) : (
-        <div className="min-h-[20rem] w-full grid place-items-center dark:text-slate-200">
+        <div className="grid min-h-[20rem] w-full place-items-center dark:text-slate-200">
           Belum ada transaksi
         </div>
       )}

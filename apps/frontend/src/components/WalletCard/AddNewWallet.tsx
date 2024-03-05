@@ -1,5 +1,12 @@
 "use cleint";
 
+import { QueryKey } from "@/types/QueryKey";
+import { createNewWallet } from "@/utils/api/wallet";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Controller, useForm } from "react-hook-form";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+
 import LoadingButton from "../dls/Button/LoadingButton";
 import Checkbox from "../dls/Form/Checkbox/Checkbox";
 import CurrencyInput from "../dls/Form/CurrencyInput";
@@ -12,12 +19,6 @@ import Option from "../dls/Select/Option";
 import Select from "../dls/Select/Select";
 import Tooltip from "../dls/Tooltip/Tooltip";
 import XmarkIcon from "../icons/XmarkIcon";
-import { QueryKey } from "@/types/QueryKey";
-import { createNewWallet } from "@/utils/api/wallet";
-import { removeCurrencyFormat } from "@/utils/currencyFormat";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Controller, useForm } from "react-hook-form";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import { indicatorColor, WalletColor } from "./constants";
 import { ColorCircle } from "./WalletCardDropdown";
 
@@ -53,7 +54,7 @@ const AddNewWallet = () => {
   return (
     <Modal>
       <ModalTrigger>
-        <div className="dark:text-slate-800 font-medium text-slate-50 bg-slate-600 dark:bg-slate-50 px-3 py-2 rounded-lg w-auto">
+        <div className="w-auto rounded-lg bg-slate-600 px-3 py-2 font-medium text-slate-50 dark:bg-slate-50 dark:text-slate-800">
           Tambah dompet
         </div>
       </ModalTrigger>
@@ -63,7 +64,7 @@ const AddNewWallet = () => {
             Tambah Dompet
           </Heading>
           <ModalCloseTringger>
-            <IconWrapper className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20">
+            <IconWrapper className="cursor-pointer rounded text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20">
               <XmarkIcon />
             </IconWrapper>
           </ModalCloseTringger>
@@ -78,7 +79,7 @@ const AddNewWallet = () => {
               required
               {...register("name")}
             />
-            <div className="flex md:items-center gap-5 flex-col md:flex-row">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center">
               <Controller
                 name="color"
                 control={control}

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+
 import useStore from "../stores/store";
 
-const useHydration = (): boolean  => {
+const useHydration = (): boolean => {
   const [hydrated, setHydrated] = useState<boolean>(false);
 
   useEffect(() => {
@@ -10,10 +11,10 @@ const useHydration = (): boolean  => {
     const unsubHydrate = useStore.persist.onHydrate(() => setHydrated(false));
 
     const unsubFinishHydration = useStore.persist.onFinishHydration(() =>
-      setHydrated(true)
+      setHydrated(true),
     );
 
-    setHydrated(useStore.persist.hasHydrated());  
+    setHydrated(useStore.persist.hasHydrated());
 
     return () => {
       unsubHydrate();

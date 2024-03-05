@@ -1,5 +1,5 @@
-import { defaultIconProps, IconProps } from "@/types/IconProps";
 import React from "react";
+import { defaultIconProps, IconProps } from "@/types/IconProps";
 
 const DesktopIcon = (props: IconProps) => {
   return (

@@ -1,9 +1,10 @@
-import WalletCard from "../../../components/WalletCard/WalletCard";
+import React, { ComponentProps } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import classNames from "classnames";
-import React, { ComponentProps } from "react";
 import { RxDragHandleDots2 } from "react-icons/rx";
+
+import WalletCard from "../../../components/WalletCard/WalletCard";
 
 type Props = ComponentProps<typeof WalletCard>;
 
@@ -26,14 +27,14 @@ export const SortableWalletCard = ({ ...props }: Props) => {
     <div
       ref={setNodeRef}
       style={style}
-      className={classNames("rounded-xl relative", {
+      className={classNames("relative rounded-xl", {
         "z-50": isDragging,
       })}
     >
       <button
         {...attributes}
         {...listeners}
-        className="absolute top-4 right-4 text-white cursor-grab active:cursor-grabbing"
+        className="absolute right-4 top-4 cursor-grab text-white active:cursor-grabbing"
       >
         <RxDragHandleDots2 size={25} color="currentColor" />
       </button>

@@ -1,11 +1,12 @@
+import { useState } from "react";
+import Link from "next/link";
 import { QueryKey } from "@/types/QueryKey";
 import { WalletData } from "@/types/Wallet";
 import { updateWalletColor } from "@/utils/api/wallet";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import classNames from "classnames";
-import Link from "next/link";
-import { useState } from "react";
+
 import { WalletColor, walletColors } from "./constants";
 import WalletCardDropdown from "./WalletCardDropdown";
 
@@ -67,8 +68,8 @@ const WalletCard = ({
   return (
     <div
       className={classNames(
-        "rounded-xl p-5 bg-gradient-to-br group flex flex-col gap-10 transition-all ",
-        !colorKey.includes("#") && walletColors[colorKey as WalletColor]
+        "group flex flex-col gap-10 rounded-xl bg-gradient-to-br p-5 transition-all ",
+        !colorKey.includes("#") && walletColors[colorKey as WalletColor],
       )}
       style={{
         backgroundColor: colorKey.includes("#") ? colorKey : undefined,
@@ -78,8 +79,8 @@ const WalletCard = ({
         <Link
           href={demoMode ? `/demo/wallet/${id}` : `/app/wallet/${id}`}
           className={classNames(
-            "px-3 py-1  w-fit rounded-lg font-semibold text-white cursor-pointer",
-            { "bg-slate-200/30": isDefault }
+            "w-fit cursor-pointer  rounded-lg px-3 py-1 font-semibold text-white",
+            { "bg-slate-200/30": isDefault },
           )}
         >
           {name}
@@ -94,7 +95,7 @@ const WalletCard = ({
       <div className="flex justify-between">
         <div>
           <div className="text-white">Saldo {isCredit && "minus"}</div>
-          <div className="text-xl md:text-2xl font-semibold text-white">
+          <div className="text-xl font-semibold text-white md:text-2xl">
             {isCredit && "-"}
             {currencyFormat(balance)}
           </div>

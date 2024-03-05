@@ -1,13 +1,14 @@
+import { useRouter } from "next/navigation";
 import { getUserDevices, logoutDevices } from "@/api/user";
-import ContentWrapper from "../../Container/ContentWrapper";
-import LoadingButton from "../../dls/Button/LoadingButton";
-import Heading from "../../dls/Heading";
 import { QueryKey } from "@/types/QueryKey";
 import { Routes } from "@/types/Routes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+
 import useStore from "../../../stores/store";
+import ContentWrapper from "../../Container/ContentWrapper";
+import LoadingButton from "../../dls/Button/LoadingButton";
+import Heading from "../../dls/Heading";
 import Device from "./Device";
 
 const DevicesLists = () => {
@@ -54,7 +55,7 @@ const DevicesLists = () => {
         <LoadingButton
           onClick={handleDeleteAllDevices}
           styleButton="danger"
-          className="!font-medium !px-2 md:!px-4 !rounded-lg !py-2"
+          className="!rounded-lg !px-2 !py-2 !font-medium md:!px-4"
           width="fit"
           title="Hapus Semua"
           isLoading={deleteDeviceMutation.isLoading}

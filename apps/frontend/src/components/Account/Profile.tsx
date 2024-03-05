@@ -1,9 +1,10 @@
+import { toast } from "react-hot-toast";
+
+import useStore from "../../stores/store";
+import ContentWrapper from "../Container/ContentWrapper";
 import Heading from "../dls/Heading";
 import IconWrapper from "../dls/IconWrapper";
 import ClipboardIcon from "../icons/ClipboardIcon";
-import { toast } from "react-hot-toast";
-import useStore from "../../stores/store";
-import ContentWrapper from "../Container/ContentWrapper";
 
 type Props = {
   className?: string;
@@ -23,19 +24,19 @@ const Profile = (props: Props) => {
         Informasi tentang akun
       </Heading>
       <ContentWrapper className="flex flex-col gap-3">
-        <div className="flex  lg:flex-row flex-col lg:items-center">
+        <div className="flex  flex-col lg:flex-row lg:items-center">
           <span className="w-[10%] font-semibold">Nama</span>
-          <span className="lg:ml-0 ml-3">{user?.name}</span>
+          <span className="ml-3 lg:ml-0">{user?.name}</span>
         </div>
-        <div className="flex  lg:flex-row flex-col lg:items-center">
+        <div className="flex  flex-col lg:flex-row lg:items-center">
           <span className="w-[10%] font-semibold">Email</span>
-          <span className="lg:ml-0 ml-3">{user?.email}</span>
+          <span className="ml-3 lg:ml-0">{user?.email}</span>
         </div>
-        <span className="flex lg:flex-row flex-col lg:items-center">
-          <span className="w-[10%] font-semibold whitespace-nowrap flex items-center gap-2">
+        <span className="flex flex-col lg:flex-row lg:items-center">
+          <span className="flex w-[10%] items-center gap-2 whitespace-nowrap font-semibold">
             <span>Token</span>
           </span>
-          <span className="lg:ml-0 ml-3 mr-4 flex gap-4">
+          <span className="ml-3 mr-4 flex gap-4 lg:ml-0">
             {user?.token}
             <IconWrapper
               onClick={copyTokenToClipboard}
@@ -47,19 +48,19 @@ const Profile = (props: Props) => {
         </span>
         {user?.telegramAccount?.username && (
           <>
-            <hr className="border-gray-200 dark:border-slate-500 my-3" />
+            <hr className="my-3 border-gray-200 dark:border-slate-500" />
             <Heading fontWeight="normal" className="!text-base" level={3}>
               Akun Telegram yang terhubung
             </Heading>
-            <div className="flex lg:flex-row flex-col lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center">
               <span className="w-[10%] font-semibold">Username</span>
-              <span className="lg:ml-0 ml-3">
+              <span className="ml-3 lg:ml-0">
                 @{user?.telegramAccount?.username}
               </span>
             </div>
-            <div className="flex lg:flex-row flex-col lg:items-center">
+            <div className="flex flex-col lg:flex-row lg:items-center">
               <span className="w-[10%] font-semibold">Nama</span>
-              <span className="lg:ml-0 ml-3">
+              <span className="ml-3 lg:ml-0">
                 {user?.telegramAccount?.firstName}
               </span>
             </div>

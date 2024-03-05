@@ -1,16 +1,17 @@
+import { useCallback } from "react";
+import { WalletData } from "@/types/Wallet";
+
+import useStore from "../../stores/store";
+import { DropdownItem } from "../dls/Dropdown/DropdownItem";
+import DropdownMenu from "../dls/Dropdown/DropdownMenu";
 import IconButton from "../dls/IconButton";
 import ArrowsIcon from "../icons/ArrowsIcon";
+import CheckIcon from "../icons/CheckIcon";
 import ElipsisVerticalIcon from "../icons/ElipsisVerticalIcon";
-import PlusIcon from "../icons/PlusIcon";
-import { useCallback } from "react";
-import useStore from "../../stores/store";
-import { WalletData } from "@/types/Wallet";
-import DropdownMenu from "../dls/Dropdown/DropdownMenu";
-import { DropdownItem } from "../dls/Dropdown/DropdownItem";
 import PencilIcon from "../icons/PencilIcon";
+import PlusIcon from "../icons/PlusIcon";
 import TrashIcon from "../icons/TrashIcon";
 import XmarkIcon from "../icons/XmarkIcon";
-import CheckIcon from "../icons/CheckIcon";
 
 type Props = {
   walletData: WalletData;
@@ -34,11 +35,11 @@ const WalletOption = ({ walletData, state }: Props) => {
 
   if (state.edit) {
     return (
-      <div className="flex justify-center gap-4 mt-3">
+      <div className="mt-3 flex justify-center gap-4">
         <IconButton
           onClick={() => state.setEdit(false)}
           shape="circle"
-          className="bg-white/40 text-slate-50 !p-2"
+          className="bg-white/40 !p-2 text-slate-50"
         >
           <XmarkIcon />
         </IconButton>
@@ -46,7 +47,7 @@ const WalletOption = ({ walletData, state }: Props) => {
           type="submit"
           form="edit-wallet-form"
           shape="circle"
-          className="bg-white/40 text-slate-50 !p-2"
+          className="bg-white/40 !p-2 text-slate-50"
         >
           <CheckIcon />
         </IconButton>
@@ -55,18 +56,18 @@ const WalletOption = ({ walletData, state }: Props) => {
   }
 
   return (
-    <div className="flex justify-center gap-4 mt-3">
+    <div className="mt-3 flex justify-center gap-4">
       <IconButton
         onClick={() => setWalletId(walletData._id)}
         shape="circle"
-        className="bg-white/40 text-slate-50 !p-2"
+        className="bg-white/40 !p-2 text-slate-50"
       >
         <PlusIcon strokeWidth={2} />
       </IconButton>
       <IconButton
         onClick={handleTransferBalance}
         shape="circle"
-        className="bg-white/40 text-slate-50 !p-2"
+        className="bg-white/40 !p-2 text-slate-50"
       >
         <ArrowsIcon strokeWidth={0.5} fill="currentColor" />
       </IconButton>
@@ -74,10 +75,10 @@ const WalletOption = ({ walletData, state }: Props) => {
         sideOffset={5}
         align="start"
         trigger={
-          <IconButton shape="circle" className="bg-white/40 text-slate-50 !p-2">
+          <IconButton shape="circle" className="bg-white/40 !p-2 text-slate-50">
             <ElipsisVerticalIcon
               strokeWidth={3}
-              className=" transform rotate-90"
+              className=" rotate-90 transform"
             />
           </IconButton>
         }

@@ -1,8 +1,9 @@
 "use client";
 
-import EyeIcon from "../../icons/EyeIcon";
-import classNames from "classnames";
 import { forwardRef, useState } from "react";
+import classNames from "classnames";
+
+import EyeIcon from "../../icons/EyeIcon";
 import IconWrapper from "../IconWrapper";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -25,19 +26,19 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 const InputWithLabel = forwardRef(
   (
     { id, type, label, className, inputStyle, error, ...props }: Props,
-    ref: React.Ref<HTMLInputElement>
+    ref: React.Ref<HTMLInputElement>,
   ) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
     return (
       <div
         className={classNames(
-          "flex flex-col input-with-label-wrapper",
-          className
+          "input-with-label-wrapper flex flex-col",
+          className,
         )}
       >
         <input
-          className={classNames("w-full px-4 py-4 rounded-xl", inputStyle)}
+          className={classNames("w-full rounded-xl px-4 py-4", inputStyle)}
           // Show password if type is password and isPasswordVisible is true, otherwise show the type
           type={
             type === "password"
@@ -53,7 +54,7 @@ const InputWithLabel = forwardRef(
         />
         <label htmlFor={id}>{label}</label>
         {error && (
-          <small role="alert" className="text-red-400 font-semibold left-3">
+          <small role="alert" className="left-3 font-semibold text-red-400">
             {error.message}
           </small>
         )}
@@ -69,7 +70,7 @@ const InputWithLabel = forwardRef(
         )}
       </div>
     );
-  }
+  },
 );
 
 export default InputWithLabel;

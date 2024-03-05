@@ -1,5 +1,5 @@
-import { defaultIconProps, IconProps } from "@/types/IconProps";
 import React from "react";
+import { defaultIconProps, IconProps } from "@/types/IconProps";
 
 const PhoneIcon = (props: IconProps) => {
   return (

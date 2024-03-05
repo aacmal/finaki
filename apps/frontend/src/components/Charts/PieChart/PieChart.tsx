@@ -1,6 +1,7 @@
 "use client";
 
-import { Cell, Legend, Pie, PieChart as PiChart, Tooltip } from "recharts";
+import { Cell, Legend, PieChart as PiChart, Pie, Tooltip } from "recharts";
+
 import { ChartLoading } from "../ChartPlaceholder";
 import ChartWrapper from "../ChartWrapper";
 import { PIE_CHART } from "../constant";
@@ -21,7 +22,7 @@ type Props = {
 
 const PieChart = ({ data, legend = true, loading }: Props) => {
   return (
-    <ChartWrapper className="h-52 lg:h-72 w-full">
+    <ChartWrapper className="h-52 w-full lg:h-72">
       {loading ? (
         <ChartLoading />
       ) : data.length > 0 ? (
@@ -57,7 +58,7 @@ const PieChart = ({ data, legend = true, loading }: Props) => {
           <Tooltip content={renderPieTooltip} />
         </PiChart>
       ) : (
-        <div className="min-h-[20rem] w-full grid place-items-center dark:text-slate-200">
+        <div className="grid min-h-[20rem] w-full place-items-center dark:text-slate-200">
           Belum ada Dompet yang ditambahkan
         </div>
       )}

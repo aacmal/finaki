@@ -1,4 +1,5 @@
 import { currencyFormat } from "@/utils/currencyFormat";
+
 import TooltipWrapper from "../TooltipWrapper";
 
 const renderAreaTooltip = ({ active, payload }: any) => {
@@ -8,14 +9,12 @@ const renderAreaTooltip = ({ active, payload }: any) => {
       {
         day: "numeric",
         month: "short",
-      }
+      },
     );
     return (
       <TooltipWrapper>
         <p className="font-sm">{date}</p>
-        <p className="font-medium">
-          {currencyFormat(payload[0].value)}
-        </p>
+        <p className="font-medium">{currencyFormat(payload[0].value)}</p>
       </TooltipWrapper>
     );
   }

@@ -11,7 +11,7 @@ type Props = {
 const Image = ({ src, alt, className, priority, sizes }: Props) => {
   return (
     <div className={className}>
-      <div className="h-full w-full relative">
+      <div className="relative h-full w-full">
         <Img
           priority={priority}
           fill

@@ -1,4 +1,4 @@
-import CheckIcon from "../../icons/CheckIcon";
+import React from "react";
 import {
   CheckboxItem,
   Item,
@@ -7,8 +7,8 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import classNames from "classnames";
 
+import CheckIcon from "../../icons/CheckIcon";
 import styles from "./DropdownItem.module.scss";
-import React from "react";
 
 interface ItemProps extends React.ComponentProps<typeof Item> {
   indicator?: React.ReactNode;
@@ -48,9 +48,9 @@ const DropdownItem = ({
       }}
       className={classNames(
         styles.dropdownItem,
-        "py-1 px-2 rounded hover:bg-blue-100 dark:hover:bg-blue-500/50 relative cursor-default",
+        "relative cursor-default rounded px-2 py-1 hover:bg-blue-100 dark:hover:bg-blue-500/50",
         { "pl-7": !!icon },
-        className
+        className,
       )}
       {...props}
     >

@@ -1,5 +1,5 @@
-import { IconProps } from "@/types/IconProps";
 import React from "react";
+import { IconProps } from "@/types/IconProps";
 
 const WalletIcon = ({ ...props }: IconProps) => {
   return (

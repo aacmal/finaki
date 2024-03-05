@@ -1,11 +1,12 @@
 "use client";
 
-import Hamburger from "../../dls/Hamburger";
-import { Routes } from "@/types/Routes";
-import classNames from "classnames";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { Routes } from "@/types/Routes";
+import classNames from "classnames";
+
+import Hamburger from "../../dls/Hamburger";
 import ThemeToggleIcon from "../../ThemeSelection/ThemeToggleIcon";
 import HomeNavLink from "./HomeNavLink";
 
@@ -24,30 +25,30 @@ const HomeNav = () => {
   return (
     <header
       className={classNames(
-        " transition-all duration-300 ease-out z-50",
+        " z-50 transition-all duration-300 ease-out",
         {
-          "left-1/2 top-10 lg:top-20 w-72 -translate-x-1/2 max-w-xl absolute":
+          "absolute left-1/2 top-10 w-72 max-w-xl -translate-x-1/2 lg:top-20":
             isInAuthPage,
         },
         {
-          "left-0 top-0 max-w-full w-full fixed": isInHomePage,
-        }
+          "fixed left-0 top-0 w-full max-w-full": isInHomePage,
+        },
       )}
     >
       <nav
         className={classNames(
-          "items-center flex gap-3",
-          { "px-2 py-2 rounded-lg bg-white dark:bg-slate-700": isInAuthPage },
+          "flex items-center gap-3",
+          { "rounded-lg bg-white px-2 py-2 dark:bg-slate-700": isInAuthPage },
           {
-            "px-5 py-5 md:px-10 bg-stone-100 border-b dark:bg-slate-800 dark:border-slate-700":
+            "border-b bg-stone-100 px-5 py-5 dark:border-slate-700 dark:bg-slate-800 md:px-10":
               isInHomePage,
-          }
+          },
         )}
       >
         {isInHomePage ? (
           <Link
             href={Routes.Home}
-            className="mr-3 flex-1 lg:text-xl text-lg text-stone-700 dark:text-slate-200 font-bold"
+            className="mr-3 flex-1 text-lg font-bold text-stone-700 dark:text-slate-200 lg:text-xl"
           >
             Finaki
           </Link>
@@ -60,7 +61,7 @@ const HomeNav = () => {
         <div
           className={classNames(
             {
-              "md:flex items-center absolute md:static w-full md:w-fit left-0 top-14 py-2 px-3 md:py-0 md:px-0 transition-all md:bg-none shadow-lg shadow-neutral-600/10  dark:bg-slate-8 00 dark:shadow-slate-800/50 md:shadow-none md:visible overflow-hidden gap-8":
+              "dark:bg-slate-8 00 absolute left-0 top-14 w-full items-center gap-8 overflow-hidden px-3 py-2 shadow-lg shadow-neutral-600/10 transition-all dark:shadow-slate-800/50 md:visible  md:static md:flex md:w-fit md:bg-none md:px-0 md:py-0 md:shadow-none":
                 isInHomePage,
               "flex gap-3": isInAuthPage,
             },
@@ -69,21 +70,21 @@ const HomeNav = () => {
               "visible max-h-44 bg-inherit": isOpen,
             },
             {
-              "space-y-4 md:space-y-0 border-b dark:border-slate-700":
+              "space-y-4 border-b dark:border-slate-700 md:space-y-0":
                 isInHomePage && isOpen,
             },
             {
-              "invisible md:visible md:max-h-16 max-h-0":
+              "invisible max-h-0 md:visible md:max-h-16":
                 !isOpen && isInHomePage,
-            }
+            },
           )}
         >
           <HomeNavLink
             isActive={pathname === Routes.Demo}
             href={Routes.Demo}
             className={classNames(
-              "w-full font-medium bg-gradient-to-r from-sky-500 to-blue-500 !text-white md:mb-0 mb-5",
-              { hidden: isInAuthPage }
+              "mb-5 w-full bg-gradient-to-r from-sky-500 to-blue-500 font-medium !text-white md:mb-0",
+              { hidden: isInAuthPage },
             )}
           >
             Demo

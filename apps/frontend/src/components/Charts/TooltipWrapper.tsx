@@ -7,7 +7,12 @@ type Props = {
 
 const TooltipWrapper = ({ children, className }: Props) => {
   return (
-    <div className={classNames("bg-white border border-slate-200 dark:bg-slate-600 text-gray-500 dark:text-gray-100 dark:border-slate-500 p-4 rounded-xl shadow-lg", className)}>
+    <div
+      className={classNames(
+        "rounded-xl border border-slate-200 bg-white p-4 text-gray-500 shadow-lg dark:border-slate-500 dark:bg-slate-600 dark:text-gray-100",
+        className,
+      )}
+    >
       {children}
     </div>
   );

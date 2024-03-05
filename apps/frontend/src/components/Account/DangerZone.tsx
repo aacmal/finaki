@@ -1,8 +1,9 @@
 import { detachTelegramAccount } from "@/api/user";
-import LoadingButton from "../dls/Button/LoadingButton";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+
 import useStore from "../../stores/store";
+import LoadingButton from "../dls/Button/LoadingButton";
 
 const DangerZone = () => {
   const { user, setUser } = useStore((state) => ({

@@ -1,6 +1,7 @@
-import { Routes } from "@/types/Routes";
 import Image from "next/image";
 import Link from "next/link";
+import { Routes } from "@/types/Routes";
+
 import * as Seo from "./seo";
 
 export const metadata = {
@@ -32,29 +33,29 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="mt-32 lg:pt-16 2xl:px-32 px-1 md:px-4 overflow-x-hidden">
-        <section className="px-3 md:px-1 flex flex-col items-center text-center">
-          <div className="space-y-8 xl:space-y-14 max-w-screen-xl">
-            <p className="text-base xl:text-xl text-slate-800 font-medium dark:text-slate-200">
+      <div className="mt-32 overflow-x-hidden px-1 md:px-4 lg:pt-16 2xl:px-32">
+        <section className="flex flex-col items-center px-3 text-center md:px-1">
+          <div className="max-w-screen-xl space-y-8 xl:space-y-14">
+            <p className="text-base font-medium text-slate-800 dark:text-slate-200 xl:text-xl">
               Selamat datang di Finaki
             </p>
-            <h1 className=" 2xl:text-8xl text-5xl font-bold text-transparent bg-gradient-to-r tracking-tight from-cyan-400 to-blue-500 bg-clip-text">
+            <h1 className=" bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-5xl font-bold tracking-tight text-transparent 2xl:text-8xl">
               Atur Keuangan Anda Dengan Mudah, Cepat, dan Efektif
             </h1>
-            <p className="xl:text-xl text-lg text-slate-600 dark:text-slate-300">
+            <p className="text-lg text-slate-600 dark:text-slate-300 xl:text-xl">
               Aplikasi Manajemen Keuangan All-in-One yang Membantu Anda Mengatur
               Pengeluaran, Pendapatan, dan Tabungan dengan Mudah dan Efisien
             </p>
           </div>
-          <div className="flex gap-4 flex-wrap justify-center my-6">
+          <div className="my-6 flex flex-wrap justify-center gap-4">
             <Link
-              className="block whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold bg-blue-500 text-white shadow-xl shadow-blue-600/20"
+              className="block w-fit whitespace-nowrap rounded-lg bg-blue-500 px-7 py-4 font-semibold text-white shadow-xl shadow-blue-600/20"
               href={Routes.Register}
             >
               Daftar Sekarang
             </Link>
             <Link
-              className="block whitespace-nowrap rounded-lg px-7 py-4 w-fit font-semibold border border-blue-500 text-blue-500 shadow-xl shadow-blue-600/20"
+              className="block w-fit whitespace-nowrap rounded-lg border border-blue-500 px-7 py-4 font-semibold text-blue-500 shadow-xl shadow-blue-600/20"
               href={Routes.About}
             >
               Tentang Finaki
@@ -69,7 +70,7 @@ export default function Home() {
               style={{
                 objectFit: "cover",
               }}
-              className="rounded-xl shadow-xl dark:shadow-stone-100/30 ring-1 ring-gray-400/10 mt-10"
+              className="mt-10 rounded-xl shadow-xl ring-1 ring-gray-400/10 dark:shadow-stone-100/30"
             />
             <Image
               src="/images/mobile-preview.jpg"
@@ -79,16 +80,16 @@ export default function Home() {
               style={{
                 objectFit: "cover",
               }}
-              className="rounded-xl shadow-xl w-1/5 max-w-xs h-3/4 -ml-20 ring-1 ring-gray-400/10 mt-10"
+              className="-ml-20 mt-10 h-3/4 w-1/5 max-w-xs rounded-xl shadow-xl ring-1 ring-gray-400/10"
             />
           </div>
         </section>
-        <section className="overflow-hidden bg-white dark:bg-slate-700 rounded-lg lg:rounded-3xl py-24 mt-32 lg:mt-44">
+        <section className="mt-32 overflow-hidden rounded-lg bg-white py-24 dark:bg-slate-700 lg:mt-44 lg:rounded-3xl">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
               <div className="lg:pr-8 lg:pt-4">
                 <div className="lg:max-w-lg">
-                  <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-500 to-emerald-500">
+                  <h2 className="mt-2 bg-gradient-to-r from-blue-500 to-emerald-500 bg-clip-text text-5xl font-bold tracking-tight text-transparent">
                     Dilengkapi dengan Grafik Visual yang mudah dipahami
                   </h2>
                   <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-slate-200">
@@ -111,7 +112,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="overflow-hidden relative bg-gray-900 rounded-lg lg:rounded-3xl py-24 mt-10 lg:mt-10">
+        <section className="relative mt-10 overflow-hidden rounded-lg bg-gray-900 py-24 lg:mt-10 lg:rounded-3xl">
           <div className="isolate">
             <svg
               viewBox="0 0 1024 1024"
@@ -133,11 +134,11 @@ export default function Home() {
               </defs>
             </svg>
           </div>
-          <div className="mx-auto max-w-7xl px-6 lg:px-8 z-10">
-            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
-              <div className="lg:pr-8 lg:pt-4 z-20">
+          <div className="z-10 mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+              <div className="z-20 lg:pr-8 lg:pt-4">
                 <div className="lg:max-w-lg">
-                  <h2 className="mt-2 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-500 to-cyan-500">
+                  <h2 className="mt-2 bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-5xl font-bold tracking-tight text-transparent">
                     Dark Mode
                   </h2>
                   <p className="mt-6 text-lg leading-8 text-slate-100">
@@ -160,11 +161,11 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="p-px rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 relative w-fit">
+              <div className="relative w-fit rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 p-px">
                 <Image
                   src="/images/wallet-dark.jpg"
                   alt="Dark Mode Wallet"
-                  className="w-[48rem] max-w-none sm:w-[57rem] rounded-xl md:-ml-4 lg:-ml-0 z-20"
+                  className="z-20 w-[48rem] max-w-none rounded-xl sm:w-[57rem] md:-ml-4 lg:-ml-0"
                   width={2432}
                   height={1442}
                 />
@@ -172,7 +173,7 @@ export default function Home() {
             </div>
           </div>
         </section>
-        <section className="my-10 p-3 rounded-lg text-center bg-white dark:bg-slate-700 dark:text-white font-medium">
+        <section className="my-10 rounded-lg bg-white p-3 text-center font-medium dark:bg-slate-700 dark:text-white">
           <h2>
             Dibuat dengan <span className="text-red-500">❤</span> oleh{" "}
             <Link

@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
+
 import Heading from "../Heading";
 
 type TextWithIconProps = {
@@ -18,8 +19,8 @@ const TextWithIcon = ({
   return (
     <div
       className={classNames(
-        "gap-10 w-full p-5 rounded-xl flex items-center text-white shadow-lg",
-        className
+        "flex w-full items-center gap-10 rounded-xl p-5 text-white shadow-lg",
+        className,
       )}
     >
       {iconPosition === "left" && <div className="w-6">{icon}</div>}

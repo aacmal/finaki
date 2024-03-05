@@ -1,6 +1,16 @@
+import { useMemo } from "react";
 import { insertNewTransaction } from "@/api/transaction";
 import { TransactionInput } from "@/api/types/TransactionAPI";
 import { getAllWallets } from "@/api/wallet";
+import { QueryKey } from "@/types/QueryKey";
+import { WalletData } from "@/types/Wallet";
+import { removeCurrencyFormat } from "@/utils/currencyFormat";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
+import { Controller, useForm } from "react-hook-form";
+
+import useStore from "../../stores/store";
+import useTransaction from "../../stores/transactionStore";
 import LoadingButton from "../dls/Button/LoadingButton";
 import CurrencyInput from "../dls/Form/CurrencyInput";
 import InputWithLabel from "../dls/Form/InputWithLabel";
@@ -13,15 +23,6 @@ import Option from "../dls/Select/Option";
 import Select from "../dls/Select/Select";
 import ArrowIcon from "../icons/ArrowIcon";
 import XmarkIcon from "../icons/XmarkIcon";
-import { QueryKey } from "@/types/QueryKey";
-import { WalletData } from "@/types/Wallet";
-import { removeCurrencyFormat } from "@/utils/currencyFormat";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import classNames from "classnames";
-import { useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
-import useStore from "../../stores/store";
-import useTransaction from "../../stores/transactionStore";
 import { indicatorColor } from "../WalletCard/constants";
 
 const AddTransaction = () => {
@@ -30,7 +31,7 @@ const AddTransaction = () => {
   }));
 
   const { isOpen, setOpen, walletId } = useStore(
-    (state) => state.addTransactionState
+    (state) => state.addTransactionState,
   );
 
   const {
@@ -60,7 +61,7 @@ const AddTransaction = () => {
           return {
             transactions: [data, ...transactions],
           };
-        }
+        },
       );
 
       // add new transaction to transaction store
@@ -91,7 +92,7 @@ const AddTransaction = () => {
 
     // get balance of selected wallet
     const walletBalance = walletQuery.data?.find(
-      (wallet) => wallet._id === values.wallet
+      (wallet) => wallet._id === values.wallet,
     )?.balance;
 
     // check if transaction type is out and wallet balance is less than amount
@@ -102,7 +103,7 @@ const AddTransaction = () => {
           type: "manual",
           message: "Saldo tidak mencukupi",
         },
-        { shouldFocus: true }
+        { shouldFocus: true },
       );
       return;
     }
@@ -114,10 +115,10 @@ const AddTransaction = () => {
       [...(walletQuery.data ?? [])]
         .sort(
           (a, b) =>
-            new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime()
+            new Date(a.updatedAt!).getTime() - new Date(b.updatedAt!).getTime(),
         )
         .reverse(),
-    [walletQuery.data]
+    [walletQuery.data],
   );
 
   return (
@@ -128,7 +129,7 @@ const AddTransaction = () => {
             <Heading level={3}>Tambah Transaksi</Heading>
             <IconWrapper
               onClick={() => setOpen(false)}
-              className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20"
+              className="cursor-pointer rounded text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20"
             >
               <XmarkIcon />
             </IconWrapper>
@@ -143,7 +144,7 @@ const AddTransaction = () => {
             required
             {...register("description")}
           />
-          <div className="flex gap-5 flex-col lg:flex-row">
+          <div className="flex flex-col gap-5 lg:flex-row">
             <ul className="flex gap-2">
               <RadioButton
                 id="in"
@@ -206,7 +207,7 @@ const AddTransaction = () => {
                   <Option
                     selected={wallet._id === walletId}
                     className={classNames(
-                      "p-3 rounded-lg mx-2 mb-2 font-bold border-2 border-transparent text-slate-50 hover:border-blue-400 flex justify-between items-center"
+                      "mx-2 mb-2 flex items-center justify-between rounded-lg border-2 border-transparent p-3 font-bold text-slate-50 hover:border-blue-400",
                     )}
                     key={wallet._id}
                     value={wallet._id}

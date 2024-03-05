@@ -1,5 +1,6 @@
-import Placeholder from "../../Placeholder";
 import React from "react";
+
+import Placeholder from "../../Placeholder";
 
 type Props = {
   delay?: number;

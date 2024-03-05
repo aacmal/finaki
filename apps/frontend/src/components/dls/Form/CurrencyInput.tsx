@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import { currencyFormat } from "@/utils/currencyFormat";
 import { forwardRef, useState } from "react";
+import { currencyFormat } from "@/utils/currencyFormat";
+
 import InputWithLabel from "./InputWithLabel";
 
 type Props = {
@@ -23,10 +24,10 @@ type Props = {
 
 const CurrencyInput = forwardRef(function CurrencyInput(
   { prefixSymbol = "Rp", className, inputStyle, ...props }: Props,
-  ref: React.Ref<HTMLInputElement>
+  ref: React.Ref<HTMLInputElement>,
 ) {
   const [value, setValue] = useState<number>(
-    props.value ? parseInt(props.value) : 0
+    props.value ? parseInt(props.value) : 0,
   );
 
   return (

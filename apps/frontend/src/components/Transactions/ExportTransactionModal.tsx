@@ -1,15 +1,16 @@
+import React, { useState } from "react";
 import { getAllTransactionByMonth } from "@/api/transaction";
-import LoadingButton from "../dls/Button/LoadingButton";
-import Heading from "../dls/Heading";
-import IconWrapper from "../dls/IconWrapper";
-import { Modal, ModalContent } from "../dls/Modal";
-import XmarkIcon from "../icons/XmarkIcon";
 import { Transaction } from "@/types/Transaction";
 import { currencyFormat } from "@/utils/currencyFormat";
 import { useMutation } from "@tanstack/react-query";
 import JsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import React, { useState } from "react";
+
+import LoadingButton from "../dls/Button/LoadingButton";
+import Heading from "../dls/Heading";
+import IconWrapper from "../dls/IconWrapper";
+import { Modal, ModalContent } from "../dls/Modal";
+import XmarkIcon from "../icons/XmarkIcon";
 
 type Props = {
   isOpen: boolean;
@@ -26,7 +27,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
     },
     onError: () => {
       setError(
-        "Terjadi kesalahan atau tidak ada transaksi pada bulan yang dipilih"
+        "Terjadi kesalahan atau tidak ada transaksi pada bulan yang dipilih",
       );
     },
   });
@@ -42,7 +43,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
             name: string;
           };
         },
-        index: number
+        index: number,
       ) => {
         return {
           no: (index + 1).toString(),
@@ -59,7 +60,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
           nominal: currencyFormat(transaction.amount),
           dompet: transaction.wallet ? transaction.wallet.name : "-",
         };
-      }
+      },
     );
 
     autoTable(doc, {
@@ -96,7 +97,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
             year: "numeric",
           })}`,
           data.settings.margin.left + 15,
-          22
+          22,
         );
       },
     });
@@ -105,7 +106,7 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
       `data transaksi ${date.toLocaleDateString("id-ID", {
         month: "long",
         year: "numeric",
-      })}.pdf`
+      })}.pdf`,
     );
   };
 
@@ -132,20 +133,20 @@ const ExportTransactionModal = ({ isOpen, setIsOpen }: Props) => {
           <Heading level={3}>Export Ke PDF</Heading>
           <IconWrapper
             onClick={closeModal}
-            className="text-blue-500 cursor-pointer rounded hover:bg-blue-100 dark:hover:bg-blue-500/20"
+            className="cursor-pointer rounded text-blue-500 hover:bg-blue-100 dark:hover:bg-blue-500/20"
           >
             <XmarkIcon />
           </IconWrapper>
         </div>
-        <span className="mt-5 font-semibold block dark:text-slate-200">
+        <span className="mt-5 block font-semibold dark:text-slate-200">
           Pilih Bulan
         </span>
-        {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+        {error && <span className="mt-1 text-sm text-red-500">{error}</span>}
         <form onSubmit={fetchTransaction}>
           <input
             type="month"
             placeholder="Pilih Bulan"
-            className="w-full mt-1 mb-5 p-3 bg-slate-100 dark:bg-slate-500 dark:text-slate-200 rounded-lg"
+            className="mb-5 mt-1 w-full rounded-lg bg-slate-100 p-3 dark:bg-slate-500 dark:text-slate-200"
             name="month"
           />
           <LoadingButton

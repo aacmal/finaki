@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+
 import { ModalContext } from "./Modal";
 
 type Props = {

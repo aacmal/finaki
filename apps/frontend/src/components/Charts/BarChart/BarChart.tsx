@@ -1,15 +1,21 @@
 "use client";
 
-import {TotalTransactionByDay} from "@/types/Transaction";
+import { Interval } from "@/api/types/TransactionAPI";
+import { TotalTransactionByDay } from "@/types/Transaction";
 import classNames from "classnames";
-import {Bar, BarChart as BaChart, CartesianGrid, Tooltip, XAxis,} from "recharts";
-import {ChartError, ChartLoading} from "../ChartPlaceholder";
-import ChartWrapper from "../ChartWrapper";
+import {
+  BarChart as BaChart,
+  Bar,
+  CartesianGrid,
+  Tooltip,
+  XAxis,
+} from "recharts";
+import { shallow } from "zustand/shallow";
 
-import renderBarTooltip from "./BarTooltip";
 import useTransaction from "../../../stores/transactionStore";
-import {shallow} from "zustand/shallow";
-import {Interval} from "@/api/types/TransactionAPI";
+import { ChartError, ChartLoading } from "../ChartPlaceholder";
+import ChartWrapper from "../ChartWrapper";
+import renderBarTooltip from "./BarTooltip";
 
 type Props = {
   data: TotalTransactionByDay[];
@@ -20,11 +26,11 @@ type Props = {
 };
 
 const BarChart = ({ data, color, loading, className }: Props) => {
-  const interval = useTransaction(state => state.interval, shallow)
-  const barSize = interval === Interval.Weekly ? 8 :4
+  const interval = useTransaction((state) => state.interval, shallow);
+  const barSize = interval === Interval.Weekly ? 8 : 4;
 
   return (
-    <ChartWrapper className={classNames("w-full h-48 lg:72", className)}>
+    <ChartWrapper className={classNames("lg:72 h-48 w-full", className)}>
       {loading ? (
         <ChartLoading />
       ) : data ? (

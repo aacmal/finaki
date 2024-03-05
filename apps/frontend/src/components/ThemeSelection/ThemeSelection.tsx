@@ -1,10 +1,11 @@
 "use client";
 
-import Heading from "../dls/Heading";
 import { Theme } from "@/types/Theme";
+
 import useHydration from "../../hooks/useHydration";
 import useTheme from "../../hooks/useTheme";
 import ContentWrapper from "../Container/ContentWrapper";
+import Heading from "../dls/Heading";
 import ThemeOption from "./ThemeOption";
 
 const ThemeSelection = () => {

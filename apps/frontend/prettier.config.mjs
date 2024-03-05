@@ -1,4 +1,5 @@
-import basePrettierConfig from "@finaki/prettier-config"
+import basePrettierConfig from "@finaki/prettier-config";
+
 /** @typedef {import("prettier").Config} PrettierConfig */
 /** @typedef {import("prettier-plugin-tailwindcss").PluginOptions} TailwindConfig */
 /** @typedef {import("@ianvs/prettier-plugin-sort-imports").PluginConfig} SortImportsConfig */
@@ -20,4 +21,4 @@ export default {
     "^[../]",
     "^[./]",
   ],
-}
+};

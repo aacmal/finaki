@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React, { forwardRef } from "react";
+import classNames from "classnames";
 
 interface Props extends React.HTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -8,23 +8,23 @@ interface Props extends React.HTMLAttributes<HTMLInputElement> {
 
 const Checkbox = forwardRef(function Checkbox(
   { className, label, id, ...props }: Props,
-  ref: React.Ref<HTMLInputElement>
+  ref: React.Ref<HTMLInputElement>,
 ) {
   return (
     <div
       className={classNames(
         "flex items-center text-gray-900 dark:text-gray-300",
-        className
+        className,
       )}
     >
       <input
-        className="w-4 h-4 accent-blue-500"
+        className="h-4 w-4 accent-blue-500"
         id={id}
         type="checkbox"
         {...props}
         ref={ref}
       />
-      <label htmlFor={id} className="ml-2 text-sm font-medium select-none">
+      <label htmlFor={id} className="ml-2 select-none text-sm font-medium">
         {label}
       </label>
     </div>

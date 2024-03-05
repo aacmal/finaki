@@ -8,6 +8,7 @@ import {
   Tooltip,
   XAxis,
 } from "recharts";
+
 import { ChartError, ChartLoading } from "../ChartPlaceholder";
 import ChartWrapper from "../ChartWrapper";
 import renderAreaTooltip from "./AreaTooltip";

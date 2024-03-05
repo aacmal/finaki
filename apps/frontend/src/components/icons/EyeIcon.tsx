@@ -1,5 +1,5 @@
-import { defaultOutlineIconProps, IconProps } from "@/types/IconProps";
 import React from "react";
+import { defaultOutlineIconProps, IconProps } from "@/types/IconProps";
 
 type EyeIconProps = IconProps & {
   isVisible?: boolean;

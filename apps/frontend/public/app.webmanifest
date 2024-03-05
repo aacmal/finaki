@@ -1,32 +1,32 @@
 {
-    "theme_color": "#e7e5e4",
-    "background_color": "#FFF",
-    "display": "standalone",
-    "scope": "/",
-    "start_url": "/app",
-    "name": "Finaki",
-    "description": "Finaki adalah aplikasi manajemen keuangan all-in-one, yang memungkinkan Anda untuk mengatur pengeluaran, pendapatan, dan tabungan dengan mudah dan efisien.",
-    "short_name": "Finaki",
-    "icons": [
-        {
-            "src": "/icon-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-256x256.png",
-            "sizes": "256x256",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-384x384.png",
-            "sizes": "384x384",
-            "type": "image/png"
-        },
-        {
-            "src": "/icon-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
+  "theme_color": "#e7e5e4",
+  "background_color": "#FFF",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/app",
+  "name": "Finaki",
+  "description": "Finaki adalah aplikasi manajemen keuangan all-in-one, yang memungkinkan Anda untuk mengatur pengeluaran, pendapatan, dan tabungan dengan mudah dan efisien.",
+  "short_name": "Finaki",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

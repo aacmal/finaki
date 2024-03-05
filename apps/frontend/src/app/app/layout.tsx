@@ -1,6 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { getUserData } from "@/api/user";
+import { QueryKey } from "@/types/QueryKey";
+import { Routes } from "@/types/Routes";
+import { useQuery } from "@tanstack/react-query";
+
 import Container from "../../components/Container/Container";
 import Header from "../../components/Header/Header";
 import AppNav from "../../components/Navigation/AppNav/AppNav";
@@ -8,11 +14,6 @@ import AddTransaction from "../../components/Transactions/AddTransaction";
 import TransactionDetail from "../../components/Transactions/TransactionDetail";
 import DeleteWalletDialog from "../../components/WalletCard/DeleteWalletDialog";
 import TransferBalanceDialog from "../../components/WalletCard/TransferBalanceDialog";
-import { QueryKey } from "@/types/QueryKey";
-import { Routes } from "@/types/Routes";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import useStore from "../../stores/store";
 
 type Props = {
@@ -44,7 +45,7 @@ const AppLayout = ({ children }: Props) => {
 
   if (isLoading || !data) {
     return (
-      <div className="h-screen w-screen dark:text-slate-300 grid place-items-center font-semibold">
+      <div className="grid h-screen w-screen place-items-center font-semibold dark:text-slate-300">
         Loading...
       </div>
     );
@@ -54,7 +55,7 @@ const AppLayout = ({ children }: Props) => {
     <>
       <Container>
         <AppNav />
-        <div className="flex flex-col w-full">
+        <div className="flex w-full flex-col">
           <Header />
           <main>{children}</main>
         </div>

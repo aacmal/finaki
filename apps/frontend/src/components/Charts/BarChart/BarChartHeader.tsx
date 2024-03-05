@@ -1,4 +1,5 @@
 import React from "react";
+
 import ChartHeader from "../ChartHeader";
 
 type BarChartHeaderProps = {
@@ -11,14 +12,14 @@ const BarChartHeader = ({ COLOR }: BarChartHeaderProps) => (
       <div className="flex items-center">
         <div
           style={{ backgroundColor: COLOR["INCOME"] }}
-          className="h-2 w-2 rounded-full mr-2"
+          className="mr-2 h-2 w-2 rounded-full"
         ></div>
         <span className="text-sm">Masuk</span>
       </div>
       <div className="flex items-center">
         <div
           style={{ backgroundColor: COLOR["OUTCOME"] }}
-          className="h-2 w-2 rounded-full mr-2"
+          className="mr-2 h-2 w-2 rounded-full"
         ></div>
         <span className="text-sm">Keluar</span>
       </div>

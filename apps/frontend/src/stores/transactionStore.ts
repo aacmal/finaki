@@ -1,6 +1,6 @@
-import {Transaction} from "@/types/Transaction";
-import {create} from "zustand";
-import {Interval} from "@/api/types/TransactionAPI";
+import { Interval } from "@/api/types/TransactionAPI";
+import { Transaction } from "@/types/Transaction";
+import { create } from "zustand";
 
 interface TransactionStore {
   transactionDetailState: {
@@ -31,7 +31,7 @@ const useTransaction = create<TransactionStore>((set) => ({
   transactions: [],
   interval: Interval.Weekly,
   setInterval: (val) => {
-    set({ interval: val })
+    set({ interval: val });
   },
   setTransactions: (transactions: Transaction[]) => {
     set({ transactions });
@@ -44,13 +44,13 @@ const useTransaction = create<TransactionStore>((set) => ({
   dispatchUpdateTransaction: (id, newTransaction) =>
     set((state) => ({
       transactions: state.transactions.map((transaction) =>
-        transaction._id === id ? newTransaction : transaction
+        transaction._id === id ? newTransaction : transaction,
       ),
     })),
   dispatchDeleteTransaction: (id) =>
     set((state) => ({
       transactions: state.transactions.filter(
-        (transaction) => transaction._id !== id
+        (transaction) => transaction._id !== id,
       ),
     })),
   dispatchAddTransaction: (transaction) =>

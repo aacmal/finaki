@@ -1,4 +1,5 @@
 import classNames from "classnames";
+
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import Button from "./Button";
 
@@ -49,13 +50,13 @@ const LoadingButton = ({
       <div className="flex items-center justify-center">
         <LoadingSpinner
           className={classNames(
-            "transition-all duration-500 stroke-current",
+            "stroke-current transition-all duration-500",
 
             {
-              "max-w-0 mr-0": !isLoading,
-              "max-w-xs mr-3": isLoading,
+              "mr-0 max-w-0": !isLoading,
+              "mr-3 max-w-xs": isLoading,
             },
-            { "max-w-xs mr-3": isSuccess && loadingOnSuccess }
+            { "mr-3 max-w-xs": isSuccess && loadingOnSuccess },
           )}
         />
         <span>

@@ -7,7 +7,7 @@ import ThemeSelection from "../../../components/ThemeSelection/ThemeSelection";
 
 const MyAccount = () => {
   return (
-    <div className="space-y-10 mt-6">
+    <div className="mt-6 space-y-10">
       <Profile />
       <ThemeSelection />
       <DevicesLists />

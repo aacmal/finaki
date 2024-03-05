@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* create custom style for Tooltop recharts component */
 // .recharts-tooltip-wrapper{
 //   outline: none;
@@ -16,9 +15,9 @@
 
 // }
 
-*{
+* {
   outline: none;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -30,17 +29,17 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
-.recharts-cartesian-axis-tick text tspan {    
+.recharts-cartesian-axis-tick text tspan {
   @apply dark:text-slate-400;
 }
 
 // this line bellow is for the InputWithLabel component, because the module.scss file is not working with the darkmode
 
-.input-with-label-wrapper{
+.input-with-label-wrapper {
   position: relative;
 
   label {
@@ -52,10 +51,10 @@ input[type=number] {
     padding: 0 5px;
     transition: all 0.2s ease-in-out;
   }
-  
 
-  input, textarea{
-    @apply bg-gray-100 text-slate-800 dark:text-slate-100 dark:bg-slate-500 ;
+  input,
+  textarea {
+    @apply bg-gray-100 text-slate-800 dark:bg-slate-500 dark:text-slate-100;
     transition: all 0.2s ease-in-out;
     &:focus + label {
       @apply bg-white dark:bg-slate-600;
@@ -67,7 +66,6 @@ input[type=number] {
       @apply bg-white dark:bg-slate-600;
       top: 0 !important;
       left: 20px;
-
     }
 
     &::placeholder {
@@ -79,26 +77,25 @@ input[type=number] {
       transition-delay: 100ms;
     }
 
-    &:not(:placeholder-shown){
+    &:not(:placeholder-shown) {
       @apply bg-transparent;
       @apply ring-1 ring-gray-300 invalid:ring-pink-400;
     }
 
-
-    &:focus{
+    &:focus {
       @apply bg-transparent ring-2 ring-blue-400;
     }
 
-    &:focus:not(:placeholder-shown){
-      @apply ring-2 ring-blue-400 ;
+    &:focus:not(:placeholder-shown) {
+      @apply ring-2 ring-blue-400;
     }
-    
+
     &:not(:placeholder-shown) ~ .toggleHide {
       display: block;
     }
   }
 
-    .toggleHide{
+  .toggleHide {
     @apply text-gray-500;
     display: none;
     position: absolute;
@@ -107,17 +104,20 @@ input[type=number] {
     transform: translateY(-50%);
     cursor: pointer;
   }
-
 }
 
-.hero-image{
-  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg) rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg) skewY(0deg);
+.hero-image {
+  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg)
+    rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg)
+    skewY(0deg);
   border-radius: 10px;
   overflow: hidden;
 }
 
-.hero-image:nth-child(2){
-  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg) rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg) skewY(0deg);
+.hero-image:nth-child(2) {
+  transform: scaleX(1) scaleY(1) scaleZ(1) rotateX(-15deg) rotateY(32deg)
+    rotateZ(1deg) translateX(0px) translateY(0px) translateZ(0px) skewX(0deg)
+    skewY(0deg);
   border-radius: 10px;
   overflow: hidden;
   position: absolute;
@@ -129,4 +129,3 @@ input[type=number] {
     left: 20px;
   }
 }
-

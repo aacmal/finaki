@@ -1,9 +1,11 @@
 import { Transaction } from "@/types/Transaction";
+
 import { instance } from "./api";
 import { makeUrl } from "./config";
 import {
   EditTransactionInput,
-  InfiniteTransactionResponse, Interval,
+  InfiniteTransactionResponse,
+  Interval,
   TotalTransactionByDayResponse,
   TransactionInput,
   TransactionResponse,
@@ -13,7 +15,7 @@ import {
 export const insertNewTransaction = async (data: TransactionInput) => {
   const response = await instance.post<TransactionResponse>(
     "/transactions",
-    data
+    data,
   );
   return response.data.data;
 };
@@ -33,17 +35,15 @@ export const editTransaction = async ({
 
 export const deleteTransaction = async (id: string) => {
   const response = await instance.delete<TransactionResponse>(
-    `/transactions/${id}`
+    `/transactions/${id}`,
   );
   return response.data.data;
 };
 
-export const getTotalTransactionByPeriod = async (
-  interval: Interval
-) => {
+export const getTotalTransactionByPeriod = async (interval: Interval) => {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const response = await instance.get<TotalTransactionByDayResponse>(
-    makeUrl("/transactions/total", { interval, timezone })
+    makeUrl("/transactions/total", { interval, timezone }),
   );
 
   return response.data.data;
@@ -55,7 +55,7 @@ export const getAllTransactions = async (query: {
   search?: string;
 }) => {
   const response = await instance.get<InfiniteTransactionResponse>(
-    makeUrl("/transactions", query)
+    makeUrl("/transactions", query),
   );
 
   return response.data.data;
@@ -65,7 +65,7 @@ export const getAllTransactionByMonth = async (date: Date) => {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const response = await instance.get<TransactionsResponse>(
-    makeUrl(`/transactions/by-month/${month}/${year}`)
+    makeUrl(`/transactions/by-month/${month}/${year}`),
   );
 
   return response.data.data;

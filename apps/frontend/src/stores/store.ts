@@ -100,8 +100,8 @@ const useStore = create<Store>()(
           colorTheme: state.colorTheme,
         };
       },
-    }
-  )
+    },
+  ),
 );
 
 export default useStore;

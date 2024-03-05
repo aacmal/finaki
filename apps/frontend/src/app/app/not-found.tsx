@@ -1,11 +1,12 @@
-import Heading from "../../components/dls/Heading";
-import { Routes } from "@/types/Routes";
 import Image from "next/image";
 import Link from "next/link";
+import { Routes } from "@/types/Routes";
+
+import Heading from "../../components/dls/Heading";
 
 const NotFound = () => {
   return (
-    <div className="w-full flex flex-col items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center">
       <Image
         src="/images/not-found.png"
         width={500}
@@ -16,7 +17,7 @@ const NotFound = () => {
         Ups! Ada yang salah
       </Heading>
       <Link
-        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg mt-5 font-semibold text-slate-50"
+        className="mt-5 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 font-semibold text-slate-50"
         href={Routes.Dashboard}
       >
         Kembali ke Dashboard

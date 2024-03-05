@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React, { useContext } from "react";
+import classNames from "classnames";
+
 import { ModalContext } from "./Modal";
 import ModalOverlay from "./ModalOverlay";
 
@@ -20,9 +21,9 @@ const ModalContent = ({
   return (
     <div
       className={classNames(
-        "w-screen h-screen fixed z-50 top-0 left-0 grid place-items-center",
+        "fixed left-0 top-0 z-50 grid h-screen w-screen place-items-center",
         { invisible: !isOpen },
-        { visible: isOpen }
+        { visible: isOpen },
       )}
     >
       <ModalOverlay
@@ -36,10 +37,10 @@ const ModalContent = ({
       />
       <div
         className={classNames(
-          "p-5 bg-white shadow-2xl w-[90%] -mt-32 lg:mt-0 max-w-lg rounded-lg z-[52] duration-200 transition-all transform dark:bg-slate-600",
-          { "scale-75 -translate-y-20 invisible opacity-0": !isOpen },
-          { "scale-100 translate-y-0 visible opacity-100": isOpen },
-          className
+          "z-[52] -mt-32 w-[90%] max-w-lg transform rounded-lg bg-white p-5 shadow-2xl transition-all duration-200 dark:bg-slate-600 lg:mt-0",
+          { "invisible -translate-y-20 scale-75 opacity-0": !isOpen },
+          { "visible translate-y-0 scale-100 opacity-100": isOpen },
+          className,
         )}
       >
         {isOpen && children}

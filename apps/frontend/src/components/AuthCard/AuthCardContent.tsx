@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 type Props = {
   children: React.ReactNode;
@@ -10,8 +10,8 @@ const AuthCardContent = ({ children, className }: Props) => {
   return (
     <div
       className={classNames(
-        "flex flex-col justify-evenly pb-10 lg:pt-16 md:px-10 w-full gap-9 lg:w-[40%] h-fit lg:h-full",
-        className
+        "flex h-fit w-full flex-col justify-evenly gap-9 pb-10 md:px-10 lg:h-full lg:w-[40%] lg:pt-16",
+        className,
       )}
     >
       {children}

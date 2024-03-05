@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React, { forwardRef, LegacyRef } from "react";
+import classNames from "classnames";
 
 interface Props extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   transparent?: boolean;
@@ -25,13 +25,13 @@ const TextArea = forwardRef(
       padding = "px-4 py-4",
       ...props
     }: Props,
-    ref: LegacyRef<HTMLTextAreaElement>
+    ref: LegacyRef<HTMLTextAreaElement>,
   ) => {
     return (
       <div
         className={classNames(
-          "flex flex-col input-with-label-wrapper",
-          className
+          "input-with-label-wrapper flex flex-col",
+          className,
         )}
       >
         <textarea
@@ -46,14 +46,14 @@ const TextArea = forwardRef(
         {error && (
           <small
             role="alert"
-            className="text-red-400 absolute -bottom-5 font-semibold left-3"
+            className="absolute -bottom-5 left-3 font-semibold text-red-400"
           >
             {error.message}
           </small>
         )}
       </div>
     );
-  }
+  },
 );
 
 export default TextArea;

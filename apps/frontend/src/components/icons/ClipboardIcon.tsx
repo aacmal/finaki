@@ -1,6 +1,5 @@
-import { defaultOutlineIconProps, IconProps } from "@/types/IconProps";
 import React from "react";
-
+import { defaultOutlineIconProps, IconProps } from "@/types/IconProps";
 
 const ClipboardIcon = (props: IconProps) => {
   return (

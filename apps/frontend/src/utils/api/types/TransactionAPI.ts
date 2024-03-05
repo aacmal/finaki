@@ -1,10 +1,11 @@
 import { TotalTransactionByDay, Transaction } from "@/types/Transaction";
+
 import { GenericResponse } from "./Api";
 
 export enum Interval {
   // Daily = "daily",
   Weekly = "weekly",
-  Monthly = "monthly"
+  Monthly = "monthly",
 }
 
 export interface TransactionResponse extends GenericResponse {

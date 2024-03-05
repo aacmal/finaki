@@ -1,5 +1,5 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ const Button = ({
     <button
       type={type}
       className={classNames(
-        "px-4 py-4 disabled:cursor-not-allowed rounded-xl text-white hover:shadow-2xl transition-all",
+        "rounded-xl px-4 py-4 text-white transition-all hover:shadow-2xl disabled:cursor-not-allowed",
         { "w-full": width === "full" },
         { "w-auto": width === "auto" },
         { "w-fit": width === "fit" },
@@ -44,7 +44,7 @@ const Button = ({
           "text-red-500 hover:text-red-600":
             buttonStyle === "danger" && !background,
         },
-        className
+        className,
       )}
       {...props}
     >

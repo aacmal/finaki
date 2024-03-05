@@ -1,13 +1,14 @@
 "use client";
 
-import Ratio from "../../../components/Dashboard/Ratio";
-import RecentTransactions from "../../../components/Dashboard/RecentTrasactions";
-import TransactionActivity from "../../../components/Dashboard/TransactionActivity";
-import WalletPercentage from "../../../components/Dashboard/WalletPercentage";
 import { QueryKey } from "@/types/QueryKey";
 import { TotalTransactionByDay, Transaction } from "@/types/Transaction";
 import { WalletData } from "@/types/Wallet";
 import { useQuery } from "@tanstack/react-query";
+
+import Ratio from "../../../components/Dashboard/Ratio";
+import RecentTransactions from "../../../components/Dashboard/RecentTrasactions";
+import TransactionActivity from "../../../components/Dashboard/TransactionActivity";
+import WalletPercentage from "../../../components/Dashboard/WalletPercentage";
 
 const Page = () => {
   const totalTransactionQuery = useQuery({
@@ -50,7 +51,7 @@ const Page = () => {
         loading={totalTransactionQuery.isLoading}
         data={totalTransactionQuery.data}
       />
-      <div className="flex gap-4 h-fit flex-col lg:flex-row">
+      <div className="flex h-fit flex-col gap-4 lg:flex-row">
         <WalletPercentage
           data={walletQuery.data}
           loading={walletQuery.isLoading}
