@@ -1,19 +1,24 @@
+import crypto from "crypto";
+import { compare } from "bcrypt";
+import dotenv from "dotenv";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { generateAccessToken, generateForgotPasswordToken, generateRefreshToken } from "../utils/generateToken";
-import UserModel from "../models/user.model";
-import * as UserService from "../services/user.service";
-import { compare } from "bcrypt";
-import TokenModel from "../models/token.model";
-import jwt from "jsonwebtoken";
-import { GoogleUser, IUser } from "../interfaces/User";
-import { REFRESH_TOKEN_SECRET } from "../..";
-import crypto from "crypto";
-import * as mailService from "../services/mail.service";
-import { errorResponse } from "../utils/errorHander";
 import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
 import { jwtDecode } from "jwt-decode";
-import dotenv from "dotenv";
+
+import { REFRESH_TOKEN_SECRET } from "../../index";
+import { GoogleUser, IUser } from "../interfaces/User";
+import TokenModel from "../models/token.model";
+import UserModel from "../models/user.model";
+import * as mailService from "../services/mail.service";
+import * as UserService from "../services/user.service";
+import { errorResponse } from "../utils/errorHander";
+import {
+  generateAccessToken,
+  generateForgotPasswordToken,
+  generateRefreshToken,
+} from "../utils/generateToken";
 
 dotenv.config();
 
@@ -29,7 +34,11 @@ const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
  *
  * @returns {string} access token string
  **/
-export async function generateAuthCredential(req: Request, res: Response, user: IUser): Promise<string> {
+export async function generateAuthCredential(
+  req: Request,
+  res: Response,
+  user: IUser,
+): Promise<string> {
   try {
     // generate access token and refresh token
     const accessToken = generateAccessToken(user);
@@ -77,7 +86,12 @@ export async function register(req: Request, res: Response) {
       });
     }
     const telegramToken = crypto.randomBytes(10).toString("hex");
-    const newUser = await UserService.create({ email, name, password, token: telegramToken });
+    const newUser = await UserService.create({
+      email,
+      name,
+      password,
+      token: telegramToken,
+    });
 
     // generate access token and refresh token
     const accessToken = await generateAuthCredential(req, res, newUser);
@@ -88,7 +102,7 @@ export async function register(req: Request, res: Response) {
         accessToken,
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       message: error.message,
     });
@@ -172,20 +186,24 @@ export async function refreshToken(req: Request, res: Response) {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
-    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET!, (error: unknown, decoded: unknown) => {
-      if (error) {
-        return res.status(403).json({
-          message: "Forbidden",
+    jwt.verify(
+      refreshToken,
+      REFRESH_TOKEN_SECRET!,
+      (error: unknown, decoded: unknown) => {
+        if (error) {
+          return res.status(403).json({
+            message: "Forbidden",
+          });
+        }
+        const accessToken = generateAccessToken(user);
+        res.status(200).json({
+          message: "Access token has been refreshed successfully",
+          data: {
+            accessToken,
+          },
         });
-      }
-      const accessToken = generateAccessToken(user);
-      res.status(200).json({
-        message: "Access token has been refreshed successfully",
-        data: {
-          accessToken,
-        },
-      });
-    });
+      },
+    );
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -203,7 +221,9 @@ export async function logout(req: Request, res: Response) {
       });
     }
 
-    const deletedRefreshToken = await TokenModel.findOneAndDelete({ token: refreshToken });
+    const deletedRefreshToken = await TokenModel.findOneAndDelete({
+      token: refreshToken,
+    });
     if (!deletedRefreshToken) {
       return res.status(500).json({
         message: "Something went wrong",
@@ -260,28 +280,35 @@ export async function verifyResetPasswordToken(req: Request, res: Response) {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
-    jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!, async (error: unknown, decoded: unknown) => {
-      if (error) {
-        return res.status(403).json({
-          message: "Forbidden",
+    jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!,
+      async (error: unknown, decoded: unknown) => {
+        if (error) {
+          return res.status(403).json({
+            message: "Forbidden",
+          });
+        }
+
+        const decodedToken = decoded as { email: string };
+        const user = await UserModel.findOne({
+          email: decodedToken.email,
+          resetPasswordToken: token,
         });
-      }
 
-      const decodedToken = decoded as { email: string };
-      const user = await UserModel.findOne({ email: decodedToken.email, resetPasswordToken: token });
+        if (!user) {
+          return res.status(403).json({
+            message: "Forbidden",
+            data: false,
+          });
+        }
 
-      if (!user) {
-        return res.status(403).json({
-          message: "Forbidden",
-          data: false,
+        res.status(200).json({
+          message: "Token is valid",
+          data: true,
         });
-      }
-
-      res.status(200).json({
-        message: "Token is valid",
-        data: true,
-      });
-    });
+      },
+    );
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -297,7 +324,10 @@ export async function resetPassword(req: Request, res: Response) {
   try {
     const { token, password } = req.body;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const decoded = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!) as { email: string };
+    const decoded = jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_TOKEN_SECRET_KEY!,
+    ) as { email: string };
 
     const user = await UserModel.findOne({ email: decoded.email });
     if (!user) {
@@ -332,7 +362,11 @@ export async function resetPassword(req: Request, res: Response) {
 
 export async function loginWithGoogle(req: Request, res: Response) {
   try {
-    const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "postmessage");
+    const oAuth2Client = new OAuth2Client(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      "postmessage",
+    );
 
     const { code } = req.body;
     if (!code) {

@@ -1,22 +1,11 @@
 {
+  "extends": "@finaki/ts-config/base",
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-
-    /* Language and Environment */
-    "target": "ES2018",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-  
-    /* Modules */
-    "module": "commonjs",                                /* Specify what module code is generated. */
-    "outDir": "./dist",                                   /* Specify an output folder for all emitted files. */
-
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-
-    /* Type Checking */
-    "strict": true,                                 
-    "noImplicitAny": true,                           
-    "useUnknownInCatchVariables": false,               
-    "skipLibCheck": true,
+    "outDir": "./dist",
+    "allowJs": false,
+    "useUnknownInCatchVariables": false,
+    "noEmit": false // Set to true if you don't want to compile the code
   },
-  "exclude": ["node_modules"]
+  "include": ["*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

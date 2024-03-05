@@ -1,11 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.WalletSchema = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
-exports.WalletSchema = new mongoose_1.default.Schema({
+import mongoose from "mongoose";
+export const WalletSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -16,7 +10,7 @@ exports.WalletSchema = new mongoose_1.default.Schema({
         min: [0, "Balance cannot be negative"],
     },
     userId: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
@@ -26,7 +20,7 @@ exports.WalletSchema = new mongoose_1.default.Schema({
     },
     transactions: [
         {
-            type: mongoose_1.default.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Transaction",
         },
     ],
@@ -36,4 +30,4 @@ exports.WalletSchema = new mongoose_1.default.Schema({
         default: false,
     },
 }, { timestamps: true });
-exports.default = mongoose_1.default.model("Wallet", exports.WalletSchema);
+export default mongoose.model("Wallet", WalletSchema);

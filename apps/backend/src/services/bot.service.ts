@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Markup, Telegraf, session } from "telegraf";
 import dotenv from "dotenv";
-import UserModel from "../models/user.model";
-import * as TransactionService from "./transaction.service";
-import { ICreateTransactionInput, TransactionType } from "../interfaces/Transaction";
-import { transactionStage } from "./bot/transaction.scene";
+import { Markup, session, Telegraf } from "telegraf";
 import { message } from "telegraf/filters";
+
+import {
+  ICreateTransactionInput,
+  TransactionType,
+} from "../interfaces/Transaction";
+import UserModel from "../models/user.model";
+import { transactionStage } from "./bot/transaction.scene";
+import * as TransactionService from "./transaction.service";
 
 dotenv.config();
 
@@ -16,19 +20,25 @@ bot.use(Telegraf.log());
 const currentUser = async (messageId: number) => {
   const user = await UserModel.findOne({ "telegramAccount.id": messageId });
   if (!user) {
-    throw new Error("Akun telegram ini belum terhubung, paste token kamu untuk menghubungkan");
+    throw new Error(
+      "Akun telegram ini belum terhubung, paste token kamu untuk menghubungkan",
+    );
   }
   return user;
 };
 
 bot.start((ctx) => {
-  ctx.reply("Selamat datang di bot Finaki - Money Manager \nBot ini akan membantu kamu dalam mengelola keuangan kamu");
+  ctx.reply(
+    "Selamat datang di bot Finaki - Money Manager \nBot ini akan membantu kamu dalam mengelola keuangan kamu",
+  );
   ctx.reply("Silahkan ketik /help untuk melihat daftar perintah");
   ctx.reply("Masukan token kamu untuk memulai");
 });
 
 bot.help((ctx) => {
-  ctx.reply("Daftar perintah yang tersedia: \n /help \n /start \n /token \n /in \n /out \n /balance");
+  ctx.reply(
+    "Daftar perintah yang tersedia: \n /help \n /start \n /token \n /in \n /out \n /balance",
+  );
 });
 
 bot.command("/user", async (ctx) => {
@@ -37,7 +47,9 @@ bot.command("/user", async (ctx) => {
       "telegramAccount.id": ctx.message.from.id,
     });
     if (!user) {
-      ctx.reply("Akun telegram ini belum terhubung, ketik /token untuk menghubungkan");
+      ctx.reply(
+        "Akun telegram ini belum terhubung, ketik /token untuk menghubungkan",
+      );
       return;
     }
     ctx.reply(`Akun telegram ini terhubung dengan token ${user.token}`);
@@ -49,7 +61,8 @@ bot.command("/user", async (ctx) => {
 bot.command("/in", async (ctx) => {
   try {
     // console.log(ctx.message)
-    const description = ctx.message?.text.split("#")[0].replace("/in ", "");
+    const description =
+      ctx.message?.text.split("#")[0]!.replace("/in ", "") ?? "";
     const amount = ctx.message?.text.split("#")[1] as unknown as number;
     const walletName = ctx.message?.text.split("#")[2];
     if (!description || !amount) {
@@ -63,11 +76,15 @@ bot.command("/in", async (ctx) => {
     }).populate("wallets");
 
     if (!user) {
-      ctx.reply("Akun telegram ini belum terhubung, ketik /token untuk menghubungkan");
+      ctx.reply(
+        "Akun telegram ini belum terhubung, ketik /token untuk menghubungkan",
+      );
       return;
     }
 
-    const wallet = user.wallets.find((wallet: any) => wallet.name === walletName);
+    const wallet = user.wallets.find(
+      (wallet: any) => wallet.name === walletName,
+    );
     if (!wallet && walletName) {
       ctx.reply("Dompet tidak ditemukan");
       return;
@@ -97,7 +114,8 @@ bot.command("/in", async (ctx) => {
 bot.command("/out", async (ctx) => {
   try {
     // console.log(ctx.message)
-    const description = ctx.message?.text.split("#")[0].replace("/out ", "");
+    const description =
+      ctx.message?.text.split("#")[0]!.replace("/out ", "") ?? "";
     const amount = ctx.message?.text.split("#")[1] as unknown as number;
     const walletName = ctx.message?.text.split("#")[2];
     if (!description || !amount) {
@@ -111,11 +129,15 @@ bot.command("/out", async (ctx) => {
     }).populate("wallets");
 
     if (!user) {
-      ctx.reply("Akun telegram ini belum terhubung, ketik /token untuk menghubungkan");
+      ctx.reply(
+        "Akun telegram ini belum terhubung, ketik /token untuk menghubungkan",
+      );
       return;
     }
 
-    const wallet = user.wallets.find((wallet: any) => wallet.name === walletName) as any;
+    const wallet = user.wallets.find(
+      (wallet: any) => wallet.name === walletName,
+    ) as any;
     if (!wallet && walletName) {
       ctx.reply("Dompet tidak ditemukan");
       return;
@@ -151,7 +173,9 @@ bot.command("/balance", async (ctx) => {
   try {
     const walletName = ctx.message?.text.split("#")[1];
     if (!walletName) {
-      ctx.reply("Perintah tidak lengkap \nFormat: /balance#<nama_dompet> \nContoh: /balance Dompet Utama");
+      ctx.reply(
+        "Perintah tidak lengkap \nFormat: /balance#<nama_dompet> \nContoh: /balance Dompet Utama",
+      );
       return;
     }
     const user = await UserModel.findOne({
@@ -159,11 +183,15 @@ bot.command("/balance", async (ctx) => {
     }).populate("wallets");
 
     if (!user) {
-      ctx.reply("Akun telegram ini belum terhubung, ketik /token untuk menghubungkan");
+      ctx.reply(
+        "Akun telegram ini belum terhubung, ketik /token untuk menghubungkan",
+      );
       return;
     }
 
-    const wallet = user.wallets.find((wallet: any) => wallet.name === walletName) as any;
+    const wallet = user.wallets.find(
+      (wallet: any) => wallet.name === walletName,
+    ) as any;
     if (!wallet) {
       ctx.reply("Dompet tidak ditemukan");
       return;
@@ -217,7 +245,9 @@ bot.on(message("text"), async (ctx) => {
       ctx.reply("Token belum terdaftar");
       return;
     }
-    ctx.reply("Akun telegram berhasil terhubung, ketik /menu untuk melihat daftar perintah");
+    ctx.reply(
+      "Akun telegram berhasil terhubung, ketik /menu untuk melihat daftar perintah",
+    );
   } catch (error) {
     ctx.reply(
       "Gagal menghubungkan \nAkun telegram ini sudah terhubung dengan token lain, putuskan terlebih dahulu di akun web kamu",

@@ -1,34 +1,7 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTransactionsByMonth = exports.getAllTransactions = exports.getTotalTransaction = exports.getTransactionById = exports.deleteTransaction = exports.updateTransaction = exports.createTransaction = exports.getAllTransactionsByDate = void 0;
-// import Transaction from "../models/Transaction";
-const express_validator_1 = require("express-validator");
-const TransactionService = __importStar(require("../services/transaction.service"));
-const Transaction_1 = require("../interfaces/Transaction");
-async function getAllTransactionsByDate(req, res) {
+import { validationResult } from "express-validator";
+import { Interval } from "../interfaces/Transaction";
+import * as TransactionService from "../services/transaction.service";
+export async function getAllTransactionsByDate(req, res) {
     try {
         // const transactions = await Transaction.getAll();
         const userId = req.user;
@@ -39,9 +12,8 @@ async function getAllTransactionsByDate(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getAllTransactionsByDate = getAllTransactionsByDate;
-async function createTransaction(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function createTransaction(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
@@ -66,16 +38,20 @@ async function createTransaction(req, res) {
         res.status(400).json({ message: error.message });
     }
 }
-exports.createTransaction = createTransaction;
-async function updateTransaction(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function updateTransaction(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
         const id = req.params.id;
         const { description, amount, type, note } = req.body;
-        const updatedTransaction = await TransactionService.update(id, { description, amount, type, note });
+        const updatedTransaction = await TransactionService.update(id, {
+            description,
+            amount,
+            type,
+            note,
+        });
         if (!updatedTransaction)
             return res.status(404).json({ message: "Transaction not found" });
         res.json({
@@ -87,8 +63,7 @@ async function updateTransaction(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.updateTransaction = updateTransaction;
-async function deleteTransaction(req, res) {
+export async function deleteTransaction(req, res) {
     try {
         const id = req.params.id;
         const deletedTransaction = await TransactionService.remove(id);
@@ -104,11 +79,10 @@ async function deleteTransaction(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.deleteTransaction = deleteTransaction;
-async function getTransactionById(req, res) {
+export async function getTransactionById(req, res) {
     try {
         const id = req.params.id;
-        const transaction = await TransactionService.getById(id);
+        const transaction = await TransactionService.getById(String(id));
         res.json({
             message: "Transaction has been fetched successfully",
             data: transaction,
@@ -118,12 +92,10 @@ async function getTransactionById(req, res) {
         res.status(404).json({ message: error.message });
     }
 }
-exports.getTransactionById = getTransactionById;
-async function getTotalTransaction(req, res) {
-    var _a;
+export async function getTotalTransaction(req, res) {
     try {
         const userId = req.user;
-        const interval = (_a = req.query.interval) !== null && _a !== void 0 ? _a : Transaction_1.Interval.Weekly;
+        const interval = req.query.interval ?? Interval.Weekly;
         const timezone = "Asia/Jakarta";
         const totalTranscation = await TransactionService.getTotalTransactionByPeriods(userId, interval, timezone);
         if (!totalTranscation)
@@ -137,8 +109,7 @@ async function getTotalTransaction(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getTotalTransaction = getTotalTransaction;
-async function getAllTransactions(req, res) {
+export async function getAllTransactions(req, res) {
     try {
         const userId = req.user;
         const query = req.query;
@@ -147,8 +118,8 @@ async function getAllTransactions(req, res) {
             message: "Transactions has been fetched successfully",
             data: {
                 transactions: result.transactions,
-                totalPages: Math.ceil(result.count / Number(query === null || query === void 0 ? void 0 : query.limit)),
-                currentPage: query === null || query === void 0 ? void 0 : query.page,
+                totalPages: Math.ceil(result.count / Number(query?.limit)),
+                currentPage: query?.page,
             },
         });
     }
@@ -156,10 +127,12 @@ async function getAllTransactions(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getAllTransactions = getAllTransactions;
-async function getAllTransactionsByMonth(req, res) {
+export async function getAllTransactionsByMonth(req, res) {
     try {
         const { month, year } = req.params;
+        if (!month || !year) {
+            return res.status(400).json({ message: "Month and year is required" });
+        }
         const userId = req.user;
         const transactions = await TransactionService.getTransactionByMonth(userId, { month, year });
         if (!transactions || transactions.length === 0)
@@ -173,4 +146,3 @@ async function getAllTransactionsByMonth(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getAllTransactionsByMonth = getAllTransactionsByMonth;

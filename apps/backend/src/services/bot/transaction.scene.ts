@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Markup, Scenes } from "telegraf";
+
+import {
+  ICreateTransactionInput,
+  TransactionType,
+} from "../../interfaces/Transaction";
 import WalletModel from "../../models/wallet.model";
-import { ICreateTransactionInput, TransactionType } from "../../interfaces/Transaction";
 import * as TransactionService from "../../services/transaction.service";
 
 const { WizardScene, Stage } = Scenes;
@@ -13,12 +17,20 @@ const createTransaction = async (ctx: any, data: ICreateTransactionInput) => {
     await ctx.reply(
       "Transaksi berhasil dibuat",
       Markup.inlineKeyboard([
-        [Markup.button.url("Lihat Transaksi", "https://finaki.acml.me/app/transactions")],
+        [
+          Markup.button.url(
+            "Lihat Transaksi",
+            "https://finaki.acml.me/app/transactions",
+          ),
+        ],
         [Markup.button.callback("Tambah lagi", "add")],
       ]),
     );
   } catch (error) {
-    ctx.reply("Ada yang salah, silahkan ulangi kembali", Markup.removeKeyboard());
+    ctx.reply(
+      "Ada yang salah, silahkan ulangi kembali",
+      Markup.removeKeyboard(),
+    );
   } finally {
     return ctx.scene.leave();
   }
@@ -79,7 +91,10 @@ const addTransactionWizard = new WizardScene(
     }
 
     ctx.session.__scenes.state.type = type;
-    ctx.reply("Apakah anda ingin memilih dompet?", Markup.keyboard(["Ya", "Tidak"]).resize().oneTime());
+    ctx.reply(
+      "Apakah anda ingin memilih dompet?",
+      Markup.keyboard(["Ya", "Tidak"]).resize().oneTime(),
+    );
     return ctx.wizard.next();
   },
 
@@ -90,7 +105,10 @@ const addTransactionWizard = new WizardScene(
     const { type: transactionType, amount } = ctx.session.__scenes.state;
 
     if (response !== "Ya" && response !== "Tidak") {
-      ctx.reply("Pilih salah satu", Markup.keyboard(["Ya", "Tidak"]).resize().oneTime());
+      ctx.reply(
+        "Pilih salah satu",
+        Markup.keyboard(["Ya", "Tidak"]).resize().oneTime(),
+      );
       return ctx.wizard.selectStep(4);
     }
 
@@ -116,7 +134,9 @@ const addTransactionWizard = new WizardScene(
       });
 
       if (filteredWallets.length === 0) {
-        ctx.reply("Tidak ada dompet yang memiliki saldo cukup, silahkan buat dompet baru, \nAksi dibatalkan");
+        ctx.reply(
+          "Tidak ada dompet yang memiliki saldo cukup, silahkan buat dompet baru, \nAksi dibatalkan",
+        );
         return ctx.scene.leave();
       }
 

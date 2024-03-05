@@ -1,7 +1,8 @@
 import { Types } from "mongoose";
+
 import { IUser } from "../interfaces/User";
-import UserModel from "../models/user.model";
 import TokenModel from "../models/token.model";
+import UserModel from "../models/user.model";
 
 export async function isUnique(email: string) {
   const user = await UserModel.findOne<IUser>({ email });
@@ -26,7 +27,10 @@ export async function getById(userId: string | undefined | Types.ObjectId) {
   }
 }
 
-export async function pushTransaction(userId: string | undefined | Types.ObjectId, transactionId: Types.ObjectId) {
+export async function pushTransaction(
+  userId: string | undefined | Types.ObjectId,
+  transactionId: Types.ObjectId,
+) {
   try {
     const user = await UserModel.findById(userId);
     if (user) {
@@ -38,7 +42,10 @@ export async function pushTransaction(userId: string | undefined | Types.ObjectI
   }
 }
 
-export async function pullTransaction(userId: Types.ObjectId, transactionId: Types.ObjectId) {
+export async function pullTransaction(
+  userId: Types.ObjectId,
+  transactionId: Types.ObjectId,
+) {
   try {
     await UserModel.findByIdAndUpdate(
       {
@@ -58,7 +65,10 @@ export async function pullTransaction(userId: Types.ObjectId, transactionId: Typ
   }
 }
 
-export async function pushToken(userId: string | undefined | Types.ObjectId, tokenId: Types.ObjectId) {
+export async function pushToken(
+  userId: string | undefined | Types.ObjectId,
+  tokenId: Types.ObjectId,
+) {
   try {
     const user = await UserModel.findById(userId);
     if (user) {
@@ -70,7 +80,10 @@ export async function pushToken(userId: string | undefined | Types.ObjectId, tok
   }
 }
 
-export async function pullToken(userId: string | undefined | Types.ObjectId, tokenId: Types.ObjectId | string) {
+export async function pullToken(
+  userId: string | undefined | Types.ObjectId,
+  tokenId: Types.ObjectId | string,
+) {
   try {
     await UserModel.findByIdAndUpdate(
       {
@@ -90,7 +103,10 @@ export async function pullToken(userId: string | undefined | Types.ObjectId, tok
   }
 }
 
-export async function pushWallet(userId: Types.ObjectId, walletId: Types.ObjectId) {
+export async function pushWallet(
+  userId: Types.ObjectId,
+  walletId: Types.ObjectId,
+) {
   try {
     await UserModel.findByIdAndUpdate(
       {
@@ -113,7 +129,10 @@ export async function pushWallet(userId: Types.ObjectId, walletId: Types.ObjectI
   }
 }
 
-export async function pullWallet(userId: Types.ObjectId, walletId: Types.ObjectId) {
+export async function pullWallet(
+  userId: Types.ObjectId,
+  walletId: Types.ObjectId,
+) {
   try {
     await UserModel.findByIdAndUpdate(
       {
@@ -135,7 +154,10 @@ export async function pullWallet(userId: Types.ObjectId, walletId: Types.ObjectI
 
 export async function findByRefreshToken(token: string): Promise<IUser | null> {
   try {
-    const tokenResult = await TokenModel.findOne({ token }).populate("userId", { refreshTokens: 0, transactions: 0 });
+    const tokenResult = await TokenModel.findOne({ token }).populate("userId", {
+      refreshTokens: 0,
+      transactions: 0,
+    });
     return tokenResult?.userId as unknown as IUser;
   } catch (error) {
     throw error;

@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import * as WalletService from "../services/wallet.service";
-import * as TransactionService from "../services/transaction.service";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
+
 import { TransactionType } from "../interfaces/Transaction";
 import TransactionModel from "../models/transaction.model";
-import WalletModel from "../models/wallet.model";
 import UserModel from "../models/user.model";
+import WalletModel from "../models/wallet.model";
+import * as TransactionService from "../services/transaction.service";
+import * as WalletService from "../services/wallet.service";
 
 export async function createWallet(req: Request, res: Response) {
   const error = validationResult(req);
@@ -79,14 +80,19 @@ export async function getAllWallets(req: Request, res: Response) {
 export async function deleteWallet(req: Request, res: Response) {
   try {
     const id = req.params.id as unknown;
-    const deleteTransactions = req.query.deleteTransactions as unknown as string;
+    const deleteTransactions = req.query
+      .deleteTransactions as unknown as string;
 
     const credentials = {
       userId: req.user as Types.ObjectId,
       walletId: id as Types.ObjectId,
     };
-    const deletedWallet = await WalletService.deleteById(credentials, deleteTransactions);
-    if (!deletedWallet) return res.status(404).json({ message: "Wallet not found" });
+    const deletedWallet = await WalletService.deleteById(
+      credentials,
+      deleteTransactions,
+    );
+    if (!deletedWallet)
+      return res.status(404).json({ message: "Wallet not found" });
 
     res.json({
       message: "Wallet has been deleted successfully",
@@ -129,7 +135,8 @@ export async function updateWallet(req: Request, res: Response) {
       isCredit: 1,
     });
 
-    if (!updatedWallet) return res.status(404).json({ message: "Wallet not found" });
+    if (!updatedWallet)
+      return res.status(404).json({ message: "Wallet not found" });
 
     res.json({
       message: "Wallet has been updated successfully",
@@ -168,7 +175,8 @@ export async function updateWalletColor(req: Request, res: Response) {
       _id: 1,
       color: 1,
     });
-    if (!updatedColor) return res.status(404).json({ message: "Wallet not found" });
+    if (!updatedColor)
+      return res.status(404).json({ message: "Wallet not found" });
     res.json({
       message: "Wallet color has been updated successfully",
       data: updatedColor,
@@ -209,29 +217,38 @@ export async function transferWalletBalance(req: Request, res: Response) {
     return res.status(400).json({ errors: error.array() });
   }
   try {
-    const { sourceWallet, destinationWallet, amount, note, description } = req.body;
+    const { sourceWallet, destinationWallet, amount, note, description } =
+      req.body;
 
     if (sourceWallet === destinationWallet) {
-      return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
+      return res
+        .status(400)
+        .json({ message: "Source and destination wallet cannot be the same" });
     }
 
     const sourceWalletData = await WalletModel.findOne({
       _id: sourceWallet,
       userId: req.user as Types.ObjectId,
     });
-    if (!sourceWalletData) return res.status(404).json({ message: "Source wallet not found" });
+    if (!sourceWalletData)
+      return res.status(404).json({ message: "Source wallet not found" });
 
     const destinationWalletData = await WalletModel.findOne({
       _id: destinationWallet,
       userId: req.user as Types.ObjectId,
     });
-    if (!destinationWalletData) return res.status(404).json({ message: "Destination wallet not found" });
+    if (!destinationWalletData)
+      return res.status(404).json({ message: "Destination wallet not found" });
 
     const originDescription =
-      description.length > 0 ? description : `Transfer saldo ke dompet ${destinationWalletData.name}`;
+      description.length > 0
+        ? description
+        : `Transfer saldo ke dompet ${destinationWalletData.name}`;
 
     const destinationDescription =
-      description.length > 0 ? description : `Terima saldo dari dompet ${sourceWalletData.name}`;
+      description.length > 0
+        ? description
+        : `Terima saldo dari dompet ${sourceWalletData.name}`;
 
     const origin = await TransactionService.create({
       userId: req.user as Types.ObjectId,
@@ -296,7 +313,8 @@ export async function reorderWallets(req: Request, res: Response) {
     const userWallets = await UserModel.findOne(userId).select({ wallets: 1 });
     const arrayWalletIds = JSON.parse(walletIds);
 
-    if (!userWallets) return res.status(404).json({ message: "User not defined" });
+    if (!userWallets)
+      return res.status(404).json({ message: "User not defined" });
 
     const oldOrder = JSON.stringify(userWallets.wallets.sort());
     const newOrder = JSON.stringify([...arrayWalletIds].sort()); // prevent mutation of original array
@@ -306,7 +324,9 @@ export async function reorderWallets(req: Request, res: Response) {
 
     userWallets.wallets = arrayWalletIds;
     await userWallets.save();
-    return res.status(200).json({ message: "Wallets order has been updated successfully" });
+    return res
+      .status(200)
+      .json({ message: "Wallets order has been updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

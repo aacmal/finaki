@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function resetPasswordTemplate(redirectLink) {
+export default function resetPasswordTemplate(redirectLink) {
     return `
   <html>
   <body style="margin: 0px">
@@ -116,4 +114,3 @@ function resetPasswordTemplate(redirectLink) {
 </html>
   `;
 }
-exports.default = resetPasswordTemplate;

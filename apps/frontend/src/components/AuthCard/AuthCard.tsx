@@ -1,5 +1,6 @@
-import classNames from "classnames";
 import React from "react";
+import classNames from "classnames";
+
 import Image from "../dls/Image";
 
 type Props = {
@@ -13,15 +14,15 @@ const AuthCard = ({ children, className, imageUrl, imageAlt }: Props) => {
   return (
     <div
       className={classNames(
-        "flex lg:mx-0 mx-auto lg:mt-0 lg:mb-0 mb-16 mt-32 flex-col lg:flex-row items-center max-w-xl lg:max-w-6xl w-[90%] h-fit p-6 bg-white dark:bg-slate-600 dark:shadow-slate-800 rounded-2xl shadow-2xl shadow-slate-200",
-        className
+        "mx-auto mb-16 mt-32 flex h-fit w-[90%] max-w-xl flex-col items-center rounded-2xl bg-white p-6 shadow-2xl shadow-slate-200 dark:bg-slate-600 dark:shadow-slate-800 lg:mx-0 lg:mb-0 lg:mt-0 lg:max-w-6xl lg:flex-row",
+        className,
       )}
     >
       {imageUrl && (
         <Image
           src={imageUrl}
           alt={imageAlt ?? ""}
-          className="w-[40%] lg:w-[60%] aspect-square hidden lg:block"
+          className="hidden aspect-square w-[40%] lg:block lg:w-[60%]"
           priority
         />
       )}

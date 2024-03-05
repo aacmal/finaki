@@ -1,14 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendForgotPasswordToken = void 0;
-const nodemailer_1 = __importDefault(require("nodemailer"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const reset_password_1 = __importDefault(require("../template/reset-password"));
-dotenv_1.default.config();
-const transporter = nodemailer_1.default.createTransport({
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+import resetPasswordTemplate from "../template/reset-password";
+dotenv.config();
+const transporter = nodemailer.createTransport({
     service: "gmail",
     host: "smtp.gmail.com",
     secure: true,
@@ -17,14 +11,14 @@ const transporter = nodemailer_1.default.createTransport({
         pass: process.env.EMAIL_PASSWORD,
     },
 });
-async function sendForgotPasswordToken(email, token) {
+export async function sendForgotPasswordToken(email, token) {
     try {
         const redirectLink = `${process.env.FRONTEND_URL}/auth/reset-password?token=${token}`;
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
             subject: "Reset Password",
-            html: (0, reset_password_1.default)(redirectLink),
+            html: resetPasswordTemplate(redirectLink),
         };
         await transporter.sendMail(mailOptions);
     }
@@ -32,4 +26,3 @@ async function sendForgotPasswordToken(email, token) {
         throw error;
     }
 }
-exports.sendForgotPasswordToken = sendForgotPasswordToken;

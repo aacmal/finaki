@@ -1,10 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.corsConfig = void 0;
-exports.corsConfig = {
+export const corsConfig = {
     origin: [
-        "https://finaki.vercel.app",
-        "https://finaki.acml.me",
+        "https://finaki.vercel.app", // vercel domain
+        "https://finaki.acml.me", // production
         "http://localhost:3000", // development
     ],
     credentials: true,

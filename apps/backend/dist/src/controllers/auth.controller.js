@@ -1,47 +1,18 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginWithGoogle = exports.resetPassword = exports.verifyResetPasswordToken = exports.forgotPassword = exports.logout = exports.refreshToken = exports.sign = exports.register = exports.generateAuthCredential = void 0;
-const express_validator_1 = require("express-validator");
-const generateToken_1 = require("../utils/generateToken");
-const user_model_1 = __importDefault(require("../models/user.model"));
-const UserService = __importStar(require("../services/user.service"));
-const bcrypt_1 = require("bcrypt");
-const token_model_1 = __importDefault(require("../models/token.model"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const __1 = require("../..");
-const crypto_1 = __importDefault(require("crypto"));
-const mailService = __importStar(require("../services/mail.service"));
-const errorHander_1 = require("../utils/errorHander");
-const google_auth_library_1 = require("google-auth-library");
-const jwt_decode_1 = require("jwt-decode");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+import crypto from "crypto";
+import { compare } from "bcrypt";
+import dotenv from "dotenv";
+import { validationResult } from "express-validator";
+import { OAuth2Client } from "google-auth-library";
+import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
+import { REFRESH_TOKEN_SECRET } from "../../index";
+import TokenModel from "../models/token.model";
+import UserModel from "../models/user.model";
+import * as mailService from "../services/mail.service";
+import * as UserService from "../services/user.service";
+import { errorResponse } from "../utils/errorHander";
+import { generateAccessToken, generateForgotPasswordToken, generateRefreshToken, } from "../utils/generateToken";
+dotenv.config();
 const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
 /**
  * A Promise that returns a string of access token after user logged in or registered
@@ -53,11 +24,11 @@ const MAX_AGE_REFRESH_TOKEN = 3 * 30 * 24 * 60 * 60 * 1000; // 3 months
  *
  * @returns {string} access token string
  **/
-async function generateAuthCredential(req, res, user) {
+export async function generateAuthCredential(req, res, user) {
     try {
         // generate access token and refresh token
-        const accessToken = (0, generateToken_1.generateAccessToken)(user);
-        const refreshToken = (0, generateToken_1.generateRefreshToken)(user);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
         // set refresh token as a cookie to the client
         res.cookie("refresh_token", refreshToken, {
             httpOnly: true,
@@ -67,7 +38,7 @@ async function generateAuthCredential(req, res, user) {
         });
         const userAgent = req.get("user-agent");
         // save refresh token to database
-        const savedRefreshToken = await token_model_1.default.create({
+        const savedRefreshToken = await TokenModel.create({
             userId: user._id,
             token: refreshToken,
             userAgent: userAgent,
@@ -79,9 +50,8 @@ async function generateAuthCredential(req, res, user) {
         throw error;
     }
 }
-exports.generateAuthCredential = generateAuthCredential;
-async function register(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function register(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
@@ -97,8 +67,13 @@ async function register(req, res) {
                 ],
             });
         }
-        const telegramToken = crypto_1.default.randomBytes(10).toString("hex");
-        const newUser = await UserService.create({ email, name, password, token: telegramToken });
+        const telegramToken = crypto.randomBytes(10).toString("hex");
+        const newUser = await UserService.create({
+            email,
+            name,
+            password,
+            token: telegramToken,
+        });
         // generate access token and refresh token
         const accessToken = await generateAuthCredential(req, res, newUser);
         res.status(200).json({
@@ -114,15 +89,14 @@ async function register(req, res) {
         });
     }
 }
-exports.register = register;
-async function sign(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function sign(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
         const { email, password } = req.body;
-        const user = await user_model_1.default.findOne({ email });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             return res.status(400).json({
                 errors: [
@@ -144,7 +118,7 @@ async function sign(req, res) {
             });
         }
         // compare password
-        const isPassowrdValid = await (0, bcrypt_1.compare)(password, user.password);
+        const isPassowrdValid = await compare(password, user.password);
         if (!isPassowrdValid) {
             return res.status(400).json({
                 errors: [
@@ -170,8 +144,7 @@ async function sign(req, res) {
         });
     }
 }
-exports.sign = sign;
-async function refreshToken(req, res) {
+export async function refreshToken(req, res) {
     try {
         const refreshToken = req.cookies.refresh_token;
         if (!refreshToken) {
@@ -186,13 +159,13 @@ async function refreshToken(req, res) {
             });
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
-        jsonwebtoken_1.default.verify(refreshToken, __1.REFRESH_TOKEN_SECRET, (error, decoded) => {
+        jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (error, decoded) => {
             if (error) {
                 return res.status(403).json({
                     message: "Forbidden",
                 });
             }
-            const accessToken = (0, generateToken_1.generateAccessToken)(user);
+            const accessToken = generateAccessToken(user);
             res.status(200).json({
                 message: "Access token has been refreshed successfully",
                 data: {
@@ -207,8 +180,7 @@ async function refreshToken(req, res) {
         });
     }
 }
-exports.refreshToken = refreshToken;
-async function logout(req, res) {
+export async function logout(req, res) {
     try {
         const refreshToken = req.cookies.refresh_token;
         const user = await UserService.findByRefreshToken(refreshToken);
@@ -217,13 +189,15 @@ async function logout(req, res) {
                 message: "Something went wrong",
             });
         }
-        const deletedRefreshToken = await token_model_1.default.findOneAndDelete({ token: refreshToken });
+        const deletedRefreshToken = await TokenModel.findOneAndDelete({
+            token: refreshToken,
+        });
         if (!deletedRefreshToken) {
             return res.status(500).json({
                 message: "Something went wrong",
             });
         }
-        await UserService.pullToken(user._id, deletedRefreshToken === null || deletedRefreshToken === void 0 ? void 0 : deletedRefreshToken._id);
+        await UserService.pullToken(user._id, deletedRefreshToken?._id);
         res.status(200).json({
             message: "User has been logged out successfully",
         });
@@ -234,21 +208,20 @@ async function logout(req, res) {
         });
     }
 }
-exports.logout = logout;
-async function forgotPassword(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function forgotPassword(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
         const { email } = req.body;
-        const user = await user_model_1.default.findOne({ email });
+        const user = await UserModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "Email belum terdaftar",
             });
         }
-        const token = (0, generateToken_1.generateForgotPasswordToken)(user);
+        const token = generateForgotPasswordToken(user);
         await mailService.sendForgotPasswordToken(email, token);
         user.resetPasswordToken = token;
         await user.save();
@@ -257,11 +230,10 @@ async function forgotPassword(req, res) {
         });
     }
     catch (error) {
-        res.status(500).json((0, errorHander_1.errorResponse)("root", error.message));
+        res.status(500).json(errorResponse("root", error.message));
     }
 }
-exports.forgotPassword = forgotPassword;
-async function verifyResetPasswordToken(req, res) {
+export async function verifyResetPasswordToken(req, res) {
     try {
         const token = req.query.token;
         if (!token) {
@@ -270,14 +242,17 @@ async function verifyResetPasswordToken(req, res) {
             });
         }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-unused-vars
-        jsonwebtoken_1.default.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY, async (error, decoded) => {
+        jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY, async (error, decoded) => {
             if (error) {
                 return res.status(403).json({
                     message: "Forbidden",
                 });
             }
             const decodedToken = decoded;
-            const user = await user_model_1.default.findOne({ email: decodedToken.email, resetPasswordToken: token });
+            const user = await UserModel.findOne({
+                email: decodedToken.email,
+                resetPasswordToken: token,
+            });
             if (!user) {
                 return res.status(403).json({
                     message: "Forbidden",
@@ -296,17 +271,16 @@ async function verifyResetPasswordToken(req, res) {
         });
     }
 }
-exports.verifyResetPasswordToken = verifyResetPasswordToken;
-async function resetPassword(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function resetPassword(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
         const { token, password } = req.body;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY);
-        const user = await user_model_1.default.findOne({ email: decoded.email });
+        const decoded = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET_KEY);
+        const user = await UserModel.findOne({ email: decoded.email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found",
@@ -314,7 +288,7 @@ async function resetPassword(req, res) {
         }
         // if user has password, check if the new password is the same as the old one
         if (user.password) {
-            const isPasswordMatch = await (0, bcrypt_1.compare)(password, user.password);
+            const isPasswordMatch = await compare(password, user.password);
             if (isPasswordMatch) {
                 return res.status(400).json({
                     message: "Password baru tidak boleh sama dengan password lama",
@@ -334,10 +308,9 @@ async function resetPassword(req, res) {
         });
     }
 }
-exports.resetPassword = resetPassword;
-async function loginWithGoogle(req, res) {
+export async function loginWithGoogle(req, res) {
     try {
-        const oAuth2Client = new google_auth_library_1.OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "postmessage");
+        const oAuth2Client = new OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, "postmessage");
         const { code } = req.body;
         if (!code) {
             return res.status(400).json({
@@ -349,11 +322,11 @@ async function loginWithGoogle(req, res) {
             return res.status(400).json({
                 message: "Something went wrong",
             });
-        const decodedIdToken = (0, jwt_decode_1.jwtDecode)(tokens.id_token);
-        const user = await user_model_1.default.findOne({ email: decodedIdToken.email });
+        const decodedIdToken = jwtDecode(tokens.id_token);
+        const user = await UserModel.findOne({ email: decodedIdToken.email });
         if (!user) {
             // if user not registered yet, register the user
-            const telegramToken = crypto_1.default.randomBytes(10).toString("hex");
+            const telegramToken = crypto.randomBytes(10).toString("hex");
             const newUser = await UserService.create({
                 email: decodedIdToken.email,
                 name: decodedIdToken.name,
@@ -383,4 +356,3 @@ async function loginWithGoogle(req, res) {
         });
     }
 }
-exports.loginWithGoogle = loginWithGoogle;

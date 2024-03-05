@@ -1,12 +1,7 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const TokenSchema = new mongoose_1.default.Schema({
+import mongoose from "mongoose";
+const TokenSchema = new mongoose.Schema({
     userId: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
     token: {
@@ -24,4 +19,4 @@ const TokenSchema = new mongoose_1.default.Schema({
         expires: 7776000, // 90 days,
     },
 });
-exports.default = mongoose_1.default.model("RefreshToken", TokenSchema);
+export default mongoose.model("RefreshToken", TokenSchema);

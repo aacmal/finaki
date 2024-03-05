@@ -1,5 +1,6 @@
+import { Document, InferSchemaType } from "mongoose";
+
 import { TransactionSchema } from "../models/transaction.model";
-import { InferSchemaType, Document } from "mongoose";
 
 export enum TransactionType {
   IN = "in",
@@ -12,16 +13,26 @@ export enum Interval {
   Monthly = "monthly",
 }
 
-export type ITransactionModel = InferSchemaType<typeof TransactionSchema> & Document;
+export type ITransactionModel = InferSchemaType<typeof TransactionSchema> &
+  Document;
 
 export type ITransactionData = InferSchemaType<typeof TransactionSchema>;
 
 export type ICreateTransactionInput = Pick<
   ITransactionData,
-  "userId" | "walletId" | "description" | "note" | "amount" | "type" | "includeInCalculation"
+  | "userId"
+  | "walletId"
+  | "description"
+  | "note"
+  | "amount"
+  | "type"
+  | "includeInCalculation"
 >;
 
-export type IUpdateTransactionInput = Pick<ITransactionData, "description" | "note" | "amount" | "type">;
+export type IUpdateTransactionInput = Pick<
+  ITransactionData,
+  "description" | "note" | "amount" | "type"
+>;
 
 export interface ITotalTransaction {
   _id: {

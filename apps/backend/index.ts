@@ -1,11 +1,12 @@
-import express from "express";
-import dotenv from "dotenv";
-import passport from "passport";
-import cors from "cors";
 import cookieParse from "cookie-parser";
-import AppRoutes from "./src/routes/index.route";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import passport from "passport";
+
 import { corsConfig } from "./src/configs/cors.config";
 import database from "./src/configs/database.config";
+import AppRoutes from "./src/routes/index.route";
 import bot from "./src/services/bot.service";
 
 dotenv.config();

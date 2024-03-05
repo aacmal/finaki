@@ -1,42 +1,55 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPasswordValidator = exports.transferWalletBalanceValidator = exports.walletColorValidator = exports.updateWalletValidator = exports.walletValidator = exports.signValidator = exports.registerValidator = exports.transactionValidator = void 0;
-const express_validator_1 = require("express-validator");
-exports.transactionValidator = [
-    (0, express_validator_1.body)("description").notEmpty().withMessage("Description is required"),
-    (0, express_validator_1.body)("note").optional(),
-    (0, express_validator_1.body)("amount").notEmpty().withMessage("Amount is required").isNumeric().withMessage("Amount must be a number"),
-    (0, express_validator_1.body)("type").notEmpty().withMessage("Type is required"),
-    (0, express_validator_1.body)("wallet").optional(),
+import { body } from "express-validator";
+export const transactionValidator = [
+    body("description").notEmpty().withMessage("Description is required"),
+    body("note").optional(),
+    body("amount")
+        .notEmpty()
+        .withMessage("Amount is required")
+        .isNumeric()
+        .withMessage("Amount must be a number"),
+    body("type").notEmpty().withMessage("Type is required"),
+    body("wallet").optional(),
 ];
-exports.registerValidator = [
-    (0, express_validator_1.body)("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
-    (0, express_validator_1.body)("name").notEmpty().withMessage("Name is required"),
-    (0, express_validator_1.body)("password").notEmpty().withMessage("Password is required"),
+export const registerValidator = [
+    body("email")
+        .isEmail()
+        .withMessage("Email is invalid")
+        .notEmpty()
+        .withMessage("Email is required"),
+    body("name").notEmpty().withMessage("Name is required"),
+    body("password").notEmpty().withMessage("Password is required"),
 ];
-exports.signValidator = [
-    (0, express_validator_1.body)("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
-    (0, express_validator_1.body)("password").notEmpty().withMessage("Password is required"),
+export const signValidator = [
+    body("email")
+        .isEmail()
+        .withMessage("Email is invalid")
+        .notEmpty()
+        .withMessage("Email is required"),
+    body("password").notEmpty().withMessage("Password is required"),
 ];
-exports.walletValidator = [
-    (0, express_validator_1.body)("name").notEmpty().withMessage("Name is required"),
-    (0, express_validator_1.body)("initialBalance")
+export const walletValidator = [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("initialBalance")
         .optional()
         .isNumeric()
         .withMessage("Balance must be a number")
         .isInt({ min: 0 })
         .withMessage("Balance must be greater than 0"),
-    (0, express_validator_1.body)("color").notEmpty().withMessage("Color is required"),
+    body("color").notEmpty().withMessage("Color is required"),
 ];
-exports.updateWalletValidator = [
-    (0, express_validator_1.body)("name").notEmpty().withMessage("Name is required"),
-    (0, express_validator_1.body)("color").notEmpty().withMessage("color is required"),
+export const updateWalletValidator = [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("color").notEmpty().withMessage("color is required"),
 ];
-exports.walletColorValidator = [(0, express_validator_1.body)("color").notEmpty().withMessage("Color is required")];
-exports.transferWalletBalanceValidator = [
-    (0, express_validator_1.body)("sourceWallet").notEmpty().withMessage("Source wallet is required"),
-    (0, express_validator_1.body)("destinationWallet").notEmpty().withMessage("Destination wallet is required"),
-    (0, express_validator_1.body)("amount")
+export const walletColorValidator = [
+    body("color").notEmpty().withMessage("Color is required"),
+];
+export const transferWalletBalanceValidator = [
+    body("sourceWallet").notEmpty().withMessage("Source wallet is required"),
+    body("destinationWallet")
+        .notEmpty()
+        .withMessage("Destination wallet is required"),
+    body("amount")
         .notEmpty()
         .withMessage("Amount is required")
         .isNumeric()
@@ -47,7 +60,7 @@ exports.transferWalletBalanceValidator = [
 // export const forgotPasswordValidator = [
 //   body("email").isEmail().withMessage("Email is invalid").notEmpty().withMessage("Email is required"),
 // ];
-exports.resetPasswordValidator = [
-    (0, express_validator_1.body)("password").notEmpty().withMessage("Password is required"),
-    (0, express_validator_1.body)("token").notEmpty().withMessage("Token is required"),
+export const resetPasswordValidator = [
+    body("password").notEmpty().withMessage("Password is required"),
+    body("token").notEmpty().withMessage("Token is required"),
 ];

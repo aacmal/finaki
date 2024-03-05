@@ -1,18 +1,12 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TransactionSchema = void 0;
-const mongoose_1 = __importDefault(require("mongoose"));
-exports.TransactionSchema = new mongoose_1.default.Schema({
+import mongoose from "mongoose";
+export const TransactionSchema = new mongoose.Schema({
     userId: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "User",
     },
     walletId: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Wallet",
         required: false,
     },
@@ -39,4 +33,4 @@ exports.TransactionSchema = new mongoose_1.default.Schema({
         default: true,
     },
 }, { timestamps: true });
-exports.default = mongoose_1.default.model("Transaction", exports.TransactionSchema);
+export default mongoose.model("Transaction", TransactionSchema);

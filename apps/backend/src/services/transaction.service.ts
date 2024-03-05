@@ -1,17 +1,18 @@
 // create services from Transaction
 import { Types } from "mongoose";
+
 import {
-  ITotalTransaction,
   ICreateTransactionInput,
-  TransactionType,
-  IUpdateTransactionInput,
-  ITransactionRequestQuery,
   Interval,
+  ITotalTransaction,
+  ITransactionRequestQuery,
+  IUpdateTransactionInput,
+  TransactionType,
 } from "../interfaces/Transaction";
-import * as UserService from "./user.service";
-import * as WalletService from "./wallet.service";
 import TransactionModel from "../models/transaction.model";
 import WalletModel from "../models/wallet.model";
+import * as UserService from "./user.service";
+import * as WalletService from "./wallet.service";
 
 // Create new Transaction
 export async function create(transactionData: ICreateTransactionInput) {
@@ -21,18 +22,27 @@ export async function create(transactionData: ICreateTransactionInput) {
       transactionData.amount = Number(transactionData.amount);
       wallet = await WalletModel.findById(transactionData.walletId);
       if (!wallet) throw new Error("Dompet tidak ditemukan");
-      if (transactionData.type === TransactionType.OUT && wallet.balance < transactionData.amount)
+      if (
+        transactionData.type === TransactionType.OUT &&
+        wallet.balance < transactionData.amount
+      )
         throw new Error("Saldo tidak mencukupi");
     }
     // Create transaction data
     const newTransaction = await TransactionModel.create(transactionData);
 
     // Push transaction to user and wallet
-    await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
+    await UserService.pushTransaction(
+      newTransaction.userId,
+      newTransaction._id,
+    );
     // if transaction has walletId, push transaction to wallet, and update wallet balance
     if (wallet) {
       wallet.transactions.push(newTransaction._id);
-      wallet.balance += transactionData.type === TransactionType.IN ? transactionData.amount : -transactionData.amount;
+      wallet.balance +=
+        transactionData.type === TransactionType.IN
+          ? transactionData.amount
+          : -transactionData.amount;
       await wallet.save();
     }
 
@@ -42,7 +52,10 @@ export async function create(transactionData: ICreateTransactionInput) {
   }
 }
 
-export async function getTransactions(userId: Types.ObjectId, query: ITransactionRequestQuery) {
+export async function getTransactions(
+  userId: Types.ObjectId,
+  query: ITransactionRequestQuery,
+) {
   try {
     const { page, limit } = query;
 
@@ -75,7 +88,10 @@ export async function getTransactions(userId: Types.ObjectId, query: ITransactio
   }
 }
 
-export async function getTransactionByDate(userId: Types.ObjectId, timezone = "Asia/Jakarta") {
+export async function getTransactionByDate(
+  userId: Types.ObjectId,
+  timezone = "Asia/Jakarta",
+) {
   try {
     const allTransactions = await TransactionModel.aggregate([
       {
@@ -141,13 +157,18 @@ export async function getById(id: string) {
   }
 }
 
-export async function update(id: string, newTransactionData: IUpdateTransactionInput) {
+export async function update(
+  id: string,
+  newTransactionData: IUpdateTransactionInput,
+) {
   try {
     const oldTransaction = await TransactionModel.findById(id);
     if (!oldTransaction) return;
     newTransactionData.amount = Number(newTransactionData.amount);
 
-    const currentWallet = await WalletModel.findById(oldTransaction.walletId as Types.ObjectId);
+    const currentWallet = await WalletModel.findById(
+      oldTransaction.walletId as Types.ObjectId,
+    );
 
     const isTypeChanged = oldTransaction.type !== newTransactionData.type;
     const isAmountChanged = oldTransaction.amount !== newTransactionData.amount;
@@ -176,8 +197,12 @@ export async function update(id: string, newTransactionData: IUpdateTransactionI
       // 500 - (500 + 600) = -600; -600 is negative number so return false
       const typeOutValidation =
         (oldTransaction.type === TransactionType.OUT &&
-          currentWallet.balance - (newTransactionData.amount - oldTransaction.amount) >= 0) ||
-        currentWallet.balance - (oldTransaction.amount + newTransactionData.amount) >= 0;
+          currentWallet.balance -
+            (newTransactionData.amount - oldTransaction.amount) >=
+            0) ||
+        currentWallet.balance -
+          (oldTransaction.amount + newTransactionData.amount) >=
+          0;
 
       // explanation of type in validation:
       // 1. validation type IN is simple than OUT, the purpose is for prevent wallet balance to negative same as type OUT too;
@@ -185,7 +210,10 @@ export async function update(id: string, newTransactionData: IUpdateTransactionI
       // in this case, I will edit Transaction I amount to 300, this is cannot apply the update because:
       // currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0
       // 0 - (600 - 300) = -300; -300 is negative number then return false to throw Error
-      const typeInValidation = currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0;
+      const typeInValidation =
+        currentWallet.balance -
+          (oldTransaction.amount - newTransactionData.amount) >=
+        0;
 
       if (newTransactionData.type === TransactionType.OUT) {
         validateTransaction(!typeOutValidation);
@@ -200,7 +228,9 @@ export async function update(id: string, newTransactionData: IUpdateTransactionI
       const updatedTransaction = await oldTransaction.save(); // return updated transaction
 
       // update balance in wallet collection based on transaction type
-      await WalletService.updateBalance(updatedTransaction.walletId as Types.ObjectId);
+      await WalletService.updateBalance(
+        updatedTransaction.walletId as Types.ObjectId,
+      );
 
       return updatedTransaction;
     }
@@ -225,16 +255,25 @@ export async function remove(id: string) {
     // and wallet balance is less than transaction amount then throw error
 
     if (wallet) {
-      if (transaction.type === TransactionType.IN && wallet.balance < transaction.amount) {
-        throw new Error("Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus");
+      if (
+        transaction.type === TransactionType.IN &&
+        wallet.balance < transaction.amount
+      ) {
+        throw new Error(
+          "Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus",
+        );
       }
       const deletedTransaction = await transaction.delete();
 
       // remove transactionId from wallet collection
       // and decrese balance or increse balance based on transaction type
-      (wallet.transactions as Types.DocumentArray<Types.ObjectId>).pull(deletedTransaction._id);
+      (wallet.transactions as Types.DocumentArray<Types.ObjectId>).pull(
+        deletedTransaction._id,
+      );
       wallet.balance -=
-        deletedTransaction.type === TransactionType.IN ? deletedTransaction.amount : -deletedTransaction.amount;
+        deletedTransaction.type === TransactionType.IN
+          ? deletedTransaction.amount
+          : -deletedTransaction.amount;
       await wallet.save();
 
       return deletedTransaction;
@@ -244,7 +283,10 @@ export async function remove(id: string) {
     const deletedTransaction = await transaction.delete();
 
     // remove transactionId from user collection
-    await UserService.pullTransaction(deletedTransaction.userId, deletedTransaction._id);
+    await UserService.pullTransaction(
+      deletedTransaction.userId,
+      deletedTransaction._id,
+    );
 
     return deletedTransaction;
   } catch (error) {
@@ -333,7 +375,8 @@ export async function getTotalTransactionByPeriods(
 
       const transaction = totalTranscation.find(
         (transaction: ITotalTransaction) =>
-          transaction._id.day === date.getDate() && transaction._id.month === date.getMonth() + 1, // because month start from 0
+          transaction._id.day === date.getDate() &&
+          transaction._id.month === date.getMonth() + 1, // because month start from 0
       );
 
       totalTransactionByPeriods.push({

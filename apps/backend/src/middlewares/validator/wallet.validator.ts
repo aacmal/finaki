@@ -13,7 +13,9 @@ export const walletValidator = [
 
 export const transferWalletBalanceValidator = [
   body("sourceWallet").notEmpty().withMessage("Source wallet is required"),
-  body("destinationWallet").notEmpty().withMessage("Destination wallet is required"),
+  body("destinationWallet")
+    .notEmpty()
+    .withMessage("Destination wallet is required"),
   body("description").optional(),
   body("amount")
     .notEmpty()

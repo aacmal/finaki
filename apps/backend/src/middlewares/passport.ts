@@ -1,7 +1,8 @@
 import passport from "passport";
-import UserModel from "../models/user.model";
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+
 import { ACCESS_TOKEN_SECRET } from "../..";
+import UserModel from "../models/user.model";
 
 // JWT middleware authentication
 passport.use(

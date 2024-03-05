@@ -1,6 +1,8 @@
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+
 import resetPasswordTemplate from "../template/reset-password";
+
 dotenv.config();
 
 const transporter = nodemailer.createTransport({

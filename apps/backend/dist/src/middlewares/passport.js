@@ -1,20 +1,15 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const passport_1 = __importDefault(require("passport"));
-const user_model_1 = __importDefault(require("../models/user.model"));
-const passport_jwt_1 = require("passport-jwt");
-const __1 = require("../..");
+import passport from "passport";
+import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import { ACCESS_TOKEN_SECRET } from "../..";
+import UserModel from "../models/user.model";
 // JWT middleware authentication
-passport_1.default.use(new passport_jwt_1.Strategy({
+passport.use(new JwtStrategy({
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    secretOrKey: __1.ACCESS_TOKEN_SECRET,
-    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: ACCESS_TOKEN_SECRET,
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 }, async function (jwtPayload, done) {
     try {
-        const user = await user_model_1.default.findById(jwtPayload._id);
+        const user = await UserModel.findById(jwtPayload._id);
         if (!user) {
             return done(null, false, { message: "Something went wrong" });
         }

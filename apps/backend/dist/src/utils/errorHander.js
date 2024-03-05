@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorResponse = void 0;
-const errorResponse = (param, msg) => ({
+export const errorResponse = (param, msg) => ({
     errors: [
         {
             param,
@@ -9,4 +6,3 @@ const errorResponse = (param, msg) => ({
         },
     ],
 });
-exports.errorResponse = errorResponse;

@@ -1,41 +1,12 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.reorderWallets = exports.walletTransactions = exports.transferWalletBalance = exports.getOneWallet = exports.updateWalletColor = exports.updateWallet = exports.deleteWallet = exports.getAllWallets = exports.createWallet = void 0;
-const WalletService = __importStar(require("../services/wallet.service"));
-const TransactionService = __importStar(require("../services/transaction.service"));
-const express_validator_1 = require("express-validator");
-const Transaction_1 = require("../interfaces/Transaction");
-const transaction_model_1 = __importDefault(require("../models/transaction.model"));
-const wallet_model_1 = __importDefault(require("../models/wallet.model"));
-const user_model_1 = __importDefault(require("../models/user.model"));
-async function createWallet(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+import { validationResult } from "express-validator";
+import { TransactionType } from "../interfaces/Transaction";
+import TransactionModel from "../models/transaction.model";
+import UserModel from "../models/user.model";
+import WalletModel from "../models/wallet.model";
+import * as TransactionService from "../services/transaction.service";
+import * as WalletService from "../services/wallet.service";
+export async function createWallet(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
@@ -50,12 +21,12 @@ async function createWallet(req, res) {
             isCredit: isCredit || false,
         });
         if (balance > 0) {
-            const transaction = await transaction_model_1.default.create({
+            const transaction = await TransactionModel.create({
                 userId,
                 walletId: newWallet._id,
                 description: `Pembuatan dompet ${newWallet.name}`,
                 amount: balance,
-                type: Transaction_1.TransactionType.IN,
+                type: TransactionType.IN,
             });
             newWallet.transactions.push(transaction._id);
             await newWallet.save();
@@ -75,11 +46,10 @@ async function createWallet(req, res) {
         return res.status(500).json(error);
     }
 }
-exports.createWallet = createWallet;
-async function getAllWallets(req, res) {
+export async function getAllWallets(req, res) {
     try {
         const userId = req.user;
-        const wallets = await user_model_1.default.findById(userId).populate({
+        const wallets = await UserModel.findById(userId).populate({
             path: "wallets",
             select: {
                 _id: 1,
@@ -92,18 +62,18 @@ async function getAllWallets(req, res) {
         });
         return res.status(200).json({
             message: "Wallets has been fetched successfully",
-            data: wallets === null || wallets === void 0 ? void 0 : wallets.wallets,
+            data: wallets?.wallets,
         });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getAllWallets = getAllWallets;
-async function deleteWallet(req, res) {
+export async function deleteWallet(req, res) {
     try {
         const id = req.params.id;
-        const deleteTransactions = req.query.deleteTransactions;
+        const deleteTransactions = req.query
+            .deleteTransactions;
         const credentials = {
             userId: req.user,
             walletId: id,
@@ -122,9 +92,8 @@ async function deleteWallet(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.deleteWallet = deleteWallet;
-async function updateWallet(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function updateWallet(req, res) {
+    const error = validationResult(req);
     const userId = req.user;
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
@@ -132,7 +101,7 @@ async function updateWallet(req, res) {
     try {
         const id = req.params.id;
         const { name, color, isCredit } = req.body;
-        const updatedWallet = await wallet_model_1.default.findOneAndUpdate({
+        const updatedWallet = await WalletModel.findOneAndUpdate({
             _id: id,
             userId,
         }, {
@@ -158,9 +127,8 @@ async function updateWallet(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.updateWallet = updateWallet;
-async function updateWalletColor(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function updateWalletColor(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
@@ -168,7 +136,7 @@ async function updateWalletColor(req, res) {
         const id = req.params.id;
         const userId = req.user;
         const { color } = req.body;
-        const updatedColor = await wallet_model_1.default.findOneAndUpdate({
+        const updatedColor = await WalletModel.findOneAndUpdate({
             _id: id,
             userId,
         }, {
@@ -192,11 +160,10 @@ async function updateWalletColor(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.updateWalletColor = updateWalletColor;
-async function getOneWallet(req, res) {
+export async function getOneWallet(req, res) {
     try {
         const id = req.params.id;
-        const wallet = await wallet_model_1.default.findOne({
+        const wallet = await WalletModel.findOne({
             _id: id,
             userId: req.user,
         }).select({
@@ -217,38 +184,43 @@ async function getOneWallet(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getOneWallet = getOneWallet;
-async function transferWalletBalance(req, res) {
-    const error = (0, express_validator_1.validationResult)(req);
+export async function transferWalletBalance(req, res) {
+    const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ errors: error.array() });
     }
     try {
         const { sourceWallet, destinationWallet, amount, note, description } = req.body;
         if (sourceWallet === destinationWallet) {
-            return res.status(400).json({ message: "Source and destination wallet cannot be the same" });
+            return res
+                .status(400)
+                .json({ message: "Source and destination wallet cannot be the same" });
         }
-        const sourceWalletData = await wallet_model_1.default.findOne({
+        const sourceWalletData = await WalletModel.findOne({
             _id: sourceWallet,
             userId: req.user,
         });
         if (!sourceWalletData)
             return res.status(404).json({ message: "Source wallet not found" });
-        const destinationWalletData = await wallet_model_1.default.findOne({
+        const destinationWalletData = await WalletModel.findOne({
             _id: destinationWallet,
             userId: req.user,
         });
         if (!destinationWalletData)
             return res.status(404).json({ message: "Destination wallet not found" });
-        const originDescription = description.length > 0 ? description : `Transfer saldo ke dompet ${destinationWalletData.name}`;
-        const destinationDescription = description.length > 0 ? description : `Terima saldo dari dompet ${sourceWalletData.name}`;
+        const originDescription = description.length > 0
+            ? description
+            : `Transfer saldo ke dompet ${destinationWalletData.name}`;
+        const destinationDescription = description.length > 0
+            ? description
+            : `Terima saldo dari dompet ${sourceWalletData.name}`;
         const origin = await TransactionService.create({
             userId: req.user,
             walletId: sourceWallet,
             description: originDescription,
             amount,
             note,
-            type: Transaction_1.TransactionType.OUT,
+            type: TransactionType.OUT,
             includeInCalculation: false,
         });
         const destination = await TransactionService.create({
@@ -257,7 +229,7 @@ async function transferWalletBalance(req, res) {
             description: destinationDescription,
             amount,
             note,
-            type: Transaction_1.TransactionType.IN,
+            type: TransactionType.IN,
             includeInCalculation: false,
         });
         res.json({
@@ -272,11 +244,10 @@ async function transferWalletBalance(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.transferWalletBalance = transferWalletBalance;
-async function walletTransactions(req, res) {
+export async function walletTransactions(req, res) {
     try {
         const id = req.params.id;
-        const transactions = await wallet_model_1.default.findOne({
+        const transactions = await WalletModel.findOne({
             _id: id,
             userId: req.user,
         }).populate({
@@ -290,19 +261,18 @@ async function walletTransactions(req, res) {
         });
         res.json({
             message: "Wallet transactions has been fetched successfully",
-            data: transactions === null || transactions === void 0 ? void 0 : transactions.transactions,
+            data: transactions?.transactions,
         });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.walletTransactions = walletTransactions;
-async function reorderWallets(req, res) {
+export async function reorderWallets(req, res) {
     try {
         const userId = req.user;
         const { walletIds } = req.body;
-        const userWallets = await user_model_1.default.findOne(userId).select({ wallets: 1 });
+        const userWallets = await UserModel.findOne(userId).select({ wallets: 1 });
         const arrayWalletIds = JSON.parse(walletIds);
         if (!userWallets)
             return res.status(404).json({ message: "User not defined" });
@@ -313,10 +283,11 @@ async function reorderWallets(req, res) {
         }
         userWallets.wallets = arrayWalletIds;
         await userWallets.save();
-        return res.status(200).json({ message: "Wallets order has been updated successfully" });
+        return res
+            .status(200)
+            .json({ message: "Wallets order has been updated successfully" });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.reorderWallets = reorderWallets;

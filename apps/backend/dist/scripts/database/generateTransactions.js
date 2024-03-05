@@ -1,27 +1,22 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable no-console */
-const database_config_1 = __importDefault(require("../../src/configs/database.config"));
-const transaction_model_1 = __importDefault(require("../../src/models/transaction.model"));
-const user_model_1 = __importDefault(require("../../src/models/user.model"));
-const wallet_model_1 = __importDefault(require("../../src/models/wallet.model"));
-const wallet_service_1 = require("../../src/services/wallet.service");
-const faker_1 = require("@faker-js/faker");
-const mongoose_1 = __importDefault(require("mongoose"));
+import { faker } from "@faker-js/faker";
+import mongoose from "mongoose";
+import database from "../../src/configs/database.config";
+import TransactionModel from "../../src/models/transaction.model";
+import UserModel from "../../src/models/user.model";
+import WalletModel from "../../src/models/wallet.model";
+import { updateBalance } from "../../src/services/wallet.service";
 const userId = "6451ae1759bfa320f0728f7e";
 const walletId = null;
 const transactionType = "in";
 const seeds = {
-    dataPerDay: 7,
+    dataPerDay: 7, // random number between 1 and 7 transactions per day
     length: 7, // number of days to generate transaction data for 7 days
 };
 async function generateTransactions() {
     console.clear();
-    await (0, database_config_1.default)();
-    faker_1.faker.setLocale("id_ID");
+    await database();
+    faker.setLocale("id_ID");
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - seeds.length);
     const transactions = [];
@@ -32,10 +27,10 @@ async function generateTransactions() {
         const dataPerDay = Math.floor(Math.random() * seeds.dataPerDay) + 1;
         for (let j = 0; j < dataPerDay; j++) {
             const transaction = {
-                _id: new mongoose_1.default.Types.ObjectId(),
+                _id: new mongoose.Types.ObjectId(),
                 userId,
                 walletId: walletId,
-                description: faker_1.faker.finance.transactionDescription(),
+                description: faker.finance.transactionDescription(),
                 amount: Math.floor(Math.random() * 7000) + 1,
                 type: transactionType,
                 createdAt: date,
@@ -50,10 +45,10 @@ async function generateTransactions() {
     }, 0);
     console.log("Total balance changes: ", totalBalance);
     if (!walletId) {
-        await transaction_model_1.default.insertMany(transactions).then(() => {
+        await TransactionModel.insertMany(transactions).then(() => {
             console.log("Transactions generated successfully");
         });
-        await user_model_1.default.updateOne({
+        await UserModel.updateOne({
             _id: userId,
         }, {
             $push: {
@@ -64,7 +59,7 @@ async function generateTransactions() {
         });
         process.exit(0);
     }
-    const wallet = await wallet_model_1.default.findById(walletId);
+    const wallet = await WalletModel.findById(walletId);
     if (!wallet) {
         console.log("Wallet not found");
         process.exit(0);
@@ -76,10 +71,10 @@ async function generateTransactions() {
             process.exit(0);
         }
     }
-    await transaction_model_1.default.insertMany(transactions).then(() => {
+    await TransactionModel.insertMany(transactions).then(() => {
         console.log("Transactions generated successfully");
     });
-    await user_model_1.default.updateOne({
+    await UserModel.updateOne({
         _id: userId,
     }, {
         $push: {
@@ -88,7 +83,7 @@ async function generateTransactions() {
             },
         },
     });
-    await wallet_model_1.default.updateOne({
+    await WalletModel.updateOne({
         _id: walletId,
     }, {
         $push: {
@@ -97,7 +92,7 @@ async function generateTransactions() {
             },
         },
     });
-    await (0, wallet_service_1.updateBalance)(walletId);
+    await updateBalance(walletId);
     process.exit(0);
 }
 generateTransactions();

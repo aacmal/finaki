@@ -1,9 +1,10 @@
 // import Transaction from "../models/Transaction";
-import { validationResult } from "express-validator";
-import * as TransactionService from "../services/transaction.service";
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
 import { Types } from "mongoose";
-import { ITransactionRequestQuery, Interval } from "../interfaces/Transaction";
+
+import { Interval, ITransactionRequestQuery } from "../interfaces/Transaction";
+import * as TransactionService from "../services/transaction.service";
 
 export async function getAllTransactionsByDate(req: Request, res: Response) {
   try {
@@ -51,9 +52,15 @@ export async function updateTransaction(req: Request, res: Response) {
   try {
     const id = req.params.id as string;
     const { description, amount, type, note } = req.body;
-    const updatedTransaction = await TransactionService.update(id, { description, amount, type, note });
+    const updatedTransaction = await TransactionService.update(id, {
+      description,
+      amount,
+      type,
+      note,
+    });
 
-    if (!updatedTransaction) return res.status(404).json({ message: "Transaction not found" });
+    if (!updatedTransaction)
+      return res.status(404).json({ message: "Transaction not found" });
 
     res.json({
       message: "Transaction has been updated successfully",
@@ -69,7 +76,8 @@ export async function deleteTransaction(req: Request, res: Response) {
     const id = req.params.id as string;
     const deletedTransaction = await TransactionService.remove(id);
     // console.log(deletedTransaction);
-    if (!deletedTransaction) return res.status(404).json({ message: "Transaction not found" });
+    if (!deletedTransaction)
+      return res.status(404).json({ message: "Transaction not found" });
 
     res.json({
       message: "Transaction has been deleted successfully",
@@ -83,7 +91,7 @@ export async function deleteTransaction(req: Request, res: Response) {
 export async function getTransactionById(req: Request, res: Response) {
   try {
     const id = req.params.id;
-    const transaction = await TransactionService.getById(id);
+    const transaction = await TransactionService.getById(String(id));
     res.json({
       message: "Transaction has been fetched successfully",
       data: transaction,
@@ -99,12 +107,14 @@ export async function getTotalTransaction(req: Request, res: Response) {
     const interval = (req.query.interval as Interval) ?? Interval.Weekly;
     const timezone = "Asia/Jakarta";
 
-    const totalTranscation = await TransactionService.getTotalTransactionByPeriods(
-      userId as Types.ObjectId,
-      interval,
-      timezone,
-    );
-    if (!totalTranscation) return res.status(404).json({ message: "No data found" });
+    const totalTranscation =
+      await TransactionService.getTotalTransactionByPeriods(
+        userId as Types.ObjectId,
+        interval,
+        timezone,
+      );
+    if (!totalTranscation)
+      return res.status(404).json({ message: "No data found" });
     res.json({
       message: "Total transaction has been fetched successfully",
       data: totalTranscation,
@@ -119,7 +129,10 @@ export async function getAllTransactions(req: Request, res: Response) {
     const userId = req.user;
     const query = req.query as unknown as ITransactionRequestQuery;
 
-    const result = await TransactionService.getTransactions(userId as Types.ObjectId, query);
+    const result = await TransactionService.getTransactions(
+      userId as Types.ObjectId,
+      query,
+    );
     res.json({
       message: "Transactions has been fetched successfully",
       data: {
@@ -136,10 +149,17 @@ export async function getAllTransactions(req: Request, res: Response) {
 export async function getAllTransactionsByMonth(req: Request, res: Response) {
   try {
     const { month, year } = req.params;
+    if (!month || !year) {
+      return res.status(400).json({ message: "Month and year is required" });
+    }
     const userId = req.user;
-    const transactions = await TransactionService.getTransactionByMonth(userId as Types.ObjectId, { month, year });
+    const transactions = await TransactionService.getTransactionByMonth(
+      userId as Types.ObjectId,
+      { month, year },
+    );
 
-    if (!transactions || transactions.length === 0) return res.status(404).json({ message: "No data found" });
+    if (!transactions || transactions.length === 0)
+      return res.status(404).json({ message: "No data found" });
 
     res.json({
       message: "Transactions has been fetched successfully",

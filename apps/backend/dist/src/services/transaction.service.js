@@ -1,59 +1,34 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTransactionByMonth = exports.getTotalTransactionByPeriods = exports.remove = exports.update = exports.getById = exports.getTransactionByDate = exports.getTransactions = exports.create = void 0;
 // create services from Transaction
-const mongoose_1 = require("mongoose");
-const Transaction_1 = require("../interfaces/Transaction");
-const UserService = __importStar(require("./user.service"));
-const WalletService = __importStar(require("./wallet.service"));
-const transaction_model_1 = __importDefault(require("../models/transaction.model"));
-const wallet_model_1 = __importDefault(require("../models/wallet.model"));
+import { Types } from "mongoose";
+import { Interval, TransactionType, } from "../interfaces/Transaction";
+import TransactionModel from "../models/transaction.model";
+import WalletModel from "../models/wallet.model";
+import * as UserService from "./user.service";
+import * as WalletService from "./wallet.service";
 // Create new Transaction
-async function create(transactionData) {
+export async function create(transactionData) {
     try {
         let wallet;
         if (transactionData.walletId) {
             transactionData.amount = Number(transactionData.amount);
-            wallet = await wallet_model_1.default.findById(transactionData.walletId);
+            wallet = await WalletModel.findById(transactionData.walletId);
             if (!wallet)
                 throw new Error("Dompet tidak ditemukan");
-            if (transactionData.type === Transaction_1.TransactionType.OUT && wallet.balance < transactionData.amount)
+            if (transactionData.type === TransactionType.OUT &&
+                wallet.balance < transactionData.amount)
                 throw new Error("Saldo tidak mencukupi");
         }
         // Create transaction data
-        const newTransaction = await transaction_model_1.default.create(transactionData);
+        const newTransaction = await TransactionModel.create(transactionData);
         // Push transaction to user and wallet
         await UserService.pushTransaction(newTransaction.userId, newTransaction._id);
         // if transaction has walletId, push transaction to wallet, and update wallet balance
         if (wallet) {
             wallet.transactions.push(newTransaction._id);
-            wallet.balance += transactionData.type === Transaction_1.TransactionType.IN ? transactionData.amount : -transactionData.amount;
+            wallet.balance +=
+                transactionData.type === TransactionType.IN
+                    ? transactionData.amount
+                    : -transactionData.amount;
             await wallet.save();
         }
         return newTransaction;
@@ -62,23 +37,21 @@ async function create(transactionData) {
         throw error;
     }
 }
-exports.create = create;
-async function getTransactions(userId, query) {
-    var _a;
+export async function getTransactions(userId, query) {
     try {
         const { page, limit } = query;
-        const transactions = await transaction_model_1.default.find({
+        const transactions = await TransactionModel.find({
             userId: userId,
             includeInCalculation: true,
             ...(query.search && {
                 description: { $regex: query.search, $options: "i" },
             }),
         })
-            .limit((_a = parseInt(limit)) !== null && _a !== void 0 ? _a : 0)
+            .limit(parseInt(limit) ?? 0)
             .skip((parseInt(page) - 1) * parseInt(limit))
             .sort({ createdAt: -1 })
             .select({ userId: 0, __v: 0, includeInCalculation: 0 });
-        const count = await transaction_model_1.default.countDocuments({
+        const count = await TransactionModel.countDocuments({
             userId: userId,
             includeInCalculation: true,
             ...(query.search && {
@@ -94,13 +67,12 @@ async function getTransactions(userId, query) {
         throw error;
     }
 }
-exports.getTransactions = getTransactions;
-async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
+export async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
     try {
-        const allTransactions = await transaction_model_1.default.aggregate([
+        const allTransactions = await TransactionModel.aggregate([
             {
                 $match: {
-                    userId: new mongoose_1.Types.ObjectId(userId),
+                    userId: new Types.ObjectId(userId),
                     includeInCalculation: true,
                 },
             },
@@ -152,23 +124,21 @@ async function getTransactionByDate(userId, timezone = "Asia/Jakarta") {
         throw error;
     }
 }
-exports.getTransactionByDate = getTransactionByDate;
-async function getById(id) {
+export async function getById(id) {
     try {
-        return await transaction_model_1.default.findById(id);
+        return await TransactionModel.findById(id);
     }
     catch (error) {
         throw error;
     }
 }
-exports.getById = getById;
-async function update(id, newTransactionData) {
+export async function update(id, newTransactionData) {
     try {
-        const oldTransaction = await transaction_model_1.default.findById(id);
+        const oldTransaction = await TransactionModel.findById(id);
         if (!oldTransaction)
             return;
         newTransactionData.amount = Number(newTransactionData.amount);
-        const currentWallet = await wallet_model_1.default.findById(oldTransaction.walletId);
+        const currentWallet = await WalletModel.findById(oldTransaction.walletId);
         const isTypeChanged = oldTransaction.type !== newTransactionData.type;
         const isAmountChanged = oldTransaction.amount !== newTransactionData.amount;
         oldTransaction.description = newTransactionData.description;
@@ -188,20 +158,26 @@ async function update(id, newTransactionData) {
             // so the balance will be 1000, then I edit the transaction to Type Out with amount 600, this transaction cannot updated because:
             // currentWallet.balance - (oldTransaction.amount + newTransactionData.amount) >= 0
             // 500 - (500 + 600) = -600; -600 is negative number so return false
-            const typeOutValidation = (oldTransaction.type === Transaction_1.TransactionType.OUT &&
-                currentWallet.balance - (newTransactionData.amount - oldTransaction.amount) >= 0) ||
-                currentWallet.balance - (oldTransaction.amount + newTransactionData.amount) >= 0;
+            const typeOutValidation = (oldTransaction.type === TransactionType.OUT &&
+                currentWallet.balance -
+                    (newTransactionData.amount - oldTransaction.amount) >=
+                    0) ||
+                currentWallet.balance -
+                    (oldTransaction.amount + newTransactionData.amount) >=
+                    0;
             // explanation of type in validation:
             // 1. validation type IN is simple than OUT, the purpose is for prevent wallet balance to negative same as type OUT too;
             // example: I have two transaction, Transaciton 1 is 600 Type IN and transaction 2 is 600 Type OUT so the balance will be 0;
             // in this case, I will edit Transaction I amount to 300, this is cannot apply the update because:
             // currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0
             // 0 - (600 - 300) = -300; -300 is negative number then return false to throw Error
-            const typeInValidation = currentWallet.balance - (oldTransaction.amount - newTransactionData.amount) >= 0;
-            if (newTransactionData.type === Transaction_1.TransactionType.OUT) {
+            const typeInValidation = currentWallet.balance -
+                (oldTransaction.amount - newTransactionData.amount) >=
+                0;
+            if (newTransactionData.type === TransactionType.OUT) {
                 validateTransaction(!typeOutValidation);
             }
-            else if (newTransactionData.type === Transaction_1.TransactionType.IN) {
+            else if (newTransactionData.type === TransactionType.IN) {
                 validateTransaction(!typeInValidation);
             }
             else {
@@ -222,18 +198,18 @@ async function update(id, newTransactionData) {
         throw error;
     }
 }
-exports.update = update;
-async function remove(id) {
+export async function remove(id) {
     try {
-        const transaction = await transaction_model_1.default.findById(id);
+        const transaction = await TransactionModel.findById(id);
         // if transaction not found, return null
         if (!transaction)
             return;
-        const wallet = await wallet_model_1.default.findById(transaction.walletId);
+        const wallet = await WalletModel.findById(transaction.walletId);
         // check if transaction type is out
         // and wallet balance is less than transaction amount then throw error
         if (wallet) {
-            if (transaction.type === Transaction_1.TransactionType.IN && wallet.balance < transaction.amount) {
+            if (transaction.type === TransactionType.IN &&
+                wallet.balance < transaction.amount) {
                 throw new Error("Tidak dapat menghapus transaksi ini, karena akan mengakibatkan saldo wallet menjadi minus");
             }
             const deletedTransaction = await transaction.delete();
@@ -241,7 +217,9 @@ async function remove(id) {
             // and decrese balance or increse balance based on transaction type
             wallet.transactions.pull(deletedTransaction._id);
             wallet.balance -=
-                deletedTransaction.type === Transaction_1.TransactionType.IN ? deletedTransaction.amount : -deletedTransaction.amount;
+                deletedTransaction.type === TransactionType.IN
+                    ? deletedTransaction.amount
+                    : -deletedTransaction.amount;
             await wallet.save();
             return deletedTransaction;
         }
@@ -255,15 +233,14 @@ async function remove(id) {
         throw error;
     }
 }
-exports.remove = remove;
-async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/Jakarta") {
-    const intervals = interval === Transaction_1.Interval.Weekly ? 7 : 30;
+export async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/Jakarta") {
+    const intervals = interval === Interval.Weekly ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
     try {
-        const totalTranscation = await transaction_model_1.default.aggregate([
+        const totalTranscation = await TransactionModel.aggregate([
             {
                 $match: {
-                    userId: new mongoose_1.Types.ObjectId(userId),
+                    userId: new Types.ObjectId(userId),
                     includeInCalculation: true,
                 },
             },
@@ -326,7 +303,8 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
         for (let i = 1; i <= intervals; i++) {
             const date = new Date(dateInterval);
             date.setDate(date.getDate() + i);
-            const transaction = totalTranscation.find((transaction) => transaction._id.day === date.getDate() && transaction._id.month === date.getMonth() + 1);
+            const transaction = totalTranscation.find((transaction) => transaction._id.day === date.getDate() &&
+                transaction._id.month === date.getMonth() + 1);
             totalTransactionByPeriods.push({
                 _id: {
                     day: date.getDate(),
@@ -343,11 +321,10 @@ async function getTotalTransactionByPeriods(userId, interval, timezone = "Asia/J
         throw error;
     }
 }
-exports.getTotalTransactionByPeriods = getTotalTransactionByPeriods;
-async function getTransactionByMonth(userId, date) {
+export async function getTransactionByMonth(userId, date) {
     try {
         const { month, year } = date;
-        const transactions = await transaction_model_1.default.aggregate([
+        const transactions = await TransactionModel.aggregate([
             {
                 $project: {
                     month: {
@@ -418,4 +395,3 @@ async function getTransactionByMonth(userId, date) {
         throw error;
     }
 }
-exports.getTransactionByMonth = getTransactionByMonth;

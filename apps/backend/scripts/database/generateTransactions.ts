@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
+import { faker } from "@faker-js/faker";
+import mongoose from "mongoose";
+
 import database from "../../src/configs/database.config";
 import TransactionModel from "../../src/models/transaction.model";
 import UserModel from "../../src/models/user.model";
 import WalletModel from "../../src/models/wallet.model";
 import { updateBalance } from "../../src/services/wallet.service";
-
-import { faker } from "@faker-js/faker";
-import mongoose from "mongoose";
 
 const userId = "6451ae1759bfa320f0728f7e";
 const walletId = null;

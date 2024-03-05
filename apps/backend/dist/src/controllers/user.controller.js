@@ -1,37 +1,7 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.detachTelegramAccount = exports.logoutDevices = exports.getLoggedDevices = exports.getUser = void 0;
-const UserService = __importStar(require("../services/user.service"));
-const user_model_1 = __importDefault(require("../models/user.model"));
-const token_model_1 = __importDefault(require("../models/token.model"));
-async function getUser(req, res) {
-    var _a, _b;
+import TokenModel from "../models/token.model";
+import UserModel from "../models/user.model";
+import * as UserService from "../services/user.service";
+export async function getUser(req, res) {
     try {
         const userId = req.user;
         const user = await UserService.getById(userId);
@@ -46,8 +16,8 @@ async function getUser(req, res) {
                 email: user.email,
                 token: user.token,
                 telegramAccount: {
-                    username: (_a = user.telegramAccount) === null || _a === void 0 ? void 0 : _a.username,
-                    firstName: (_b = user.telegramAccount) === null || _b === void 0 ? void 0 : _b.first_name,
+                    username: user.telegramAccount?.username,
+                    firstName: user.telegramAccount?.first_name,
                 },
             },
         });
@@ -56,12 +26,11 @@ async function getUser(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getUser = getUser;
-async function getLoggedDevices(req, res) {
+export async function getLoggedDevices(req, res) {
     try {
         const userId = req.user;
         const cookie = req.cookies.refresh_token;
-        const user = await user_model_1.default.findById(userId).populate({
+        const user = await UserModel.findById(userId).populate({
             path: "refreshTokens",
             select: {
                 userAgent: 1,
@@ -88,16 +57,15 @@ async function getLoggedDevices(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.getLoggedDevices = getLoggedDevices;
-async function logoutDevices(req, res) {
+export async function logoutDevices(req, res) {
     try {
         const userId = req.user;
         const cookie = req.cookies.refresh_token;
-        const currentToken = await token_model_1.default.findOne({ token: cookie });
+        const currentToken = await TokenModel.findOne({ token: cookie });
         if (!currentToken)
             return res.status(401).json({ message: "Refresh Token not valid" });
         const deviceIds = req.body.deviceIds;
-        await user_model_1.default.updateOne({
+        await UserModel.updateOne({
             _id: userId,
         }, {
             $pull: {
@@ -106,7 +74,7 @@ async function logoutDevices(req, res) {
                 },
             },
         });
-        await token_model_1.default.deleteMany({
+        await TokenModel.deleteMany({
             _id: {
                 $in: deviceIds,
             },
@@ -119,11 +87,10 @@ async function logoutDevices(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.logoutDevices = logoutDevices;
-async function detachTelegramAccount(req, res) {
+export async function detachTelegramAccount(req, res) {
     try {
         const userId = req.user;
-        const user = await user_model_1.default.findByIdAndUpdate(userId, {
+        const user = await UserModel.findByIdAndUpdate(userId, {
             telegramAccount: {
                 id: null,
             },
@@ -144,4 +111,3 @@ async function detachTelegramAccount(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-exports.detachTelegramAccount = detachTelegramAccount;

@@ -1,40 +1,11 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getWalletTransactions = exports.balanceHistory = exports.getTotalBalance = exports.updateBalance = exports.deleteById = exports.create = exports.getBalance = exports.getById = void 0;
-const mongoose_1 = require("mongoose");
-const UserService = __importStar(require("../services/user.service"));
-const wallet_model_1 = __importDefault(require("../models/wallet.model"));
-const transaction_model_1 = __importDefault(require("../models/transaction.model"));
-const token_model_1 = __importDefault(require("../models/token.model"));
-async function getById(data) {
+import { Types } from "mongoose";
+import UserModel from "../models/token.model";
+import TransactionModel from "../models/transaction.model";
+import WalletModel from "../models/wallet.model";
+import * as UserService from "../services/user.service";
+export async function getById(data) {
     try {
-        return await wallet_model_1.default.findOne({
+        return await WalletModel.findOne({
             _id: data.walletId,
             userId: data.userId,
         });
@@ -43,10 +14,9 @@ async function getById(data) {
         throw error;
     }
 }
-exports.getById = getById;
-async function getBalance(walletId) {
+export async function getBalance(walletId) {
     try {
-        const wallet = await wallet_model_1.default.findById(walletId);
+        const wallet = await WalletModel.findById(walletId);
         if (!wallet)
             throw new Error("Wallet not found");
         return wallet.balance;
@@ -55,10 +25,9 @@ async function getBalance(walletId) {
         throw error;
     }
 }
-exports.getBalance = getBalance;
-async function create(walletData) {
+export async function create(walletData) {
     try {
-        const savedWallet = await wallet_model_1.default.create(walletData);
+        const savedWallet = await WalletModel.create(walletData);
         await UserService.pushWallet(walletData.userId, savedWallet._id);
         return savedWallet;
     }
@@ -66,22 +35,21 @@ async function create(walletData) {
         throw error;
     }
 }
-exports.create = create;
-async function deleteById(data, deleteTransactions) {
+export async function deleteById(data, deleteTransactions) {
     try {
-        const wallet = await wallet_model_1.default.findOne({
+        const wallet = await WalletModel.findOne({
             _id: data.walletId,
             userId: data.userId,
         });
         if (!wallet)
             return;
         if (deleteTransactions === "true") {
-            await transaction_model_1.default.deleteMany({
+            await TransactionModel.deleteMany({
                 _id: {
                     $in: wallet.transactions,
                 },
             });
-            await token_model_1.default.updateOne({
+            await UserModel.updateOne({
                 _id: wallet.userId,
             }, {
                 $pull: {
@@ -98,13 +66,12 @@ async function deleteById(data, deleteTransactions) {
         throw error;
     }
 }
-exports.deleteById = deleteById;
-async function updateBalance(walletId) {
+export async function updateBalance(walletId) {
     try {
-        const currentBalance = await wallet_model_1.default.aggregate([
+        const currentBalance = await WalletModel.aggregate([
             {
                 $match: {
-                    _id: new mongoose_1.Types.ObjectId(walletId),
+                    _id: new Types.ObjectId(walletId),
                 },
             },
             {
@@ -140,7 +107,7 @@ async function updateBalance(walletId) {
         ]);
         if (!currentBalance[0])
             throw new Error("Wallet not found");
-        await wallet_model_1.default.findByIdAndUpdate(walletId, {
+        await WalletModel.findByIdAndUpdate(walletId, {
             $set: {
                 balance: currentBalance[0].balance,
             },
@@ -150,13 +117,12 @@ async function updateBalance(walletId) {
         throw error;
     }
 }
-exports.updateBalance = updateBalance;
-async function getTotalBalance(userId) {
+export async function getTotalBalance(userId) {
     try {
-        const totalBalance = await wallet_model_1.default.aggregate([
+        const totalBalance = await WalletModel.aggregate([
             {
                 $match: {
-                    userId: new mongoose_1.Types.ObjectId(userId),
+                    userId: new Types.ObjectId(userId),
                 },
             },
             {
@@ -182,15 +148,14 @@ async function getTotalBalance(userId) {
         throw error;
     }
 }
-exports.getTotalBalance = getTotalBalance;
-async function balanceHistory(walletId, interval) {
+export async function balanceHistory(walletId, interval) {
     try {
         const intervals = interval === "week" ? 7 : 30;
         const dateInterval = new Date().setDate(new Date().getDate() - intervals);
-        const walletTransactionsPerDay = await transaction_model_1.default.aggregate([
+        const walletTransactionsPerDay = await TransactionModel.aggregate([
             {
                 $match: {
-                    walletId: new mongoose_1.Types.ObjectId(walletId),
+                    walletId: new Types.ObjectId(walletId),
                 },
             },
             {
@@ -241,7 +206,9 @@ async function balanceHistory(walletId, interval) {
             const date = new Date(dateInterval);
             date.setDate(date.getDate() + i);
             const walletTransaction = walletTransactionsPerDay.find((transaction) => transaction._id === date.getDate());
-            lastBalance = walletTransaction ? lastBalance + (walletTransaction.in - walletTransaction.out) : lastBalance;
+            lastBalance = walletTransaction
+                ? lastBalance + (walletTransaction.in - walletTransaction.out)
+                : lastBalance;
             balanceHistoryResult.push({
                 timestamp: date,
                 value: lastBalance,
@@ -253,12 +220,11 @@ async function balanceHistory(walletId, interval) {
         throw error;
     }
 }
-exports.balanceHistory = balanceHistory;
-async function getWalletTransactions(data) {
+export async function getWalletTransactions(data) {
     try {
-        const transactions = await transaction_model_1.default.find({
-            walletId: new mongoose_1.Types.ObjectId(data.walletId),
-            userId: new mongoose_1.Types.ObjectId(data.walletId),
+        const transactions = await TransactionModel.find({
+            walletId: new Types.ObjectId(data.walletId),
+            userId: new Types.ObjectId(data.walletId),
         });
         return transactions;
     }
@@ -266,4 +232,3 @@ async function getWalletTransactions(data) {
         throw error;
     }
 }
-exports.getWalletTransactions = getWalletTransactions;

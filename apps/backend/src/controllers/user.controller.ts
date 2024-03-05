@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
-import * as UserService from "../services/user.service";
-import UserModel from "../models/user.model";
+
 import TokenModel from "../models/token.model";
+import UserModel from "../models/user.model";
+import * as UserService from "../services/user.service";
 
 export async function getUser(req: Request, res: Response) {
   try {
@@ -62,7 +63,8 @@ export async function logoutDevices(req: Request, res: Response) {
     const userId = req.user;
     const cookie = req.cookies.refresh_token;
     const currentToken = await TokenModel.findOne({ token: cookie });
-    if (!currentToken) return res.status(401).json({ message: "Refresh Token not valid" });
+    if (!currentToken)
+      return res.status(401).json({ message: "Refresh Token not valid" });
 
     const deviceIds = req.body.deviceIds as string[];
     await UserModel.updateOne(

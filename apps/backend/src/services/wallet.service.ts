@@ -1,9 +1,10 @@
 import { Types } from "mongoose";
-import * as UserService from "../services/user.service";
-import WalletModel from "../models/wallet.model";
-import TransactionModel from "../models/transaction.model";
-import UserModel from "../models/token.model";
+
 import { BalanceHistory, IWalletData } from "../interfaces/Wallet";
+import UserModel from "../models/token.model";
+import TransactionModel from "../models/transaction.model";
+import WalletModel from "../models/wallet.model";
+import * as UserService from "../services/user.service";
 
 type WalletQuery = {
   userId: Types.ObjectId;
@@ -42,7 +43,10 @@ export async function create(walletData: IWalletData) {
   }
 }
 
-export async function deleteById(data: WalletQuery, deleteTransactions?: string) {
+export async function deleteById(
+  data: WalletQuery,
+  deleteTransactions?: string,
+) {
   try {
     const wallet = await WalletModel.findOne({
       _id: data.walletId,
@@ -159,7 +163,10 @@ export async function getTotalBalance(userId: Types.ObjectId) {
   }
 }
 
-export async function balanceHistory(walletId: Types.ObjectId, interval: "week" | "month") {
+export async function balanceHistory(
+  walletId: Types.ObjectId,
+  interval: "week" | "month",
+) {
   try {
     const intervals = interval === "week" ? 7 : 30;
     const dateInterval = new Date().setDate(new Date().getDate() - intervals);
@@ -219,8 +226,12 @@ export async function balanceHistory(walletId: Types.ObjectId, interval: "week" 
       const date = new Date(dateInterval);
       date.setDate(date.getDate() + i);
 
-      const walletTransaction = walletTransactionsPerDay.find((transaction) => transaction._id === date.getDate());
-      lastBalance = walletTransaction ? lastBalance + (walletTransaction.in - walletTransaction.out) : lastBalance;
+      const walletTransaction = walletTransactionsPerDay.find(
+        (transaction) => transaction._id === date.getDate(),
+      );
+      lastBalance = walletTransaction
+        ? lastBalance + (walletTransaction.in - walletTransaction.out)
+        : lastBalance;
 
       balanceHistoryResult.push({
         timestamp: date,
