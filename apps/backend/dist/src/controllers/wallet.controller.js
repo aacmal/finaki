@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { validationResult } from "express-validator";
 import { TransactionType } from "../interfaces/Transaction";
 import TransactionModel from "../models/transaction.model";

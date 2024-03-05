@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { validationResult } from "express-validator";
 import { Interval } from "../interfaces/Transaction";
 import * as TransactionService from "../services/transaction.service";

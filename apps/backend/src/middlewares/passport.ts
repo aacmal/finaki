@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import passport from "passport";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
-import { ACCESS_TOKEN_SECRET } from "../..";
+import { ACCESS_TOKEN_SECRET } from "../../index";
 import UserModel from "../models/user.model";
 
 // JWT middleware authentication
 passport.use(
   new JwtStrategy(
     {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       secretOrKey: ACCESS_TOKEN_SECRET!,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     },

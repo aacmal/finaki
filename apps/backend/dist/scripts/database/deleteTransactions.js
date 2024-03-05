@@ -9,6 +9,7 @@ async function deleteTransactions() {
     await TransactionModel.deleteMany({
         userId: userId,
     }).then(() => {
+        // eslint-disable-next-line no-console
         console.log("Transactions deleted successfully");
     });
     await UserModel.updateOne({
@@ -28,4 +29,4 @@ async function deleteTransactions() {
     });
     process.exit(0);
 }
-deleteTransactions();
+await deleteTransactions();

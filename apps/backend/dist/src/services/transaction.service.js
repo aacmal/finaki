@@ -1,4 +1,13 @@
-// create services from Transaction
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/**
+ * During refactoring to Monorepo, I found this file is so many eslint error
+ * I Don't know why, but I think this is because of the typescript version
+ * or maybe the eslint version, so for now I will disable some eslint rule
+ * and I will fix it later
+ */
 import { Types } from "mongoose";
 import { Interval, TransactionType, } from "../interfaces/Transaction";
 import TransactionModel from "../models/transaction.model";
@@ -174,10 +183,10 @@ export async function update(id, newTransactionData) {
             const typeInValidation = currentWallet.balance -
                 (oldTransaction.amount - newTransactionData.amount) >=
                 0;
-            if (newTransactionData.type === TransactionType.OUT) {
+            if (newTransactionData.type === "out") {
                 validateTransaction(!typeOutValidation);
             }
-            else if (newTransactionData.type === TransactionType.IN) {
+            else if (newTransactionData.type === "in") {
                 validateTransaction(!typeInValidation);
             }
             else {

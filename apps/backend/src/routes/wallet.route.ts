@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
 
 import * as WalletController from "../controllers/wallet.controller";

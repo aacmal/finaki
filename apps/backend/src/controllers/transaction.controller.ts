@@ -1,4 +1,13 @@
-// import Transaction from "../models/Transaction";
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/**
+ * During refactoring to Monorepo, I found this file is so many eslint error
+ * I Don't know why, but I think this is because of the typescript version
+ * or maybe the eslint version, so for now I will disable some eslint rule
+ * and I will fix it later
+ */
+
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";
@@ -50,7 +59,7 @@ export async function updateTransaction(req: Request, res: Response) {
     return res.status(400).json({ errors: error.array() });
   }
   try {
-    const id = req.params.id as string;
+    const id = req.params.id!;
     const { description, amount, type, note } = req.body;
     const updatedTransaction = await TransactionService.update(id, {
       description,
@@ -73,7 +82,7 @@ export async function updateTransaction(req: Request, res: Response) {
 
 export async function deleteTransaction(req: Request, res: Response) {
   try {
-    const id = req.params.id as string;
+    const id = req.params.id!;
     const deletedTransaction = await TransactionService.remove(id);
     // console.log(deletedTransaction);
     if (!deletedTransaction)

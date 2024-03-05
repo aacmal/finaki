@@ -6,6 +6,6 @@
     "useUnknownInCatchVariables": false,
     "noEmit": false // Set to true if you don't want to compile the code
   },
-  "include": ["*.ts"],
+  "include": ["."],
   "exclude": ["node_modules", "dist"]
 }

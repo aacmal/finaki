@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import TokenModel from "../models/token.model";
 import UserModel from "../models/user.model";
 import * as UserService from "../services/user.service";

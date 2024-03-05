@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { Router } from "express";
 import * as AuthController from "../controllers/auth.controller";
 import { registerValidator, resetPasswordValidator, signValidator, } from "../middlewares/validator";

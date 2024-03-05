@@ -95,4 +95,4 @@ async function generateTransactions() {
     await updateBalance(walletId);
     process.exit(0);
 }
-generateTransactions();
+await generateTransactions();

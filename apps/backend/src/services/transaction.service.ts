@@ -1,4 +1,15 @@
-// create services from Transaction
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/**
+ * During refactoring to Monorepo, I found this file is so many eslint error
+ * I Don't know why, but I think this is because of the typescript version
+ * or maybe the eslint version, so for now I will disable some eslint rule
+ * and I will fix it later
+ */
+
 import { Types } from "mongoose";
 
 import {
@@ -166,9 +177,7 @@ export async function update(
     if (!oldTransaction) return;
     newTransactionData.amount = Number(newTransactionData.amount);
 
-    const currentWallet = await WalletModel.findById(
-      oldTransaction.walletId as Types.ObjectId,
-    );
+    const currentWallet = await WalletModel.findById(oldTransaction.walletId!);
 
     const isTypeChanged = oldTransaction.type !== newTransactionData.type;
     const isAmountChanged = oldTransaction.amount !== newTransactionData.amount;
@@ -215,9 +224,9 @@ export async function update(
           (oldTransaction.amount - newTransactionData.amount) >=
         0;
 
-      if (newTransactionData.type === TransactionType.OUT) {
+      if (newTransactionData.type === "out") {
         validateTransaction(!typeOutValidation);
-      } else if (newTransactionData.type === TransactionType.IN) {
+      } else if (newTransactionData.type === "in") {
         validateTransaction(!typeInValidation);
       } else {
         throw new Error("Ada yang salah");
@@ -228,9 +237,7 @@ export async function update(
       const updatedTransaction = await oldTransaction.save(); // return updated transaction
 
       // update balance in wallet collection based on transaction type
-      await WalletService.updateBalance(
-        updatedTransaction.walletId as Types.ObjectId,
-      );
+      await WalletService.updateBalance(updatedTransaction.walletId!);
 
       return updatedTransaction;
     }

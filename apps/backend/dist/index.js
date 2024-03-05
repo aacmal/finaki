@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import cookieParse from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -11,7 +12,7 @@ dotenv.config();
 export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET_KEY;
 export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET_KEY;
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT ?? 3000;
 app.get("/", (req, res) => {
     res.json({
         message: "Hello World!",
@@ -26,17 +27,21 @@ app.use(passport.initialize());
 require("./src/middlewares/passport");
 // Logging request
 app.use((req, res, next) => {
-    // eslint-disable-next-line no-console
     console.log(`[${req.method}] ${req.path} - ${req.get("user-agent")}`);
     next();
 });
 app.use("/api", AppRoutes);
 database().catch((error) => {
-    // eslint-disable-next-line no-console
     console.log(error);
 });
 app.listen(port, () => {
-    // eslint-disable-next-line no-console
-    bot.launch();
+    bot
+        .launch()
+        .then(() => {
+        console.log("Bot is running");
+    })
+        .catch((error) => {
+        console.log(error);
+    });
     console.log(`Server is running at http://localhost:${port}`);
 });

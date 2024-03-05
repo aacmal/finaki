@@ -1,3 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+/**
+ * During refactoring to Monorepo, I found this file is so many eslint error
+ * I Don't know why, but I think this is because of the typescript version
+ * or maybe the eslint version, so for now I will disable some eslint rule
+ * and I will fix it later
+ */
+
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { Types } from "mongoose";

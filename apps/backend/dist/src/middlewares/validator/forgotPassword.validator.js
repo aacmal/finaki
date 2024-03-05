@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { body } from "express-validator";
 import userModel from "../../models/user.model";
 export const forgotPasswordValidator = [

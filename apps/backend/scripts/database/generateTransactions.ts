@@ -119,4 +119,4 @@ async function generateTransactions() {
   process.exit(0);
 }
 
-generateTransactions();
+await generateTransactions();

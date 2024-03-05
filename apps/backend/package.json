@@ -62,7 +62,8 @@
     "root": true,
     "extends": "@finaki/eslint-config/base",
     "rules": {
-      "no-useless-catch": "off"
+      "no-useless-catch": "off",
+      "no-console": "error"
     }
   }
 }
