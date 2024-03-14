@@ -23,5 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${domain}/about`,
       lastModified: new Date(),
     },
+    {
+      url: `${domain}/telegram-integration`,
+      lastModified: new Date(),
+    },
   ];
 }

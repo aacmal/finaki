@@ -4,6 +4,7 @@ import ClipboardIcon from "../icons/ClipboardIcon";
 import { toast } from "react-hot-toast";
 import useStore from "../../stores/store";
 import ContentWrapper from "../Container/ContentWrapper";
+import Link from "next/link";
 
 type Props = {
   className?: string;
@@ -31,19 +32,29 @@ const Profile = (props: Props) => {
           <span className="w-[10%] font-semibold">Email</span>
           <span className="lg:ml-0 ml-3">{user?.email}</span>
         </div>
-        <span className="flex lg:flex-row flex-col lg:items-center">
+        <span className="flex lg:flex-row flex-col lg:items-start">
           <span className="w-[10%] font-semibold whitespace-nowrap flex items-center gap-2">
             <span>Token</span>
           </span>
-          <span className="lg:ml-0 ml-3 mr-4 flex gap-4">
-            {user?.token}
-            <IconWrapper
-              onClick={copyTokenToClipboard}
-              className="w-5 cursor-pointer"
-            >
-              <ClipboardIcon />
-            </IconWrapper>
-          </span>
+          <div className="flex-col flex lg:ml-0 ml-3 ">
+            <div className="mr-4 flex gap-4">
+              {user?.token}
+              <IconWrapper
+                onClick={copyTokenToClipboard}
+                className="w-5 cursor-pointer"
+              >
+                <ClipboardIcon />
+              </IconWrapper>
+            </div>
+            <p className="text-sm mt-2">
+              <Link
+                className="underline text-blue-500"
+                href="/telegram-integration"
+              >
+                Hubungkan dengan Telegram
+              </Link>
+            </p>
+          </div>
         </span>
         {user?.telegramAccount?.username && (
           <>

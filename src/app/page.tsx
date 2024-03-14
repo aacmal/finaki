@@ -2,6 +2,7 @@ import { Routes } from "@/types/Routes";
 import Image from "next/image";
 import Link from "next/link";
 import * as Seo from "./seo";
+import { FaTelegram } from "react-icons/fa";
 
 export const metadata = {
   metadataBase: new URL("https://finaki.acml.me/"),
@@ -168,6 +169,49 @@ export default function Home() {
                   width={2432}
                   height={1442}
                 />
+              </div>
+            </div>
+          </div>
+        </section>
+        <section className="overflow-hidden relative bg-gray-900 rounded-lg lg:rounded-3xl py-24 mt-10 lg:mt-10">
+          <div className="isolate">
+            <svg
+              viewBox="0 0 1024 1024"
+              className="absolute left-1/2 top-1/2 -z-10 h-[64rem] w-[64rem] -translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:left-full sm:-ml-80 lg:left-1/2 lg:ml-0 lg:-translate-x-1/2 lg:translate-y-0"
+              aria-hidden="true"
+            >
+              <circle
+                cx={512}
+                cy={512}
+                r={512}
+                fill="url(#759c1415-0410-454c-8f7c-9a820de03641)"
+                fillOpacity="0.7"
+              />
+              <defs>
+                <radialGradient id="759c1415-0410-454c-8f7c-9a820de03641">
+                  <stop stopColor="#3b82f6" />
+                  <stop offset={1} stopColor="#06b6d4" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 z-10">
+            <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 items-center lg:max-w-none lg:grid-cols-2">
+              <div className="lg:pr-8 lg:pt-4 z-20">
+                <div className="lg:max-w-lg">
+                  <h2 className="mb-7 h-32 text-5xl font-bold tracking-tight bg-clip-text bg-gradient-to-r text-transparent from-blue-500 to-cyan-500">
+                    Integrasikan dengan bot Telegram
+                  </h2>
+                  <Link
+                    href="telegram-integration"
+                    className="rounded-md bg-gradient-to-r from-blue-500 to-cyan-500 px-5 py-3 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    Coba Sekarang
+                  </Link>
+                </div>
+              </div>
+              <div className="rounded-xl bg-gradient-to-br p-5 mx-auto from-blue-500 to-cyan-500 relative w-fit">
+                <FaTelegram size="100%" className="text-white" />
               </div>
             </div>
           </div>

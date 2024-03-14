@@ -14,7 +14,9 @@ const HomeNav = () => {
   const pathname = usePathname();
   const isInHomePage =
     !pathname?.includes("auth") &&
-    (pathname?.includes("about") || pathname === "/");
+    (pathname?.includes("about") ||
+      pathname === "/" ||
+      pathname === "/telegram-integration");
 
   const isInAuthPage = pathname?.includes("auth");
 
