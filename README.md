@@ -48,5 +48,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## Update
 The backend available at refactor_monorepo branch. 
 
-
----- During refactoring to Monorepo, I found this so many eslint error. I Don't know why, but I think this is because of the typescript version or maybe changes of eslint version and rules, so for now I will disable some eslint rule and I will fix it later ----
