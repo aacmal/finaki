@@ -44,7 +44,3 @@ A web-based application created to solve financial recording solutions, Finaki w
 
 ## ⚖️ License
 Distributed under the MIT License. See `LICENSE` for more information.
-
-## Update
-The backend available at refactor_monorepo branch. 
-
